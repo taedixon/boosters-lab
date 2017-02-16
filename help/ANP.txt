@@ -1,0 +1,587 @@
+Cave Story Animations [<ANP]
+
+
+* PLAYER
+
+	Quote [0150] -By J.T.E.
+0000	Stand around.
+0002	Look up.
+0010	Splat on the floor.
+0011	Splat on the floor, no poofs or noise.
+0020	Get teleported out
+	(from Misery teleports you to Labyrinth cutscene)
+0021	Invisible
+0050	Walk forward
+	(No gravity)
+0051	Walk forward
+	(first 3 frames glitch: Step, look up, then splat. Otherwise same as 0050)
+0060	Slowly fall, shaking and upside down (from normal ending)
+0061	Invisible
+0070	Walk in place
+0071	Walk in place
+	(Same glitch as 0051)
+0080	Back turned
+	(Checking an NPC)
+0100	Walk in place
+	(Gravity, from credits)
+0101	Walk in place
+	(Gravity, same glitch as 0051)
+0102	Walk in place
+	(No gravity, same glitch as 0051)
+
+
+* NON-PLAYABLE CHARACTERS
+
+	Hermit Gunsmith [0030] -By Shmitz
+0000	Only animation. Direction 0000 is standing.
+	Any other direction is sitting down sleeping, one space below original.
+	Flag 0x1000 starts him out this way.
+	Going to direction 0000 stands him up, does not change position.
+
+
+	King [0061] -By Shmitz
+0000	Stand around. Eyes blink.
+0005	Fall over
+0006	Fall over
+0007	Fall over
+0008	Walk forward
+0009	Flop down, walk forward
+0010	Run forward			
+0011	Run forward			
+0020	Brandish sword			
+0030	Knocked way over
+0031	Knocked way over		
+0040	Die, leave sword		
+0042	Die, leave sword		
+0060	Leap to the right.
+
+
+	Toroko [0060] -By jcys810
+0000	Standing
+0003	Running
+	(Runs forward, when she hits a hard block, she turns and runs forward, hits a hard block, turns and runs forward, so on and so forth)
+0004	Running
+	(Runs forward, when she hits a hard block, she turns and runs forward, hits a hard block, turns and runs forward, so on and so forth)
+0006	Jumps then run
+	(Jumps forward, then does the same thing as 0003; 0004)
+0008	Jumps on the spot
+	(If used when running, will jump in that direction, facing direction may be different, but jumping direction remains)
+0010	Falls down
+	(Like in the Shack when you shoot her)
+0011	Down (No smoke, just immediately in the fallen position)
+
+
+        Jack [0074] -By jcys810
+0000    Standing	
+0008    Walking
+
+
+        Kanpachi (Standing) [0226] -By jcys810
+0000    Standing
+0010    Walking
+0011	Walking	
+0020	Three quarter back view
+
+
+        Mahin [0079] -By jcys810
+0000    Standing
+	(Face back)
+0002	Standing
+	(Face front)
+
+
+	Balrog [0012] -By Shmitz
+0000	Stand around. Eyes blink.
+0010	Going up!
+0011	Going up!
+0020	Uh oh! Smoking, going up!
+0021	Smoking, going up!
+0030	Smile
+0040	Super panic
+0041	Super panic
+0042	Uh oh! Image blinks
+0043	Uh oh! Image blinks
+0050	Back turned
+0060	Walk forward no falling
+0070	Uh oh! Vanish
+0071	Vanish
+0080	Panic
+0081	Panic
+0100	Super going up!
+	(changes map tiles)
+
+
+	Misery (floating) [0067] -By Shmitz
+0000	Teleport in, hover
+0001	Teleport in, hover
+0010	Hover
+0011	Hover
+0013	Drop to floor, standing
+0014	Standing *
+0015	Standing, create bubble *
+0016	Create bubble
+	(not animated) *
+0020	Hover, going up!
+0021	Hover, going up!
+	(doesn't pass through walls)
+0025	Standing, cast big spell *
+0025	Standing, cast big spell *
+0027	Standing *
+
+* Use these after 0013, or sprite will continue to move 
+in last "hover" direction (up or down).
+
+
+	Misery (standing) [0082] -By Shmitz
+0000	Stand around. Eyes blink.
+0011	Sitting?		
+0015	Cast spell
+	(to right)
+0020	Going up!		
+0021	Going up!
+	(doesn't pass through walls)	
+0025	Cast big spell
+0026	Cast big spell
+0030	Cast spell		
+0031	Cast spell
+0040	Cast bubbles
+	(to right)		
+0041	Cast bubbles
+	(to right)	
+0050	Defeated
+
+
+	Sue [0042] -By Shmitz
+0000	Stand around. Eyes blink.
+0003	Walk forward			
+0004	Walk forward			
+0005	Back turned			
+0008	Knocked a bit over		
+0009	Fall over			
+0010	Fall over			
+0011	Throw a fit			
+0012	Fall over, throw a fit.
+0014	CRASH GAME
+0015	Summons red crystal		
+0017	Looks afraid
+0020	Run while to left of main char		
+0021	Run while to left of main char		
+0030	Run forward			
+0031	Run forward			
+0040	Hops once
+
+
+	Igor  (Cutscene) [0083] -By jcys810
+0000	Standing
+0001	Standing
+0002	Walk
+0003	Walk
+0004	Bend arm and Jab
+0005	Quick Jab
+
+
+        Santa [0040] -By jcys810
+0000    Standing
+0003    Walk through horizontal tiles no gravity
+0004	Walk through horizontal tiles no gravity
+
+
+        Chaco [0093] -By jcys810
+0000    Standing
+0003	Walking, no gravity
+0004	Walking, no gravity
+0010	Lying down on bed
+	(Bed sprite is seperate)
+0011	Direction facing is fixed
+
+
+	Malco Undamaged [0107] -By jcys810
+0000	Sitting
+0010	Eyes glow, smoke appears, stands up, starts freaking out
+0016	Smoke appears, stands up, starts freaking out
+0019	Immediately stands up and starts freaking out
+0020	Stands up and holds his head
+0021	Crushed
+
+
+	Malco Damaged [0109] -By jcys810
+0000	Standing
+0010	Smoke appears
+
+
+	Doctor (Intro) [0298]
+0000	Standing
+0011	Laughing
+0020	Walk without falling
+0021	Walk without falling
+0030	Face back
+0040	Face back laughing
+0041	Laughs then face back and continue laughing
+
+
+	Prof. Booster [0113] -By Shmitz
+0000	Stand around. Eyes blink.
+0003	Walk forward
+0004	Walk forward
+0005	Show back
+0030	Warp + teleport in?
+0031	Teleport in
+
+
+	Curly [0117] -By Shmitz
+0000	Stand around. Eyes blink.
+0003	Walk forward
+0004	Walk forward
+0005	Poof defeat
+0006	Defeat
+0010	Walk towards main char until 1 away
+0011	Walk forward no falling
+0020	Back turned
+0021	Look up
+0030	Knocked a bit over
+0031	Fall over
+0032	Fall over
+0070	Moonwalk
+0071	Moonwalk
+
+
+	Doctor (Crowned) [0139] -By jcys810
+0000	Standing
+0010	Laughing
+0011	Laughing
+0020	Floats
+0021	Floats upward till the topmost part of the map, then just floats.
+	If he is not able to reach the topmost part, his head will get stuck.
+	This animation doesn't allow you to see his head.
+0030	Teleport Out
+0031	Disappears instantly
+0040	Teleports In, then floats
+0041	Teleports In, then floats
+
+
+	Doctor (Red Energy) [0281] -By jcys810
+0000	Standing
+0010	Red Energy Appears
+0011	Red Energy Appears
+
+	Korons/Colons [0122]
+0010	Aggress
+0020	Abjure
+	How Pixel did it: 4 entities (200-203). Odd # were 0121, Even were 0120.
+	5 entities (0400, 0310-0313). The ones in the 300's were directly above the
+	Colons, with the 400 off to the side. On Boss begin, the 4 entities 310-313 were changed 	to 122. 
+	ANP 0010 direction 0002. When fight was over...
+	<ANP0310:0020:0005
+	<ANP0311:0020:0005
+	<ANP0312:0020:0005
+	<ANP0313:0020:0005
+	<CNP0400:0117:0005
+	<ANP0400:0005:0005<WAI0002
+	<ANP0400:0030:0004<SOU0070
+	<WAI0100<PRI<CMU0015<MSG
+	Victory!<WAI0140<CMU0000<NOD<CLO
+	<KEY<ANP0400:0006:0005<WAI0002<PRI
+
+
+
+MONSTERS
+
+	Door [0059] -By jcys810
+0000	Opens eye when approached
+0002	Opens eye and closes
+0006	Eye remains closed even when approached
+
+
+	Basil [0007] -By Metalogz
+0000	Immediately <MOV Basil to ANP location
+	(Where the event in which you <ANP it is)
+0001	Make Basil slow down and change direction as per normal to travel towards the left
+0002	Make Basil slow down and change direction as per normal to travel towards the right
+0003	Make Basil continue moving towards the direction it is already facing regardless of
+	where you are at the speed at which it has been <ANP'd
+
+
+	Kulala [0094] -By jcys810
+0000	Idle
+0010	Angry
+
+
+	Ravil [0115] -By jcys810
+0000	Attacking
+0005	Standing
+0010	Pauses for a while
+0030	Smoke appears
+0050	Lying down
+
+
+	Crow [0057] -By Metalogz
+0000	Normal
+0001	Slowly fly back to original NPC event position from wherever it is and act normally from then on.
+0002	Chase after you as per normal
+0003	Face ANP direction and slowly drift away towards direction it was moving in.
+	Does not chase after you even it you hit it after ANP'ed
+
+
+	Midorin	[0235] -By jcys810
+0000	Running about
+0004	Stops running, will slide if he is running
+0010	Runs forward for a while
+
+
+	Dragon Zombie [0200] -By Metalogz
+0000	Acts normally
+0001	Completely freezes in motion, but still damages you if you touch it
+0020	Charges fire in mouth and shoots them out
+0021	1st ANP, Charges fire in mouth and shoots them out
+	2nd ANP, Opens mouth and fires immediately
+0030	Opens mouth and fires immediately
+0035	1st ANP, Fires immediately with current animtion
+	2nd ANP, Acts normally
+0100	Dead, but still damages you as per normal if you touch it
+
+
+	Enemy - Press (killer) [0238] -By Metalogz
+0000	Normal
+0001	Normal
+0002	Doesn't move
+0010	Smash once, with eye closed
+0020	Waits a while, moves back same distance, but does not crush
+0030	Immediately moves back same distance, but does not crush
+
+
+* BOSSES
+
+	Balrog (running) [0068] -By Metalogz
+0000	Begins/Restarts boss fight battle pattern cycle.
+0005	Freezes Balrog in current position, but continues sliding in the direction
+	it was moving in before frozen. Faces in direction of ANP.
+0010	Instantly transports you into Balrog's grasps where he confines you in him
+	and later throws you out as per normal.
+	However, you are visible while you are in confinement.
+	Auto <SMC after he throws you out after ANP.
+	Thrown in opposite direction of ANP.
+0020	Instantly throws you as if thrown out of Balrog after he confines you.
+	Balrog is in appropriate animation, sliding in direction he was moving in
+	before ANP.
+	Boss fight pattern continues are per normal after that.
+	Thrown in opposite direction of ANP.
+
+
+	Igor (Boss) [0088] -By jcys810
+0000	Boss fight patterns
+0009	Charge laser
+0011	Turn left and freeze current frame
+
+
+	Toroko+ [0140] -By jcys810
+0000	Transforming animation
+0004	Freeze frame
+0020	Jumps and throws Flowercub
+0022	Throws Flowercub
+0025	Goes into landing frame for a while
+0026	Pauses and goes into standing animation for a while before continuing what
+	it was doing prior to this ANP
+0052	Goes into standing animation for a while
+0100	Dying animation
+0105	Changes into small Toroko's dying animation
+0106	Dying animation without flashing and smoke
+
+
+	Ma Pignon [0313] -By jcys810
+0000	Standing
+0100	Boss fight patterns, begin with jumping
+	(Unable to hurt you unless with falling boulders or falling Ma Pignons)
+0200	Boss fight patterns, begin with tackling wall
+	(Unable to hurt you unless with falling boulders or falling Ma Pignons)
+0300	Boss fight patterns, begin with tackling ceiling
+	(Unable to hurt you unless with falling boulders or falling Ma Pignons)
+0500	Screaming/Losing
+
+
+	Red Demon [0276] -By Metalogz
+0000	Makes sprite jolt up half a block and drop back down.
+0003	Freezes sprite in current frame. Still damages upon contact. Follows your
+	direction. Slides in direction it was moving in when ANP'ed.
+0010	Starts boss fight animations, starting with throws on ground.
+0020	Starts boss fight animations, starting with leap and throws in air.
+0021	Starts boss fight animations, starting with stomp on ground.
+0022	Starts boss fight animations, pauses for short while before beginning.
+0050	Boss death sequence. Exp included. Repeatable xD (trust me, it's fun)
+0051	Instant switch to dead boss sprite without sound or animations.
+0052	Freezes sprite in current frame. Still damages upon contact. Does not follow
+	your direction. Slides in direction it was moving in when ANP'ed.
+
+
+	Misery (Boss) [0247] -By jcys810
+0000	Floating pose but does not move
+0020	Standing
+0100	Hover up and starts boss fight patterns
+0110	Shoots at you and starts boss fight patterns
+0150	Teleports away and starts boss fight patterns
+0160	Shoots those orbs that turn into lightning bolts at you and starts boss
+	fight patterns
+1000	Smoke appears, screaming
+1010	Defeated
+
+
+	Doctor (Boss) [0263] -By jcys810
+0000	Unsure, he doesn't appear when I do this.
+0002	Appear and attacks with red energy, Boss animations
+0010	Attacks with red energy, Boss animations
+0020	Attacks with red energy, Boss animations
+0030	In pain animation, releases alot of red projectiles, Boss animations
+0032	Releases alot of red projectiles, Doctor sprite does not appear
+
+
+	Doctor (Muscle) [0267] -By Metalogz and jcys810
+0000	Image blinks
+0001	Faces left
+0006	Idle
+0007	(No idea what this is, but it has to be done to make him appear)
+0008	Getting ready to jump pose, then does an attack
+0010	Stops what he is doing and land
+0011	Does a random attack
+0015	Jump
+0016	Landing pose and shake screen
+0020	Shoot bats out of his palms
+0030	Elbow ram attack
+0031	Elbow ram attack, then jump
+0032	Elbow ram sprite frames but does not move
+0040	Stomps
+0100	Teleports and lands above Quote
+0101	Teleports and lands above Quote
+	No teleporting sound
+0102	Landing frame then suddenly disappears and reappears above Quote
+	No teleporting sound
+0500	Screaming to the right
+0501	Screaming to the left
+0510	Evaporating
+0511	Suddenly moves into the left wall
+
+
+* OBJECTS
+
+	Fireplace [0038] -By jcys810
+0000	Nothing
+0001	Freeze
+0010	Extinguish
+0011	Disappear instantly
+
+
+	Lift Platform [0025] -By Metalogz
+0000	Moves it a bit to the right
+0001	Makes where the lift currently is the lowest stop
+0002	Makes where the lift currently is the middle stop
+0009	Makes lift stop
+
+
+	Terminal [0085] -By jcys810
+0000	Blank
+0001	Blue Screen
+	(Change direction to 0002 to make it Red Screen, I think setting Flag 1000
+	 works as well)
+
+
+	Horizontal Block [0149] -By jcys810
+0000	Slides down and right by a little diagonally
+0001	Does not move even if you move close to it
+	(If moving while this event takes place, it will stop at the end before this
+	 happens, but while moving, the sound will be removed)
+0011	Move to the left
+0021	Move to the right
+
+
+	Vertical Block [0157] -By jcys810
+0000	Slides down and right by a little diagonally
+0001	Does not move even if you move close to it
+	(If moving while this event takes place, it will stop at the end before this
+	 happens, but while moving, the sound will be removed)
+0011	Move up
+0021	Move down
+
+
+	Shutter (Small) [0185] -By jcys810
+0000	Stationery
+0010	Move
+
+
+	Shutter (Large) [0184] -By jcys810
+0000	Stationery
+0010	Move
+
+	Rocket [0231] -By Metalogz
+0010	Activate launch
+
+
+	General Notes [By Shmitz]:
+This document is mostly for cutscene sprites and guests.
+Enemy and boss animations, from what brief experimentation
+I did on them, mostly consist of an innert mode, attack mode,
+and specific attack functions. These would be better suited
+to be catalogued in a different document, and I'm unsure how
+useful they would be for more detailed scripted events.
+
+The most likely numbers to find animations on are X0 and X1. 
+The next most likely are X5 and X6. However, there enough 
+exceptions that sometimes you'll just need to brute force
+your way through all of them if you're looking for something 
+specific.
+
+There does not seem to be any standard convention for what
+types of animations go with what number. They vary from entity
+to entity. Many entities lack what seem like common sense 
+animations (example: Curly's 0010 animation). It seems likely
+that unless an animation was needed for a specific entity
+while the game was being created, it was not enabled or 
+implemented. It is possible the animations from one entity
+could be applied to another through exe hacking, but that's
+way beyond the scope of this document.
+
+Many animations have duplicates. In my testing environment,
+there did not seem to be any difference. However, the 
+difference could be subtle or dependant on something my
+environment lacked. For example, if my test room didn't have
+drop-offs in it, I would not have detected that some "walk
+forward" animations had a "no falling" aspect to them. If
+I find differences at a later date, I will make note of them.
+
+
+	Last Thoughts:
+These are mostly the cutscene sprites that I will have need of
+in my own project. I do not know if I will be getting around to
+investigating and listing the animations for the other sprites,
+so feel free to add to this document and add your "credits" to mine. 
+
+
+	Credits:
+This file is built entirely on the work of others, Pixel for 
+creating Cave Story, and too many hard-working people in the 
+community to list. These credits are not for recognition, but 
+primarily for version tracking, to avoid duplication of effort.
+
+04/23/06
+Shmitz - 	Sue, Curly, King, Misery (standing), Misery (floating), Balrog (cutscene), Hermit Gunsmith
+07/25/07
+Echidna-san - 	Quote
+
+DUNNO
+jcys810 -       Already stated and I'm too lazy to check
+
+29/01/08
+Metalogz -	Doctor (Muscle)
+
+11/08/08
+Metalogz -	Enemy - Press (Killer), Dragon Zombie
+
+02/11/08
+Metalogz -	Crow, Basil, Balrog (Running), Rocket
+
+02/11/08
+jcys810 -	Reorganised ANP.txt
+
+04/11/08
+jcys810 -	Expanded Doctor (Muscle) at Metalogz request
+
+15/06/09
+jcys810 -	Enemy - Door
+Metalogz -	Red Demon

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Trolly NPC">
+	<panel>
+		<field type="label">NPC 56</field>
+		<field type="info">
+			Replaces NPC 56 with a trolly
+			that moves left and right. It can be turned on/off with some
+			script state. State 0 is idle, state 1 is roll.
+		</field>
+			
+		<field type="data" offset="0x4311D0">
+			55 8B EC 8B 4D 08 8B 41 4C 83 F8 01 
+			0F87 38010000
+			FF24853B134300C7 41 68 00 00 00 00 
+			E9 EB0000008B 41 08 8B 51 0C 81 EA 00 20 00 00 B9 00 20 00 00 29 C8 50 29 CA 52 C1 E1 01 01 C8 50 01 CA 52 
+			E8 A6DAFFFF83 C4 10 8B 4D 08 85 C0 
+			0F84 B80000008B 41 08 3B 05 54 E6 49 00 
+			7F 2C83 61 18 FE 8B 41 10 83 C0 38 3D 80 04 00 00 
+			7E 05B8 80 04 00 00 89 41 10 8B 41 04 83 E0 04 
+			74 0983 49 18 04 
+			E9 83000000
+			EB 2783 61 18 FB 8B 41 10 83 E8 38 3D 80 FB FF FF 
+			7D 05B8 80 FB FF FF 89 41 10 8B 41 04 83 E0 01 
+			74 0683 49 18 01 
+			EB 5A8B 41 10 01 41 64 83 79 64 00 
+			7C 0B81 79 64 00 02 00 00 
+			7F 1B
+			EB 43C7 41 64 00 02 00 00 FF 49 68 83 79 68 00 
+			7D 1CC7 41 68 02 00 00 00 
+			EB 1331 C0 89 41 64 FF 41 68 83 79 68 02 
+			7E 0531 C0 89 41 68 8B 41 68 83 F8 01 
+			75 0F6A 01 6A 6B 
+			E8 66F3FEFF83 C4 08 8B 4D 08 8B 41 18 85 C0 
+			74 09C7 41 10 00 00 00 00 
+			EB 2A8B 41 10 83 F8 00 
+			7D 0F83 C0 28 83 F8 00 
+			7E 14B8 00 00 00 00 
+			EB 0D83 E8 28 83 F8 00 
+			7D 05B8 00 00 00 00 89 41 10 01 41 08 8B 41 68 C1 E0 04 89 41 58 83 C0 10 89 41 60 C7 41 54 90 00 00 00 C7 41 5C C0 00 00 00 8B E5 5D C3 
+			E9114300
+			F5114300
+		</field>
+	</panel>
+</hack>

@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Rsrc-Class-Path: ./
+Class-Path: .
+Rsrc-Main-Class: ca.noxid.lab.EditorApp
+Main-Class: ca.noxid.lab.EditorApp
+

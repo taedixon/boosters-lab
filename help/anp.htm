@@ -1,0 +1,55 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>ANP: How it's Done</h1>
+The ANP command is a cryptic and confusing one, yet very powerful if used correctly. It is what allows you to orchestrate cutscenes, activate objects, and do other interactions with the entities on your map. This tutorial aims to help you understand the proper use of the ANP command, what each of its parameters means, and what can and cannot be done with the command.
+
+
+<br /><br /><h2>So what's ANP mean?</h2>
+<b>ANP</b> stands for <b>A</b>nimate <b>NP</b>C. However, this description of the term is a little misleading; there are no such thing as "generalized animations" in cave story. Every single NPC is essentially a finite state machine.
+
+</p><p>
+<img src="./img/states.png" alt="fsm diagram"></img>
+<p>Some entities, like the critter, are entirely autonomous; all their states can be reached through the normal behaviour of the entity. Others, typically character NPCs, have a number of action paths they can take that don't always link together.</p><p>
+The number in each bubble on the diagram is what I'll refer to as the entity's scriptstate. When an entity is created for the first time, it <em>always</em> has a scriptstate of zero, which is typically used to try and "reset" the entity. I would like to repeat that none of the animations are general. Every entity has its own set of states, and while there may be some patterns in the way Pixel designs them, there is no rule that says any one has to be like another.
+</p>
+
+<br /><h2>Well, what does ANP do?</h2>
+The primary function of ANP is to override the scriptstate and direction of a particular NPC (or group of NPCs), forcing it to suddenly behave in a different way. The ANP command will not change any other variables of the entity, so if the code was expecting a natural transition to the new state forcing it may have unexpected results. Most entities that are meant for use with the <i>&lt;ANP</i> command have special measures to make sure that previous states won't impact a new animated state.
+
+<br /><br /><h2>The Parameters</h2>
+The ANP command has the format <i>&lt;ANPXXXX:YYYY:ZZZZ</i>
+<ul>
+<li><strong>X: NPC</strong></p><p>
+The NPC parameter is how the game decides which entities to apply the new scriptstate to. Like most commands on entities, this searches by the Event Number of the entity. If more than one entity on the map has the same event number, the animation is applied to all of them. Entities spawned during play by other entities or commands like <i>&lt;SNP</i> all have an event number of zero.
+</li>
+<li><strong>Y: Animation</strong></p><p>
+The animation parameter is the new scriptstate that will be applied to the affected entities. Applying an unsupported scriptstate to an entity may either do nothing, make it behave strangely, or cause a crash, depending on the entity.
+</li>
+<li><strong>Z: Direction</strong></p><p>
+The direction parameter is not always used, and its meaning is different between all the different entities that *do* use it. Generally speaking, use 0000 to represent right and 0001 to represent left. Sometimes the direction can be the direction the sprite moves, or sometimes it can signify a different sprite as in the case of door entities. If you are unsure, use 0000.
+</li>
+</ul>
+<p class="warning">Don't forget that TSC parameters always need to be 4 characters long or you will die
+</p>
+
+<h2>Example</h2>
+This example code assumes that we have an entity of type 150 (Quote) on the map with an event number 123.
+
+<p class="code">#0100<br />
+&lt;ANP0123:0050:0001&lt;WAI0050&lt;ANP0123:0002:0000<br />
+&lt;WAI0025&lt;CNP0123:0018:0000&lt;END
+</p>
+<p>This code would make Quote walk left for 50 frames, stop, look up, then turn into a door when event #0100 is run.
+</p>
+
+<br /><h2>Final considerations:</h2>
+For a sort-of complete list of available character animations, check <a href="./ANP.txt">anp.txt</a>. All the values in this listing were determined empirically, so some states (such as 11 for quote) aren't necessarily "meant" to be animated to, but the result is still described.<p>
+If you use assembly to write your own NPCs, the scriptstate variable is <b>[+0x74]</b> and the direction variable is <b>[+0x4C]</b>. Design with this in mind if you want to be able to use ANP with your own entities.
+</p>
+<p align="right">Author: Noxid</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>Credits</h1>
+
+<p>Credit editing is one of the very least used elements in Cave Story modding due to the minority of completed mods. However, it is worth learning how to manipulate the slightly different coding techniques to make your credits accommodate the cast and contributions in your mod in the event that you manage to see your project through to the end.</p>
+
+<p>The first thing to understand is that a majority of the credits in Cave Story take place in a blank room. You must also understand which tasks are handled by the room's script, and which ones are handled by the Credit.tsc file. Credit.tsc only handles the scrolling text, and, in Cave Story, what music plays at certain points. You can make the room's script handle the music if you want to, but Pixel chose otherwise, as you have more synchronization control that way. Everything else from credit art illustrations, to epilogue scenes is handled by room number 0's script, save the time during which the epilogue scenes are in play on the right side of the screen in which case another map has been temporarily loaded. The first thing to do is have your credit room, and know which event starts the credits up. In this example, we'll assume that your mod's ending cutscene transitions to starting the credit room at event 100.
+
+<blockquote class="code"><pre>#0100
+&lt;KEY&lt;FOM0016&lt;WAI0100&lt;EQ-0256&lt;CRE&lt;WAI0340</pre></blockquote>
+
+This will cause the Credit.tsc script to execute.</p>
+
+<h2>Credit.tsc</h2>
+
+<p>Credit.tsc is a slightly abstract form of TSC scripting, but much simpler and more intuitive. The tasks it handles in Cave Story are the scrolling text, as well as which song plays at what point. Some commands in Credit.tsc are, in fact, identical to some TSC commands, save that Credit.tsc counterparts only have one character prior to the parameters, and that if it's an alphabetical letter, then it's lowercase. So, let's see how to program in it.</p>
+
+<h3>Credit.tsc Commands</h3>
+
+<!--Posted Image-->
+<p>There is a much less broad variety of Credit.tsc commands, but some come so close to being identical with certain TSC commands, that the only difference is the characters used to execute it. Here is a table of all of the Credit.tsc commands used in the vanilla game. It is recommended that you still read the other sections for learning how to use these commands, and use this table primarily for reference purposes.</p>
+<table style="background-color: #DDDDDD; color: #222222;"><tr><th>Credit.tsc Command</th><th>TSC Counterpart</th><th>Function</th></tr>
+<tr><td class="center">!XXXX</td><td class="center">&lt;CMUXXXX</td><td>Same as &lt;CMU</td></tr>
+<tr><td class="center">+XXXX</td><td class="center">None</td><td>Sets the X value of the scrolling text</td></tr>
+<tr><td class="center">-XXXX</td><td class="center">Possibly &lt;WAIXXX</td><td>Separates lines of scrolling text by X number of pixels</td></tr>
+<tr><td class="center">[X]YYYY</td><td class="center">None</td><td>Displays image of number Y to the left of X text</td></tr>
+<tr><td class="center">~</td><td class="center">&lt;FMU</td><td>Same as &lt;FMU</td></tr>
+<tr><td class="center">lXXXX</td><td class="center">#XXXX</td><td>Sets where the script starts when an event is called</td></tr>
+<tr><td class="center">jXXXX</td><td class="center">&lt;EVEXXXX</td><td>Calls the part of the script marked by an l of the same #</td></tr>
+<tr><td class="center">fXXXX:YYYY</td><td class="center">&lt;FLJXXXX:YYYY</td><td>Same as &lt;FLJXXXX:YYYY</td></tr>
+<tr><td class="center">/</td><td class="center">Possibly &lt;END</td><td>Makes the credits stop scrolling</td></tr></table>
+
+
+<h2>Initiating</h2>
+
+<p>The first thing you want to start with with your credit script is use the +XXXX command. In this example, we'll use +0192. This will set the X position of the scrolling text. +0192 aligns them so that the credits will be on the right side of the screen, leaving the left side free for illustrations. Note that if you use this command again, then it will use the provided X parameter as a new value instead of adding to the current. So if you later on put +0063, then all text succeeding that command will appear on the left side of the screen, which we will do later on.</p>
+
+<p>Next, we'll see the !XXXX command. This works almost exactly like the &lt;CMU command aside from the fact that “&lt;CMU” is replaced with “!”. So in the vanilla game, it executes “!0033” to start the song, The Way Back Home. Even though you COULD make your room's script set the music, it's probably best to let Credit.tsc handle it so that you have more control over the synchronization. So, to get the X position of the credits, and determine the music that is to be played, put this code at the beginning of your credit script:
+
+<blockquote class="code"><pre>+0192
+!0033</pre></blockquote></p>
+
+
+<h2>Text, Icons, and Spacing</h2>
+
+<p>So now we'll cover how to do text, icons for characters who appeared in the game, and spacing text. To make your credit script display text, put what ever you want it to say inside of square brackets. Example:
+
+<blockquote class="code"><pre>[  = Cast =  ]</pre></blockquote>
+
+This will make the text, “= Cast =” scroll up. However, there is something very wrong with that code above. Every string in Credit.tsc MUST be followed by a four-digit number. Even if we use the command which separates text into lines which we will take a look at later, the strings will all overlap each other if we don't follow the close square brace with a four-digit number. The number adjacent to each string corresponds to the image which will appear to the left of it in-game. 0000 corresponds to a blank image. Even if you don't want said line of text to have an image next to it, you still have to follow the string with 0000. See in Pixel's code how essential this is:
+
+<blockquote class="code"><pre>[- Surface Dwellers -]0000-0064
+[Plucky, looks up]0000-0016
+[ to her brother]0000-0016</pre></blockquote>
+
+We'll talk about those minuses followed by XXXX in a minute, but for now, focus on the 0000's after the strings. I just can't stress enough how important it is to follow your text with XXXX.</p>
+
+<p>It is entirely possible, however, that you will want an image to the left of some lines of text, as done in the credits for Cave Story. As you might notice here:
+
+<blockquote class="code"><pre>[Plucky, looks up]0000-0016
+[ to her brother]0000-0016
+[  Sue Sakamoto]0001-0064
+[Her occasionally]0000-0016
+[ reliable brother]0000-0016
+[  Kazuma Sakamoto]0002-0064</pre></blockquote>
+
+there are images next to some lines of text. Please continue to ignore the minuses, as the time draws ever nearer that we'll talk about those.</p>
+
+<p>Here is a reference for which numbers represent which credit icons:
+<img alt="Numbered Credits ref" src="./img/Castsnumbered.jpg"></img></p>
+
+
+<p>Now we'll see the command which vertically spaces out lines. And that is -XXXX. What this does is start a new line the number of pixels down entered in the command. So in this example:
+
+<blockquote class="code"><pre>[  = Cast =  ]0000
+-0320
+[- Surface Dwellers -]0000</pre></blockquote>
+
+It says “= Cast =” then 320 pixels below it, appears the text, “- Surface Dwellers -”. In Pixel's code, he started a new line to add the command for major jumps, but kept the spacing command adjacent to a string's image number in minor jumps, so it was arranged like this:
+
+<blockquote class="code"><pre>[  = CAST =  ]0000
+-0320
+[- Surface Dwellers -]0000-0064
+[Plucky, looks up]0000-0016
+[ to her brother]0000-0016
+[  Sue Sakamoto]0001-0064
+[Her occasionally]0000-0016
+[ reliable brother]0000-0016
+[  Kazuma Sakamoto]0002-0064</pre></blockquote></p>
+
+<p>It's irrelevant whether you start a new line for the line jump or not. Just keep in mind that if the code for a string of text is not followed by a four-digit number, then the -XXXX command which follows it will have no effect, and the next string of text will overlap it regardless.</p>
+
+<p>With the knowledge you now hopefully possess on Credit.tsc, try understand this code:
+
+<blockquote class="code"><pre>+0192
+!0033
+[  = CAST =  ]0000
+-0320
+[- Surface Dwellers -]0000-0064
+[Plucky, looks up]0000-0016
+[ to her brother]0000-0016
+[  Sue Sakamoto]0001-0064
+[Her occasionally]0000-0016
+[ reliable brother]0000-0016
+[  Kazuma Sakamoto]0002-0064
+[Sue's mother]0000-0032
+[  Momorin Sakamoto]0003-0064
+[Sue's grandfather]0000-0016
+[ figure]0000-0016
+[  Booster]0004-0064
+[The Mimiga-shaped]0000-0016
+[ coward]0000-0016
+[  Itoh]0005-0064
+-0063
+[- Mimiga Village -]0000-0064
+[Sweet and brave]0000-0032
+[  Toroko]0013-0064
+[The village leader]0000-0032
+[  King]0014-0064
+[The Number-Two]0000-0032
+[  Jack]0015-0064
+[Never stops eating]0000-0032
+[  Mahin]0016-0064
+[Loves to fish]0000-0032
+[  Kanpachi]0020-0064
+[Mans the farm]0000-0032
+[  Sandaime]0019-0064
+-0063
+[- Grasstown -]0000-0064
+[Lives alone]0000-0032
+[  Santa]0017-0064
+[The colored Mimiga]0000-0032
+[  Chaco]0018-0064
+[Power Room watcher]0000-0032
+[  Malco]0025-0064
+-0063
+[- Sand Zone -]0000-0064
+[Ally of the Mimigas]0000-0032
+[  Curly]0007-0064
+[Raised by Curly]0000-0032
+[  The Colons]0008-0064
+[Original keeper of]0000-0016
+[ the Sand Zone]0000-0016
+[  Jenka]0009-0064
+-0031
+[Jenka's puppies]0000-0032
+[  Hajime]0010-0032
+[  Shinobu]0010-0032
+[  Kakeru]0010-0032
+[  Mick]0010-0032
+[  Nene]0010-0064
+-0063
+[- Labyrinth -]0000-0064
+[The labyrinth's]0000-0016
+[ weapons dealer]0000-0016
+[  Chaba]0027-0064
+[The labyrinth's]0000-0016
+[ resident physician]0000-0016
+[  Dr. Gero]0028-0064
+[I am a nurse!]0000-0032
+[  Nurse Hasumi]0029-0064
+-0063
+[- Plantation -]0000-0064
+[The girl Mimiga]0000-0032
+[  Chie]0023-0064
+[The grandpa Mimiga]0000-0032
+[  Zett]0024-0064
+[Sprinkler manager]0000-0032
+[  Megane]0022-0064
+[Believers in the]0000-0016
+[ Doctor]0000-0016
+[  The Shovel Brigade]0021-0064
+-0063[/size][/size][/size][/size]
+[size=4][- Villains -]0000-0064
+[The power-snatching]0000-0016
+[ betrayer]0000-0016
+[  The Doctor]0006-0064
+[The Doctor's servant]0000-0032
+[  Misery]0011-0064
+[Misery's punching bag]0000-0032
+[  Balrog]0012-0064
+-0063
+[- Etcetera -]0000-0064
+[The Hermit Gunsmith]0000-0032
+[  Tetsuzou Kamadani]0035-0064
+[The mysterious]0000-0016
+[ mushroom]0000-0016
+[  Ma Pignon]0045-0064
+[The family living in]0000-0016
+[ the outer wall]0000-0016
+[  The Littles]0031-0064
+[The mysterious]0000-0016
+[ native inhabitants]0000-0016
+[  Cthulhu]0032-0064
+[The statue carver]0000-0032
+[  Numahachi]0088-0064
+-0100</pre></blockquote></p>
+
+
+<p>As you most likely know, the second half of the credits involves different music, and the scrolling text appearing on the left side of the screen. To transition to this state like Pixel did, add a “~” to the code to start fading the current song, then a line skip of about 250 pixels (-0250) before changing to the new song, so that the music fade will sound natural. Then, using !XXXX, change the music to what you want to play during the second part of the credits. And use +0063 to make the upcoming text appear on the left side of the screen if you so desire. Example:
+
+<blockquote class="code"><pre>~
+-0250
+!0001
++0063
+[ = Monsters = ]0000-0032
+-0063
+[ Leaps and hops: Critter]0039-0048
+[ Every cave needs a: Bat]0040-0048
+[ Possessed by something: The Door]0041-0048
+[ Charges when angered: Behemoth]0048-0048</pre></blockquote></p>
+
+
+<p>If you've gotten to the end, and you want to vertically center one line of text and make it stay there, then use this:
+
+<blockquote class="code"><pre>+0040
+[= Special Thanks =]0000-0032
++0048
+-0032
+[Torai    ]0037-0040
+[Naoku  ]0122-0040
+[Kuroihito]0119-0040
+[BA2       ]0033-0040
+[Okami    ]0120-0040
+[Nao       ]0117-0040
+[Shih Tzu  ]0123-0040
+[Gideon Zhi]0124-0040
+[And many others]0000-0040
+-0063
+[Thank you very much.]0129-0032
+-0240
++0120
+[Cave Story ~ The End]0000
+-0280
+/</pre></blockquote></p>
+
+<p>At the end, you want to make the last line of text go up 280 pixels in order to center it. The forward slash ends the credit script, making the text stop scrolling. If you wanted the credits to continue out through the top of the screen and disappear, then you'd just finish the script off without the forward slash. In pixel's script, there was some weird code after the forward slash:
+
+<blockquote class="code"><pre>[Cave Story ~ The End]0000
+-0280
+/
+
+&lt;&lt;&lt;
+2000ƒJ?[ƒŠ?[ƒGƒ“ƒfƒBƒ“ƒO</pre></blockquote></p>
+
+<p>I can confirm that this code never executes, as removing it has no ill effects. Removing the forward slash and keeping the unknown text, however, causes the game to crash. This is most likely because the “/” ends the script, so that any extra code is for naught. What is this code for, however? It is most likely a note by Pixel to himself. It is Japanese writing that says, "2000Curly Ending" (thanks goes to GIRakaCHEEZER for translating), which simply means that since flag #2000 is the one which triggers the best ending, and the best ending involves saving Curly, that he used this to remind himself.</p>
+
+<h2>Conditional Credits</h2>
+
+<p>If your mod only has one ending, the odds are that you know everything you need in order to script your own credits; however, if it has multiple endings, then you may want different parts of scrolling text to appear depending on which ending you achieved, or certain tasks you accomplished. Such as Ballos, the Butes, Mesas, Green Devils, Rollings, Deleetes, and Heavy Press making an appearance in the credits only if you went through Hell. In this section, we'll cover how to script this ourselves.</p>
+
+<p>At various parts of the credit script, you might notice the lXXXX command. This is almost like the event number in a TSC script. When that event is called, it jumps to that part of the script. In a moment, we will look at how to call these events. Another similarity between the event numbers and the lXXXX command is that you must list them in numerical order. (i.e. so that 90 doesn't go before 80) The difference between this and the event numbers in TSC is that it just jumps to a certain point in the credit script when called, as opposed to calling a set of instructions that does not intersect with the rest of the script.</p>
+
+<p>By using the jXXXX command, we are able to jump to the part of the credit script of the corresponding lXXXX. The jXXXX works almost identically to the &lt;EVEXXXX TSC command. Note that this command should only be used if you're also using the fXXXX:YYYY command.</p>
+
+<p>The fXXXX:YYYY command functions identically to the &lt;FLJXXXX:YYYY. It jumps to event Y in the case that flag X is set. Conveniently, the X parameter accepts flags that have been set by scripts in your mod. For example, the flag 2000 is only set if you went through the Sacred Grounds; therefore, in this code:
+
+<blockquote class="code"><pre>f2000:0190j0200l0190
+-0002
+[ Hell's messenger: Bute]0098-0048
+[ Hell's messenger: Mesa]0099-0048
+[ Innocent demon: Green Devil]0100-0048
+[ Rolls along the walls: Rolling]0094-0048
+[ Blocks passage: Deleet]0095-0048
+l0200</pre></blockquote>
+
+all of that text only shows if flag 2000 is set.</p>
+
+<p>So, that is pretty much it, as far as Credit.tsc goes. Don't worry if you feel a bit shaky on this at first. Feel free to reference back to the table above, and try taking a full examination of the vanilla game's Credit.tsc as an exercise. When you looked at it at first, it may have seemed like a bunch of gibberish, but you come to realize that it's even simpler easier to understand than regular TSC.</p>
+
+<h2>Illustration Art Images</h2>
+
+<p>The showing of credit illustrations is handled by the room's script. If your mod has multiple alternate endings which show a different series of credit art illustrations, then you'll want to have flag jumps placed later on in the same event:
+
+<blockquote class="code">&lt;KEY&lt;FOM0016&lt;WAI0100&lt;EQ-0256&lt;CRE&lt;WAI0340
+&lt;FLJ2000:0102&lt;EVE0101</blockquote></p>
+
+<p>If your mod only has one ending, or if you only need one series of pixel art illustrations, then the &lt;FLJ2000:0110 will not be necessary. In this example, we use flag 2000 for the jump for the different ending because that's the flag set in Cave Story if you went through the Sacred Grounds. With &lt;EVE0101, we jump to event #0101 if we did not get the special ending. If you want, you could just make the event script continue with the normal illustration ending set if you wanted, but we'll keep it a bit more organized in this example.</p>
+
+<h2>Showing The Illustrations</h2>
+
+<p>The &lt;SIL0001 (Show ILlustration) command shows an illustration of the corresponding number. To show illustrations in the same fashion that Pixel did in Cave Story, use this code:
+
+<blockquote class="code"><pre>#0101
+&lt;SIL0001&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0002&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0003&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0004&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0005&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0006&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0007&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0008&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0009&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0010&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0011&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0017&lt;WAI0350&lt;CIL
+&lt;WAI0280&lt;EVE0200</pre></blockquote></p>
+
+<p>The &lt;WAI0350 determines that it stays for 350 steps, then it clears, and keeps the left side of the screen clear for 20 ticks before showing another illustration. You will have to make sure that the showing of each set of illustrations must remain synchronized with the scrolling text scripted in Credit.tsc. In the above code, there is a time of 280 ticks during which there is no illustration showing, and waits for the current part of the credits to finish. In this sample of code, however:
+
+<blockquote class="code"><pre>#0102
+&lt;SIL0012&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0018&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0014&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0002&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0003&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0004&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0005&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0007&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0008&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0009&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0010&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0011&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0017&lt;WAI0350&lt;CIL
+&lt;WAI0020&lt;EVE0200</pre></blockquote></p>
+
+<p>There are enough illustrations so that there won't be a blank period before the next part of the credits continues. Each number in the &lt;SIL TSC command's parameter corresponds to a certain credit image. Example:</p>
+<ol style="padding-left: 5em;"><li>Kazuma and Quote on the sky dragon</li>
+<li>The fight with the Undead Core</li>
+<li>Quote fighting Misery</li>
+<li>Quote riding the rocket up to the Doctor's throne</li>
+<li>Quote making his way up the outer wall</li>
+<li>Quote in the Waterway with IronHead sneaking up behind him</li>
+<li>Quote fighting Balrog in the Boulder chamber (Curly is shown unconscious)</li>
+<li>Quote in the camp receiving the clinic key from Dr. Gero, and Nurse Hasumi tending to Curly</li>
+<li>King, Toroko, the Doctor, and Balrog (fleeing and crying) in the Sand Zone storehouse</li>
+<li>Jenka's house with Quote, Jenka, and her five puppies</li>
+<li>Curly Brace and the Colons fighting Quote</li>
+<li>Quote and Curly on top of Balrog (after fighting Ballos)</li>
+<li>(There is no illustration in slot 13)</li>
+<li>Quote and Curly running through Hell</li>
+<li>The island floating high in the sky</li>
+<li>The island floating high ins the sky (black and white [kinda])</li>
+<li>King, Jack, and Sue arguing amongst themselves</li>
+<li>Ballos summoning lightning</li></ol>
+
+<h2>Your Own Illustrations</h2>
+
+<p>To get your own illustrations, open up your mod's exe with resource hacker, expand the “BITMAP,” tab, and apply the same principle of that found in the tutorial on replacing music. If you either need more slots, or don't want to replace any existing illustrations (i. e. you're making a mod that's pretty much cave story except it has a fourth ending, and you want to have illustrations to accommodate the alternate scenes, or you simply need more), then start by creating your own added illustration. Ensure that it is in the same format as a preexisting one, and the same dimensions. In Resource Hacker, select “Action,” and from the drop-down menu, select “Add a new Resource...” Open up the credit art illustration you want to add. For resource name, enter “CREDIT19,” (or if you're adding even more, then it's CREDIT20, CREDIT21, etc.) and in the language field, either leave it blank, it fill it with “1041,”. If you're replacing music, it doesn't matter, but I'm not sure about when you're adding a credit art illustration. I've only tested that it works if you fill it with 1041, but it probably works otherwise as well.
+In your TSC script, make the &lt;SIL command match up with the credit art illustration number you designated, and it will accept it as any other illustration. Example:
+
+<blockquote class="code"><pre>&lt;SIL0019&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0020&lt;WAI0350&lt;CIL&lt;WAI0020
+&lt;SIL0021&lt;WAI0350&lt;CIL&lt;WAI0020</pre></blockquote></p>
+
+<p>Even though there are no credit art illustrations of these numbers in the vanilla game, your TSC script accepts them perfectly without replacing any existing ones. This requires no assembly, and is 100% compatible with porting.</p>
+
+<h2>Epilogue Scenes</h2>
+
+<p>When the illustration sequence has ended, it will jump to an event. In this example, we'll have it jump to event 200. In the vanilla game, it starts by turning NPC 400 into Quote, and making him walk in place:
+
+<blockquote class="code"><pre>#0200
+&lt;CNP0400:0150:0000
+&lt;ANP0400:0099:0000
+&lt;FAI0001&lt;WAI0610&lt;FAO0001
+&lt;TRA0074:0100:0001:0001</pre></blockquote></p>
+
+<p>It then transports you to a room which shows an epilogue scene. Don't worry about this interfering with the scrolling credit text, as it's persistent throughout rooms. I'm not going into detail in doing epilogue scenes, as there is another entire tutorial on cutscenes. Just know that each room should have the dimensions of 21 X 16, and that any points in your scene's map along the X axis from 0-9 will appear as blackness, so as to accommodate the credit text.</p>
+
+<p>Also, keep in mind that once your scene ends, that it should transition back to the credit room in preparation for the next epilogue scene. And if you so desire, then execute this code to make Quote walk in place before the next scene:
+
+<blockquote class="code"><pre>&lt;CNP0400:0150:0000
+&lt;ANP0400:0099:0000</pre></blockquote></p>
+
+<p>In between each scene, there is a 400 tick waiting period. I'm not saying to do it the same way Pixel did, but just understand that this is the way it works in between each epilogue scene:
+
+<blockquote class="code"><pre>&lt;CNP0400:0150:0000
+&lt;ANP0400:0099:0000
+&lt;FAI0001&lt;WAI0400&lt;FAO0001
+&lt;TRA0075:0100:0020:0001</pre></blockquote></p>
+
+<p>You can make your own epilogue scenes last however long as you want, but Pixel chose to make all of his epilogue scenes last 300 ticks, save the scene where Malco activates the other robots, in which case it lasts an extra 50 ticks, and the end scene in the Labyrinth in which there's an extra 2 ticks. But this is all really up to you. This section was primarily showing you how Pixel did his epilogue scenes, and not telling you how you should do yours.</p>
+
+<h2>The End</h2>
+
+<p>When the Credit.tsc script ends in Cave Story, Quote looks up, and his friends drop down. I'm not saying you have to do this the same way, but it should be noted that the characters who drop down have abstract parameters for their directions that I can't explain. Finally, the “thank you!” text appears. So here's Pixel's code for that:
+
+<blockquote class="code"><pre>#1090
+&lt;CNP0400:0150:0000
+&lt;ANP0400:0100:0000
+&lt;FAI0001
+&lt;FLJ2000:1200&lt;EVE1100
+#1100
+&lt;WAI0732
+&lt;ANP0400:0002:0000&lt;WAI0050
+&lt;CNP0503:0352:0300&lt;WAI0020
+&lt;CNP0504:0352:0400&lt;WAI0020
+&lt;CNP0502:0352:0200&lt;WAI0020
+&lt;CNP0505:0352:0500&lt;WAI0020
+&lt;CNP0501:0352:0100&lt;WAI0020
+&lt;CNP0506:0352:0600&lt;WAI0020
+&lt;CNP0500:0352:0000&lt;WAI0020
+&lt;ANP0400:0000:0000
+&lt;SIL0016
+&lt;FMU&lt;WAI0200&lt;CMU0000
+&lt;CNP0600:0360:0000
+&lt;WAI9999&lt;END
+#1200
+&lt;WAI0432
+&lt;ANP0400:0002:0000&lt;WAI0050
+&lt;CNP0510:0352:1000&lt;WAI0020
+&lt;CNP0511:0352:1100&lt;WAI0020
+&lt;CNP0509:0352:0900&lt;WAI0020
+&lt;CNP0512:0352:1200&lt;WAI0020
+&lt;CNP0508:0352:0800&lt;WAI0020
+&lt;CNP0513:0352:1300&lt;WAI0020
+&lt;CNP0507:0352:0700&lt;WAI0020
+&lt;ANP0400:0000:0000
+&lt;SIL0015
+&lt;FMU&lt;WAI0200&lt;CMU0000
+&lt;CNP0600:0360:0000
+&lt;WAI9999&lt;END</pre></blockquote></p>
+
+<p>In event 1090, Quote looks up, and based on which ending you got, a certiain set of characters drops down next to Quote. In event 1100, the character set from the normal ending drops down, but in event 1200, the character set from the hidden ending drops down. And at the end, there's a 9999 waiting tick, which should be indefinite.</p>
+
+<h2>Summary</h2>
+
+<p>I hope that you have gained a deep understanding in making credits with Credit.tsc, illustration art, and epilogue scenes. It's a shame how little this is used in modding, as about 65% of mods are abandoned, approximately 25% are in progress, and only around 10% are completed. And not even all of those 10% take advantage of the useful tools available for credit editing. I hope that you now have the motivation to see your mod through to the end, so that you can utilize the powerful tools of credit editing.</p>
+
+<p align="right">Author: HaydenStudios</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

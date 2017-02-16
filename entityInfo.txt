@@ -1,0 +1,45 @@
+//num	short1	short2	long rect desc category
+// tab delimited
+//Contributors: Wistil (cannibalized CE's entity list)
+//		Noxid (most of entities 0-180 & some more)
+//		Carrotlord (rects for entities 180+)
+//     Bombchu Link (updated and refreshed framarects.)
+#0	 	 	Null 	0:0:0:0	<nothing> 	General:Tool CE:General ;
+#1	Weapn	energy	EXP	0:32:32:64	Weapon energy 	CE:General ;
+#2	Enemy	Behem	Behemoth 	0:0:64:48	Enemy - Behemoth 	CE:Egg1 Tileset:Eggs1 Enemy:Ground ;
+#3	?	 	Null_disappear 	0:0:0:0	<nothing?> 	CE:Unsure ;
+#4	Smoke	 	Smoke 	128:0:160:32	Smoke 	General:Effect CE:Misc Tileset:Sym ;
+#5	Enemy	CrtHG	Critter(g) 	0:94:32:124	Enemy - Critter (hopping, green) 	CE:Egg1 Tileset:Eggs1 Enemy:Ground ;
+#6	Enemy	BtlHG	Beetle(horiz_g) 	0:160:32:192	Enemy - Beetle (horiz, green) 	CE:Egg1 Tileset:Eggs1 Enemy:Air ;
+#7	Enemy	Basil	Basil 	512:128:560:166	Enemy - Basil 	CE:Egg1 Tileset:Eggs1 Enemy:Ground ;
+#8	Enemy	BtlF1	Beetle(follow) 	160:160:192:192	Enemy - Beetle (follow 1) 	CE:Egg1 Tileset:Eggs1 Enemy:Air ;
+#9	Blrg	drop	Balrog(DropIn) 	0:0:80:48	Balrog (drops in) 	Tileset:Bllg CE:Balrog ;
+#10	Boss	Blrg0	Balrog(Shoot) 	0:0:80:48	Boss - Balrog (shooting) 	Tileset:Bllg CE:Balrog ;
+#11	Proj	Blrg1	Shot(Balrog) 	480:160:512:192	Projectile - Balrog (energy shot) 	CE:Balrog Tileset:Bllg Projectile:All ;
+#12	Blrg	 	Balrog(cutscene) 	0:0:80:48	Balrog (cutscene) 	Tileset:Bllg CE:Balrog ;
+#13	Force	field	ForceField 	256:0:298:32	Forcefield 	General:Prop CE:Misc Tileset:Sym ;
+#14	Santa	Key	SantaKey 	450:0:480:32	Santa's Key 	General:Prop CE:Misc Tileset:Cent ;
+#15	Chest	closd	Chest(closed) 	480:0:512:32	Treasure chest (closed) 	General:Prop CE:General Tileset:Sym ;
+#16	Save	point	SavePoint 	192:32:224:64	Save point 	General:Prop CE:General Tileset:Sym ;
+#17	Refil	 	Refill	576:0:608:32	Health/ammo refill 	General:Prop CE:General Tileset:Sym ;
+#18	Door	 	Door 	448:32:480:80	Door 	General:Prop CE:General Tileset:Sym ;
+#19	Blrg	bust	Balrog(burst) 	0:0:80:48	Balrog (busts in) 	Tileset:Bllg CE:Balrog ;
+#20	Compu	 	Computer 	576:32:640:80	Computer 	General:Prop CE:Misc Tileset:Sym ;
+#21	Chest	open	Chest(open) 	448:80:480:96	Treasure chest (open) 	General:Prop CE:General Tileset:Sym ;
+#22	Telep	 	Teleporter 	480:32:528:96	Teleporter 	General:Prop CE:Misc Tileset:Sym ;
+#23	Telep	light	TP_lights 	528:64:576:72	Teleporter lights 	General:Prop CE:Misc Tileset:Sym ;
+#24	Enemy	PCrit	PowerCritter 	0:0:48:48	Enemy - Power Critter 	CE:Grasstown Tileset:Weed Enemy:Ground ;
+#25	Lift	platf	Lift 	512:128:580:160	Lift platform 	General:Prop CE:Misc Tileset:Sym ;
+#26	Enemy	BatBC	Bat(circle_black) 	64:160:96:192	Enemy - Bat (black, circling) 	CE:Grasstown Tileset:Weed Enemy:Air ;
+#27	Death	trap	DeathTrap 	192:128:256:176	Deathtrap 	General:Prop CE:Misc ;
+#28	Enemy	CrtFy	Critter(fly_g) 	96:96:128:128	Enemy - Critter (flying) 	CE:Grasstown Tileset:Weed Enemy:Ground ;
+#29	Cthu	 	Cthulhu 	0:384:32:432	Cthulhu 	CE:Characters Character:Human Tileset:Regu ;
+#30	Hermt	Gunsm	Gunsmith 	0:64:32:96	Hermit Gunsmith 	CE:Characters Character:Human Tileset:Guest ;
+#31	Enemy	BatBH	Bat(hang_black) 	0:158:32:190	Enemy - Bat (black, hanging) 	CE:Grasstown Tileset:Weed Enemy:Air ;
+#32	Capsl	life	Life Capsule	64:192:96:224	Life Capsule 	General:Prop CE:General Tileset:Sym ;
+#33	Proj	Blrg2	Shot(Bllg_bounce) 	480:160:512:192	Projectile - Balrog (energy bounce) 	CE:Balrog Tileset:Bllg Projectile:All ;
+#34	Bed	 	Bed 	384:96:448:128	Bed 	General:Prop CE:General Tileset:Sym ;
+#35	Enemy	Manan	Mannan 	192:128:240:192	Enemy - Mannan 	CE:Grasstown Tileset:Weed Enemy:Ground ;
+#36	Boss	Blrg2	Balrog(hover) 	0:0:80:48	Boss - Balrog (hovering) 	Tileset:Bllg CE:Balrog ;
+#37	Sign	post	Signpost 	384:128:416:160	Signpost 	General:Prop CE:General Tileset:Sym ;
+#38	Fire	place	Fire 	256:128:288:160	Fireplace fire 	General:Prop CE:Misc Tileset:Sym ;

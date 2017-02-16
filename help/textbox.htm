@@ -1,0 +1,51 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>TEXTBOX ECSTASY</h1>
+<h3>Exploring the wonders of Textbox.pbm</h3>
+<p>Textbox.pbm is a fun file in the data folder of Cave Story that allows you to change many things relating to the UI of Cave Story such as healthbar and experience bar colour and design, pause menu text colour and design, message box colour and design, etcetera. It's pretty much restricted to cosmetics of the UI.
+</p>
+<p>Before you work on anything in the data folder of Cave Story, if you're modding the original PC version make sure that you check the box in the game settings menu that says "remove ©Pixel requirement". Otherwise your edits will fail and your .exe will not load.
+</p>
+<p>First off, you'll need to rename the Textbox.pbm file into a bmp file, which is easily done by clicking the file name (as if you were changing the name of the file) and just changing the extension to bmp. Note that when you're done you'll probably have to rename it to .pbm unless you're really cool and have your mod configured to use .bmp files. Note that some operating systems hide known file extensions, so you may need to make those visible.
+Now let's take a look:
+</p>
+<img src="./img/textbox.png"></img>
+<p>All you have to do is change the colour or style of any of the different "parts" of the file, then save it and rename it to .pbm. Your changes will be carried over once you load the .exe (if you have the game open you must close the game then reopen it again, not just reset it).
+</p>
+<p>Each "part" of the file is separated by an invisible rectangular border that dictates which "part" you're playing with. This separates, say, the AIR sign from the "version" text. The borders do not always fit the shape of each "part". For example, the message box's borders are at the edges of the textbox itself but in a rectangular pattern - they do not go in a zigzag pattern like the message box itself does. There's no real way to tell where the borders are just by looking at the image, and they are all hard-coded within the game itself, so you'll just have to use trial and error. For reference, the corners of the rectangles *usually* lie on pixel coordinates that are divisible by 16 or 8.
+</p>
+
+<p>Quite a few parts of the file aren't exactly obvious, and so I will tell you what these parts do.</p>
+
+<p>At the top, there is a big blue box. That box is used for messages ingame, and is what text from the &lt;MSG command appears in. You can change the shape or colour of it (or any other part of the file) if you want. An interesting idea may to completely remove it and replace it with black to have an invisible message box for your game, like with &lt;MS2.</p>
+
+<p>Next are the three bars under the message box. The first two show the current and maximum health of a boss, and the third formats the player's health bar.</p>
+
+<p>The symbols directly under these bars show various things: the word "boss" beside the boss health bar, the heart beside the player's health bar, the + and - shown along with a number showing how much damage you've taken or experience you've gained, the circle that appears in a message box instead of the = sign, and the slash that separates the current ammo of the selected weapon from the maximum.</p>
+
+<p>The numbers under these symbols are used for damage taken/experience gained, and for the version number on the Cave Story start menu.</p>
+
+<p>The four bars under the numbers show your experience bar at different stages of "fullness."
+The little shield beside the word "AIR" flashes on and off whenever you're underwater.</p>
+
+<p>The rounded squares under the experience bar are shown in the Item Menu and show which item/weapon you have currently highlighted.</p>
+
+<p>The four dots under the word "Version" are put in between each digit for the version number; for example, the version number could show 1.0.0.2.</p>
+
+<p>The hands beside the dots point to either Yes or No in the Yes / No message box, depending on which option you have selected.</p>
+
+<p>The clocks under these hands and the ' and " beside the clocks show the Nikumaru counter during the run through Hell in Cave Story.</p>
+
+<p>See those tiny dots in the corner right underneath the message box? Those are used as the colours for the map system. if you change those to different shades of, say, red, the map system screen would become red instead of green.</p>
+
+<p class="warning">One more stupid thing, on the top of the map system. The zero that is grouped with the numbers under the experience bar has a dangerous secret. Within it is the white dot that is used with the map system. I wouldn't recommend changing the zero's colour or removing it unless you want to change the colour of the map system or do something weird with it. It's white anyway, you wouldn't need to change it in most cases for a palette swap for the map system.</p>
+
+<p>There are tons of things you can do with the Textbox.pbm file, so play around and make your mod unique! Just remember not to make things too weird, or players might get confused.
+</p>
+<p align="right">Author: MagicDoors Editor: Noxid</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

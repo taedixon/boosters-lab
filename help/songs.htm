@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>Message Boxes</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>How to Add Your Songs into Cave Story</h1>
+<p>Firstly, if you plan to use OrgMaker v2 for your music, make sure that you don’t use any of the new special drums. Make sure that you only use these drum tracks: bass01, snare01, hiClose, hiOpen, Tom01, and Per01. Make sure that you don’t use any other drum, or else it will cause your game to crash.
+</p>
+<p>Now with all of that out of the way… We have to get a program to edit the Cave Story’s resources in the .exe file, which is where we can find the credit illustrations, various bitmaps, and, most importantly, the .org files that we want to replace! Yay! Now, as for the program, I use something that’s simply called Resource Hacker (which can be found here: <br />http://www.angusj.com/resourcehacker/). For the sake of this tutorial, I will be using referring to this, so instructions on how to would vary from resource hacker to resource hacker.<br />
+<br />
+So let's get this started...
+</p>
+<ol>
+<li>Install your resource hacker of choice if you have not done so yet.
+</li>
+<li>Right-Click on Doukutstu.exe and click "Open Using Resource Hacker." It should be the second option from the top under "Open."
+</li>
+<li>Resource Hacker will open. Expand "ORG" by clicking on the little "+." This will reveal all of the songs in the game.<br />
+<img src="./img/changeorg_1.png"></img>
+</li>
+<li>Expand one song by clicking on the little "+." Click on 1041 and you will see some hex on the side. For this case, we will be changing the music that plays in the cemetery.<br />
+<img src="./img/changeorg_2.png"></img>
+</li>
+<li>Right-Click on 1041. Click on the fourth option "Replace Resource." I will be using Jackalope’s 8bit Green Hill Zone as an example, so kudos to her.
+</li>
+<li>A new window should appear. Click on "Open File With New Resource…" in the new window and select your file.<br />
+<img src="./img/changeorg_3.png"></img>
+</li>
+<li>Now we are presented with three textboxes. Since we have an .org file, we want to fill ORG in the Resource Type. The Resource Name would be the names like ACCESS, CEMETARY, FANFALE1, etc. Keep Resource Language blank and click on "Replace."<br />
+<img src="./img/changeorg_4.png"></img>
+</li>
+<li> Click on File->Save and you are good to go!
+</li>
+</ol>
+<p>Also, a quick note for Resource Hacker, it creates a modified .exe and saves the original. If you are editing Doukutsu.exe with Resource Hacker, there will be a Doukutsu.exe (the modified one), and Doukutsu_original.exe (the original).
+</p>
+<p align="right">Author: ShinyElectricBlueTiger</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Spike Damage">
+	<panel>
+		<field type="label">Spike damage:</field>
+		<field type="text" size="1" offset="0x4162F0" col="1"/>
+	</panel>
+</hack>

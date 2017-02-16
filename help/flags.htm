@@ -1,0 +1,79 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>All About Flags</h1>
+<p>Flags are one of the most commonly misunderstood things in CS modding, when really they aren't that difficult at all! This tutorial will teach you all you need to know in order to be a flag wizard and impress your friends and family.
+</p>
+
+<h2>What's a flag?</h2>
+<p>To start off with, in the regular course of CS modding you will come across a few different types of flags.
+</p>
+<ul>
+<li><strong>TSC Flags</strong><br />
+These are what most people mean when they refer to flags in the context of CS modding. They are set with the <i>&lt;FL+</i> and <i>&lt;FL-</i> commands, and are used to manage the flow of scripted events.
+</li>
+<li><strong>Skip Flags</strong><br />
+These are very similar to TSC flags, but they can only be used in scripted events, and only last as long as the game session (until the window is closed). They aren't saved, but don't get reset by loading a save or starting a new game. Set with the <i>&lt;SK+</i> and <i>&lt;SK-</i> commands.
+</li>
+<li><strong>Entity Flags</strong><br />
+A set of sixteen flags that are used to determine properties of an entity: whether it does damage, when it should appear, etc. These are set when the entity is created, and can't be modified directly by script.
+</li>
+<li><strong>Map Flags</strong><br />
+Map flags are a rarely used feature that may have once played a role in the map system, but was later abandoned by Pixel. Set with the <i>&lt;MP+</i> and <i>&lt;MP-</i> commands, there is one for each map by default, but if you add more maps than the game has by default it may cause issues. They are only mentioned here for completeness, and any functionality of map flags can be achieved by using regular flags.
+</li>
+</ul>
+<p>
+TSC flags are by far the most important to know, and will be the focus of this tutorial; Entity flags will be discussed in a seperate tutorial.<br \>
+Each flag in cave story represents one 'bit' of data, and can have one of two values: on, or off. A flag that is on is said to be set, and a flag that is off is said to be unset. Setting and unsetting flags can be done as many times as you want, and there's no harm in setting a flag that's already set, or trying to unset a flag that wasn't set to begin with.<br />
+Although TSC allows you to use flag numbers up to 9999 (or more if you're sneaky!), only flags 0-7999 get saved in profile.dat and higher values may cause unexpected behaviour (more on that in the advanced section). Skipflags are even more limited, with only 0-127 being viable numbers; more than that and they'll be put into regular flag memory space, with <i>&lt;SK+0128</i> being the same as <i>&lt;FL+0000</i>.<br />
+It's also recommended that you use flags greater than 10, because very low values may be designated as special "game flags" set by the engine that shouldn't be changed.
+</p>
+
+<h2>How do we use flags?</h2>
+<p>Flags are used to make the game world respond and change as the player progresses through the story. They can do this in one of two ways;
+</p>
+<blockquote><h3>In Script</h3>
+the most obvious use of flags is to control the flow of script. The <i>&lt;FL+</i> and <i>&lt;FL-</i> commands turn the flags on and off, and the <i>&lt;FLJ</i> command is used to go to a particular location in the script based on whether a flag is set. Consider the following example:
+<p class=code>#0100<br />
+&lt;KEY&lt;FLJ0010:0101&lt;FL+0010<br />&lt;MSGHey, I haven't seen you around here before!&lt;NOD&lt;END<br />
+<br />
+#0101<br />
+&lt;MSGWelcome back!&lt;NOD&lt;END
+</p>
+Here we have a simple one-time script; the first time it is called (by interacting with an entity, let's say) we get the "I haven't seen you around here before!" message, because flag 0010 hasn't been set yet and so the FLJ doesn't trigger. However, as soon as that jump is missed, flag 0010 gets set so any subsequent calls to #0100 will go straight to #0101, giving the "Welcome back!" message.
+</blockquote>
+
+<blockquote><h3>With Entities</h3>
+The other way of using flags is to associate them with entities. In the entity editor, every entity has a flag ID (or entity ID) that it uses when performing flag-related operations. Two special entity flags, "Appear when flagID set" and "Disappear when flagID set" are used with the flag at the time the map is loaded to determine whether or not the NPC should be loaded. Setting the entity's flag will have no effect until the map is reloaded, it should be noted.
+
+<p class="warning">If an entity has the "Disappear when flagID set" entity flag, then if it is killed or deleted the flag corresponding to its flag ID will be set automatically! This is the cause of much flag-related confusion for modders who don't know this.
+</p>
+</blockquote>
+<p>
+These basic relationships can be added onto one another to build more complex conditions. For example, a chest is basically a one-time event that animates the chest to make it open, and then sets a flag so that every subsequent time the room is loaded the original chest entity isn't created and a different, open chest is made in its place. Numerous flags can be used to confirm a series of conditions to meet, and even simulate a rudimentary counter.
+</p>
+
+<h2>Tips</h2>
+<ul>
+<li><strong>Reserved Flags</strong><br />
+Of special note is flag 431; this flag is used by the head.tsc saving script to indicate that the game has been saved at least once, so avoid using it in your own script. Flags under 0010 should be avoided as well, but this doesn't apply to skipflags.
+</li>
+<li><strong>Skipflag use</strong><br />
+Skipflags don't reset under any condition while the game is running, so they could be used to make a "New Game +" mode by checking for one in the start script and setting the flag at the end of the game then using the <i>&lt;INI</i> command. Always remember to use skipflags on cutscenes where the player has a chance of dying before they can save.
+</li>
+<li><strong>Document!</strong><br />
+I can't stress enough how important it is to document your flags. Keep a simple text file along with where you work on your mod to note each flag you use and what it means, possibly with a short description of where it's used. This will save you from descending into madness when you realize you have a hundred different flags being used in a single room and no idea what any of them were for (or worse, which ones have been used and which haven't)
+</li>
+</ul>
+
+<h2>Advanced</h2>
+<p>As mentioned earlier, using flags above 7999 is generally a bad idea. There is no range checking, so if you use a value that is too large then it will happily set bits in parts of the memory that aren't for the flags, much like an out-of-bounds array. However, if you have a good knowledge of the memory layout you may be able to use this to your advantage to arbitrarily set some variables that would be otherwise inaccessible; in regular CS one that springs to mind is the "Show FPS" byte which should be relatively near to the flag memory. Each flag is one bit and there are eight bits in a byte, so the range of this command isn't very high. <a href="illegal.htm">Using non-numerical characters in the TSC arguments</a> significantly increases the range of accessible values, but the max is still probably only a few kilobytes of range.<br />
+<br />
+If you are comfortable with binary, flags could be used to set up a "counter script" to simulate number variables with TSC. The amount of code and processing increases dramatically with the more bits you want to add, as every aspect has to be essentially "hard-coded" into the script. Still, it can be used for some neat things like timers or item counters.
+</p>
+<p align="right">Author: Noxid</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

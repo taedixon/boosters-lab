@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Blade">
+<panel>
+	<panel title="Level 1">
+		<panel title="Bullet stats">
+		<field type="label">
+			Damage
+		</field>
+		<field type="text" offset="0x48f494" size="1"/>
+		
+		<field  type="label">
+			# of Hits
+		</field>
+		<field type="text" offset="0x48f495" size="1"/>
+		
+		<field type="label">
+			Frames to Live
+		</field>
+		<field type="text" offset="0x48f498"/>
+		
+		<field type="label"></field>
+		
+		<field type="label" col = "1">
+			Hitbox width
+		</field>
+		<field type="text" offset="0x48f4a0"/>
+		
+		<field type="label">
+			Hitbox height
+		</field>
+		<field type="text" offset="0x48f4a4"/>
+		
+		<field type="label">
+			XP to level up
+		</field>
+		<field type="text" offset="0x4936cc"/>
+		</panel>
+		
+		
+		<panel title="Flags">
+			<field type="flags" size="1" offset="0x48f49c">
+				<checkbox name="0x01" value="0x01" />
+				<checkbox name="0x02" value="0x02" />
+				<checkbox name="Ignore solid" value="0x04" />
+				<checkbox name="Don't break when hit wall" value="0x08" />
+				<checkbox name="0x10" value="0x10" />
+				<checkbox name="Break blocks" value ="0x20" />
+				<checkbox name="Pierce blocks" value="0x40" />
+				<checkbox name="0x80" value="0x80" />
+			</field>
+		</panel>
+		
+
+		<panel title="graphicals" col="2">
+			<field type="label">Sprite offset - Left</field>
+			<field type="text" offset="0x48f4b0" />
+			
+			<field type="label">Sprite offset - Top</field>
+			<field type="text" offset="0x48f4b4" />
+			
+			<field type="label">Sprite Size</field>
+			<field type="text" offset="0x48f4b8" />
+		</panel>
+	</panel>
+
+
+
+	<panel title="Level 2">
+		<panel title="Bullet stats">
+		<field type="label">
+			Damage
+		</field>
+		<field type="text" offset="0x48f4c0" size="1"/>
+		
+		<field  type="label">
+			# of Hits
+		</field>
+		<field type="text" offset="0x48f4c1" size="1"/>
+		
+		<field type="label">
+			Frames to Live
+		</field>
+		<field type="text" offset="0x48f4c4"/>
+		
+		<field type="label"></field>
+		
+		<field type="label" col = "1">
+			Hitbox width
+		</field>
+		<field type="text" offset="0x48f4cc"/>
+		
+		<field type="label">
+			Hitbox height
+		</field>
+		<field type="text" offset="0x48f4d0"/>
+		
+		<field type="label">
+			XP to level up
+		</field>
+		<field type="text" offset="0x4936d0"/>
+		</panel>
+		
+		
+		<panel title="Flags">
+			<field type="flags" size="1" offset="0x48f4c8">
+				<checkbox name="0x01" value="0x01" />
+				<checkbox name="0x02" value="0x02" />
+				<checkbox name="Ignore solid" value="0x04" />
+				<checkbox name="Don't break when hit wall" value="0x08" />
+				<checkbox name="0x10" value="0x10" />
+				<checkbox name="Break blocks" value ="0x20" />
+				<checkbox name="Pierce blocks" value="0x40" />
+				<checkbox name="0x80" value="0x80" />
+			</field>
+		</panel>
+		
+
+		<panel title="graphicals" col="2">
+			<field type="label">Sprite offset - Left</field>
+			<field type="text" offset="0x48f4dc" />
+			
+			<field type="label">Sprite offset - Top</field>
+			<field type="text" offset="0x48f4e0" />
+			
+			<field type="label">Sprite Size</field>
+			<field type="text" offset="0x48f4e4" />
+		</panel>
+	</panel>
+
+
+
+	<panel title="Level 3">
+		<panel title="Bullet stats">
+		<field type="label">
+			Damage
+		</field>
+		<field type="text" offset="0x48f4ec" size="1"/>
+		
+		<field  type="label">
+			# of Hits
+		</field>
+		<field type="text" offset="0x48f4ed" size="1"/>
+		
+		<field type="label">
+			Frames to Live
+		</field>
+		<field type="text" offset="0x48f4f0"/>
+		
+		<field type="label"></field>
+		
+		<field type="label" col = "1">
+			Hitbox width
+		</field>
+		<field type="text" offset="0x48f4f8"/>
+		
+		<field type="label">
+			Hitbox height
+		</field>
+		<field type="text" offset="0x48f4fc"/>
+		
+		<field type="label">
+			XP to level up
+		</field>
+		<field type="text" offset="0x4936d4"/>
+		</panel>
+		
+		
+		<panel title="Flags">
+			<field type="flags" size="1" offset="0x48f4f4">
+				<checkbox name="0x01" value="0x01" />
+				<checkbox name="0x02" value="0x02" />
+				<checkbox name="Ignore solid" value="0x04" />
+				<checkbox name="Don't break when hit wall" value="0x08" />
+				<checkbox name="0x10" value="0x10" />
+				<checkbox name="Break blocks" value ="0x20" />
+				<checkbox name="Pierce blocks" value="0x40" />
+				<checkbox name="0x80" value="0x80" />
+			</field>
+		</panel>
+		
+
+		<panel title="graphicals" col="2">
+			<field type="label">Sprite offset - Left</field>
+			<field type="text" offset="0x48f508" />
+			
+			<field type="label">Sprite offset - Top</field>
+			<field type="text" offset="0x48f50c" />
+			
+			<field type="label">Sprite Size</field>
+			<field type="text" offset="0x48f510" />
+		</panel>
+	</panel>
+</panel>
+</hack>

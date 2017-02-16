@@ -1,0 +1,42 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>HOW TO GIVE EXTREMELY LARGE <br />
+AND/OR NEGATIVE NUMBERS AS ARGUMENTS TO TSC COMMANDS</h1>
+<p>Just use symbols that aren't letters. Like &lt;AM+0002:00/0. CE will tell you you suck at TSC. You don't. Or you might, but it's not because of this. 
+Here's a table saying which ascii values correspond to which numbers (from -16 to 16. they go way higher, but meh):
+</p>
+<pre class="code">This is the table.
+(space)	-16	|	1	1
+!	-15	|	2	2
+"	-14	|	3	3
+#	-13	|	4	4
+$	-12	|	5	5
+%	-11	|	6	6
+&	-10	|	7	7
+'	-9	|	8	8
+(	-8	|	9	9
+)	-7	|	:	10
+*	-6	|	;	11
++	-5	|	<	12
+,	-4	|	=	13
+-	-3	|	>	14
+.	-2	|	?	15
+/	-1	|	@	16
+</pre>
+<p>The mechanism by which the real number is calculated is the same as always. Numbers that are in the ones place get multiplied by 1. Those in the tens place get multiplied by 10, etcetera.
+A result of all ascii characters working as input is that there are multiple equivalent ways of stating each number. 0012 is 000<. 0000 is 00\: is 001&. Because of this, superfluous ascii can yield complete obfuscation. While you might think 000@ is prettier than 0016, I recommend that you just use standard decimal unless you have sufficient reason (you need a number larger than 9999 or smaller than 0 as an argument).
+</p>
+<h2>Uses</h2>
+<p>There are only two real uses for this I can think of. The first is decreasing max health or ammo without assembly hacking. Note, however, that the game was not engineered to do that, so there can be some buggy behavior (setting your health to zero is sorta wonky). The other use is changing bits of memory by using extremely oob flags (you modify data up to 10382 bytes ahead of the first flag and up to 2222 bytes before it. I don't recall what data this is off the top of my head, but it might be useful).
+</p>
+<h2>Additional Info</h2>
+<p>At <a href="./ascii.htm">asciitable.com</a> is an ascii table. Subtract 48 from the dec value of any ascii character to get what the game interprets it as.<br />
+Yeah
+</p>
+<p align="right">Author: Lace</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

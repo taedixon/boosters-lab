@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="TSC+ PHYS addon">
+	<panel>
+		<field type="label">NPC048</field>
+		<field type="info">
+		 An addon for TSC+ that adds &lt;PHY commands.
+		 If you use these, note that you MUST set all
+		 physics variables at the start of a new game.
+		</field>
+		
+		<!-- PHYS RemoveAirTimer2 -->
+		<field type="data" offset="0x41a356">
+		33 c0 b0 48 89 45 e4 b0 50 89 45 ec 89 45 f4 b0
+58 89 45 fc b0 70 89 45 e0 89 45 f0 b0 90 89 45
+e8 89 45 f8 a0 80 e0 49 00 84 c0 0f 85 9e 00 00
+00 90 90 90 90 90 90 90
+		</field>
+		<!-- PHYS RemoveAirTimer1 -->
+		<field type="data" offset="0x416993">
+b9 80 e6 49 00 8b 41 d0 83 e0 10 74 11 c7 41 5c
+e8 03 00 00 33 c0 89 41 60 e9 e4 00 00 00 8b 51
+bc 81 e2 00 01 00 00 75 0c c7 41 5c e8 03 00 00
+e9 9d 00 00 00 a0 80 e0 49 00 84 c0 75 eb 90 90
+		</field>
+		<!-- PHYS physicsChanges -->
+		<field type="data" offset="0x4156d7">
+		ba 60 e0 49 00 8b 0d 3c e6 49 00 81 e1 00 01 00
+00 74 03 83 c2 10 66 0f bf 02 89 45 ec 66 0f bf
+42 02 89 45 f4 66 0f bf 42 04 89 45 e4 66 0f bf
+42 06 89 45 f0 66 0f bf 42 08 89 45 dc 66 0f bf
+42 0a 89 45 e8 66 0f bf 42 0c 89 45 e0 66 0f bf
+42 0e 89 45 d8 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+		</field>
+		<!-- PHYS NoSplash -->
+		
+		<field type="data" offset="0x41612f">
+		b9 80 e6 49 00 8a 41 64 84 c0 0f 85 8f 01 00 00
+a0 80 e0 49 00 84 c0 0f 85 82 01 00 00 8b 51 bc
+81 e2 00 01 00 00 0f 84 73 01 00 00 8b 51 bc 33
+c0 81 e2 00 08 00 00 74 02 b0 02 89 45 d4 8b 49
+bc 90 90
+		</field>
+		<!-- PHYS fixMaxSpeed -->
+		<field type="data" offset="0x416063">
+		b9 6c e6 49 00 8b 51 d0 81 e2 00 01 00 00 74 14
+8b 41 d0 25 00 f0 00 00 75 0a 66 0f bf 15 72 e0
+49 00 eb 08 66 0f bf 15 62 e0 49 00 f7 da 39 11
+7d 02 89 11 39 51 04 7d 03 89 51 04 f7 da 39 11
+7e 02 89 11 39 51 04 7e 03 89 51 04 eb 7e 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90
+		</field>
+	</panel>
+</hack>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="New Game values">
+	<panel title="hax">
+		<field type="label">
+			Starting health (max)
+		</field>
+		<field type="text" offset="0x414BD8" size="2"/>
+		<field  type="label">
+			Starting health (current)
+		</field>
+		<field type="text" offset="0x414BCF" size="2"/>
+		<field type="label">
+			Starting map
+		</field>
+		<field type="text" offset="0x41d599" size="1"/>
+		<field type="label">
+			Starting Event
+		</field>
+		<field type="text" offset="0x01D594" size="4"/>
+		
+		<field type="label">
+			Starting Position(X)
+		</field>
+		<field type="text" offset="0x01d592" size="1"/>
+		
+		<field type="label">
+			Starting Position(Y)
+		</field>
+		<field type="text" offset="0x01d590" size="1"/>
+		
+		<field type="label">
+			Starting Direction
+		</field>
+		<field type="text" offset="0x014B74" size="4"/>
+	</panel>	
+</hack>

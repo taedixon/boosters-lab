@@ -1,0 +1,45 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>Cave Story Tilesets and Tile Properties</h1>
+<p>If you want to make your own, make sure that:
+<ul><li>It is saved in .bmp format</li>
+<li>Begins with the letters “Prt,” such as PrtCave, PrtWeed, etc</li>
+<li>Tiles are 16 pixels by 16 pixels each</li>
+<li>Has a maximum height of 256 pixels and a maximum width of 256 pixels</li></ul></p>
+
+<p>Once you have made a tileset, you will have to assign properties to each tile. [In Cave Editor,] click on a tileset and press the “edit tileset” button. This can also be achieved by right-clicking the tileset and clicking on “edit tileset.”</p>
+
+<p>Now, there are distinct properties for most tiles, but most function identically. Here’s a list going over the major ones that are always used by Pixel:</p>
+
+<ul><li>0- Air. Nothing. Nothing will be rendered if you put anything in there.</li>
+<li>40- Used for decorations such as grass, small stones on the ground, and more importantly, fake blocks. Will be rendered in front of the PC</li>
+<li>41- Solid blocks. The Player cannot get through any of these, if you didn’t know what a solid area is.</li>
+<li>42- Spikes. Note that the same tile property is used on several spikes facing different directions. Why? There is a 4x4 hitbox in the center of the area, and will damage the player when it touches it. Also, this will render in front of the player.</li>
+<li>43- Breakable blocks. Also known as those “Sn” blocks in some of Pixel’s tilesets. If you want to edit the appearance for the breakable blocks, go to NpcSym.</li>
+<li>44- No NPC blocks. Monsters and other NPCs will not pass through. A great example would be the vines in Grasstown/Bushlands.</li>
+<li>46- Not really used by Pixel, but the Player cannot pass through this. Same effect as any solid object.</li>
+<li>50-57- Diagonals. Not much to say about those.</li>
+<li>60- Water. The stuff that will make you drown if you stay in there for too long.</li>
+<li>62- Spikes!... In Water!</li>
+<li>70-77- Same as tile tiles 50-57, but have water</li>
+<li>80-83- Eternal Winds. Will move the player in the direction of the arrow.</li>
+
+<ul><li>80- Left</li>
+<li>81- Up</li>
+<li>82- Right</li>
+<li>83- Down</li></ul>
+
+<li>A0-A3- Same as tiles 80-83, but in water. Very commonly used in the Waterway.</li>
+
+<ul><li>A0- Left</li>
+<li>A1- Up</li>
+<li>82- Right</li>
+<li>83- Down</li></ul></ul>
+
+<p align="right">Author: ShinyElectricBlueTiger</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

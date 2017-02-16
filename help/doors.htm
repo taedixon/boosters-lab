@@ -1,0 +1,35 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>How to use Doors</h1>
+<p>Doors are among the most fundamental of Cave Story modding
+operations. Creating your own door will be one of the
+first steps in learning to modify Cave Story.
+With that said, let's begin. Start by building your own map,
+and placing a door in your desired position.
+</p>
+<h2>The sending event</h2>
+<img src="./img/door_steps.png"></img>
+<p>After that, go to the entity's its flag properties. Be sure to tick flag number 2000 (PC presses down to run script). Next, give it an event number no lower than one hundred. Then, in your script, add an event corresponding to the number you assigned to your door; in this example, we'll set this door's event number to one hundred. The first thing to do is use either the &lt;PRI or &lt;KEY command, which will keep our hero from moving. Next, we want to use the &lt;CNP0100:0000:0000 command. The first parameter corresponds to your door's event number, so make sure they match. This part animates the door to look like it's opening. You could use the &lt;DNP command, but it's generally better yo use &lt;CNP for doors. Next, put &lt;SOU0011, which will make the opening door sound play. Then, make the room fade out in your desired direction. In this example, we'll make it fade out from the center. So we'll add &lt;FAO0004. Finally, we need to add the command that makes you go to the next room. In this example, we'll use &lt;TRA0012:0094:0037:0011. The twelve means it will send you to room number twelve, the ninety-four is the event that is ran upon arrival in the next room. And the thirty-seven and eleven are the respective X and Y values for where you are teleported in the next room.
+So, in the end, your script for the door should look like this:
+<p class="code">#0100<br />
+&lt;PRI&lt;CNP0100:0000:0000<br />
+&lt;SOU0011&lt;FAO0004<br />
+&lt;TRA0012:0094:0037:0011<br />
+</p>
+</p>
+<h2>The receiving Event</h2>
+<p>It's important to never forget to have an event on the
+map you need to go to. Pixel had a set of generic receiving events that he more or less copy-pasted across all his scripts, those being #0090-#0094. You can follow the same technique, or use seperate events for each door / situation - it is up to you. This receiving event would relate to our code above:
+<p class="code">#0094<br />
+&lt;FAIxxxx&lt;CMUxxxx&lt;END
+</p>
+It doesn't matter what the x's are, but the receiving event must have an &lt;END or equivalent (&lt;EVE, &lt;TRA, etc.)
+</p>
+<p align="right">Author: HaydenStudios</p>
+</td><td class = "side"></td></tr></table>
+</body>
+</html>

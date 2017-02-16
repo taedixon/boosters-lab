@@ -1,0 +1,305 @@
+Changelog:
+V0.4.5.5:
+- Improvements to the behaviour of fill and replace
+- allow map list to work if resorted
+
+V0.4.5.4:
+- Make tilepen static (you can copy/draw tiles between maps)
+- Add file checker to the action menu
+
+V0.4.5.3:
+- Change how graphics are created in some areas to hopefully address clipping issues
+
+V0.4.5.2:
+- Support different encodings in TSC editor (set in project config)
+
+V0.4.5.1:
+- Made the entity selection list a set, preventing double-selection bugs
+- fixed pasting entities which was broken in previous release
+- TSC previews for <GIT now show the correct items
+
+V0.4.5.0:
+- Added more hacks to the hackinator, including TSC+
+- Selecting a stack of entities brings up a popup letting you choose which to select, rather than just always picking from the top.
+- Fixed a bug where changes to npc.tbl would not save in certain conditions.
+- Fixed npc placement when shifting the map
+- Added delete option to the context menu for entity editor
+- added drag-select to entity editor
+- you can now use ctrl-a to select all entities on the map in entity edit mode
+- you now have to double-click an NPC type in the NPC list to change the type of a selected entity
+- the command to add an entity to the map has been changed to the 'i' key, previously it was double-click
+- removed cairn from entityinfo.txt
+- updated sfxlist by zxin I think
+
+V0.4.4.3:
+- Added a gradient layer for TESS, new nxm format number 0x33
+- Fixed some other things for GIR
+- massive performance boost for the tile view
+- added some hackinator hacks & fixed a few that were busted
+
+V0.4.3.0:
+- Added a TSC argument decoder to the TSC thing, so you can see facepics and stuff
+- Made editor controls collapse to the left of the window to give more flexibility for panel placement
+
+V0.4.2.0:
+- blaze it
+
+V0.4.1.4:
+- Added "Checkbox" field type to Hackinator parser
+- Added Randolf's Polar Star variant hacks
+- Expanded on the title screen hack
+- Hex patcher no longer requires bytes be properly spaced
+
+V0.4.1.3:
+- Added an "Export mod" option to the file menu
+
+V0.4.1.2
+- "ctrl-s" shortcut in TSC no longer causes the tab to be marked as modified
+- Fixed a bug where using save-all and Load Last in combination could result in old data overwriting your maps
+
+V0.4.1.1
+- Small bugfix to disabling scriptsource option
+
+V0.4.1.0
+- Added warning if TSC to load is newer than ScriptSource
+- Added option to disable ScriptSource altogether
+- Mapdata no longer auto-lowercase
+- updated blConfig to include more options
+- Possibly fixed the issue where changing the # of maps could cause the EXE to become  nonfunctional
+- Editor warns if EXE has been modified before overwriting
+
+V0.4.0.1
+- Added player physics hack
+- Added title screen hacks by sold
+- Added trolly hack
+- Added "info" and "data" field types
+
+V0.4.0.0
+- Reorganized packages in the source
+- Hackinator implemented
+- Added a bunch of starter hacks to match what CE can do
+
+V0.3.3.9[d]
+- Shift map can now shift lines
+- Clicking line nodes works if lines are "off grid"
+- Shift map dialog no longer inverts X and Y
+
+V0.3.4.0
+- Enforce UTF-8 character encoding on mapdata files. This may break shit.
+
+V0.3.3.8/0.3.3.9
+- map resize now uses min size from config
+- Changes to the line editor for GIR
+
+V0.3.3.7
+- updated the mapdata version for CSEngine / Kitten Battle Dungeon
+
+V0.3.3.6
+- Entity copy-paste was using tile size scaling rather than entity res scaling
+- Fixed the ShiftMap dialogue (was failing on non-square maps, and entities were not moved according to the appropriate scales)
+- npc list and tileset names should do a better job of ignoring case.
+- added option to shift NPCs, Tiles, or both to the shift map dialogue
+- Changing the map's tileset should now change the tileset bounds to reflect the new dimensions, if the map is currently open.
+
+V0.3.3.5
+- Fixed it so that opening a map that has been starred doesn't let you open multiple tabs for it
+- added some more help docs
+- replaced the entityinfo file with the old version
+
+V0.3.3.4
+- Made the undo/redo stop spamming the logfiles so much
+- Pressing delete key will toggle "eraser" mode for the current tile selection, where all tiles in the pen will be set to tile 0
+- MAYBE fixed that thing with the pxa OOB messages and some more fringe errors in the tile thing honestly I have no idea what I'm doing
+- Made the program yell more when it can't save tsc pxa or pxe files
+- changing the pxa will now cause the map to be flagged as modified
+- changes to the entity's properties will now cause the map to be flagged as modified
+
+V0.3.3.3
+- made adding non-number inputs to NPC fields more stable
+- pressing ctrl-s or ctrl-shift-s (save shortcuts) in the script tab will trigger the proper event in the main window
+- fixed an exception being thrown when trying to duplicate a map if no map was selected
+- Added a "remove all entities" to the entity pane's right-click menu
+- Added a "Tile #" display to the tileset pane right-click menu (the one what which you set the tile type with)
+
+V0.3.3.2
+- Fixed a bug causing Out Of Bounds errors in the map editor, which messed up undo/redo
+- Fixed tiles with ID 0x80 + not appearing in Classic editor mode
+- Title bar should now show correct tile #s when in entity view
+- Added support for SpeechBubble events to the script parser (KittenBattleDungeon feature)
+
+V0.3.3.1
+- Fixed a bug in creating <CMP scripts where it would use map dimensions rather than selected block
+
+V0.3.3.0
+- Changed editor to allow any number of entities (maybe)
+- Can now add and remove entities from the master entity list and export updated EntityInfo.txt (note to cave story modders: don't do this)
+- Fixed a bug where an entity could not be loaded if it had no categories
+- Updated EntityInfo.txt from bombchu link
+- Added some future help files to the index (these have not been written)
+- fixed a bug where entities assigned to non-drawable tilesets would also not draw their NPC box or name
+- Clicking outside the map boundaries no longer draws a tile at the edge of the map
+- the hackinator can kind of load some input fields now
+- added an in-editor copy of the changelog
+- Added a dialog to edit the bl.ini settings to the view menu
+- Added copy-paste to entities (ctrl-c, ctrl-v)
+- Improved camera focus when scroll-zooming
+- more catte
+- made some of the menu buttons grey out if they are invalid rather than giving a popup error
+
+V0.3.2.3 
+- Japanese translation available(!)
+- Exports csmap.bin (vanilla format mapdata)
+- Added scrolling with ctrl-mousewheel
+- Fixed error with map pane not scrolling with arrow keys
+- Switched logging back on (I accidentally turned it off in the prev. version)
+- Change internal dummy resources to png because I'm retarded
+- Revised FloodFill algorithm to hopefully be more efficient
+- Fixed some wordings of stuff
+- Added a bl.ini file for configuration crap
+- externalized entity flag type strings
+- Made the mapdata maybe more stable, maybe less stable
+- misc. shit I never wrote down
+
+V0.2.5.1 :
+- Log size increased from 30k to 300k
+- Bugfix to saving stage.tbl files from CS+, should now write the proper file length
+- Misc. display options should now save between sessions
+- Increased search scope for npc / tilesets / backgrounds - Base files should now be selectable for mapdata editing in CS+
+
+V0.2.4.0
+- quick fix to make it so it can *save* the scroll types that it now was able to read properly...
+- Changed how TSC defines are loaded
+- Deleting a map *should* modify the TSC of all maps to refer to the new map number when map nums are shifted
+- can delete many maps at once. Please note I still don't really think you ought to delete maps.
+- Can move maps mapdata with the move map thing
+- Crappy output logging
+
+V0.2.3.0
+- Can read scroll type from mapdata in a CS exe
+- Duplicate implemented
+- Automatically removes (C)Pixel requirement
+- Automatically changes image extension to .bmp because there's no reason not to 99% of the time.
+- Added to Action menu a button to open arbitrary TSC files like head.tsc
+- Fixed a bug where double-clicking the TSC command list only put stuff in the first script you opened. Now it goes to whichever last had focus.
+
+V0.2.2.2
+- Fixed a bug where saving the EXE twice without closing the application would corrupt the file header
+- Improved the splash page and map editor background
+- Added a License and a runonce popup to make you accept the license before using the software
+- Limited mapname and file input fields to 31 characters
+- Fixed a bug in mapdata mode where pressing enter in the textfields would cause 2 dialogs to spawn instead of one.
+- Updated tile types to be more accurate
+- Changed map display to more accurately reflect ingame appearance
+
+V0.2.2.1 (unreleased)
+- Added pretty colours
+- fixed a bug where the asterix wasn't showing up by map tabs that had been changed
+- Added a splash page
+- Added the ability to generate CMP and TRA commands via right-click
+- (finally) added the "New Mod" option
+- fixed a bug where "cancel" didn't work when closing the program and save prompt appears
+- Pressing a letter while the TSC command list is selected will scroll to the first TSC command starting with that letter
+- Added shortcuts for layer modes (alt + 1-4 to set active layer, alt + 6-9 to set visible layers)
+- Added shortcuts for the draw mode (alt + d, f, r, e, c)
+- Added a "Run Game" to the Action menu
+- Added the Flag and <TRA list generator
+- Added // comments to the TSC editor
+- Added zoom shortcuts (ctrl-plus, ctrl-minus for map. Shift & the same keys does tileset)
+- Can now open .pxm files without loading a whole project / exe thing (don't actually do this)
+- Fixed a bug with the tileset undo related to layers, and one related to unusual source origins.
+
+V0.2.0.0
+- Added npc.tbl editor
+- Made "Load" automatically snap to the most recent loaded directory
+- Added warning when converting SW mods
+- Added Javascript parser
+- Added SFX list (.txt)
+- Entity list can now be filtered by category (2xclick category lists)
+- Added mostly-working undo/redo to entity editor
+- Updated help files to compilation by JazzJackalope
+
+V0.1.1.0
+- Improved functionality to entity editor (entity attributes, list sorts)
+- Improved TSC list by Jackalope & Lace
+- Semi-functional hex patcher
+- Added shift-dragging to entity editing screen
+- minor performance fixes
+
+V0.1.0.0
+- (finally) implemented the Entity Editing interface, and the various components therof
+- More centralized data storage (slightly smaller memory footprint)
+- Dummied out the 'New' file menu option because it really doesn't do anything yet
+- Fixed behaviour of in-window mapdata editor
+- Various small optimizations
+
+V0.0.5.2
+- Changed backslashes \ to forwardslashes / for internal file paths to improve compatibility with OS that aren't windows.
+
+V0.0.5.1
+- True support for saving mapdata. This includes deleting (careful with this one), modifying, and adding maps. Should work on CS and CS+ with a CE, Sue's or Vanilla executable
+- Fixed numerous bugs and added many more popup warnings that would have previously gone un-alerted (except maybe in console) leaving people potentially baffled
+- Added an override for 2x editing .exe mods: add a file "32_override" to the directory where the editor is being launched.
+- Added a dialogue to edit the mapdata without actually opening the map
+- Checks for unsaved changes before closing tabs/the editor
+- Fixed a bug where .pxa files weren't actually getting saved
+- tons of internal refractoring to make it actually work
+- Fixed the bug where the tileset tile selector's graphics got clipped if you set the tileset zoom above 1x
+- Probably more but as usual I can't remember.
+
+V0.0.4.0 -- I don't consider this to be a stable release, in that it has a high prob. of breaking your exe and/or files and/or spirit.
+- If you open a mod that has been edited by Sue's Workshop then it will automatically be restored to sanctity. Well, not if you've already tried to replace resources in it. Ain't nobody can fix that.
+- If you make changes to the mapdata then they will be preserved if you save the map.
+- You get a warning if there are pending exe changes that haven't been saved, if you try to close the program. Still nothing for the maps themselves though.
+- "Resize Map" now does something. I didn't really test this very well.
+- You can delete maps but if you don't use the Save All button expect some... unintended consequences.
+- More feedback when there is a failure on resource load (more as in not none)
+- Fixed a bug where entities wouldn't follow the map's scale
+- Some other small changes that I can never remember
+
+V0.0.3.1
+- Minor adjustments to the TSC lexer
+- TSC files can now be saved
+- Can switch between displaying defines and TSC commands
+- Help window changed from a dialog to a frame
+- Fixed a bug where popping out the tileset always made it open the tileset of the most recently opened map
+- Changing the map name will now properly update the TSC tabs and map list
+- All windows will remember their last position, assuming the program terminates gracefully. Delete "editor.rect" to restore defaults.
+
+V0.0.3.0
+- Added defines display to TSC window
+- Added help system and a few tutorials
+- Added "About" window
+- Added "Actions" menu to menu bar
+- Added "Help" menu to menu bar
+- Script editor now resides exclusively in a seperate window
+- Improved behaviour of dialogs (made them child to main window rather than free-floating)
+- Added a "notes" thing for writing yer' notes
+
+V0.0.2.0
+- Script is now highlighted pretty and has the Command Ref on the side (but doesn't save)
+- Mapdata tab has stuff in it now and that stuff makes changes to the map pane (but don't save)
+- minor interface tweaks and improvements (I forget the other stuff)
+
+V0.0.1.1
+- Tileset window can be "popped out" (try double-clicks)
+
+V0.0.1.0
+- All tile draw modes are functional
+- Tileset backdrop has a pattern effect and can be changed colour for maximum viewability
+- Saving is possible (watch out!)
+- Rearranged the positioning of some UI elements for better usability
+- Shift map is implemented
+- Undo/Redo is implemented
+- Can load mods from CS+ (open stage.tbl)
+- drag scrolling (shift-click-drag)
+- Improved handling of opening tabs
+- Tile types can be edited by right-clicking
+- Display of entity sprites and names
+- some more stuff??? ?
+
+V0.0.0.2
+- No longer "temporarily renames" files from pbm to bmp
+- CE_Tiles.png now inside the jar
+
+V0.0.0.1
+- First release. Mostly Tiles perspective has been worked on; others are placeholders.

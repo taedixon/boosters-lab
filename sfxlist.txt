@@ -1,0 +1,161 @@
+0 - Silent
+1 - Y/N Change Choice
+2 - Message Typing
+3 - PC Bump Head
+4 - Switch Weapon
+5 - Y/N Prompt
+6 - High Pitch Critter Hop
+7 - Silent
+8 - Silent
+9 - Silent
+10 - Silent
+11 - Door Open
+12 - Destroy Breakable Block
+13 - Silent
+14 - Get EXP
+15 - PC Jump
+16 - PC Hurt
+17 - PC Die
+18 - Y/N Confirm
+19 - Silent
+20 - PC Heal
+21 - Bubble
+22 - Chest Open
+23 - PC Hit Ground
+24 - PC Walk
+25 - Silly Explosion
+26 - Large Object Hit Ground
+27 - Level Up!
+28 - Shot Hit Wall
+29 - Teleport
+30 - Critter Hop
+31 - Shot Hit Invulnerable Entity
+32 - Polar Star Shoot Level 1/2
+33 - Fireball Shoot
+34 - Fireball Bounce
+35 - large Explosion
+36 - Silent
+37 - No Ammo
+38 - Item Get
+39 - Enemy Shoot Projectile
+40 - Stream Noise (<SSS)
+41 - Stream Noise (<SSS)
+42 - PC Missile Get
+43 - Computer Screen On
+44 - Missile Impact
+45 - EXP Bounce
+46 - Iron Head Shot
+47 - Strange Click
+48 - Bubbler Shoot
+49 - Polar Star Shoot Level 3
+50 - Toroko/Enemy Squeal
+51 - Critter/Small Hurt
+52 - Behemoth/Large Hurt
+53 - Gaudi Die
+54 - Heavy Press/Large Object Hurt
+55 - High Pitched Gaudi Die
+56 - Water Splash
+57 - Curly/Object Hurt
+58 - Helicopter Blades (<SPS)
+59 - Spur Charge Level 1
+60 - Spur Charge Level 2
+61 - Spur Charge Level 3
+62 - Spur Shoot Level 1
+63 - Spur Shoot Level 2
+64 - Spur Shoot Level 3
+65 - Spur Charge MAX
+66 - Silence
+67 - Silence
+68 - Silence
+69 - Silence
+70 - Enemy Smoke Poof
+71 - PC Smash Into Ground
+72 - Explosion
+73 - Silence
+74 - Silence
+75 - Silence
+76 - Silence
+77 - Silence
+78 - Silence
+79 - Silence
+80 - Silence
+81 - Silence
+82 - Silence
+83 - Silence
+84 - Silence
+85 - Silence
+86 - Silence
+87 - Silence
+88 - Silence
+89 - Silence
+90 - Silence
+91 - Silence
+92 - Silence
+93 - Silence
+94 - Silence
+95 - Silence
+96 - Silence
+97 - Silence
+98 - Silence
+99 - Silence
+100 - Bubbler Shoot Level 3
+101 - Lightning
+102 - Sand Croc
+103 - Ballos Ball/etc. Charge
+104 - Secret Item Hurt
+105 - Puppy Bark
+106 - Spinning Projectile
+107 - Block Move
+108 - Power Critter/Large Enemy Jump
+109 - Critter Fly
+110 - Power Critter Flys
+111 - Thud
+112 - Large Thud
+113 - Booster
+114 - Core Hurt
+115 - Core Thrust
+116 - Core Charge
+117 - Nemesis Shoot
+118 - Silence
+119 - Silence
+120 - Silence
+121 - Silence
+122 - Silence
+123 - Silence
+124 - Silence
+125 - Silence
+126 - Silence
+127 - Silence
+128 - Silence
+129 - Silence
+130 - Silence
+131 - Silence
+132 - Silence
+133 - Silence
+134 - Silence
+135 - Silence
+136 - Silence
+137 - Silence
+138 - Silence
+139 - Silence
+140 - Silence
+141 - Silence
+142 - Silence
+143 - Silence
+144 - Silence
+145 - Silence
+146 - Silence
+147 - Silence
+148 - Silence
+149 - Silence
+150 - Bass (Bass01)
+151 - Snare (Snare01)
+152 - HiClose (HiClose)
+153 - HiOpen (HiOpen)
+154 - Tom (Tom01)
+155 - Per (Per01)
+156 - Silence
+157 - Silence
+158 - Silence
+159 - Silence
+160 - [Crashes The Game]

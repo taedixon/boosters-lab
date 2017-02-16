@@ -1,0 +1,111 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1>How to Use the Embedded Script Area</h1>
+
+<p>If you're new (or old) to Booster's Lab, you're probably intrigued and perplexed by what appears when you select Script. Some may be annoyed: "Why doesn't that unwieldy Script window I can never find a good place for neatly consolidate itself into this space? Instead it's being occupied by two big text areas and a button that does nothing when I push it. Freeloaders."</p>
+
+<p>The answer is simple, my friend: these three objects offer a secret: a niche secret, to be sure.</p>
+
+<p>Though this isn't readily apparent, the key lies in JavaScript. In case this is your first time hearing of it (unlikely), JavaScript (shortened to JS) is a lightweight programming language that nobody likes. By placing the appropriate JS code into the leftmost text area, you can procedurally generate TSC code, without having to type much of it out.</p>
+
+<p>Unfortunately, I can't show you the complete way to accomplishing this feat of wizardry, since I can't anticipate your specific TSC needs. But what I can (and will) do is give you a basic lesson with a most basic spell.</p>
+
+<p>The simplest way to demonstrate the mysterious properties of the Script window is with an example, as I mentioned I would give. I'll show you the entire chunk of demo code I made, and then explain each line in order.</p>
+
+<blockquote class="code"><pre>var i = ['Hearts', ' Stars', ' Horseshoes'];
+out.setText(i + '\n');
+var j = 'Clovers and Blue Moons\n';
+out.replaceSelection(j);
+var k = ['Pots', 'of', 'Gold', 'and', 'Rainbows', '\n'];
+for (let i = 0; i < k.length; i++) {
+    out.replaceSelection(k[i]);
+    out.replaceSelection(' ');
+}
+var l = ['And ', 'the ', 'Red ', 'Balloons'];
+for (let i in l) {
+    out.replaceSelection(l[i]);
+}</pre></blockquote>
+
+<p>Should you possess knowledge of JS (and some of the relevant Java) already, you most likely already comprehend this code. If not, you may well be intrigued, perplexed, and, for those of little experience with code, possibly intimidated. Fear not: I promised I would elaborate, and this promise I'll keep. I must ask you must meet me halfway, however, by following along and adding each line to the left text area. There are many unusual qualities of the Script area that only become apparent when you work with it bit by bit. I assume little to no prior programming knowledge, so feel free to skim when I explain basic programming concepts, like arrays, variables and loops, if you already know them.</p>
+
+<blockquote class="code"><pre>var i = ['Hearts', ' Stars', ' Horseshoes'];</pre></blockquote>
+
+<p>This first line creates, or declares, a simple variable, i, and places an array containing three strings inside it. var denotes that a variable name, or identifier, follows; it's actually optional, but it's also wise to always use it. A name can be any combination of numbers, letters, underscores, or dollar signs, with the proviso that it can't begin with a number. There are also many keywords in the JS language that can't be used as variable names, but those are beyond the scope of my miniature tutorial. You won't have to worry about the simple, one-letter names I use throughout - with one caveat I'll explain later.</p>
+
+<p>The equals sign, deviating from its usual role, simply assigns the value of everything on its right side into the waiting variable on the left: this is called initialization. Never confuse the traditional programming use of the equals sign with its doubled form (==), which means, in programming, exactly what we've come to expect from equals signs through our contact with arithmetic - but should you make this error through no fault of your own, don't begin questioning your competence, as even the most skilled programmer may still fall into this trap.</p>
+
+<p>Only two more paragraphs of mechanical items, and then we shall proceed to the next line. The square brackets create an array, which is, simply, a list of items. Inside the array lie three strings of odious and inedible nature; they are strings because they are surrounded by single quotation marks. You may use double quotes as well: both are equally valid, and single is merely my stylistic choice. The strings are separated by commas, which are necessary to denote the array's items. Without them, the strings would begin fighting for legroom and make a terrible mess. Remember to keep your array items seated!</p>
+
+<p>Last but not least, the entire line is ended by a semicolon, which marks the end of the line - statement, actually, but this distinction is superficial until we learn of compound statements, which will occur soon enough. Like the var keyword, the humble semicolon is in truth optional in this context. Again, however, I encourage you to use it, for code clarity and to evade potential pitfalls.</p>
+
+<blockquote class="code"><pre>out.setText(i + '\n');</pre></blockquote>
+
+<p>This line, as is clear to you, exhibits almost none of the trappings I spent much time explaining to you. Though I have tried to stay jaunty, I will assume you grow tired of my lengthy explanations, and in turn I'll try to go more quickly.</p>
+
+<p>out is a variable that has been pre-declared and -initialized for you; it forms a direct path to the right-side text area, allowing you to fill it with the output of your code. Since the text area is an object, we'll do this by calling its methods. If you <i>are</i>, in fact, a beginner, the nuances of objects are a bit too involved to cover here, and I'll have to ask you trust me that things work the way they should. I will point out, however, that the text area is a Java object, not a JS one; though this distinction holds no bearing on this simple code, it is crucial regardless.</p>
+
+<p>An object's method is called by placing a period after its variable name, then the name of the method, then a set of parentheses that may or may not contain arguments to the method. setText accepts one argument, a string that should be placed into out. Now, certain aspects of this situation may make you uncomfortable. In particular, I passed our variable i to the method, and i contains not a string, but an array. Furthermore, there's a plus sign, and a strange string with only a backslash and n...</p>
+
+<p>Fortunately, the engine which transforms our code into results is wily, to some extent. It will convert the array into a string for us; by default it simply inserts commas between the items, which is why I gave the last two words leading spaces so that they wouldn't squish up against each other. Not, I assure you, a pretty sight. The second string, briefly, denotes a new line, as if you had pressed Enter or Return. The plus sign simply combines these two strings. setText examines its input arguments, sees that they are good, and places them inside out (the rightmost text area, of course).</p>
+
+<p>Of course, it won't do this magically as you type. Let's acknowledge the Parse button, finally. Have you placed the two lines I've discussed (and only these two; it behooves us to go sequentially) in the left text area? Then give Parse a good press. You should see this output appear in the right text area:</p>
+
+<blockquote class="code"><pre>Hearts, Stars, Horseshoes
+&nbsp;</pre></blockquote>
+
+<p>For the sake of experiment, press Parse again. Right now, yes, before proceeding. Notice that the contents of the right area remain the same. This is because setText always completely replaces the contents of the text area, which is less-than-optimal when we want to add text based on different situations. To add to existing text without disturbing it, we'll have to wield a new and different function.</p>
+
+<blockquote class="code"><pre>var j = 'Clovers and Blue Moons\n';
+out.replaceSelection(j);</pre></blockquote>
+
+<p>The first of these lines creates a new variable, j, and assigns it a simple string of yet more flavorless and unappealing words. This time, I've chosen to include the new line directly in the string. In the second line we now use the new function: replaceSelection. It is identical to setText in terms of the way you call it, but it inserts text by replacing only what is selected in out. Since nothing is selected, and the text cursor is at the end of its contents, it is the same as adding more text to the existing contents.</p>
+
+<p>You may wonder why you would ever need setText again, but beware: when it is not necessary to retain existing text, appending can cause an even bigger mess than the unruly strings who need comma seats. I advise you to use setText always as the very first operation and replaceSelection at all times afterwards, unless you need to deviate from this pattern for a good reason.</p>
+
+<p>(You could, alternatively, simply combine the strings into a single variable - optimally an array - as you go, and, once finished, output everything at once with a single call to setText. In this approach, to avoid the automatic output of commas between each array item, use .join('') on the array [for it too is an object] to create the string with no commas other than those you yourself added. Due to the way strings are handled in Java and JS, this method is usually preferable.)</p>
+
+<p>The abilities of Parse have been proven, and so you do not <i>need</i> to press it again until the very end of this code. But don't let me discourage you if you wish to witness it at each stage, or even feel ambitious enough to make changes to the code and see what occurs.</p>
+
+<blockquote class="code"><pre>var k = ['Pots', 'of', 'Gold', 'and', 'Rainbows', '\n'];
+for (let i = 0; i < k.length; i++) {
+    out.replaceSelection(k[i]);
+    out.replaceSelection(' ');
+}</pre></blockquote>
+
+<p>The simple for loop is far more frightened of you than you may be of it. Its meat lies between its parentheses. This version begins by creating a new variable and assigning it 0; it then names its truth condition, which, when true, is the point at which it will stop its looping (in this case, when i is equal to the number of items of the k array); and finally, the i++ simply means it will add one to this variable once it reaches the end of the loop body.</p>
+
+<p>Yes, I have noticed you signaling wildly that I've made a grievous error; we've already used i as a variable name! This is true, but the use of the let keyword, which is very similar to var, means the loop considers this an entirely new variable. Though jarring - and something you should refrain from doing - this is legal because the for loop is considered to have its own, unique i variable, separate from the existing one. Had this initialization statement been used outside the loop's parentheses, or had we used var, it would have been considered the same, existing i. In this simple example we could have freely reused i anyway, as I accidentally did in the former version of this text; it's not as if we're using it for anything else. As (almost) always, however, it is good form to use var.</p>
+
+<p>The loop's body consists of two method calls, surrounded by curly braces. These curly braces group them together as a statement block, which I mentioned earlier. As you've likely noticed, I did not place a semicolon after the closing brace; indeed, semicolons do not go in such a place, for once. Because life, even in a discipline such as programming, cannot be simple, there is <i>one</i> case where a semicolon is acceptable after a closing brace, but I shan't bring it up due to irrelevancy.</p>
+
+<p>I must mention the curious construct passed to the first of the replaceSelection calls. Arrays would be useless were there no way to individually access the items within them; indeed, you do so by adding brackets after an array's variable name and nestling a number between them for the appropriate item. Discard your concepts of which number you should use when you begin counting, for array items are numbered beginning with 0. I have used the loop to access each item in turn for me, stopping when it has reached the end of the array.</p>
+
+<p>At this point, you may notice the text areas morphing in a strange and unwieldy manner. BL is attempting to assist you by resizing them so that you might see the full contents of each as much as possible without having to scroll; this resizing occurs only when you click on the blue portion of the window, or switch to another editing mode and back. Certainly it's jarring, but I know of no better ideas, so I suggest being patient as you would with a young person who insists on helping when they actually get in the way. This is not an indictment of BL, a great and useful program by a wise and powerful wizard. He is many months, if not years (of actual productive work), ahead of me in his training, so I must be felicitous indeed.</p>
+
+<blockquote class="code"><pre>var l = ['And ', 'the ', 'Red ', 'Balloons'];
+for (let i in l) {
+    out.replaceSelection(l[i]);
+}</pre></blockquote>
+
+<p>All that is new here is the form of the for loop, which is refreshingly simple; after the variable declaration, it eschews everything else for a simple "in" and the variable name of our new array. This is called the for/in loop, and is designed for iterating over such things as our list more efficently. And this is, presently, all you need to know.</p>
+
+<p>Now that every line has been accounted for, press Parse again. If you have not modified the code (and possibly if you have), this is what the output will be:</p>
+
+<blockquote class="code"><pre>Hearts, Stars, Horseshoes
+Clovers and Blue Moons
+Pots of Golden Rainbows 
+ And the Red Balloons</pre></blockquote>
+
+<p>Absolutely vile, is it not? But a fine example of how we can use JS to assemble text. Of course, we could have typed all this ourselves much more quickly - but as we and the sneering hooligan who saw fit to helpfully draw this fact to our attention all know, that is not the object of an example.</p>
+
+<p>If I have whetted your appetite for the use of this tool, I have one suggestion where you might proceed from here. There's a rather unsightly extra space in the output, though the cause of its origin lies in a tricky place. Patching this minor bug is quite simple, but involves a construct I have not discussed in this tutorial; I leave this as a stepping stone for you.</p>
+
+<p>And to answer the question about the Script window: doesn't it turn out to be more convenient that you can have it next to your maps as you work?</p>
+
+<p align="right">Author: JazzJackalope</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

@@ -1,0 +1,16 @@
+Solid (bouncy sides)
+Not Affected By Tile44
+Invulnerable
+Ignore Solid
+Bouncy Top
+Shootable
+Solid (hard sides)
+Rear and top no damage
+Run event on contact
+Run event on death
+(Unused)
+Appear once flagID set
+Spawn with alt direction
+Interactable
+No Appear if flagID set
+Show Damage #

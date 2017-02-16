@@ -1,0 +1,442 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"Anonymous Pro";
+	panose-1:2 6 6 9 3 2 2 0 5 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:10.0pt;
+	margin-left:0cm;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:10.0pt;
+	margin-left:36.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:10.0pt;
+	margin-left:36.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+.MsoPapDefault
+	{margin-bottom:10.0pt;
+	line-height:115%;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-CA>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><b><span style='font-size:17.0pt;line-height:115%;
+font-family:"Anonymous Pro"'>TSC Essentials</span></b></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Looking to create the coolest, longest and best mod on the
+forums? Ready to start a giant project filled with story and bosses?</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Stop doing that. This is a huge problem that most new modders
+have (including me) when they begin their mod. They have a head full of ideas,
+and inspiration to create one of the first truly finished mods. However, they
+need a level of skill to match their enthusiasm and creativity, which doesn't
+come pre-packaged.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Before you even touch an editor, you have to keep organized.
+Try to plot out your entire story, characters, and assets in a text file so
+that you know what you're doing. There's nothing worse than having your mod
+hastily end with a cookie cutter plot twist final boss, and an unappealing
+ending which tries desperately to wrap up split ends.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>But enough of that, on to the meat of this tutorial. This
+tutorial should help you learn some of the basics of scripting in Cave Story.
+This will be a more condensed version for modders just starting out, and should
+help people avoid common pitfalls that occur while scripting.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>The images in this tutorial are screenshots of scripts from
+Booster's Lab, but the syntax are exactly the same, and they both look almost
+identical except for some parts highlighted in green in Booster's Lab, which
+show code that is not run. This is useful for making comments or notes, and
+organizing the code.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>First of all, let's look at some script within the game.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'><img width=610 height=254 id="Picture 1"
+src="TSC%20Essentials_files/image001.gif"></span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Depending on how much practice you have with TSC scripting,
+this may or may not look familiar to you.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>The first important point is towards the event numbers.</span></p>
+
+<p class=MsoNormal><b><u><span style='font-size:13.0pt;line-height:115%;
+font-family:"Anonymous Pro"'><span style='text-decoration:none'>&nbsp;</span></span></u></b></p>
+
+<p class=MsoNormal><b><u><span style='font-size:13.0pt;line-height:115%;
+font-family:"Anonymous Pro"'>1. Event Numbers</span></u></b></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'><img width=119 height=82 id="Picture 10"
+src="TSC%20Essentials_files/image002.gif"></span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>These numbers represent what script is run at which event. The
+event number is found when a certain entity is interacted with, or through a
+specific TSC command <span style='color:blue'>&lt;EVE</span>. More on that
+later.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>The important part is the order of the numbers, as well as
+where they are in comparison to the rest of the code. <b><span
+style='color:red'>EVENTS MUST BE IN THE CORRECT ORDER. </span></b>If you
+switched the placement of the two events, so that <b>#0200</b> is first and <b>#0110</b>
+is second, it is very likely that the game will not be able to correctly find
+the event number and weird things may happen to your game.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>An event line comprises of the &quot;<b>#</b>&quot; symbol,
+followed by exactly four digits. This is the event's number. Putting in more or
+less than the required four digits can cause various issues; best-case
+scenario, you will hear some text sounds ingame, worst-case scenario, you might
+crash your game. Either way it's unprofessional, so don't do it.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><u><span style='font-size:13.0pt;line-height:115%;
+font-family:"Anonymous Pro"'>2. Essential Map Starting Code</span></u></b></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>There are a few commands that are almost always in the
+starting event for a map - that is to say, the event that is run when the map
+is loaded.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'><img width=266 height=157 id="Picture 16"
+src="TSC%20Essentials_files/image003.gif"></span><span style='font-size:13.0pt;
+line-height:115%;font-family:"Anonymous Pro"'> </span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>These events highlight some of the commands used for starting
+a map. As you can probably see, they do mostly the same thing. The only
+difference is the value of <span style='color:blue'>&lt;FAI</span>.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro";color:blue'>&lt;MNA</span><span style='font-size:13.0pt;
+line-height:115%;font-family:"Anonymous Pro"'> is used to show the caption of
+the map for a few seconds in the middle of the screen. For example, the first
+playable map uses <span style='color:blue'>&lt;MNA</span> to display
+&quot;Start Point&quot;. <span style='color:blue'>&lt;CMU</span>, followed by a
+four-digit value, starts a specific music track specified by the four-digit string.
+Remember that it <b>must</b> be four digits. <span style='color:blue'>&lt;FAI</span>,
+followed by a four-digit value, causes the game to &quot;fade in&quot; to a
+map. This basically means the game fades in from a blue screen to the map you
+are currently in. <b><span style='color:red'>If you don't fade in to a map
+after fading out from another map, you will be able to move but won't be able
+to see anything.</span></b> Make sure that you remember to put these in. Values
+0-4 set which direction the game fades in from. <span style='color:blue'>&lt;END</span>
+simply ends the event.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'> There are more commands that can be useful for starting maps,
+but these are the basic commands that are usually important. Two other commands
+that are worth noting are <span style='color:blue'>&lt;KEY</span> and <span
+style='color:blue'>&lt;FOM</span>. <span style='color:blue'>&lt;KEY</span>
+prevents any movement of the player for the duration of the event. <span
+style='color:blue'>&lt;FOM</span>, followed by a four-digit value, focuses the
+screen on the player. The value represents the number of ticks it takes to
+shift the screen - <span style='color:#C32E99'>0001</span> is immediate, <span
+style='color:#C32E99'>0016</span> is the normal speed. The normal speed is the
+speed at which the screen moves throughout the game, so <b><span
+style='color:red'>you must reset the speed to 0016 after changing it. </span></b>Also,
+setting the value to 0000 crashes the game on the spot. Don't do that.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><u><span style='font-size:13.0pt;line-height:115%;
+font-family:"Anonymous Pro"'>3. Essential Map Ending Code</span></u></b></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Ending an event is easy; you need two commands and a few
+values. Extra commands are used for things like making noises, opening doors
+and the like, but that's not really important.</span></p>
+
+<p class=MsoNormal><b><span style='font-size:13.0pt;line-height:115%;
+font-family:"Anonymous Pro"'>Make sure to include a <span style='color:blue'>&lt;FAO</span>,
+and <span style='color:blue'>&lt;TRA </span>command when changing maps.</span></b><span
+style='font-size:13.0pt;line-height:115%;font-family:"Anonymous Pro"'> <span
+style='color:blue'>&lt;FAO</span>, followed by a number 0-4, fades out in a
+specific direction. It is exactly the same as <span style='color:blue'>&lt;FAI</span>,
+but it fades out instead of in. You will end with a blue screen. <span
+style='color:blue'>&lt;TRA </span>is a bit more complicated, and has four
+parameters, or values. The correct structure is <span style='color:blue'>&lt;TRA</span><span
+style='color:#C32E99'>XXXX</span>:<span style='color:#C32E99'>YYYY</span>:<span
+style='color:#C32E99'>ZZZZ</span>:<span style='color:#C32E99'>WWWW</span>. In
+order from left to right, the values correspond to map number, the number of
+the event that is called after changing maps, and the x and y values of the
+player in the next map. After running <span style='color:blue'>&lt;TRA</span>,
+the map will be immediately changed to the one specified by <span
+style='color:#C32E99'>XXXX</span>.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'><img width=300 height=52 id="Picture 52"
+src="TSC%20Essentials_files/image004.gif"></span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Here is an example of an exit map code. Note the <span
+style='color:blue'>&lt;FAO</span> and <span style='color:blue'>&lt;TRA</span>
+commands. <span style='color:blue'>&lt;FOM</span> is added in because of a
+special circumstance, and can be ignored for this tutorial.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><u><span style='font-size:13.0pt;line-height:115%;
+font-family:"Anonymous Pro"'>4. Beginning and Ending Messages</span></u></b></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>It's important to make sure your scripts run properly so that
+the game can run normally. This is a common problem for modders, especially
+with message boxes.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Knowledge of the <span style='color:blue'>&lt;MSG</span>
+command is vital for most mods, but it will not be covered here. Instead, we
+will discuss how to end and begin messages.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>To start a message, there are three commands that are commonly
+used. (Technically there are five, counting <span style='color:blue'>&lt;MS2</span>
+and <span style='color:blue'>&lt;MS3</span>, but those aren't important right
+now.) These commands are <span style='color:blue'>&lt;FAC</span>, <span
+style='color:blue'>&lt;GIT</span>, and of course <span style='color:blue'>&lt;MSG</span>.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro";color:blue'>&lt;FAC </span><span style='font-size:13.0pt;
+line-height:115%;font-family:"Anonymous Pro"'>creates a facepic that
+corresponds with the following value within the message box. Make sure to limit
+the value to four digits, as always. One important case is <span
+style='color:blue'>&lt;FAC</span><span style='color:#C32E99'>0001</span>, which
+clears the current facepic. You don't have to do this if the event ends
+afterwards, as it automatically resets the current facepic to <span
+style='color:#C32E99'>0000</span>, but pay attention if you need to change the
+message box so that the next line does not need a facepic. This command is also
+similar to <span style='color:blue'>&lt;GIT</span>, although the latter is used
+to display an item or weapon image. The value corresponds to the item or
+weapon, and is referenced from armsimage.pbm and itemimage.pbm. Weapon images
+range from values <span style='color:#C32E99'>0001</span>-<span
+style='color:#C32E99'>0013</span>. If you wish to display an item image
+instead, take the value of the item and add <span style='color:#C32E99'>1000</span>
+to it. For example, to display a Life Capsule you would enter <span
+style='color:blue'>&lt;GIT</span><span style='color:#C32E99'>1006</span>, as
+opposed to <span style='color:blue'>&lt;GIT</span><span style='color:#C32E99'>0006</span>.
+The latter would show the Missiles image, instead.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>To end a message, there are also three commands that are
+commonly used. These are <span style='color:blue'>&lt;NOD</span>, <span
+style='color:blue'>&lt;CLR</span>, and <span style='color:blue'>&lt;CLO</span>.
+<span style='color:blue'>&lt;NOD</span> simply waits for key input - it will
+wait at this point until you press the attack button or the jump button.
+Putting a <span style='color:blue'>&lt;CLR</span> after this will erase the
+text but keep the message box on the screen. <span style='color:blue'>&lt;CLO</span>
+will erase the text as well as closing the message box. If your event ends with
+the message, <span style='color:blue'>&lt;CLO</span> is not technically
+necessary, as the game will automatically close the message box when the event
+ends.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>One more point: the limit for characters for each line within
+the message box is about 35 characters. <b>Keep in mind that part of the final
+character may still be cut off if you have the maximum 35 characters on a line.
+</b>Also, when using a facepic the limit is lowered to 27 characters. The text
+is supposed to wrap around, but that isn't always the case and you shouldn't
+rely on it.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><u><span style='font-size:13.0pt;line-height:115%;
+font-family:"Anonymous Pro"'>5. Stabilizing Events</span></u></b></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Making sure the event starts and ends properly is extremely
+important. Failing to do this can result in the game cycling through each event
+in the script without stopping, or the player accidentally falling off the map
+while in the middle of an event!</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>An event is usually started with <span style='color:blue'>&lt;KEY</span>
+or <span style='color:blue'>&lt;PRI</span>, although there are a few
+exceptions. <span style='color:blue'>&lt;KEY</span> is used to restrict
+movement of the player, as stated before. This stops your character from moving
+into places it shouldn't. This is bad for many reasons, two being that your
+character can skip through movement triggers, and can avoid almost all damage. <span
+style='color:blue'>&lt;PRI</span> is like <span style='color:blue'>&lt;KEY</span>,
+but universal. <b>When using <span style='color:blue'>&lt;PRI</span>,
+everything except for the message box will be frozen until the end of the
+event.</b> Keep in mind that you cannot create cutscenes with moving characters
+while using <span style='color:blue'>&lt;PRI</span>.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Events are ended in one of three ways. The commands that
+correspond to this are <span style='color:blue'>&lt;END</span>, <span
+style='color:blue'>&lt;EVE</span>, and <span style='color:blue'>&lt;TRA</span>.
+We've already talked about <span style='color:blue'>&lt;TRA</span>: it sends us
+to a different map and begins a new event. <span style='color:blue'>&lt;EVE</span>
+is like this - it begins a new event, but it does not send the player to a
+different map and does not move the player. It has one parameter, a
+(four-digit) value that determines the event that is changed to. <span
+style='color:blue'>&lt;END</span>, evidently enough, does nothing but ends the
+event. The unique, and perhaps obvious properties of <span style='color:blue'>&lt;EVE</span>
+and <span style='color:blue'>&lt;TRA</span>, are that they also act as <span
+style='color:blue'>&lt;END</span> commands. Anything after these commands is
+ignored, as the current event is finished.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'><img width=286 height=45 id="Picture 55"
+src="TSC%20Essentials_files/image005.gif"></span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>As had been mentioned before, <i><span style='color:#367A2A'>green
+text is text that is never run. </span></i>You can clearly see that <i><span
+style='color:#367A2A'>&lt;END </span></i>is not run, then. This is because the <span
+style='color:blue'>&lt;TRA</span> that is before <i><span style='color:#367A2A'>&lt;END
+</span></i>ends the event, so the final <i><span style='color:#367A2A'>&lt;END </span></i>is
+not actually required and not run anyway. This is the same for <span
+style='color:blue'>&lt;EVE</span>.</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>&nbsp;</span></p>
+
+<p class=MsoNormal><b><u><span style='font-size:13.0pt;line-height:115%;
+font-family:"Anonymous Pro"'>To summarize:</span></u></b></p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-18.0pt'><span
+style='font-size:13.0pt;line-height:115%;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:13.0pt;line-height:115%;font-family:"Anonymous Pro"'>Make
+sure to properly begin and end your events</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-18.0pt'><span
+style='font-size:13.0pt;line-height:115%;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:13.0pt;line-height:115%;font-family:"Anonymous Pro"'>Event
+numbers should look proper and come in sequence</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-18.0pt'><span
+style='font-size:13.0pt;line-height:115%;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:13.0pt;line-height:115%;font-family:"Anonymous Pro"'>Code
+can be written outside of what is actually run to essentially comment your code</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-18.0pt'><span
+style='font-size:13.0pt;line-height:115%;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:13.0pt;line-height:115%;font-family:"Anonymous Pro"'>There
+is a limit for characters within a message box - 35, or 27 with a facepic</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-18.0pt'><span
+style='font-size:13.0pt;line-height:115%;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:13.0pt;line-height:115%;font-family:"Anonymous Pro"'>Please
+close your message boxes and reset <span style='color:blue'>&lt;FAC</span> and <span
+style='color:blue'>&lt;GIT</span> or your game will look ugly</span></p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-18.0pt'><span
+style='font-size:13.0pt;line-height:115%;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='font-size:13.0pt;line-height:115%;font-family:"Anonymous Pro"'>For
+the love of god, and all that is holy, <b><span style='color:red'>DO NOT PUT
+MORE OR LESS THAN FOUR DIGITS FOR EVERY SINGLE PARAMETER</span></b></span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:13.0pt;line-height:115%;font-family:
+"Anonymous Pro"'>Hopefully, reading this guide has helped you gain a better
+understanding of how the event system works, and will help you be able to find
+errors in your code easily or prevent them from ever happening. However, if
+you're absolutely stumped, you can always ask the experts.</span></p>
+
+</div>
+
+</body>
+
+</html>

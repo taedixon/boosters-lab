@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Title Screen Stuff">
+	<panel title="hax">
+		<field type="label">
+			Window Title
+		</field>
+		<field type="text" offset="0x48EFD0" size="40"/>
+		<field  type="label">
+			Title event
+		</field>
+		<field type="text" offset="0x00F763" size="1"/>
+		<field type="label">
+			Title map
+		</field>
+		<field type="text" offset="0x00F765" size="1"/>
+		<field type="label">
+			Title focus(X)
+		</field>
+		<field type="text" offset="0x00F761" size="1"/>
+		
+		<field type="label">
+			Title focus(Y)
+		</field>
+		<field type="text" offset="0x00F75F" size="1"/>
+		
+	</panel>	
+</hack>

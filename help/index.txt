@@ -1,0 +1,38 @@
+anp.txt
+refs.htm;Lyger's Refs
+!Using Booster's Lab
+editor.htm;General Editor Controls
+!Editing Modes
+tilemode.htm;Tile Editing
+entitymode.htm;Entity Editing
+scriptmode.htm;Script Editing
+mapdatamode.htm;Mapdata Editing
+!!
+!The Many Config Files
+entityconfig.htm;Configuring Entities
+tscconfig.htm;Configuring TSC commands
+blconfig.htm;Editor Configuration
+!!
+!Dropdown Menu Details
+filemenu.htm;File
+viewmenu.htm;View
+actionmenu.htm;Action
+helpmenu.htm;Help
+!!
+!!
+!TSC
+anp.htm;ANP
+flags.htm;Flags
+illegal.htm;Negative Args
+scriptwindow.htm;The Script Window
+tsc_help.html;General TSC Help
+tsc+.htm;Hackinator TSC+ help
+!!
+!General
+npcediting;npc.tbl editing
+message_boxes.htm;Messages
+doors.htm;Doors
+textbox.htm;TextBox img
+songs.htm;Adding Songs
+tilesets.htm;Tilesets
+credits.htm;Credits

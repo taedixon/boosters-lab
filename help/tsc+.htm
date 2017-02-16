@@ -1,0 +1,155 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+
+	<h1>TSC+ COMMAND DOCUMENTATION</h1>
+
+	<p>
+		This help file provides some information about the 
+		commands included in TSC+. TSC+ as currently released in BL
+		has 3 parts: the base commands, commands added by the PHYS
+		addon, and commands added by the TIMG addon. To use PHYS or TIMG requires
+		applying base TSC+ first. TSC+ is a large hack, so it doesn't usually
+		play well with non-TSC+ TSC modifications.
+	</p>
+	<h2>TSC+ BASE:</h2>
+	<hr>
+	
+	<p class="code">
+	&lt;LRXXXXX:YYYY:ZZZZ<br>
+	Wait for a keypress and run either event X, Y, or Z
+	depending on whether they key was Left, Right or Shoot
+	<p>
+	
+	<p class="code">
+	&lt;FNJXXXX:YYYY<br>
+	Jump to Y if flag X is not set.
+	<p>
+	
+	
+	<p class="code">
+	&lt;VARXXXX:YYYY<br>
+	Puts YYYY into variable # XXXX
+	</p>
+	
+	<p class="code">
+	&lt;VAOXXXX$YYYY<br>
+	Performs operation $ on XXXX using # YYYY. Valid values of $ are + (addition) - (subtraction) * (multiplication) and % (Basically IDIV). Dividing by zero will crash the game, by the way.
+	</p>
+	
+	<p class="code">
+	&lt;VAZXXXX:YYYY<br>
+	Zeros YYYY variables, starting at variable # XXXX. &lt;VAZXXXX:0000 will do nothing.
+	</p>
+	
+	<p class="code">
+	&lt;VAJXXXX:YYYY:ZZZZ:WWWW
+	Compare XXXX to YYYY using method ZZZZ, if true jump to WWWW. ZZZZ is as follows:
+	<table>
+		<tr><td>0000</td><td>X is equal to Y</td></tr>
+		<tr><td>0001</td><td>X is not equal to Y</td></tr>
+		<tr><td>0002</td><td>X is greater than Y</td></tr>
+		<tr><td>0003</td><td>X is less than Y</td></tr>
+		<tr><td>0004</td><td>X is greater or equal to Y</td></tr>
+		<tr><td>0005</td><td>X is less or equal to Y</td></tr>
+		<tr><td>0006</td><td>Always jumps, but that's a bug in the code. Any higher than 6 and you may very well crash the game.</td></tr>
+	</table>
+	does NOT assume arguments are variables. Use VXXX if you want to access them here.
+	</p>
+	
+	<p class="code">
+	&lt;RNDXXXX:YYYY:ZZZZ
+	Puts random # between XXXX (min) and YYYY (max) into variable ZZZZ.
+	</p>
+	
+	<p>
+		Other changes: <br>
+		<br>
+		VAR utilizes flags 6000-8000. Variables numbered V008-V123 can be used
+		safely. Variables higher than 123 will begin modifying other RAM values
+		- you can use this to your advantage if you know the math. VAR flags 
+		start at address 49E090. Each var is two bytes.
+		<br><br>
+		For any TSC argument, if the first digit is replaced with "V"
+		then it will be evaluated as Variable #XXX. Example:
+		<p class="code">
+			&lt;FAI0004 // fades in with direction "4"<br>
+			&lt;FAIV010 // fades in using the value of variable 10
+		</p>
+		&lt;NUMXXXX now outputs the value in variable XXXX to the message box.<br>
+		As well, certain variables are pre-populated and should not be set.
+		These are "read-only" meaning changing them will not do anything.
+		<table>
+		<tr><td>0000</td><td>Current Health</td></tr>
+		<tr><td>0001</td><td>Max Health</td></tr>
+		<tr><td>0002</td><td>Player X Position</td></tr>
+		<tr><td>0003</td><td>Player Y Position</td></tr>
+		<tr><td>0004</td><td>Current Weapon Ammo</td></tr>
+		<tr><td>0005</td><td>XP needed to be gained for next level</td></tr>
+		<tr><td>0006</td><td>MyChar number (this one is writable</td></tr>
+		<tr><td>0007</td><td>Current Direction Faced</td></tr>
+		</table>
+	</p>
+	
+	<h2>TSC+ TIMG ADDON:</h2>
+	<hr>
+	<p class="code">
+		&lt;IMGFILE<br>
+		will set TimgFILE.bmp over the screen. The "tag" for
+		the file name must be exactly 4 characters. <br>
+		&lt;IMG0000 will remove the image overlay.<br>
+	</p>
+	<p>
+		Pure black [00000000] in the overlay image will be transparent.
+		This replaces the "Blackboard" npc (043) and "Grate" npc (100)
+	</p>
+	
+	<h2>TSC+ PHYS ADDON:</h2>
+	<hr>
+	<pre class="code">
+	Command &lt;PHYXXXX:YYYY	Type:Value
+Physics variables that can be changed:
+	0 = Max Walk Speed (normal 812)
+	1 = Max Fall speed (normal 1535)
+	2 = Gravity (normal 80)
+	3 = Alt Gravity (normal 32)
+	4 = Walk Accel (normal 85)
+	5 = Jump Control (normal 32)
+	6 = Friction (normal 51)
+	7 = Jump force (normal 1280)
+	8 = 0 but water
+	9 = 1 but water
+	10 = 2 but water
+	11 = 3 but water
+	12 = 4 but water
+	13 = 5 but water
+	14 = 6 but water
+	15 = 7 but water
+	16 : water doesn't cause splash
+		or trigger air timer.
+		
+	</pre>
+	<p>
+		When using the PHYS hack, you need to define ALL your physics
+		variables whenever a new game is started, otherwise the player will not
+		move. PHYS uses flags starting at 49E060.<br><br>
+		You can then change physics using TSC whenever you want. DO NOT use
+		the regular hackinator physics hack in combination with this one!!
+		it will break!!!
+	</p>
+	
+	<p>
+	Max movement speed is defined by 01:MaxFallSpeed 
+	instead of hardcoded now</p>
+
+
+	<p align="right">Author: Noxid</p>
+	</td><td class="side"></td></tr></table>
+
+</body>
+
+
+</html>

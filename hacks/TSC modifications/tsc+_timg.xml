@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="TSC+ TIMG addon">
+	<panel>
+		<field type="info">
+		 An addon for TSC+ that lets you use TIMG commands.
+		 Note that this also modifies the title screen behaviour.
+		</field>
+		
+		<!-- inject main loop 1 -->
+		<field type="data" offset="0x410815">
+		E8 D6 E1 01 00 D9 D0 D9 D0 90
+		</field>
+		
+		<!-- setupTIMG -->
+		<field type="data" offset="0x42ea50">
+		55 89 e5 83 ec 10 a1 d8 5a 4a 00 03 45 08 8b 08
+89 4d fc 81 f9 30 30 30 30 75 09 c6 05 00 ba 4b
+00 00 eb 21 b8 54 69 6d 67 bb 01 ba 4b 00 89 03
+89 4b 04 6a 00 53 e8 45 d5 fd ff 83 c4 08 c6 05
+00 ba 4b 00 01 89 ec 5d c3
+		</field>
+		<!-- ReplaceTitle 3 -->
+		<field type="data" offset="0x4102fb">
+		83 3d e4 e1 49 00 00 75 0c c7 85 0c ff ff ff 9f
+00 00 00 eb 0a c7 85 0c ff ff ff b7 00 00 00 6a
+10 8d 85 fc fe ff ff 50 8b 8d 0c ff ff ff 51 68
+e8 00 00 00 68 1c f9 48 00 e8 87 c0 ff ff 83 c4
+14 eb 0a
+		</field>
+		<!-- ReplaceTitle 2 -->
+		<field type="data" offset="0x4100ae">
+		6a 00 68 1c f9 48 00 6a 00 6a 00 68 1c f9 48 00
+e8 fd c2 ff ff 83 c4 14 eb 57
+		</field>
+		<!-- ReplaceTitle 1 -->
+		<field type="data" offset="0x40f9b0">
+		55 8b ec 81 ec f0 01 00 00 33 c0 89 45 e0 89 45
+e4 89 85 ec fe ff ff 89 85 f0 fe ff ff 89 85 14
+ff ff ff 89 85 18 fe ff ff 89 85 38 fe ff ff 89
+85 20 ff ff ff 89 85 40 ff ff ff 89 85 58 fe ff
+ff 89 85 78 fe ff ff 83 c0 10 89 85 f8 fe ff ff
+89 85 1c ff ff ff 89 45 f4 89 85 1c fe ff ff 89
+85 20 fe ff ff 89 85 28 fe ff ff 89 85 2c fe ff
+ff 89 85 3c fe ff ff 89 85 40 fe ff ff 89 85 4c
+fe ff ff 89 85 28 ff ff ff 89 85 30 ff ff ff 89
+85 48 ff ff ff 89 85 5c fe ff ff 89 85 60 fe ff
+ff 89 85 6c fe ff ff 89 85 7c fe ff ff 89 85 80
+fe ff ff 89 85 8c fe ff ff 83 c0 10 89 45 fc 89
+85 24 fe ff ff 89 85 30 fe ff ff 89 85 34 fe ff
+ff 89 85 44 fe ff ff 89 85 48 fe ff ff 89 85 54
+fe ff ff 89 85 38 ff ff ff 89 85 50 ff ff ff 89
+85 64 fe ff ff 89 85 68 fe ff ff 89 85 74 fe ff
+ff 89 85 84 fe ff ff 89 85 94 fe ff ff 83 c0 10
+89 85 50 fe ff ff 89 85 58 ff ff ff 89 85 7c ff
+ff ff 89 45 8c 89 45 9c 89 45 ac 89 85 70 fe ff
+ff 89 85 88 fe ff ff 83 c0 10 89 85 a0 fe ff ff
+89 85 c0 fe ff ff 89 45 84 89 45 94 89 45 a4 89
+45 b4 89 85 90 fe ff ff 83 c0 10 89 45 cc 89 85
+a4 fe ff ff 89 85 a8 fe ff ff 89 85 b0 fe ff ff
+89 85 b4 fe ff ff 89 85 c4 fe ff ff 89 85 c8 fe
+ff ff 89 85 d4 fe ff ff 83 c0 08 89 45 d4 89 85
+6c ff ff ff 83 c0 08 89 85 74 ff ff ff 89 85 ac
+fe ff ff 89 85 b8 fe ff ff 89 85 bc fe ff ff 89
+85 cc fe ff ff 89 85 d0 fe ff ff 89 85 dc fe ff
+ff 83 c0 10 89 85 24 ff ff ff 89 85 34 ff ff ff
+89 85 44 ff ff ff 89 85 54 ff ff ff 89 85 d8 fe
+ff ff 83 c0 10 89 85 2c ff ff ff 89 85 3c ff ff
+ff 89 85 4c ff ff ff 89 85 5c ff ff ff 83 c0 10
+89 45 e8 89 45 f0 89 85 10 ff ff ff 83 c0 08 89
+45 c8 89 85 68 ff ff ff 83 c0 08 89 85 f4 fe ff
+ff c7 45 ec 38 00 00 00 c7 85 18 ff ff ff c0 00
+00 00 c7 45 f8 c0 00 00 00 c7 45 d0 d0 00 00 00
+c7 85 70 ff ff ff d0 00 00 00 c7 85 78 ff ff ff
+e0 00 00 00 c7 45 80 f0 00 00 00 c7 45 88 20 01
+00 00 c7 45 90 30 01 00 00 c7 45 98 e0 00 00 00
+c7 45 a0 f0 00 00 00 c7 45 a8 30 01 00 00 c7 45
+b0 40 01 00 00 6a 00 68 f8 c4 48 00 e8 8f c3 ff
+ff 83 c4 08 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90
+		</field>
+		<!-- Renderoverlay -->		
+		<field type="data" offset="0x42e9f0">
+		55 89 e5 82 3d 00 ba 4b 00 00 74 18 6a 00 68 1c
+		f9 48 00 6a 00 6a 00 68 1c f9 48 00 e8 af d9 fd
+		ff 83 c4 14 6a 00 e8 35 58 fe ff 83 c4 40 89 ec
+		5d c3
+		</field>
+		<!-- InjectBmpLoader 3 -->
+		<field type="data" offset="0x43b350">
+		6a 01 6a 0a 68 e0 01 00 00 68 80 02 00 00 e8 6d
+0e fd ff 83 c4 10 6a 00 6a 00 68 e0 01 00 00 68
+80 02 00 00 e8 57 0e fd ff 83 c4 10 6a 00 68 f8
+c4 48 00 e8 48 0c fd ff 83 c4 08 e9 a8 61 fd ff
+		</field>
+		<!-- InjectBmpLoader 2 -->
+		<field type="data" offset="0x411522">
+		e9 29 9e 02 00
+		</field>
+		<!-- InjectBmpLoader 1 -->
+		<field type="data" offset="0x4113ce">
+		eb 18
+		</field>
+	</panel>
+</hack>

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>Message Boxes</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body><table><tr><td class = "side"></td><td class = "content">
+<h1 align="center">Message Boxes</h1>
+<h2 align="left">Getting Started</h2>
+<h4>Note: CS will always mean Cave Story in this guide.</h4>
+<p>You may think that message boxes would be the easiest things ever in TSC, but you're wrong. And I mean <i>really</i> wrong. Well, I may be exaggerating a bit here, but it can be difficult if you don't know what you're doing. It could also make your mod explode in the badly wrapped text of your message boxes, half of it unreadable because of faces. But we can prevent that!<br>
+To get started, simply copy and paste the following TSC into event #200 on the Start Point map with your preferred CS editor<!--That can be replaced with Booster's Lab if you want--> and run CS, then choose New. The message boxes should do as they say.</p>
+<p class="code">&lt;KEY&lt;MSGThis is a message box.&lt;NOD<br />
+&lt;CLR&lt;MS3This is a message box on top of thescreen.&lt;NOD<br />
+&lt;CLR&lt;MS2This is an invisible message box<br />
+on top of the screen.&lt;NOD&lt;END</p>
+<p>You may be wondering why there isn't a space between the "the" and the "screen" on the second message box. That is because CS' text wrapping system doesn't get rid of whitespace, like you may be accustomed to because of MS Word or the like. If you counted, you would be able to tell that CS' message box can only fit 35 characters on one line. (An exception to this is when you have a facepic in the message box, but we'll get to that later.) Beyond that, it will go to the next line, which is usually good, but it can mess with some sentences, so always remember that. A big mistake you might make is making a carriage return after exactly 35 characters. That may be what you want to do, and it may seem like it should be that way, but it isn't. It will end up looking like this.</p><br />
+<img src="./img/uBURL.jpg"
+     border="0"
+     alt="FillerFillerFillerFillerFillerFillerOOPS">
+<p>
+Do you see the problem? There's two line breaks, not one! This is because CS wraps whitespace, including carriage returns. Now, you can actually start learing how this stuff works! I'm only going to describe the dedicated message box commands, so not all the commands in the sample code are going to be explained. But that's fine, you can find that stuff in any general TSC tutorial. I'll break the commands down to make it easier to understand.<br>
+<h3>&lt;KEY</h3>
+<p>Okay, I lied. But this command should always be used before a message box! (Or &lt;PRI.) That is, unless you're experienced and know exactly what you're doing if you don't have one of these commands. This is a simple command. (In fact, all but the &lt;FAC command are, and that only has one paramater.) No weird syntax, and the only feature you're likely to care about if you're reading this guide is that it stops you from moving, and <i>only</i> you. That's what makes it diferent from...</p>
+<h3>&lt;PRI</h3>
+<p>This command is pretty much the same as &lt;KEY, except that it stops <i>everything.</i> The text box will still keep updating of course.</p>
+<h3>&lt;MSG</h3>
+<p>This is yet another no-paramaters command. Simply opens a message box at the bottom of the screen. You'll be using this for most message boxes. The other two are...</p>
+<h3>&lt;MS2 and &lt;MS3</h3>
+<p>These two have the same paramaters as &lt;MSG. (hint: nothing.) The only difference is these two appear on top of the screen, and that &lt;MS2 appears to be just text, with no message box. Although it may appear to have none, it is simply invisible. Don't beilieve me? Put this bit of script in, and I can prove it.</p>
+<p class="code">&lt;MS2&lt;FAC0001This is a test.&lt;NODaaaaaaaaaaaaaaaaa&lt;NODaaaaaa&lt;NOD&lt;END</p>
+<p>Now if you were good and tested that, you would see that one of the &lt;NODs went out of the message box, but you couldn't see the text! That alone proves there is a message box when you use &lt;MS2, even if you don't see it. And I'm sorry if you did believe me, but things like this are pretty much mandatory in a guide like this.</p>
+<h3>&lt;NOD</h3>
+<p>This command is your best friend. It is. Don't even try to argue, without this command your mod's dialog will suck because people won't be able to stop and read it. And that's what this command does! It makes the text stop until the player presses either their shoot or their jump button.</p>
+<h3>&lt;CLR</h3>
+<p>This command is really useful in dialog, especially when you have faces. It clears the message box of all text.</p>
+<h3>&lt;CLO</h3>
+<p>This command wasn't in the sample script, I know, but all it does is close the message box. It's useful in cutscenes.</p>
+<h3>&lt;END</h3>
+<p>This one's pretty self-explanatory. Marks the end of an event. (You can write notes in TSC by putting them after an &lt;END.)</p>
+<p>The only command left that a beginner modder needs to know is the &lt;FAC command. This brings us to our final section, which is...</p>
+<h2>Faces</h2> <!-- I'm so good at these transitions. -->
+<p>What I think is the most annoying think about message boxes in CS is faces. Sure, it's cool to see a mega-res version of the person you're talking to's face, but boy are they a pain. The following bit of code is a simple message box that scrolls through all the faces in regular CS. Do the same with this as you did (or should have done) with the different message boxes code, but remove all whitespace. It's only there because I couldn't for the life of me get it to wrap correctly in this guide.</p>
+<p class="code"> &lt;KEY &lt;MSG &lt;FAC0000 &lt;NOD &lt;FAC0001 &lt;NOD &lt;FAC0002 &lt;NOD &lt;FAC0003 &lt;NOD &lt;FAC0004 &lt;NOD &lt;FAC0005 &lt;NOD &lt;FAC0006 &lt;NOD &lt;FAC0007 &lt;NOD &lt;FAC0008 &lt;NOD &lt;FAC0009 &lt;NOD &lt;FAC0010 &lt;NOD &lt;FAC0011 &lt;NOD &lt;FAC0012 &lt;NOD &lt;FAC0013 &lt;NOD &lt;FAC0014 &lt;NOD &lt;FAC0015 &lt;NOD &lt;FAC0016 &lt;NOD &lt;FAC0017 &lt;NOD &lt;FAC0018 &lt;NOD &lt;FAC0019 &lt;NOD &lt;FAC0020 &lt;NOD &lt;FAC0021 &lt;NOD &lt;FAC0022 &lt;NOD &lt;FAC0023 &lt;NOD &lt;FAC0024 &lt;NOD &lt;FAC0025 &lt;NOD &lt;FAC0026 &lt;NOD &lt;FAC0027 &lt;NOD &lt;FAC0028 &lt;NOD &lt;FAC0029 &lt;NOD &lt;END</p>
+<p>That's every face in the game. That looks fine, right? So what's bad about them? The fact that they have the same rules for text wrapping as when there is no face. That is to say, it still wraps at 35 characters, not the 27 that fit in the message box when there's a face. <br>
+Wow, &lt;FAC is the first message box command that takes paramaters! (Unless you count the text for &lt;MSG, &lt;MS2 and &lt;MS3, but that's not actually TSC paramaters. TSC paramaters are four characters or CS will kill you.) The syntax for &lt;FAC is &lt;FAC<i>XXXX</i>. The paramater is the index for the face you want. The first face is at index 0, but it is nothing, and is used if you have a dialog between characters, one with a faceset, and one without. The next ones are indexes 1, 2, 3, 4, etc. And that's it! The only problem is the wrapping. You have to remember that you DO have to put a line break at 27 characters, unlike when you don't have a face and it does it for you.
+</p>
+<h2>Conclusion</h2>
+<p>If you want to see an excellent example of a mod with bad text wrapping, see this mod. Copy and paste the URL into your browser. http://dl.dropbox.com/u/52679357/Bullying.zip<br>
+Thanks for taking the time to read this!</p>
+<p align = "right">Author: Dunc2403</p></td><td class = "side"></td></tr></table>
+</body>
+</html>

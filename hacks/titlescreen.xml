@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Title Screen Rendering">
+    <panel>
+        <field type = "label">
+            Top-left X Framerect
+        </field>
+        <field type="text" size="1" offset="0x40F9BC" />
+        <field type = "label">
+            Top-left Y Framerect
+        </field>
+        <field type="text" size="1" offset="0x40F9C3" />
+        <field type = "label">
+            Bottom-right X Framerect
+        </field>
+        <field type="text" size="2" offset="0x40F9CA" />
+        <field type = "label">
+            Bottom-right Y Framerect
+        </field>
+        <field type="text" size="2" offset="0x40F9D1" />
+        <field type = "label">
+            X Render Position
+        </field>
+        <field type="text" size="1" offset="0x4100B7" />
+        <field type = "label">
+            Y Render Position
+        </field>
+        <field type="text" size="1" offset="0x4100B5" />
+        <field type = "label">
+            Character X position [NEW]
+        </field>
+        <field type="text" size="2" offset="0x41033A" />
+        <field type = "label">
+            Character Y position [NEW]
+        </field>
+        <field type="text" size="4" offset="0x4102F7" />
+        <field type = "label">
+            Character X position [LOAD]
+        </field>
+        <field type="text" size="2" offset="0x410317" />
+        <field type = "label">
+            Character Y position [LOAD]
+        </field>
+        <field type="text" size="4" offset="0x4102EB" />
+                <field type="check" name="Don't draw NEW/LOAD">
+            <checked>
+                <field type="data" offset="0x4100C5">
+                    EB 3B
+                </field>
+            </checked>
+            <unchecked>
+                <field type="data" offset="0x4100C5">
+                    6A 00 
+                </field>
+            </unchecked>
+        </field>
+        <field type="check" name="Don't draw STUDIO PIXEL/Version">
+            <checked>
+                <field type="data" offset="0x410102">
+                    EB 1B
+                </field>
+                <field type="data" offset="0x410014">
+                    E9 95 00 00 00
+                </field>
+            </checked>
+            <unchecked>
+                <field type="data" offset="0x410102">
+                    6A 01 
+                </field>
+                <field type="data" offset="0x410014">
+                    6A 1A 8D 4D C8
+                </field>
+            </unchecked>
+        </field>
+    </panel>
+    <panel>
+        <field type = "label">For the full title screen hack:</field>
+        <field type = "label">Set the framerects to {0,0,320,240} and the render position to {0,0}. Check both checkboxes to restrict drawing info.</field>
+        <field type = "label">To revert to the vanilla title screen:</field>
+        <field type = "label">Set the framerects to {0,0,144,40} and the render position to {88,40}. Uncheck both checkboxes to restore info drawn.</field>
+ 
+    </panel>
+</hack>

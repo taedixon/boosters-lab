@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Title screen song">
+        <panel>
+                <panel title="Songs">
+                        <field type="label">Input song number here.</field>
+                       
+                        <field type="text" size="1" offset="0x40FECB" col="1"></field>
+                </panel>
+        </panel>
+</hack>
