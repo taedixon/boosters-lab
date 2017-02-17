@@ -12,22 +12,22 @@ public class MapPoly {
 	private static final int clickRange = 5;
 	TypeConfig type;
 	private LinkedList<xPoint> points;
-	private Set<xPoint> selected = new HashSet<xPoint>();
+	private Set<xPoint> selected = new HashSet<>();
 	private int eventNum;
 	private boolean flipped = false;
 	private boolean active = false;
 	public MapPoly(Point firstPoint, TypeConfig t) {
 		type = t;
-		points = new LinkedList<xPoint>();
+		points = new LinkedList<>();
 		points.add(new xPoint(firstPoint));
 	}
 
 	public void draw(Graphics2D g2d) {
-		Point prev = null;
+		xPoint prev = null;
 		Graphics2D linefx = (Graphics2D) g2d.create();
 		linefx.setStroke(new BasicStroke(2f));
 		g2d.setColor(Color.ORANGE);
-		for (Point p : points) {
+		for (xPoint p : points) {
 			if (prev != null) {
 				LINECLASS lc = LINECLASS.classify(prev, p);
 				Color top = type.topColour;
@@ -71,12 +71,14 @@ public class MapPoly {
 			prev = p;
 		}
 
-		Point start = points.getFirst();
-		//close the polygon
-		linefx.drawLine((int) (start.x * EditorApp.mapScale),
-				(int) (start.y * EditorApp.mapScale),
-				(int) (prev.x * EditorApp.mapScale),
-				(int) (prev.y * EditorApp.mapScale));
+		if (prev != null) {
+			Point start = points.getFirst();
+			//close the polygon
+			linefx.drawLine((int) (start.x * EditorApp.mapScale),
+					(int) (start.y * EditorApp.mapScale),
+					(int) (prev.x * EditorApp.mapScale),
+					(int) (prev.y * EditorApp.mapScale));
+		}
 	}
 
 	public void extend(Point p) {
@@ -97,7 +99,7 @@ public class MapPoly {
 		points.removeAll(pts);
 	}
 
-	public void remove(Point p) {
+	public void remove(xPoint p) {
 		points.remove(p);
 	}
 
@@ -181,6 +183,13 @@ public class MapPoly {
 		eventNum = e;
 	}
 
+	/**
+	 * This class is to subvert a funny behaviour in Java that really
+	 * messes up the way Points behave in HashSets, because their HashCode
+	 * is based on the x and y values which can lead to both being able to add
+	 * the same point *object* to a set twice and not being able to add
+	 * a *different* point object that happens to have the same location.
+	 */
 	@SuppressWarnings("serial")
 	public class xPoint extends Point {
 
@@ -196,7 +205,7 @@ public class MapPoly {
 
 		@Override
 		public boolean equals(Object p2) {
-			return p2.hashCode() == this.hashCode();
+			return p2 instanceof xPoint && p2.hashCode() == this.hashCode();
 		}
 
 		@Override

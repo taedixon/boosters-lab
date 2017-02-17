@@ -6,6 +6,7 @@ import com.carrotlord.string.StrTools;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -32,9 +33,9 @@ public class TypeConfig {
 
 	private static Map<Integer, TypeConfig> initLinetypes() {
 		if (EditorApp.EDITOR_MODE != 2) {
-			return new HashMap<Integer, TypeConfig>();
+			return new HashMap<>();
 		}
-		HashMap<Integer, TypeConfig> rv = new HashMap<Integer, TypeConfig>();
+		HashMap<Integer, TypeConfig> rv = new HashMap<>();
 		rv.put(1, new TypeConfig(1, "Solid", "line", "0x0", "0xFF0000"));
 		File lineConfigFile = new File("linetypes.txt");
 		Scanner sc;
@@ -62,7 +63,8 @@ public class TypeConfig {
 	}
 
 	public static TypeConfig[] getTypes() {
-		return linetypeMap.values().toArray(new TypeConfig[0]);
+		Collection<TypeConfig> values = linetypeMap.values();
+		return values.toArray(new TypeConfig[values.size()]);
 	}
 
 	public String toString() {

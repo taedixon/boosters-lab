@@ -375,7 +375,6 @@ public class TilesetPane extends JPanel {
 				popTileY = currentY;
 				tileidLabel.setText("Tile #" + (popTileY * (maxTilesX + 1) + popTileX));
 				popup.show(eve.getComponent(), eve.getX(), eve.getY());
-				return;
 			}
 
 		}

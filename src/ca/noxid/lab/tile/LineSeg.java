@@ -26,18 +26,11 @@ public class LineSeg extends Line2D {
 		lineSlope = LINECLASS.classify(p1, p2);
 	}
 
-	LineSeg(int x, int y, int type) {
-		p1 = new Point(x, y);
-		p2 = null;
-		lineType = type;
-		lineSlope = LINECLASS.classify(p1, p2);
-	}
-
 	public LineSeg(Point p, int type) {
 		p1 = p;
 		p2 = null;
 		lineType = type;
-		lineSlope = LINECLASS.classify(p1, p2);
+		lineSlope = LINECLASS.classify(p1, null);
 	}
 
 	public int getType() {
@@ -140,7 +133,7 @@ public class LineSeg extends Line2D {
 	 * Checks for collision with point P, and returns a number
 	 * detailing which "thing" of the line is closest to being clicked.
 	 *
-	 * @param p
+	 * @param p the point to be compared
 	 * @return one of values LineSeg.NONE, LineSeg.FIRST, LineSeg.SECOND, LineSeg.LINE
 	 */
 	public int inRange(Point p) {
@@ -163,9 +156,8 @@ public class LineSeg extends Line2D {
 
 	@Override
 	public Rectangle2D getBounds2D() {
-		Rectangle2D rVal = new Rectangle2D.Double(
+		return new Rectangle2D.Double(
 				getX1(), getY1(), getX2(), getY2());
-		return rVal;
 	}
 
 	@Override
