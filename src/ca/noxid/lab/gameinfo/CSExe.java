@@ -69,25 +69,25 @@ import java.util.Vector;
  */
 
 public class CSExe {
-	
+
 	private File location;
 	private ExeSec[] headers;
 	private ByteBuffer peHead;
-	
+
 	private boolean modified = false;
 	long lastModify;
-	
+
 	public boolean isModified() {return modified;}
-	
+
 	private static final int pMapdata   = 0x20C2F; //address of the pointer to map data
 	private static final int mapdataLoc = 0x937B0; //address of the original mapdata
 	private static final byte[] csmapHead = {
 		0x2E, 0x63, 0x73, 0x6D, 0x61, 0x70, 0x00, 0x00, 0x38, 0x4A,
-		0x00, 0x00, 0x00, (byte) 0xF0, 0x0B, 0x00, 0x38, 0x4A, 0x00, 0x00, 
-		0x00, (byte) 0xA0, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+		0x00, 0x00, 0x00, (byte) 0xF0, 0x0B, 0x00, 0x38, 0x4A, 0x00, 0x00,
+		0x00, (byte) 0xA0, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, (byte) 0xC0
 	};
-	
+
 	@SuppressWarnings("unused")
 	CSExe(File inFile) {
 		location = inFile;
@@ -106,7 +106,7 @@ public class CSExe {
 			peHead.flip();
 			ByteBuffer uBuf = ByteBuffer.allocate(2);
 			uBuf.order(ByteOrder.LITTLE_ENDIAN);
-			
+
 			//find how many sections
 			chan.position(0x116);
 			chan.read(uBuf);
@@ -126,7 +126,7 @@ public class CSExe {
 				nuBuf.flip();
 				sections.add(nuBuf);
 				String segStr = new String(nuBuf.array());
-				
+
 				if (segStr.contains(".csmap")) //$NON-NLS-1$
 					mapSec = i;
 				else if (segStr.contains(".swdata")) //$NON-NLS-1$
@@ -170,14 +170,14 @@ public class CSExe {
 				peHead.putInt(0x198, tmpInt);
 				peHead.put(0x116, (byte) 5); //5 sections
 				peHead.putShort(0x161, (short) 0x1930); //section list size(?)
-				
+
 				moveMapdata(csmapSec.getPosV());
-				
+
 				modified = true;
 			}
 			chan.close();
 			inStream.close();
-			
+
 			//check (C)Pixel
 			ByteBuffer pBuf = read(0x08C4D8, 1);
 			if (pBuf.get(0) != 0) {
@@ -185,7 +185,7 @@ public class CSExe {
 				patch(pBuf, 0x08C4D8);
 				StrTools.msgBox(Messages.getString("CSExe.0")); //$NON-NLS-1$
 			}
-			
+
 			//check for sue's
 			if (mapSec == (headers.length - 1)) {
 				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5") + //$NON-NLS-1$
@@ -199,7 +199,7 @@ public class CSExe {
 				headers[mapSec].shift(mapShift);
 				headers[rsrcSec].shift(rsrcShift);
 				headers[mapSec].setTag(".csmap"); //$NON-NLS-1$
-				
+
 				//swap
 				ExeSec tmpSec = headers[rsrcSec];
 				headers[rsrcSec] = headers[mapSec];
@@ -207,15 +207,15 @@ public class CSExe {
 				int tmpInt = rsrcSec;
 				rsrcSec = mapSec;
 				mapSec = tmpInt;
-				
+
 				//update PE Header
 				tmpInt = peHead.getInt(0x198); //rsrc table address
 				tmpInt += rsrcShift;
 				peHead.putInt(0x198, tmpInt);
-				
+
 				//update mapdata position
 				moveMapdata(headers[mapSec].getPosV());
-								
+
 				//oh shit
 				StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
 				commit();
@@ -223,8 +223,8 @@ public class CSExe {
 		} catch (IOException err) {
 			err.printStackTrace();
 		}
-	}		
-	
+	}
+
 	public void saveMap(ByteBuffer bytes, int mapNum) {
 		int pos = mapNum * 200;
 		int csmapLoc = 0;
@@ -246,7 +246,7 @@ public class CSExe {
 		}
 		patch(bytes, pos+csmapLoc);
 	}
-	
+
 	public void setMapdataSize(int nMaps) {
 		int rsrcShift = 0;
 		for (ExeSec s : headers) {
@@ -259,11 +259,11 @@ public class CSExe {
 				//update PE Header
 				int tmpInt = peHead.getInt(0x198); //rsrc table address
 				tmpInt += rsrcShift;
-				peHead.putInt(0x198, tmpInt);				
+				peHead.putInt(0x198, tmpInt);
 			}
 		}
 	}
-	
+
 	public void patch(ByteBuffer data, int offset) {
 		//int shift = 0;
 		if (offset >= 0x400000) offset -= 0x400000;
@@ -280,7 +280,7 @@ public class CSExe {
 			}
 		}
 	}
-	
+
 	public ByteBuffer read(int imgStrOffset1, int size) {
 		ByteBuffer retVal = null;
 		if (imgStrOffset1 >= 0x400000) imgStrOffset1 -= 0x400000;
@@ -326,7 +326,7 @@ public class CSExe {
 		buf.putInt(0, newPos + 0xA5);
 		patch(buf, 0x020E6A);
 	}
-	
+
 	public void commit() {
 		File backuploc = null;
 		if (location.lastModified() > lastModify) {
@@ -334,7 +334,7 @@ public class CSExe {
 			int choice = JOptionPane.showConfirmDialog(null, "EXE has been modified since last save/load.\n"
 					+ "It may contain changes that will be lost if overwritten.\n"
 					+ "Do you want to overwrite?" , "EXE on file newer than in memory", JOptionPane.YES_NO_OPTION);
-			
+
 			if (choice != JOptionPane.YES_OPTION) {
 				JOptionPane.showMessageDialog(null, "Select 'Load Last' from the File menu\n"
 						+ "to discard changes, or try saving again later.\n"
@@ -343,7 +343,7 @@ public class CSExe {
 				backuploc = new File(location + ".blbkp");
 			}
 		}
-		
+
 		FileOutputStream oStream;
 		FileChannel c;
 		//update the SIZE_OF_IMAGE optional value in the header
@@ -353,13 +353,13 @@ public class CSExe {
 			head_sz += (sc.getLenV() + 0xFFF) / 0x1000 * 0x1000;
 		}
 		peHead.putInt(0x160, head_sz + 0x1000);
-		
+
 		try {
 			if (backuploc != null) {
 				oStream = new FileOutputStream(backuploc);
 			} else {
 				oStream = new FileOutputStream(location);
-			}	
+			}
 			c = oStream.getChannel();
 			peHead.position(0);
 			c.write(peHead);
@@ -386,7 +386,7 @@ public class CSExe {
 			lastModify = location.lastModified();
 		}
 	}
-	
+
 	/*
 	 * PE segment descriptor
 	 * 0-7 tag
@@ -412,9 +412,9 @@ public class CSExe {
 		private short numReloc;
 		private short numLine;
 		private int attrib;
-		
+
 		private ByteBuffer data;
-		
+
 		public String getTag() {return tag;}
 		public void setTag(String t) {tag = t;}
 		public int getPos() {return rAddr;}
@@ -422,7 +422,7 @@ public class CSExe {
 		public int getPosV() {return vAddr;}
 		public ByteBuffer getData() {return data;}
 		public int getLenV() {return vSize;}
-		
+
 		ExeSec(ByteBuffer in, FileChannel f) {
 			in.position(0);
 			byte[] tagArray = new byte[8];
@@ -438,7 +438,7 @@ public class CSExe {
 			numReloc = in.getShort();
 			numLine = in.getShort();
 			attrib = in.getInt();
-			
+
 			data = ByteBuffer.allocate(rSize);
 			data.order(ByteOrder.nativeOrder());
 			try {
@@ -472,11 +472,11 @@ public class CSExe {
 				err.printStackTrace();
 			}
 		}
-		
+
 		public ByteBuffer toBuf() {
 			ByteBuffer retVal = ByteBuffer.allocate(0x28);
 			retVal.order(ByteOrder.nativeOrder());
-			
+
 			byte[] tagDat = java.util.Arrays.copyOf(tag.getBytes(), 8);
 			retVal.put(tagDat);
 			retVal.putInt(vSize);
@@ -491,7 +491,7 @@ public class CSExe {
 			retVal.flip();
 			return retVal;
 		}
-		
+
 		public void shift(int amt) {
 			if (tag.equals(".rsrc")) { //$NON-NLS-1$
 				shiftDirTable(amt, 0);
@@ -499,13 +499,13 @@ public class CSExe {
 			vAddr += amt;
 			rAddr += amt;
 		}
-		
+
 		private void shiftDirTable(int amt, int pointer) {
 			//get the # of rsrc subdirs indexed by name
 			int nEntry = data.getShort(pointer + 12);
 			//get the # of rsrc subdirs indexed by id
 			nEntry += data.getShort(pointer + 14);
-			
+
 			//read and shift entries
 			int pos = pointer + 16;
 			for (int i = 0; i < nEntry; i++) {
@@ -521,7 +521,7 @@ public class CSExe {
 				data.putInt(rva, oldVal + amt);
 			}
 		}
-		
+
 		/**
 		 * @param newSize
 		 * @return how much future sections need to be shifted
