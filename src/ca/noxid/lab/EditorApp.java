@@ -295,7 +295,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	 * @return false if save was aborted
 	 */
 	protected boolean saveAll(boolean shouldClose) {
-		//try to save all tabs		
+		//try to save all tabs
 		if (shouldClose) {
 			while (mapTabs.getTabCount() != 0) {
 				if (!closeCurrentTab()) {
@@ -643,15 +643,22 @@ public class EditorApp extends JFrame implements ActionListener {
 		mapList.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent eve) {
-				if (eve.getKeyCode() == KeyEvent.VK_DELETE
-						&& exeData != null) {
-					int result = JOptionPane.showConfirmDialog(EditorApp.this,
-							Messages.getString("EditorApp.24"), //$NON-NLS-1$
-							Messages.getString("EditorApp.40"), //$NON-NLS-1$
-							JOptionPane.YES_NO_OPTION);
-					if (result == JOptionPane.YES_OPTION) {
+				if (exeData != null) {
+					if (eve.getKeyCode() == KeyEvent.VK_DELETE) {
+						int result = JOptionPane.showConfirmDialog(EditorApp.this,
+								Messages.getString("EditorApp.24"), //$NON-NLS-1$
+								Messages.getString("EditorApp.40"), //$NON-NLS-1$
+								JOptionPane.YES_NO_OPTION);
+						if (result == JOptionPane.YES_OPTION) {
+							airhorn();
+							deleteSelectedMaps();
+						}
+					} else if (eve.getKeyCode() == KeyEvent.VK_ENTER && !movingMapdata) {
 						airhorn();
-						deleteSelectedMaps();
+						int destIndex = Integer.parseInt(mapList.getSelectedValue().split("\\s+")[0]);
+						if (!movingMapdata) {
+							addMapTab(destIndex);
+						}
 					}
 				}
 			}
@@ -936,10 +943,12 @@ public class EditorApp extends JFrame implements ActionListener {
 		fileMenu.add(menuItem);
 		menuItem = new JMenuItem(Messages.getString("EditorApp.87")); //$NON-NLS-1$
 		menuItem.setActionCommand("FileMenu_Load"); //$NON-NLS-1$
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		fileMenu.add(menuItem);
 		menuItem = new JMenuItem(Messages.getString("EditorApp.89")); //$NON-NLS-1$
 		menuItem.setActionCommand("FileMenu_Last"); //$NON-NLS-1$
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		if (lastDir == null) {
 			menuItem.setEnabled(false);
@@ -1481,7 +1490,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		tempPanel.add(defButton, c);
 		c.gridx++;
 		c.gridy = 0;
-		
+
 		/*
 		JButton flagButton = new JButton("Gen. Flag listing");
 		tempPanel.add(flagButton, c);
@@ -1551,7 +1560,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		JCheckBox check;
 		c.gridx = 1;
 		c.gridheight = 1;
-		tempPanel.add(new JLabel(Messages.getString("EditorApp.124")), c); //$NON-NLS-1$	
+		tempPanel.add(new JLabel(Messages.getString("EditorApp.124")), c); //$NON-NLS-1$
 		for (int i = 0; i < NUM_LAYER; i++) {
 			check = new JCheckBox(new VisibleLayerAction(i));
 			check.setText(LAYER_NAMES[i]);
@@ -1892,7 +1901,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			componentVec.add(mapTabs.getTabCount(), holder);
 
 			//finalize
-			//layout.show(tabPanel, activePerspective); 
+			//layout.show(tabPanel, activePerspective);
 			Component contents = buildTabContents(holder);
 			mapTabs.insertTab(exeData.getShortName(selectionNum),
 					null,
@@ -1956,7 +1965,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		componentVec.add(mapTabs.getTabCount(), holder);
 
 		//finalize
-		//layout.show(tabPanel, activePerspective); 
+		//layout.show(tabPanel, activePerspective);
 		Component contents = buildTabContents(holder);
 		mapTabs.insertTab(mapdat.getFile(),
 				null,
