@@ -1027,6 +1027,7 @@ public class GameInfo {
 				newMap.setNPC2(StrTools.CString(buf32, encoding));
 				newMap.setBoss(dBuf.get());
 				dBuf.get(buf32);
+				newMap.setJpName(buf32);
 				dBuf.get(buf32);
 				newMap.setMapname(StrTools.CString(buf32, encoding));
 				newMap.markUnchanged();
