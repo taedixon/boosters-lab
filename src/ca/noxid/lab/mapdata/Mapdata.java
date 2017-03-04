@@ -106,6 +106,13 @@ public class Mapdata implements Changeable {
 	}
 	public String getMapname() {return mapName;}
 	
+	private byte[] jpName;
+	public void setJpName(byte[] b){
+		markChanged();
+		jpName = b.clone();
+	}
+	public byte[] getJpName() {return jpName.clone();}
+	
 	private int scrollType;
 	public void setScroll(int n) {
 		if (n != scrollType) {
@@ -151,6 +158,7 @@ public class Mapdata implements Changeable {
 		bossNum = 0;
 		mapName = Messages.getString("Mapdata.0");		 //$NON-NLS-1$
 		mapNum = num;
+		jpName = new byte[0x20];
 	}
 
 	public ByteBuffer toBuf(MOD_TYPE format, String charEncoding) throws UnsupportedEncodingException {
@@ -190,8 +198,11 @@ public class Mapdata implements Changeable {
 			retVal.put(npcSet1.getBytes(charEncoding), 0, npcSet1.length() < 0x20 ? npcSet1.length() : 0x1F);
 			retVal.position(0x84);
 			retVal.put(npcSet2.getBytes(charEncoding), 0, npcSet2.length() < 0x20 ? npcSet2.length() : 0x1F);
-			retVal.position(0xC4);
+			retVal.position(0xA4);
 			retVal.put((byte) bossNum);
+			retVal.position(0xA5);
+			retVal.put(jpName, 0, 0x1f);
+			retVal.position(0xC5);
 			try {
 				byte[] letters = mapName.getBytes(charEncoding);
 				retVal.put(letters, 0, letters.length < 0x23 ? letters.length : 0x22);

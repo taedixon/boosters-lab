@@ -400,7 +400,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				JLabel label = new JLabel(face);
 				label.setBackground(Color.black);
 				jp.add(label);
-			} catch (RasterFormatException ignored) {
+			} catch (Exception ignored) {
 			}
 			break;
 		case 'i': //item #

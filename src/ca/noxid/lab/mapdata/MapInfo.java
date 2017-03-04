@@ -11,7 +11,6 @@ import ca.noxid.lab.tile.LineSeg;
 import ca.noxid.lab.tile.MapPoly;
 import ca.noxid.lab.tile.ShiftDialog;
 import com.carrotlord.string.StrTools;
-import com.sun.istack.internal.NotNull;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
@@ -649,7 +648,7 @@ public class MapInfo implements Changeable {
 		}
 
 		@Override
-		public int compareTo(@NotNull PxeEntry other) {
+		public int compareTo(PxeEntry other) {
 			Integer fp = filePos;
 			return fp.compareTo(other.filePos);
 		}

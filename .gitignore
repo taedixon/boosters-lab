@@ -39,3 +39,6 @@ atlassian-ide-plugin.xml
 
 bin/
 *.rect
+.settings/org.eclipse.jdt.core.prefs
+.classpath
+.project
