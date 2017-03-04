@@ -201,7 +201,7 @@ public class Mapdata implements Changeable {
 			retVal.position(0xA4);
 			retVal.put((byte) bossNum);
 			retVal.position(0xA5);
-			retVal.put(jpName, 0, 0x1f);
+			retVal.put(jpName, 0, (jpName.length < 0x20) ? jpName.length : 0x1F);
 			retVal.position(0xC5);
 			try {
 				byte[] letters = mapName.getBytes(charEncoding);
