@@ -295,9 +295,9 @@ public class GameInfo {
 		}
 		File baseDir = ResourceManager.getBaseFolder(dataDir);
 		if (baseDir != null) {
-			stageDir = new File(baseDir + "/Npc"); //$NON-NLS-1$
+			stageDir = new File(baseDir + "/Stage"); //$NON-NLS-1$
 
-			fileList = stageDir.listFiles(new NpcFilter());
+			fileList = stageDir.listFiles(new TilesetFilter());
 			if (fileList != null) {
 				for (File f : fileList) {
 					flist.add(f.getName().replace(imageExtension, "")); //$NON-NLS-1$
