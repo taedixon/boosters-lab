@@ -2061,6 +2061,11 @@ public class EditorApp extends JFrame implements ActionListener {
 			if (exeData == null) {
 				return;
 			}
+			String message = Messages.getString("MapDeleteConfirm.0") + selectedMapStr + Messages.getString("MapDeleteConfirm.1");
+			int choice = JOptionPane.showConfirmDialog(this, message, Messages.getString("MapDeleteConfirm.2"), JOptionPane.YES_NO_OPTION);
+			if (choice == 1) {
+				return;
+			}
 			deleteSelectedMaps();
 		} else if (e.getActionCommand().equals("MapList_New")) { //$NON-NLS-1$
 			airhorn();
