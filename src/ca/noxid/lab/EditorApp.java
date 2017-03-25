@@ -2059,11 +2059,10 @@ public class EditorApp extends JFrame implements ActionListener {
 			airhorn();
 			//don't do if we ain't loaded
 			if (exeData == null) {
-				return;
-			}
-			String message = Messages.getString("MapDeleteConfirm.0") + selectedMapStr + Messages.getString("MapDeleteConfirm.1");
-			int choice = JOptionPane.showConfirmDialog(this, message, Messages.getString("MapDeleteConfirm.2"), JOptionPane.YES_NO_OPTION);
-			if (choice == 1) {
+                return;
+            }
+			int choice = JOptionPane.showConfirmDialog(this, Messages.getString("EditorApp.24"), Messages.getString("EditorApp.40"), JOptionPane.YES_NO_OPTION);
+			if (choice != JOptionPane.YES_OPTION) {
 				return;
 			}
 			deleteSelectedMaps();
