@@ -2059,8 +2059,8 @@ public class EditorApp extends JFrame implements ActionListener {
 			airhorn();
 			//don't do if we ain't loaded
 			if (exeData == null) {
-                return;
-            }
+				return;
+			}
 			int choice = JOptionPane.showConfirmDialog(this, Messages.getString("EditorApp.24"), Messages.getString("EditorApp.40"), JOptionPane.YES_NO_OPTION);
 			if (choice != JOptionPane.YES_OPTION) {
 				return;
