@@ -1993,43 +1993,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		scriptTabs.setSelectedComponent(textScroll);
 	}
 
-	public static void main(String[] args) {
-		//https://blogs.oracle.com/nickstephen/entry/java_redirecting_system_out_and
-		// initialize logging to go to rolling log file
-		//noinspection PointlessBooleanExpression,ConstantConditions
-		if (!disable_logging) {
-			LogManager logManager = LogManager.getLogManager();
-			logManager.reset();
-
-			// log file max size 10K, 3 rolling files, append-on-open
-			Handler fileHandler;
-			try {
-				fileHandler = new FileHandler("log", 100000, 3, true); //$NON-NLS-1$
-				fileHandler.setFormatter(new SimpleFormatter());
-				Logger.getLogger("").addHandler(fileHandler); //$NON-NLS-1$
-				// now rebind stdout/stderr to logger
-				LoggingOutputStream los;
-
-				logger = Logger.getLogger("stdout"); //$NON-NLS-1$
-				los = new LoggingOutputStream(logger, StdOutErrLevel.STDOUT);
-				System.setOut(new PrintStream(los, true));
-
-				logger = Logger.getLogger("stderr"); //$NON-NLS-1$
-				los = new LoggingOutputStream(logger, StdOutErrLevel.STDERR);
-				System.setErr(new PrintStream(los, true));
-			} catch (SecurityException | IOException e) {
-				e.printStackTrace();
-			}
-		}
-		// Use the event dispatch thread to build the UI for thread-safety.
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new EditorApp();
-			}
-		});
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//radio buttons for card layout
@@ -2668,6 +2631,56 @@ public class EditorApp extends JFrame implements ActionListener {
 		public void loadMap(int mapNum) {
 			addMapTab(mapNum);
 		}
+	}
+
+	public static void main(String[] args) {
+
+		//parse args
+		for (String s : args) {
+			if (s.startsWith("MODE=")) {
+				String val = s.split("=", 2)[1];
+				try {
+					EDITOR_MODE = Integer.parseInt(val);
+				} catch (NumberFormatException ignored) {
+
+				}
+			}
+		}
+
+		//https://blogs.oracle.com/nickstephen/entry/java_redirecting_system_out_and
+		// initialize logging to go to rolling log file
+		//noinspection PointlessBooleanExpression,ConstantConditions
+		if (!disable_logging) {
+			LogManager logManager = LogManager.getLogManager();
+			logManager.reset();
+
+			// log file max size 10K, 3 rolling files, append-on-open
+			Handler fileHandler;
+			try {
+				fileHandler = new FileHandler("log", 100000, 3, true); //$NON-NLS-1$
+				fileHandler.setFormatter(new SimpleFormatter());
+				Logger.getLogger("").addHandler(fileHandler); //$NON-NLS-1$
+				// now rebind stdout/stderr to logger
+				LoggingOutputStream los;
+
+				logger = Logger.getLogger("stdout"); //$NON-NLS-1$
+				los = new LoggingOutputStream(logger, StdOutErrLevel.STDOUT);
+				System.setOut(new PrintStream(los, true));
+
+				logger = Logger.getLogger("stderr"); //$NON-NLS-1$
+				los = new LoggingOutputStream(logger, StdOutErrLevel.STDERR);
+				System.setErr(new PrintStream(los, true));
+			} catch (SecurityException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		// Use the event dispatch thread to build the UI for thread-safety.
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new EditorApp();
+			}
+		});
 	}
 }
 

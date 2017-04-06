@@ -1,4 +1,12 @@
 Changelog:
+V0.5.0.0:
+- Open source oooOOooOOoo
+- Add shortcut keys to Load, Load Last and allow enter key to open maps from maplist [FDeityLink]
+- Fix various bugs related to CS+ modding [GIR]
+- Add a confirmation dialogue to map deletion [Leo40]
+- Expose editor mode as a command-line option
+
+
 V0.4.5.5:
 - Improvements to the behaviour of fill and replace
 - allow map list to work if resorted
