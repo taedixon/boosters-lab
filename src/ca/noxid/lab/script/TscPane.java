@@ -299,43 +299,43 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		});
 
 		undoManager = new UndoManager();
-        getStyledDocument().addUndoableEditListener(new UndoableEditListener() {
-            @Override
-            public void undoableEditHappened(UndoableEditEvent e) {
-            if (!e.getEdit().getPresentationName().equals("style change") && recordUndoes) {
-                System.out.println("Add edit: " + e.getEdit().getPresentationName());
-                undoManager.addEdit(e.getEdit());
-            }
-            }
-        });
+		getStyledDocument().addUndoableEditListener(new UndoableEditListener() {
+			@Override
+			public void undoableEditHappened(UndoableEditEvent e) {
+			if (!e.getEdit().getPresentationName().equals("style change") && recordUndoes) {
+				System.out.println("Add edit: " + e.getEdit().getPresentationName());
+				undoManager.addEdit(e.getEdit());
+			}
+			}
+		});
 
-        InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap am = getActionMap();
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK), "Undo");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK), "Redo");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK | Event.SHIFT_MASK), "Redo");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK), "Redo");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK | Event.SHIFT_MASK), "Redo");
 
-        am.put("Undo", new AbstractAction() {
+		am.put("Undo", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if (undoManager.canUndo()) {
 						undoManager.undo();
-                        highlightDoc(getStyledDocument(), 0, -1);
+						highlightDoc(getStyledDocument(), 0, -1);
 					}
 				} catch (CannotUndoException exp) {
 					exp.printStackTrace();
 				}
 			}
 		});
-        am.put("Redo", new AbstractAction() {
+		am.put("Redo", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					if (undoManager.canRedo()) {
 						undoManager.redo();
-                        highlightDoc(getStyledDocument(), 0, -1);
+						highlightDoc(getStyledDocument(), 0, -1);
 					}
 				} catch (CannotUndoException exp) {
 					exp.printStackTrace();
