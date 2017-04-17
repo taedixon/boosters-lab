@@ -302,10 +302,8 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		getStyledDocument().addUndoableEditListener(new UndoableEditListener() {
 			@Override
 			public void undoableEditHappened(UndoableEditEvent e) {
-			if (!e.getEdit().getPresentationName().equals("style change") && recordUndoes) {
-				System.out.println("Add edit: " + e.getEdit().getPresentationName());
-				undoManager.addEdit(e.getEdit());
-			}
+				if (recordUndoes && !e.getEdit().getPresentationName().equals("style change"))
+					undoManager.addEdit(e.getEdit());
 			}
 		});
 
