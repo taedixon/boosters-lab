@@ -1100,7 +1100,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	private static ArrayList<String> getSfxList() {
 		ArrayList<String> rv = new ArrayList<>();
 		try {
-			Scanner sc = new Scanner(new File("sfxlist.txt"));
+			Scanner sc = new Scanner(new File("sfxList.txt"));
 			while (sc.hasNext()) {
 				sc.nextInt();
 				sc.next(); //disregard hyphen
@@ -1109,7 +1109,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			}
 			sc.close();
 		} catch (FileNotFoundException err) {
-			StrTools.msgBox("Could not find sfxlist.txt");
+			StrTools.msgBox("Could not find sfxList.txt");
 		}
 
 		return rv;

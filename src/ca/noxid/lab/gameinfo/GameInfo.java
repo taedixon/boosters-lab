@@ -136,9 +136,9 @@ public class GameInfo {
 		fillMapdata(base);
 		mycharFile = new File(dataDir + "/MyChar" + imageExtension); //$NON-NLS-1$
 		mycharFile = ResourceManager.checkBase(mycharFile);
-		npcReguFile = new File(dataDir + "/Npc/npcRegu" + imageExtension); //$NON-NLS-1$
+		npcReguFile = new File(dataDir + "/Npc/NpcRegu" + imageExtension); //$NON-NLS-1$
 		npcReguFile = ResourceManager.checkBase(npcReguFile);
-		npcSymFile = new File(dataDir + "/Npc/npcSym" + imageExtension); //$NON-NLS-1$
+		npcSymFile = new File(dataDir + "/Npc/NpcSym" + imageExtension); //$NON-NLS-1$
 		npcSymFile = ResourceManager.checkBase(npcSymFile);
 		itemImageFile = new File(dataDir + "/ItemImage" + imageExtension); //$NON-NLS-1$
 		itemImageFile = ResourceManager.checkBase(itemImageFile);
