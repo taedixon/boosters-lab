@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hack name="Translate Errors">
 	<panel>
+	<field type="info">
+		This hack translates the error messages in the game,
+		as well as making it so the "Volume" menu option works on modern PCs.
+	</field>
 	<!-- Error -->
 	<field type="data" offset="0x48C74C">
 		45 72 72 6F 72 00
