@@ -151,9 +151,9 @@ public class MapInfo implements Changeable {
 		
 			bgImage = new File(directory + "/" + d.getBG() + exeData.getImgExtension()); //$NON-NLS-1$
 			iMan.addImage(bgImage, 0);
-			npcImage1 = new File(directory + "/npc/Npc" + d.getNPC1() + exeData.getImgExtension()); //$NON-NLS-1$
+			npcImage1 = new File(directory + "/Npc/Npc" + d.getNPC1() + exeData.getImgExtension()); //$NON-NLS-1$
 			iMan.addImage(npcImage1, 1);
-			npcImage2 = new File(directory + "/npc/Npc" + d.getNPC2() + exeData.getImgExtension()); //$NON-NLS-1$
+			npcImage2 = new File(directory + "/Npc/Npc" + d.getNPC2() + exeData.getImgExtension()); //$NON-NLS-1$
 			iMan.addImage(npcImage2, 1);
 	}
 	
