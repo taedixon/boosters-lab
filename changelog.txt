@@ -5,6 +5,10 @@ V0.5.0.0:
 - Fix various bugs related to CS+ modding [GIR]
 - Add a confirmation dialogue to map deletion [Leo40]
 - Expose editor mode as a command-line option
+- Add some more hacks [EnlightenedOne + Noxid]
+- Fix bugs in entity selection
+- Allow pasting into certain text fields
+- fix internal name of sfxlist so editor can run on case-sensitive filesystems
 
 
 V0.4.5.5:

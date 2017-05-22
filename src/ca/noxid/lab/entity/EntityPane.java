@@ -215,7 +215,9 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 		@Override
 		public void mouseClicked(MouseEvent eve) {
 			//System.out.println("click");
-			int realScale = (int) (dataHolder.getConfig().getEntityRes() 
+			boolean selectionListChanged = false;
+			boolean shiftHeld = (eve.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0;
+			int realScale = (int) (dataHolder.getConfig().getEntityRes()
 					* EditorApp.mapScale);
 			int tileScale = (int) (dataHolder.getConfig().getTileSize() * EditorApp.mapScale);
 			//int canvasScale = EditorApp.DEFAULT_TILE_SIZE;
@@ -224,7 +226,7 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 			if ((eve.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == 0) {
 				//ctrl key not pressed
 				selectionList.clear();
-				repaint();
+				selectionListChanged = true;
 			}
 			Iterator<PxeEntry> pIt = dataHolder.getPxeIterator();
 			List<PxeEntry> entityStack = new LinkedList<>();
@@ -239,13 +241,14 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 					&& (eve.getY() < pxeU + tileScale) ) {	
 					entityStack.add(cEntry);
 					if (!selectionList.contains(cEntry)) {
-						if ((eve.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0) {
+						if (shiftHeld) {
 							Iterator<PxeEntry> it2 = dataHolder.getPxeIterator();
 							while (it2.hasNext()) {
 								PxeEntry p = it2.next();
 								if (p.getType() == cEntry.getType() 
 										&& !selectionList.contains(p)) {
 									selectionList.add(p);
+									selectionListChanged = true;
 								}
 							}
 							repaint();
@@ -255,23 +258,27 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 				}
 				dragSelectRect = null;
 			}
-			if (entityStack.size() == 1) {
+			if (entityStack.size() == 1 && !shiftHeld) {
 				PxeEntry select = entityStack.get(0);
+				selectionListChanged = true;
 				if (selectionList.contains(select)) {
 					selectionList.remove(select);
 				} else {
 					selectionList.add(select);
 				}
-			} else if (entityStack.size() > 1) {
+			} else if (entityStack.size() > 1 && !shiftHeld) {
 				showStackedEntitySelectionPopup(entityStack, eve.getX(), eve.getY());
 			}
-			editPane.listChanged();
+			if (selectionListChanged) {
+				editPane.listChanged();
+				repaint();
+			}
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent eve) {
 			// TODO Auto-generated method stub
-			
+			EntityPane.this.requestFocusInWindow();
 		}
 
 		@Override
@@ -394,8 +401,10 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 					EntityPane.this.mouseLoc = myLoc;
 				}//if in diff. tile
 			} else {
-				dragSelectRect.width = eve.getX() - dragSelectRect.x;
-				dragSelectRect.height = eve.getY() - dragSelectRect.y;
+				if (dragSelectRect  != null) {
+					dragSelectRect.width = eve.getX() - dragSelectRect.x;
+					dragSelectRect.height = eve.getY() - dragSelectRect.y;
+				}
 				repaint();
 			}
 		}

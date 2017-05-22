@@ -46,7 +46,7 @@ public class FormattedUpdateTextField extends JFormattedTextField
 			this.setBackground(Color.white);
 			updated = false;
 			this.fireActionPerformed();
-		} else if (k >= ' ' || k == 8) { //character or backspace
+		} else if (k >= ' ' || k == 8 || k == 22) { //character or backspace or paste
 			this.setBackground(bgCol);
 			updated = true;
 		}

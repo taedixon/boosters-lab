@@ -46,7 +46,7 @@ public class UpdateTextField extends JTextField implements KeyListener, ActionLi
 	@Override
 	public void keyTyped(KeyEvent eve) {
 		char k = eve.getKeyChar();
-		if (k >= ' ' || k == 8) { //character or backspace 
+		if (k >= ' ' || k == 8 || k == 22) { //character or backspace or paste
 			this.setBackground(bgCol);
 			updated = true;
 		}

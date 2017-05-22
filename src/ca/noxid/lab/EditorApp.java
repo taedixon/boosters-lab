@@ -48,11 +48,11 @@ public class EditorApp extends JFrame implements ActionListener {
 	public static final boolean blazed = false;
 
 	//about dialog
-	private static final String VER_NUM = "0.4.5.5"; //$NON-NLS-1$
+	private static final String VER_NUM = "0.5.0.0"; //$NON-NLS-1$
 	private static final String TITLE_STR = "Booster's Lab V" + VER_NUM;
 	private static final String ABOUT_STR =
 			Messages.getString("EditorApp.1") + VER_NUM + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
-					"By Noxid - 31/01/2016\n" +  //$NON-NLS-1$
+					"By Noxid - 12/05/2017\n" +  //$NON-NLS-1$
 					Messages.getString("EditorApp.4") + //$NON-NLS-1$
 					Messages.getString("EditorApp.5"); //$NON-NLS-1$
 
