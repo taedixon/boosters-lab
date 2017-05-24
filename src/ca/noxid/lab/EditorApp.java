@@ -459,12 +459,17 @@ public class EditorApp extends JFrame implements ActionListener {
 	}
 
 	private void addComponentsToPane(JSplitPane pane) {
-		//make it look like a native application (Carrotlord)
-		try {
-			UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
-		} catch (InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException | IllegalAccessException exceptionInfo) {
-			// Ignore this exception.
+		// this causes crashes for some people.
+		// rather than solve it properly i'm just gonna make this hack to avoid it.
+		File lfOverride = new File("love.txt");
+		if (!lfOverride.exists()) {
+			//make it look like a native application (Carrotlord)
+			try {
+				UIManager.setLookAndFeel(
+						UIManager.getSystemLookAndFeelClassName());
+			} catch (InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException | IllegalAccessException exceptionInfo) {
+				// Ignore this exception.
+			}
 		}
 
 		//add the menus
