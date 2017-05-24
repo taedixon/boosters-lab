@@ -83,19 +83,7 @@ public class GameInfo {
 	public MOD_TYPE type;
 	
 	public static final String[] sfxNames = loadSfxNames();
-	
-	/**
-	 * Use this constructor for a new editor environment
-	 */
-	GameInfo() {
-		type = MOD_TYPE.MOD_CS_PLUS;
-		gameConfig = new BlConfig(new File("bl.ini"), type); //$NON-NLS-1$
-		mapdataStore = new Vector<>();
-		categoryMap = new HashMap<>();
-		mapdataStore.add(new Mapdata(0));
-		imageExtension = CSPLUS_IMG_EXT; //$NON-NLS-1$
-		loadNpcTbl(null);
-	}
+
 	
 	public GameInfo(File base) throws IOException {
 		mapdataStore = new Vector<>();
@@ -131,8 +119,7 @@ public class GameInfo {
 			dataDir = base.getParentFile().getParentFile();
 			imageExtension = CSPLUS_IMG_EXT; //$NON-NLS-1$
 		}
-		File configFile = new File(dataDir + "/bl.ini"); //$NON-NLS-1$
-		gameConfig = new BlConfig(configFile, type);
+		gameConfig = new BlConfig(dataDir, type);
 		fillMapdata(base);
 		mycharFile = new File(dataDir + "/MyChar" + imageExtension); //$NON-NLS-1$
 		mycharFile = ResourceManager.checkBase(mycharFile);
