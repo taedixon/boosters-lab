@@ -5,14 +5,12 @@ import com.carrotlord.string.StrTools;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption.*;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import static java.nio.file.StandardCopyOption.*;
-
 public class BlConfig {
-	private static final String CONFIGNAME = "bl.ini";
+	private static final String PROJECT_FOLDER = ".boostlab";
+	private static final String LEGACY_CONFIG_FOLDER = "defaultConfig";
 	private int lineResolution = 4;
 	private int entityResolution = 16;
 	private int tileSize = 16;
@@ -25,6 +23,9 @@ public class BlConfig {
 	private String backgroundPrefix = "bk";
 	private int gradientLayerAlpha = 50;
 	private String encoding = "UTF-8";
+
+	// for resolving config paths
+	File dataDir;
 
 	private static final String[] fluff = {
 			" - Line resolution",
@@ -121,8 +122,9 @@ public class BlConfig {
 		}
 	}
 
-	public BlConfig(File configFile, GameInfo.MOD_TYPE type) {
-		this.configFile = solveLegacyDirectory(configFile);
+	public BlConfig(File dataDir, GameInfo.MOD_TYPE type) {
+		this.dataDir = dataDir;
+		this.configFile = solveLegacyDirectory("bl.ini");
 		if (type == GameInfo.MOD_TYPE.MOD_CS) {
 			tileSize = 16;
 		}
@@ -187,22 +189,27 @@ public class BlConfig {
 
 	/**
 	 * Previously. bl.ini was stored directly in the project's Data Directory.
-	 * Attempt to resolve this
-	 * @param dataDir
-	 * @return
+	 * Attempt to resolve this. The file returned by this method may not exist
+	 * but its parent directory is guaranteed to.
+	 * @param filename the legacy path to the file, relative to the data directory
+	 * @return the correct path to bl.ini
 	 */
-	private File solveLegacyDirectory(File dataDir) {
-		File canonicalFile = new File(dataDir, ".boostlab/" + CONFIGNAME);
+	public File solveLegacyDirectory(String filename) {
+		File projectDir = new File(dataDir, PROJECT_FOLDER);
+		File canonicalFile = new File(projectDir, filename);
 		if (canonicalFile.exists()) {
 			return canonicalFile;
 		}
-		// the new-style project directory may not exist. If it doesn't, create it.
-		canonicalFile.getParentFile().mkdirs();
-		File legacyFile = new File(dataDir, CONFIGNAME);
+		// the new-style project directory may not have been created yet;
+		// if not, make it.
+		if (!projectDir.exists()) {
+			projectDir.mkdir();
+		}
+		File legacyFile = new File(dataDir, filename);
 		if (legacyFile.exists()) {
 			try {
 				canonicalFile.getParentFile().mkdirs();
-				Files.copy(legacyFile.toPath(), canonicalFile.toPath(), REPLACE_EXISTING);
+				Files.copy(legacyFile.toPath(), canonicalFile.toPath());
 				return canonicalFile;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -212,5 +219,34 @@ public class BlConfig {
 			// there is no ini file..
 			return canonicalFile;
 		}
+	}
+
+	/**
+	 * Get a path to a config file that was formerly stored in BL's execution directory
+	 * If it isn't found in the project folder, copy it from the default configuration
+	 * @param filename the name of the legacy config file
+	 * @return
+	 */
+	public File getLegacyConfigFile(String filename) {
+		File projectDir = new File(dataDir, PROJECT_FOLDER);
+		File canonicalFile = new File(projectDir, filename);
+		if (!canonicalFile.exists()) {
+			if (!projectDir.exists()) {
+				projectDir.mkdir();
+			}
+			File legacyFolder = new File(LEGACY_CONFIG_FOLDER);
+			File legacyFile = new File(legacyFolder, filename);
+			if (!legacyFile.exists()) {
+				StrTools.msgBox("Missing default config file " + legacyFile);
+			} else {
+				try {
+					Files.copy(legacyFile.toPath(), canonicalFile.toPath());
+				} catch (IOException e) {
+					e.printStackTrace();
+					return legacyFile;
+				}
+			}
+		}
+		return canonicalFile;
 	}
 }

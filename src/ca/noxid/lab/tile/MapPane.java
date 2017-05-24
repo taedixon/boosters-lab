@@ -77,6 +77,8 @@ public class MapPane extends BgPanel {
 
 	protected MapPane(EditorApp p) {
 		super(p.getImageManager().getImg(ResourceManager.rsrcBgBrown)); //$NON-NLS-1$
+		this.parent = p;
+		this.iMan = p.getImageManager();
 		//implicit superconstructor for entityPane
 		this.setFocusable(true);
 	}

@@ -82,9 +82,16 @@ public class GameInfo {
 	public enum MOD_TYPE {MOD_CS, MOD_KS, MOD_CS_PLUS, MOD_MR, MOD_GUXT, DUMMY}
 	public MOD_TYPE type;
 	
-	public static final String[] sfxNames = loadSfxNames();
+	private String[] sfxNames;
+	private String[] flagNames;
 
-	
+	public String[] getSfxNames() {
+		return sfxNames;
+	}
+	public String[] getFlagNames() {
+		return flagNames;
+	}
+
 	public GameInfo(File base) throws IOException {
 		mapdataStore = new Vector<>();
 		categoryMap = new HashMap<>();
@@ -120,6 +127,8 @@ public class GameInfo {
 			imageExtension = CSPLUS_IMG_EXT; //$NON-NLS-1$
 		}
 		gameConfig = new BlConfig(dataDir, type);
+		flagNames = loadFlagNames(gameConfig);
+		sfxNames = loadSfxNames(gameConfig);
 		fillMapdata(base);
 		mycharFile = new File(dataDir + "/MyChar" + imageExtension); //$NON-NLS-1$
 		mycharFile = ResourceManager.checkBase(mycharFile);
@@ -205,22 +214,48 @@ public class GameInfo {
 			}
 		}			
 	}
-	private static String[] loadSfxNames() {
-		File sfxFile = new File("sfxList.txt"); //$NON-NLS-1$
+
+	private String[] loadSfxNames(BlConfig config) {
+		File sfxFile = config.getLegacyConfigFile("sfxList.txt"); //$NON-NLS-1$
 		String[] results = new String[0];
 		ArrayList<String> lineHolder = new ArrayList<>();
 		try {
 			Scanner sc = new Scanner(sfxFile);
 			//String currentLine;
 			while (sc.hasNextLine()) {
-				lineHolder.add(sc.nextLine());				
+				lineHolder.add(sc.nextLine());
 			}
 			sc.close();
 			results = lineHolder.toArray(new String[lineHolder.size()]);
-		} catch (FileNotFoundException err) {
-			StrTools.msgBox(Messages.getString("GameInfo.14")); //$NON-NLS-1$
-		}		
+		} catch (FileNotFoundException ignored) {
+//			StrTools.msgBox(Messages.getString("GameInfo.14")); //$NON-NLS-1$
+		}
 		return results;
+	}
+
+	private String[] loadFlagNames(BlConfig config) {
+		File flagfile = config.getLegacyConfigFile("flagnames.txt");
+		String[] retVal;
+		try {
+			Scanner sc = new Scanner(flagfile);
+			int lines = 0;
+			retVal = new String[16];
+			while (sc.hasNext() && lines < 16) {
+				String line = sc.nextLine();
+				retVal[lines] = line;
+				lines++;
+			}
+			sc.close();
+		} catch (FileNotFoundException e) {
+			retVal = new String[] {Messages.getString("EntityData.0"), Messages.getString("EntityData.1"), Messages.getString("EntityData.2"), Messages.getString("EntityData.3"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					Messages.getString("EntityData.4"), Messages.getString("EntityData.5"), Messages.getString("EntityData.6"), Messages.getString("EntityData.7"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					Messages.getString("EntityData.8"), Messages.getString("EntityData.9"), Messages.getString("EntityData.10"), Messages.getString("EntityData.11"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					Messages.getString("EntityData.12"), Messages.getString("EntityData.13"), Messages.getString("EntityData.14"), Messages.getString("EntityData.15") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			};
+			System.err.println("flagnames.txt not found <entitydata.java::initFlagNames()>");
+
+		}
+		return retVal;
 	}
 	
 	public void loadImages(ResourceManager iMan) {
@@ -251,28 +286,21 @@ public class GameInfo {
 		return retVal;
 	}
 	
-	public File getScriptFile(int mapNum) {
-		Mapdata currentMap = mapdataStore.get(mapNum);
-		File script = new File(dataDir + File.separator + 
-				"Stage" + File.separator + currentMap.getFile() + ".tsc"); //$NON-NLS-1$ //$NON-NLS-2$
-		return ResourceManager.checkBase(script);
-	}
-	
-	public File getScriptSource(int mapNum) {
-		Mapdata currentMap = mapdataStore.get(mapNum);
-		File source = new File(dataDir + File.separator + 
-				"Stage" + File.separator +  //$NON-NLS-1$
-				"ScriptSource" + File.separator + currentMap.getFile() + ".txt");  //$NON-NLS-1$ //$NON-NLS-2$
-		return ResourceManager.checkBase(source);
-	}
-	
-	public String getShortName(int map) {
-		return mapdataStore.get(map).getFile();
-	}	
-	public String getLongName(int map) {
-		return mapdataStore.get(map).getMapname();
-	}
-	
+//	public File getScriptFile(int mapNum) {
+//		Mapdata currentMap = mapdataStore.get(mapNum);
+//		File script = new File(dataDir + File.separator +
+//				"Stage" + File.separator + currentMap.getFile() + ".tsc"); //$NON-NLS-1$ //$NON-NLS-2$
+//		return ResourceManager.checkBase(script);
+//	}
+//
+//	public File getScriptSource(int mapNum) {
+//		Mapdata currentMap = mapdataStore.get(mapNum);
+//		File source = new File(dataDir + File.separator +
+//				"Stage" + File.separator +  //$NON-NLS-1$
+//				"ScriptSource" + File.separator + currentMap.getFile() + ".txt");  //$NON-NLS-1$ //$NON-NLS-2$
+//		return ResourceManager.checkBase(source);
+//	}
+
 	public String[] getTilesets() {
 		ArrayList<String> flist = new ArrayList<>();
 		File stageDir = new File(dataDir + "/Stage"); //$NON-NLS-1$
@@ -497,7 +525,7 @@ public class GameInfo {
 			
 			
 			//now read supplementary info from metadata file
-			Scanner sc = new Scanner(new File("entityInfo.txt")); //$NON-NLS-1$
+			Scanner sc = new Scanner(gameConfig.getLegacyConfigFile("entityInfo.txt")); //$NON-NLS-1$
 			int lineNum = 0;
 			while (sc.hasNextLine()) {
 				String line = sc.nextLine();
@@ -697,8 +725,8 @@ public class GameInfo {
 	}
 	
 	public void saveEntityInfo() {
-		File infoFile = new File("entityInfo.txt");
-		File backup = new File("entityInfo_backup.txt");
+		File infoFile = gameConfig.getLegacyConfigFile("entityInfo.txt");
+		File backup = gameConfig.getLegacyConfigFile("entityInfo_backup.txt");
 		if (!backup.exists()) {
 			infoFile.renameTo(backup);
 		}
@@ -1628,7 +1656,7 @@ public class GameInfo {
 					out.close();
 					
 					//save the TSC
-					TscPane.SaveTsc(fileContents, scriptFile);
+					TscPane.SaveTsc(fileContents, scriptFile, new TscLexer());
 				}
 			} catch (IOException err) {
 				err.printStackTrace();

@@ -1378,7 +1378,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		tempPanel.add(subcatScroll, c);
 
 		//npc.tbl editor button
-		npcTblWindow = new NpcTblEditor(this);
 		c.gridx++;
 		c.weightx = 0.2;
 		JButton npcTblButton = new JButton(new AbstractAction() {
@@ -1387,8 +1386,8 @@ public class EditorApp extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent eve) {
 				airhorn();
-				if (exeData != null) {
-					((NpcTblEditor) npcTblWindow).populate(exeData);
+				if (npcTblWindow != null) {
+//					((NpcTblEditor) npcTblWindow).populate(exeData);
 					npcTblWindow.setVisible(true);
 				} else {
 					StrTools.msgBox(Messages.getString("EditorApp.113")); //$NON-NLS-1$
@@ -1874,6 +1873,8 @@ public class EditorApp extends JFrame implements ActionListener {
 		if (exeData == null) {
 			return;
 		}
+
+		Mapdata mapdata = exeData.getMapdata(selectionNum);
 		try {
 			//check to see if it exists already
 			for (int i = 0; i < mapTabs.getComponentCount(); i++) {
@@ -1881,37 +1882,34 @@ public class EditorApp extends JFrame implements ActionListener {
 				if (tabName.endsWith("*")) {
 					tabName = tabName.substring(0, tabName.length() - 1);
 				}
-				if (tabName.equals(exeData.getShortName(selectionNum))
-						|| tabName.equals(exeData.getLongName(selectionNum))) {
+				if (tabName.equals(mapdata.getFile())
+						|| tabName.equals(mapdata.getMapname())) {
 					mapTabs.setSelectedIndex(i);
-					//scriptTabs.setSelectedIndex(i);
 					return;
 				}
 			}
 
 			//set up the data holder
-			MapInfo data = new MapInfo(exeData, iMan, selectionNum);
+			MapInfo data = new MapInfo(exeData, iMan, mapdata);
 			//set up the map pane
 			MapPane mapPanel = new MapPane(this, data);
 			EntityPane entityPanel = new EntityPane(this, data);
-			TscPane txt = new TscPane(exeData, selectionNum, this, iMan);
+			TscPane txt = new TscPane(exeData, mapdata, this, iMan);
 
 			//set up the mapdata pane
 			MapdataPane mapdatPanel = new MapdataPane(
-					exeData, selectionNum, iMan.getImg(ResourceManager.rsrcBgBlue), true); //$NON-NLS-1$
+					exeData, mapdata, iMan.getImg(ResourceManager.rsrcBgBlue), true); //$NON-NLS-1$
 
 			//add bits to holder
 			TabOrganizer holder = new TabOrganizer(mapPanel, entityPanel, txt, mapdatPanel, data);
-			//componentVec.setSize(mapTabs.getTabCount() + 2); //not needed?
 			componentVec.add(mapTabs.getTabCount(), holder);
 
 			//finalize
-			//layout.show(tabPanel, activePerspective);
 			Component contents = buildTabContents(holder);
-			mapTabs.insertTab(exeData.getShortName(selectionNum),
+			mapTabs.insertTab(mapdata.getFile(),
 					null,
 					contents,
-					exeData.getLongName(selectionNum),
+					mapdata.getMapname(),
 					mapTabs.getComponentCount());
 			mapTabs.setSelectedComponent(contents);
 			if (scriptWindow.getName().equals(Messages.getString("EditorApp.2"))) { //$NON-NLS-1$
@@ -1926,10 +1924,10 @@ public class EditorApp extends JFrame implements ActionListener {
 				scriptWindow.setName("scriptWindow"); //$NON-NLS-1$
 			}
 			JScrollPane textScroll = new JScrollPane(txt);
-			scriptTabs.insertTab(exeData.getShortName(selectionNum),
+			scriptTabs.insertTab(mapdata.getFile(),
 					null,
 					textScroll,
-					exeData.getLongName(selectionNum),
+					mapdata.getMapname(),
 					scriptTabs.getComponentCount());
 			scriptTabs.setSelectedComponent(textScroll);
 
@@ -1943,6 +1941,10 @@ public class EditorApp extends JFrame implements ActionListener {
 		if (exeData == null) {
 			try {
 				exeData = new GameInfo(mapfile);
+				if (npcTblWindow != null) {
+					npcTblWindow.dispose();
+				}
+				npcTblWindow = new NpcTblEditor(this, exeData);
 				exeData.deleteMap(0, null);
 				mapPopup.setEnabled(false);
 			} catch (IOException e) {
@@ -2201,8 +2203,10 @@ public class EditorApp extends JFrame implements ActionListener {
 		mapList.setListData(exeData.getMapNames());
 		categoryList.setListData(exeData.getEntityCategories());
 		subcatList.setListData(exeData.getEntitySubcat(Messages.getString("EditorApp.154"))); //$NON-NLS-1$
-		((NpcTblEditor) npcTblWindow).populate(exeData);
-		TscPane.initDefines(exeData);
+		if (npcTblWindow != null) {
+			npcTblWindow.dispose();
+		}
+		npcTblWindow = new NpcTblEditor(this, exeData);
 		for (AbstractButton b : buttonsToEnableOnProjectLoad) {
 			b.setEnabled(true);
 		}

@@ -28,23 +28,14 @@ import java.util.List;
 
 public class TscPane extends JTextPane implements ActionListener, Changeable {
 	private static final long serialVersionUID = 6530249265060832403L;
-	private static final Hashtable<String, SimpleAttributeSet> styles = initStyles(); //maps styles for text formatting
-	public static final String STYLE_EVENT = "eveNum"; //$NON-NLS-1$
-	public static final String STYLE_SBEVENT = "sbEvent";
-	public static final String STYLE_SBFLAGS = "sbFlag";
-	public static final String STYLE_TAG = "tag"; //$NON-NLS-1$
-	public static final String STYLE_NUM = "number"; //$NON-NLS-1$
-	public static final String STYLE_SPACER = "spacer"; //$NON-NLS-1$
-	public static final String STYLE_TXT = "text"; //$NON-NLS-1$
-	public static final String STYLE_OVER = "overflow"; //$NON-NLS-1$
-	public static final String STYLE_COMMENT = "comment"; //$NON-NLS-1$
-	private static final String SET_KEY = "set key"; //$NON-NLS-1$
-	private static final String SET_VALUE = "set value"; //$NON-NLS-1$
-	private static Vector<TscCommand> commandInf = getCommands();
-	private static List<String> musicList = getMusicList();
-	private static List<String> sfxList = getSfxList();
-	private static Vector<String> def1 = new Vector<>();
-	private static Vector<String> def2 = new Vector<>();
+	private static final String SET_KEY = "set_key";
+	private static final String SET_VALUE = "set_value";
+
+	private static Vector<TscCommand> commandInf;
+	private static List<String> musicList;
+	private static List<String> sfxList;
+	private static Vector<String> def1;
+	private static Vector<String> def2;
 	private final JTextArea comLabel = new JTextArea(Messages.getString("TscPane.9"), 2, 18); //$NON-NLS-1$
 	private final JTextArea descLabel = new JTextArea(Messages.getString("TscPane.10"), 4, 18); //$NON-NLS-1$
 	private static JPanel commandPanel = null;
@@ -53,10 +44,11 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	private static JList<String> commandList;
 	private static JPanel commandListExtras;
 	private static TscPane lastFocus;
-	private GameInfo exeDat;
+	private static GameInfo exeDat = null;
 	private ResourceManager rm;
 	private File scriptFile;
 	private File srcFile;
+	private ScriptStyler styler;
 
 	private boolean changed;
 	private boolean justSaved = false;
@@ -72,62 +64,44 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		return commandPanel;
 	}
 
-	public TscPane(GameInfo inf, int num, EditorApp p, ResourceManager iMan) {
-		exeDat = inf;
-		rm = iMan;
-		if (EditorApp.blazed) {
-			this.setCursor(ResourceManager.cursor);
-		}
-		saveSource = exeDat.getConfig().getUseScriptSource();
-		scriptFile = exeDat.getScriptFile(num);
-		srcFile = exeDat.getScriptSource(num);
-		//EditorApp.TabOrganizer t = p.new TabOrganizer();
-		//init
-		initActions(iMan);
-		//fill
-		loadFile(srcFile, scriptFile);
-		//this.setText(parseScript(srcFile.exists() ? srcFile : scriptFile));
-		//style
-
-		loadmap = p.new LoadMapAction();
-
-		highlightDoc(this.getStyledDocument(), 0, -1);
-	}
-
 	public TscPane(GameInfo inf, Mapdata mapdat, EditorApp p,
 			ResourceManager iMan) {
-		rm = iMan;
-		exeDat = inf;
-		if (EditorApp.blazed) {
-			this.setCursor(ResourceManager.cursor);
-		}
+		initCommon(inf, iMan);
 		File dir = exeDat.getDataDirectory();
-		saveSource = exeDat.getConfig().getUseScriptSource();
 		scriptFile = new File(dir + "/Stage/" + mapdat.getFile() + ".tsc"); //$NON-NLS-1$ //$NON-NLS-2$
 		srcFile = new File(dir + "/Stage/ScriptSource/" + mapdat.getFile() + ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
-		//init
-		initActions(iMan);
 
 		loadmap = p.new LoadMapAction();
 		loadFile(srcFile, scriptFile);
 		//style
-		highlightDoc(this.getStyledDocument(), 0, -1);
-
+		styler.highlightDoc(this.getStyledDocument(), 0, -1);
 	}
 
 	public TscPane(GameInfo inf, File tscFile, ResourceManager iMan) {
-		exeDat = inf;
-		rm = iMan;
-		saveSource = exeDat.getConfig().getUseScriptSource();
+		initCommon(inf, iMan);
 		scriptFile = tscFile;
 		srcFile = new File(tscFile.getParent() + "/ScriptSource/"  //$NON-NLS-1$
 				+ tscFile.getName().replace(".tsc", ".txt")); //$NON-NLS-1$ //$NON-NLS-2$
-		initActions(iMan);
 		//fill
 		loadFile(srcFile, scriptFile);
-		//this.setText(parseScript(srcFile.exists() ? srcFile : scriptFile));
-		//style
-		highlightDoc(this.getStyledDocument(), 0, -1);
+		styler.highlightDoc(this.getStyledDocument(), 0, -1);
+	}
+
+	private void initCommon(GameInfo inf, ResourceManager iMan) {
+		rm = iMan;
+		if (inf != exeDat) {
+			exeDat = inf;
+			initDefines(inf);
+			commandInf = getCommands();
+			musicList = getMusicList();
+			sfxList = getSfxList();
+		}
+		if (EditorApp.blazed) {
+			this.setCursor(ResourceManager.cursor);
+		}
+		styler = new ScriptStyler(new TscLexer(getCommands()));
+		initActions(iMan);
+		saveSource = exeDat.getConfig().getUseScriptSource();
 	}
 
 	private void loadFile(File srcFile, File scriptFile) {
@@ -152,7 +126,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					tabText = parseScript(scriptFile, encoding);
 					break;
 				default: //compare
-					CompareScriptDialog csd = new CompareScriptDialog(srcFile, scriptFile);
+					CompareScriptDialog csd = new CompareScriptDialog(srcFile, scriptFile, encoding, styler);
 					tabText = parseScript(csd.getSelection(), encoding);
 				}
 			} else {
@@ -164,80 +138,6 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			tabText = parseScript(scriptFile, encoding);
 		}
 		this.setText(tabText);
-	}
-
-	private class CompareScriptDialog extends JDialog {
-
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-		private File selection;
-
-		public File getSelection() {
-			return selection;
-		}
-
-		CompareScriptDialog(final File srcFile, final File scriptFile) {
-			super();
-			selection = scriptFile;
-			JSplitPane disp = new JSplitPane();
-
-			JPanel left = new JPanel();
-			left.setLayout(new BoxLayout(left, BoxLayout.Y_AXIS));
-			String opt1 = parseScript(srcFile, exeDat.getConfig().getEncoding());
-			JTextPane sourcePane = new JTextPane();
-			sourcePane.setText(opt1);
-			sourcePane.setEditable(false);
-			highlightDoc(sourcePane.getStyledDocument(), 0, -1);
-			JScrollPane jsp = new JScrollPane(sourcePane);
-			jsp.setPreferredSize(new Dimension(320, 480));
-			left.add(jsp);
-			JButton button = new JButton(new AbstractAction() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					selection = srcFile;
-					dispose();
-				}
-
-			});
-			button.setText("Use ScriptSource version");
-			left.add(button);
-
-			String opt2 = parseScript(scriptFile, exeDat.getConfig().getEncoding());
-			JPanel right = new JPanel();
-			right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
-			sourcePane = new JTextPane();
-			sourcePane.setText(opt2);
-			sourcePane.setEditable(false);
-			highlightDoc(sourcePane.getStyledDocument(), 0, -1);
-			jsp = new JScrollPane(sourcePane);
-			right.add(jsp);
-			jsp.setPreferredSize(new Dimension(320, 480));
-			button = new JButton(new AbstractAction() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					selection = scriptFile;
-					dispose();
-				}
-
-			});
-			button.setText("Use TSC version");
-			right.add(button);
-
-			disp.setLeftComponent(left);
-			disp.setRightComponent(right);
-
-			this.setContentPane(disp);
-			this.pack();
-
-			this.setModal(true);
-			this.setVisible(true);
-		}
 	}
 
 	private void initActions(ResourceManager iMan) {
@@ -529,12 +429,12 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		return retVal;
 	}
 
-	public static void initDefines(GameInfo exe) {
+	private void initDefines(GameInfo exe) {
 		//HashMap<String, String> retVal = new HashMap<String, String>();
 		//load defines.txt
 		def1 = new Vector<>();
 		def2 = new Vector<>();
-		File defFile = new File(exe.getDataDirectory() + File.separator + "tsc_def.txt"); //$NON-NLS-1$
+		File defFile = exe.getConfig().solveLegacyDirectory("tsc_def.txt");
 		try {
 			if (!defFile.exists()) {
 				defFile.createNewFile();
@@ -648,96 +548,6 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		retVal.add(commandListExtras);
 		retVal.add(listScroll);
 		//retVal.setMaximumSize(new Dimension(200, 2000));
-
-		return retVal;
-	}
-
-	private static Hashtable<String, SimpleAttributeSet> initStyles() {
-		Hashtable<String, SimpleAttributeSet> retVal = new Hashtable<>();
-		SimpleAttributeSet newStyle;
-		String fontFamily = "Monospaced";
-
-		//event numbers
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.white);
-		StyleConstants.setForeground(newStyle, Color.black);
-		StyleConstants.setBold(newStyle, true);
-		StyleConstants.setItalic(newStyle, false);
-		retVal.put(STYLE_EVENT, newStyle);
-		//speech bubble
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.white);
-		StyleConstants.setForeground(newStyle, Color.ORANGE);
-		StyleConstants.setBold(newStyle, true);
-		StyleConstants.setItalic(newStyle, false);
-		retVal.put(STYLE_SBEVENT, newStyle);
-		//tsc tags
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.white);
-		StyleConstants.setForeground(newStyle, Color.blue);
-		StyleConstants.setBold(newStyle, false);
-		StyleConstants.setItalic(newStyle, false);
-		retVal.put(STYLE_TAG, newStyle);
-		//numbers
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.white);
-		StyleConstants.setForeground(newStyle, Color.decode("0xC42F63")); //$NON-NLS-1$
-		StyleConstants.setBold(newStyle, false);
-		StyleConstants.setItalic(newStyle, false);
-		retVal.put(STYLE_NUM, newStyle);
-		//number spacer
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.white);
-		StyleConstants.setForeground(newStyle, Color.GRAY);
-		StyleConstants.setBold(newStyle, false);
-		StyleConstants.setItalic(newStyle, false);
-		retVal.put(STYLE_SPACER, newStyle);
-		//text
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.white);
-		StyleConstants.setForeground(newStyle, Color.black);
-		StyleConstants.setBold(newStyle, false);
-		StyleConstants.setItalic(newStyle, false);
-		retVal.put(STYLE_TXT, newStyle);
-		//speech bubble flags
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.white);
-		StyleConstants.setForeground(newStyle, Color.decode("0xFF6060"));
-		StyleConstants.setBold(newStyle, false);
-		StyleConstants.setItalic(newStyle, false);
-		retVal.put(STYLE_SBFLAGS, newStyle);
-		//overlimit text
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.gray);
-		StyleConstants.setForeground(newStyle, Color.red);
-		StyleConstants.setBold(newStyle, false);
-		StyleConstants.setItalic(newStyle, false);
-		retVal.put(STYLE_OVER, newStyle);
-		//inaccessible commands
-		newStyle = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(newStyle, fontFamily); //$NON-NLS-1$
-		StyleConstants.setFontSize(newStyle, 12);
-		StyleConstants.setBackground(newStyle, Color.white);
-		StyleConstants.setForeground(newStyle, Color.decode("0x367A2A")); //$NON-NLS-1$
-		StyleConstants.setBold(newStyle, false);
-		StyleConstants.setItalic(newStyle, true);
-		retVal.put(STYLE_COMMENT, newStyle);
 
 		return retVal;
 	}
@@ -862,8 +672,6 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			return;
 		}
 		String text = this.getText();
-		System.out.println(text);
-		System.out.println("가");
 		try {
 			//save source
 			if (saveSource) {
@@ -878,32 +686,14 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				out.close();
 			}
 
+
 			//save script
 			//replace things
 			for (int i = 0; i < def1.size(); i++) {
 				text = text.replace(def1.get(i), def2.get(i));
 			}
 			//strip comments
-			String strippedScript = ""; //$NON-NLS-1$
-			TscLexer lex = new TscLexer();
-			lex.reset(new StringReader(text), 0, -1, 0);
-			TscToken t;
-			int line = 0;
-			while ((t = lex.getNextToken()) != null) {
-				if (line != t.getLineNumber()) {
-					strippedScript += "\r\n"; //$NON-NLS-1$
-				}
-				if (!t.getDescription().equals(STYLE_COMMENT)) {
-					String content = t.getContents();
-					if (t.getDescription().equals(STYLE_EVENT)) {
-						strippedScript += content.substring(0,
-								(content.length() >= 5) ? 5 : content.length());
-					} else {
-						strippedScript += content;
-					}
-				}
-				line = t.getLineNumber();
-			}
+			String strippedScript = styler.getLexer().sanitize(text);
 			byte[] stripArr = strippedScript.getBytes(exeDat.getConfig().getEncoding());
 			int fileSize = stripArr.length;
 			if (fileSize > 0) {
@@ -931,12 +721,12 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	}
 
 	/**
-	 * Saves a TSC file with the given contents, properly encrypted.
+	 * Saves a TSC file with the given contents, properly "encrypted".
 	 *
 	 * @param text contents to write
 	 * @param dest destination file
 	 */
-	public static void SaveTsc(String text, File dest) {
+	public static void SaveTsc(String text, File dest, Lexer lex) {
 		try {
 			//save script
 			//replace things
@@ -944,26 +734,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				text = text.replace(def1.get(i), def2.get(i));
 			}
 			//strip comments
-			String strippedScript = ""; //$NON-NLS-1$
-			TscLexer lex = new TscLexer();
-			lex.reset(new StringReader(text), 0, -1, 0);
-			TscToken t;
-			int line = 0;
-			while ((t = lex.getNextToken()) != null) {
-				if (line != t.getLineNumber()) {
-					strippedScript += "\r\n"; //$NON-NLS-1$
-				}
-				if (!t.getDescription().equals(STYLE_COMMENT)) {
-					String content = t.getContents();
-					if (t.getDescription().equals(STYLE_EVENT)) {
-						strippedScript += content.substring(0,
-								(content.length() >= 5) ? 5 : content.length());
-					} else {
-						strippedScript += content;
-					}
-				}
-				line = t.getLineNumber();
-			}
+			String strippedScript = lex.sanitize(text);
 			byte[] stripArr = strippedScript.getBytes();
 			int fileSize = stripArr.length;
 			if (fileSize > 0) {
@@ -987,32 +758,14 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		}
 	}
 
-	private void highlightDoc(StyledDocument doc, int first, int last) {
-		if (last < first) {
-			last = Integer.MAX_VALUE;
-		}
-		TscLexer lexer = new TscLexer();
-		try {
-			lexer.reset(new StringReader(doc.getText(0, doc.getLength())), first, -1, 0);
-			TscToken t;
-			while ((t = lexer.getNextToken()) != null) {
-				doc.setCharacterAttributes(t.getCharBegin(),
-						t.getCharEnd() - t.getCharBegin(),
-						styles.get(t.getDescription()), true);
-				if (t.getLineNumber() > last) break;
-			}
-		} catch (BadLocationException | IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static Vector<TscCommand> getCommands() {
+	private Vector<TscCommand> getCommands() {
+		File tscConfigFile = exeDat.getConfig().getLegacyConfigFile("tsc_list.txt");
 		BufferedReader commandFile;
 		StreamTokenizer tokenizer;
 		Vector<TscCommand> retVal = new Vector<>();
 		//Vector<TscCommand> result = new Vector<TscCommand>();
 		try {
-			commandFile = new BufferedReader(new FileReader("tsc_list.txt")); //$NON-NLS-1$
+			commandFile = new BufferedReader(new FileReader(tscConfigFile)); //$NON-NLS-1$
 			tokenizer = new StreamTokenizer(commandFile);
 		} catch (FileNotFoundException e) {
 			StrTools.msgBox(Messages.getString("TscPane.11")); //$NON-NLS-1$
@@ -1072,7 +825,6 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				retVal.add(newCommand);
 				//result.add(newCommand.commandCode + " - " + newCommand.name);
 			}
-			TscLexer.initMap(retVal);
 			commandFile.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1080,27 +832,29 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		return retVal;
 	}
 
-	private static ArrayList<String> getMusicList() {
+	private ArrayList<String> getMusicList() {
+		File musicConfigFile = exeDat.getConfig().getLegacyConfigFile("musiclist.txt");
 		ArrayList<String> rv = new ArrayList<>();
 		try {
-			Scanner sc = new Scanner(new File("musiclist.txt"));
+			Scanner sc = new Scanner(musicConfigFile);
 			while (sc.hasNext()) {
 				sc.nextInt();
 				String sfxName = sc.nextLine();
 				rv.add(sfxName);
 			}
 			sc.close();
-		} catch (FileNotFoundException err) {
-			StrTools.msgBox("Could not find musiclist.txt");
+		} catch (FileNotFoundException ignored) {
+
 		}
 
 		return rv;
 	}
 
-	private static ArrayList<String> getSfxList() {
+	private ArrayList<String> getSfxList() {
+		File sfxFile = exeDat.getConfig().getLegacyConfigFile("sfxList.txt");
 		ArrayList<String> rv = new ArrayList<>();
 		try {
-			Scanner sc = new Scanner(new File("sfxList.txt"));
+			Scanner sc = new Scanner(sfxFile);
 			while (sc.hasNext()) {
 				sc.nextInt();
 				sc.next(); //disregard hyphen
@@ -1108,8 +862,8 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				rv.add(sfxName);
 			}
 			sc.close();
-		} catch (FileNotFoundException err) {
-			StrTools.msgBox("Could not find sfxList.txt");
+		} catch (FileNotFoundException ignored) {
+
 		}
 
 		return rv;
@@ -1149,7 +903,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		}
 
 		//colour it
-		highlightDoc((StyledDocument) area.getDocument(), startLine - 1, startLine + 1);
+		styler.highlightDoc((StyledDocument) area.getDocument(), startLine - 1, startLine + 1);
 		markChanged();
 	}
 
@@ -1182,7 +936,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			}
 
 			//colour it
-			highlightDoc(this.getStyledDocument(), startLine - 1, startLine + 1);
+			styler.highlightDoc(this.getStyledDocument(), startLine - 1, startLine + 1);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

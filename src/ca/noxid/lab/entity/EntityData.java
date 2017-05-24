@@ -1,4 +1,5 @@
 package ca.noxid.lab.entity;
+import ca.noxid.lab.BlConfig;
 import ca.noxid.lab.Changeable;
 import ca.noxid.lab.Messages;
 
@@ -22,7 +23,7 @@ import java.util.*;
 	unsigned char *npctbl_Hitbox = NULL;
 	unsigned char *npctbl_Displaybox =  NULL;
  */
-public class EntityData  implements Changeable{
+public class EntityData  implements Changeable {
 	private String name;
 	public String getName() {return name;}
 	public void setName(String s) {
@@ -155,8 +156,7 @@ public class EntityData  implements Changeable{
 	
 	//key = cat ; list = subcats
 	public Map<String, ArrayList<String>> categories = new HashMap<>();
-	
-	public static final String[] flagNames = initFlagNames();
+
 	
 	EntityData(int num) {
 		name = "unnamed"; //$NON-NLS-1$
@@ -167,31 +167,7 @@ public class EntityData  implements Changeable{
 		this.tbl_display = new Rectangle(8, 8, 8, 8);
 		entityNum = num;
 	}
-	
-	private static String[] initFlagNames() {
-		File flagfile = new File("flagnames.txt");
-		String[] retVal;
-		try {
-			Scanner sc = new Scanner(flagfile);
-			int lines = 0;
-			retVal = new String[16];
-			while (sc.hasNext() && lines < 16) {
-				String line = sc.nextLine();
-				retVal[lines] = line;
-				lines++;
-			}
-			sc.close();
-		} catch (FileNotFoundException e) {
-			retVal = new String[] {Messages.getString("EntityData.0"), Messages.getString("EntityData.1"), Messages.getString("EntityData.2"), Messages.getString("EntityData.3"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					Messages.getString("EntityData.4"), Messages.getString("EntityData.5"), Messages.getString("EntityData.6"), Messages.getString("EntityData.7"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					Messages.getString("EntityData.8"), Messages.getString("EntityData.9"), Messages.getString("EntityData.10"), Messages.getString("EntityData.11"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					Messages.getString("EntityData.12"), Messages.getString("EntityData.13"), Messages.getString("EntityData.14"), Messages.getString("EntityData.15") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			};
-			System.err.println("flagnames.txt not found <entitydata.java::initFlagNames()>");
-			
-		}
-		return retVal;
-	}
+
 	public EntityData(int num, int dam, int deathSound, int exp, int flags, int hp, int hurt,
 			int size, int tileset, Rectangle display, Rectangle hitbox) {
 		name = "unnamed"; //$NON-NLS-1$
@@ -209,11 +185,6 @@ public class EntityData  implements Changeable{
 		tbl_tileset = tileset;
 		tbl_display = display;
 		tbl_hitbox = hitbox;
-	}
-	
-	EntityData(String n, int num) {
-		name = n;
-		entityNum = num;
 	}
 	
 	EntityData(EntityData other) {

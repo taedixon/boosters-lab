@@ -37,11 +37,12 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 	
 	private EntitySettings editPane;
 	public JPanel getEditPane() {return editPane;}
+
+	String[] flagNames;
 	
 	public EntityPane(EditorApp p, MapInfo data) {
 		super(p);
-		this.iMan = p.getImageManager();
-		this.parent = p;
+		flagNames = p.getGameInfo().getFlagNames();
 		dataHolder = data;
 		selectionList = new HashSet<>();
 		this.initMouse();
@@ -573,7 +574,7 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 			c.gridwidth = GridBagConstraints.REMAINDER;
 			flagArray = new JCheckBox[16];
 			for (int i = 0; i < flagArray.length; i++) {
-				flagArray[i] = new JCheckBox(EntityData.flagNames[i]);
+				flagArray[i] = new JCheckBox(flagNames[i]);
 				flagArray[i].addActionListener(this);
 				flagArray[i].setOpaque(false);
 				this.add(flagArray[i], c);
@@ -614,7 +615,7 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 					} else {
 						flagArray[i].setSelected(false);
 					}
-					flagArray[i].setText(EntityData.flagNames[i]);
+					flagArray[i].setText(flagNames[i]);
 				} //check each bit in the flag
 				entityDisplay.setSelectedValue(p.getInfo(), true);
 			} else {//if size > 1
@@ -650,10 +651,10 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 				for (int i = 0; i < flagArray.length; i++) {
 					if (flagsArray[i] == 0) {
 						flagArray[i].setSelected(false);
-						flagArray[i].setText(EntityData.flagNames[i]);
+						flagArray[i].setText(flagNames[i]);
 					} else {
 						flagArray[i].setSelected(true);
-						flagArray[i].setText(EntityData.flagNames[i] + "*" + flagsArray[i]); //$NON-NLS-1$
+						flagArray[i].setText(flagNames[i] + "*" + flagsArray[i]); //$NON-NLS-1$
 					}
 				}
 			} //if size  > 1

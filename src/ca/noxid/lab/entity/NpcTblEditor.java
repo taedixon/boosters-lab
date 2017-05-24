@@ -47,7 +47,7 @@ public class NpcTblEditor extends JDialog implements ActionListener {
 	private JTextField heightField = new JTextField();
 	
 	//flags
-	private JCheckBox[] flagCheckArray = new JCheckBox[EntityData.flagNames.length];
+	private JCheckBox[] flagCheckArray;
 	
 	//stats
 	private JTextField hpField = new JTextField(6);
@@ -60,8 +60,8 @@ public class NpcTblEditor extends JDialog implements ActionListener {
 		Messages.getString("NpcTblEditor.7"), //$NON-NLS-1$
 		Messages.getString("NpcTblEditor.8") //$NON-NLS-1$
 	};
-	private JComboBox<String> hurtList = new JComboBox<>(GameInfo.sfxNames);
-	private JComboBox<String> deathList = new JComboBox<>(GameInfo.sfxNames);
+	private JComboBox<String> hurtList;
+	private JComboBox<String> deathList;
 	private JComboBox<String> tilesetList = new JComboBox<>(tilesetNames);
 	private static final String[] tilesetNames = {
 		Messages.getString("NpcTblEditor.9"), //$NON-NLS-1$
@@ -105,15 +105,17 @@ public class NpcTblEditor extends JDialog implements ActionListener {
 		Messages.getString("NpcTblEditor.47"), //$NON-NLS-1$
 		Messages.getString("NpcTblEditor.48") //$NON-NLS-1$
 	};
-	
-	//that box panel
-	//private JPanel previewPane = new JPanel();
 
-	public NpcTblEditor(Frame aFrame) {
+	private String[] flagNames;
+
+	public NpcTblEditor(Frame aFrame, GameInfo inf) {
 		super(aFrame);
 		if (EditorApp.blazed)
 			this.setCursor(ResourceManager.cursor);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+
+		populate(inf);
+
 		this.addComponents();
 		this.setTitle(Messages.getString("NpcTblEditor.49")); //$NON-NLS-1$
 		this.setModal(true);
@@ -121,7 +123,6 @@ public class NpcTblEditor extends JDialog implements ActionListener {
 	
 	private void addComponents() {
 		GridBagConstraints c;
-		entList = new JList<>();
 		//entList.setMaximumSize(new Dimension(100, 3333));
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
@@ -362,7 +363,7 @@ public class NpcTblEditor extends JDialog implements ActionListener {
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.WEST;
 		for (int i = 0; i < flagCheckArray.length; i++) {
-			flagCheckArray[i] = new JCheckBox(EntityData.flagNames[i]);
+			flagCheckArray[i] = new JCheckBox(flagNames[i]);
 			flagCheckArray[i].addActionListener(this);
 			retVal.add(flagCheckArray[i], c);
 			c.gridx++;
@@ -412,12 +413,17 @@ public class NpcTblEditor extends JDialog implements ActionListener {
 		return retVal;
 	}
 	
-	public void populate(GameInfo inf) {
+	private void populate(GameInfo inf) {
+		hurtList = new JComboBox<>(inf.getSfxNames());
+		deathList = new JComboBox<>(inf.getSfxNames());
+		flagNames = inf.getFlagNames();
+		flagCheckArray = new JCheckBox[flagNames.length];
 		//init list of entities
 		dataCopy = new ArrayList<>();
 		for (int i = 0; i < inf.getAllEntities().length; i++) {
 			dataCopy.add(new EntityData(inf.getAllEntities()[i]));
 		}
+		entList = new JList<>();
 		entList.setListData(dataCopy.toArray(new EntityData[dataCopy.size()]));
 		entList.setSelectedIndex(0);
 		exeData = inf;
