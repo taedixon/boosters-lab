@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Spur (ID: 13)">
+	<panel>
+		<panel>
+			<field type="label">LVL 1 Bullet ID:</field>
+			<field type="label">LVL 2 Bullet ID:</field>
+			<field type="label">LVL 3 Bullet ID:</field>
+			<field type="label">LVL MAX Bullet ID:</field>
+			
+			<field type="label">Ammo Consumed Per Shot:</field>
+
+			<field type="label">Out of Ammo Sound:</field>
+			<field type="label">LVL 1 Charging Sound:</field>
+			<field type="label">LVL 2 Charging Sound:</field>
+			<field type="label">LVL 3 Charging Sound:</field>
+			<field type="label">MAX Charge Sound:</field>
+			
+			<field type="label">LVL 1 Firing Sound:</field>
+			<field type="label">LVL 2 Firing Sound:</field>
+			<field type="label">LVL 3 Firing Sound:</field>
+			<field type="label">MAX Firing Sound:</field>
+		
+			<field type="text" size="1" offset="0x41FB43" col="1"></field>
+			<field type="text" size="1" offset="0x41FB53"></field>
+			<field type="text" size="1" offset="0x41FB6E"></field>
+			<field type="text" size="1" offset="0x41FB65"></field>
+			
+			<field type="text" size="1" offset="0x41FBAB"></field>
+
+			<field type="text" size="1" offset="0x41FBBB"></field>
+			<field type="text" size="1" offset="0x41FA95"></field>
+			<field type="text" size="1" offset="0x41FAA3"></field>
+			<field type="text" size="1" offset="0x41FABA"></field>
+			<field type="text" size="1" offset="0x41FAFE"></field>
+			
+			<field type="text" size="1" offset="0x41FDFB"></field>
+			<field type="text" size="1" offset="0x41FE09"></field>
+			<field type="text" size="1" offset="0x41FE17"></field>
+			<field type="text" size="1" offset="0x41FE25"></field>
+		</panel>
+		<panel>
+			<field type="label"></field>
+		</panel>
+	</panel>
+</hack>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Blade (ID: 9)">
+	<panel>
+		<panel>
+			<field type="label">LVL 1 Bullet ID:</field>
+			<field type="label">LVL 2 Bullet ID:</field>
+			<field type="label">LVL 3 Bullet ID:</field>
+
+			<field type="label">Firing Sound:</field>
+		
+			<field type="text" size="1" offset="0x41F5B6" col="1"></field>
+			<field type="text" size="1" offset="0x41F5BF"></field>
+			<field type="text" size="1" offset="0x41F5C8"></field>
+
+			<field type="text" size="1" offset="0x41F6FF"></field>
+		</panel>
+		<panel>
+			<field type="label"></field>
+		</panel>
+	</panel>
+</hack>
