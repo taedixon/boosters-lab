@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hack name="Misc. Bullets">
 <panel>
-	<panel title="Bubbler Thorns">
+	<panel title="Bubbler Thorns (ID: 22)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage
@@ -65,7 +65,7 @@
 
 
 
-	<panel title="Blade Slashes">
+	<panel title="Blade Slashes (ID: 23)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage
@@ -129,7 +129,7 @@
 
 
 
-	<panel title="Large Falling Spike">
+	<panel title="Large Falling Spike (ID: 24)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage

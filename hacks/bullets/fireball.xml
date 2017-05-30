@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hack name="Fireball">
 <panel>
-	<panel title="Level 1">
+	<panel title="Level 1 (ID: 7)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage
@@ -65,7 +65,7 @@
 
 
 
-	<panel title="Level 2">
+	<panel title="Level 2 (ID: 8)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage
@@ -129,7 +129,7 @@
 
 
 
-	<panel title="Level 3">
+	<panel title="Level 3 (ID: 9)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage

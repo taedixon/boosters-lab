@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hack name="Misc. Bullets Page 2">
 <panel>
-	<panel title="Curly's Nemesis">
+	<panel title="Curly's Nemesis (ID: 43)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage
@@ -65,7 +65,7 @@
 
 
 
-	<panel title="Clear All Enemy">
+	<panel title="Clear All Enemy (ID: 44)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage
@@ -129,7 +129,7 @@
 
 
 
-	<panel title="Whimsical Stars">
+	<panel title="Whimsical Stars (ID: 45)">
 		<panel title="Bullet stats">
 		<field type="label">
 			Damage
