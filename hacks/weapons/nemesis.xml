@@ -2,34 +2,51 @@
 <hack name="Nemesis (ID: 12)">
 	<panel>
 		<panel>
-			<field type="label">LVL 1 Bullet ID:</field>
-			<field type="label">LVL 2 Bullet ID:</field>
-			<field type="label">LVL 3 Bullet ID:</field>
-			
-			<field type="label">Maximum Shots On-Screen*:</field>
-			<field type="label">Maximum Shots Family:</field>
-			<field type="label">Ammo Consumed Per Shot:</field>
-			
-			<field type="label">Out of Ammo Sound:</field>
-			<field type="label">LVL 1 Sound:</field>
-			<field type="label">LVL 2 Sound:</field>
-			<field type="label">LVL 3 Sound:</field>
-		
-			<field type="text" size="1" offset="0x41F733" col="1"></field>
-			<field type="text" size="1" offset="0x41F73C"></field>
-			<field type="text" size="1" offset="0x41F745"></field>
-			
-			<field type="text" size="1" offset="0x41F755"></field>
-			<field type="text" size="1" offset="0x41F74A"></field>
-			<field type="text" size="1" offset="0x41F770"></field>
-			
-			<field type="text" size="1" offset="0x41F780"></field>
-			<field type="text" size="1" offset="0x41F9B4"></field>
-			<field type="text" size="1" offset="0x41F9C2"></field>
-			<field type="text" size="1" offset="0x41F9D0"></field>
+			<panel title="Bullet IDs">
+				<field type="label">LVL 1:</field>
+				<field type="label">LVL 2:</field>
+				<field type="label">LVL 3:</field>
+				<field type="text" size="1" offset="0x41F733" col="1"></field>
+				<field type="text" size="1" offset="0x41F73C"></field>
+				<field type="text" size="1" offset="0x41F745"></field>
+			</panel>
+			<panel title="Effects Spawning">	
+				<field type="label">Up-Left:</field>
+				<field type="label">Up-Right:</field>
+				<field type="label">Mid-Left:</field>
+				<field type="label">Mid-Right:</field>
+				<field type="label">Down-Left:</field>
+				<field type="label">Down-Right:</field>
+				<field type="text" size="1" offset="0x41F7CD" col="1"></field>
+				<field type="text" size="1" offset="0x41F81B"></field>
+				<field type="text" size="1" offset="0x41F928"></field>
+				<field type="text" size="1" offset="0x41F976"></field>
+				<field type="text" size="1" offset="0x41F882"></field>
+				<field type="text" size="1" offset="0x41F8CE"></field>
+			</panel>
 		</panel>
-		<panel>
-			<field type="label">*Plus 1, so "1" actually means "2"</field>
+		<panel col="1">
+			<panel title="Properties">
+				<field type="label">Maximum Shots On-Screen*:</field>
+				<field type="label">Maximum Shots Family:</field>
+				<field type="label">Ammo Consumed Per Shot:</field>
+				<field type="text" size="1" offset="0x41F755" col="1"></field>
+				<field type="text" size="1" offset="0x41F74A"></field>
+				<field type="text" size="1" offset="0x41F770"></field>
+			</panel>
+			<panel title="SFX">
+				<field type="label">Out of Ammo Sound:</field>
+				<field type="label">LVL 1 Sound:</field>
+				<field type="label">LVL 2 Sound:</field>
+				<field type="label">LVL 3 Sound:</field>
+				<field type="text" size="1" offset="0x41F780" col="1"></field>
+				<field type="text" size="1" offset="0x41F9B4"></field>
+				<field type="text" size="1" offset="0x41F9C2"></field>
+				<field type="text" size="1" offset="0x41F9D0"></field>
+			</panel>
+			<panel>	
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+			</panel>
 		</panel>
 	</panel>
 </hack>
