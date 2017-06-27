@@ -12,11 +12,10 @@ import ca.noxid.uiComponents.UpdateTextField;
 import com.carrotlord.string.StrTools;
 
 import javax.swing.*;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import javax.swing.text.*;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.RasterFormatException;
@@ -63,6 +62,8 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	private boolean saveSource = true;
 
 	private EditorApp.LoadMapAction loadmap = null;
+
+	private boolean recordUndoes = false;
 
 	public static JPanel getDefPanel() {
 		return defPanel;
@@ -137,12 +138,12 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		if (srcFile.exists() && saveSource) {
 			if (srcFile.lastModified() > scriptFile.lastModified()) {
 				int choice = JOptionPane.showOptionDialog(lastFocus,
-						"TSC file is more recent than ScriptSource",
-						"Warning",
+						Messages.getString("TscPane.21"),
+						Messages.getString("TscPane.20"),
 						JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE,
 						null,
-						new Object[] {"Use ScriptSource", "Use TSC", "Compare Files"}, "Use TSC");
+						new Object[] {Messages.getString("TscPane.22"), Messages.getString("TscPane.23"), Messages.getString("TscPane.24")}, Messages.getString("TscPane.23"));
 
 				switch (choice) {
 				case JOptionPane.YES_OPTION: //use scriptsource
@@ -164,6 +165,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			tabText = parseScript(scriptFile, encoding);
 		}
 		this.setText(tabText);
+		recordUndoes = true;
 	}
 
 	private class CompareScriptDialog extends JDialog {
@@ -240,6 +242,8 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		}
 	}
 
+	private UndoManager undoManager;
+
 	private void initActions(ResourceManager iMan) {
 
 		if (defPanel == null) {
@@ -293,6 +297,50 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				}
 			}
 		});
+
+		undoManager = new UndoManager();
+		getStyledDocument().addUndoableEditListener(new UndoableEditListener() {
+			@Override
+			public void undoableEditHappened(UndoableEditEvent e) {
+				if (recordUndoes && !e.getEdit().getPresentationName().equals("style change"))
+					undoManager.addEdit(e.getEdit());
+			}
+		});
+
+		InputMap im = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap am = getActionMap();
+
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK), "Undo");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK), "Redo");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK | Event.SHIFT_MASK), "Redo");
+
+		am.put("Undo", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (undoManager.canUndo()) {
+						undoManager.undo();
+						highlightDoc(getStyledDocument(), 0, -1);
+					}
+				} catch (CannotUndoException exp) {
+					exp.printStackTrace();
+				}
+			}
+		});
+		am.put("Redo", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (undoManager.canRedo()) {
+						undoManager.redo();
+						highlightDoc(getStyledDocument(), 0, -1);
+					}
+				} catch (CannotUndoException exp) {
+					exp.printStackTrace();
+				}
+			}
+		});
+
 	}
 
 	private void setCommandExtras(int commandIndex, String cmd) {
