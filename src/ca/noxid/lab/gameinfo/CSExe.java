@@ -151,8 +151,8 @@ public class CSExe {
 				csHead.putInt(0x14, mapdataLoc);
 				ExeSec csmapSec = new ExeSec(csHead, chan);
 				if (headers.length - 1 != rsrcSec) {
-					StrTools.msgBox(Messages.getString("CSExe.9")); //$NON-NLS-1$
-				    System.exit(5);
+					StrTools.msgBox(Messages.getString("CSExe.9") + Messages.getString("CSExe.10")); //$NON-NLS-1$
+					System.exit(5);
 				}
 				ExeSec rsrc = headers[headers.length-1];
 				//copy the 'good' segments into their proper place
