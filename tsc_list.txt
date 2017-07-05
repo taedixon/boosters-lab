@@ -36,7 +36,8 @@ Format:
 
 NOTE: If you add a command, make sure to increase the number next to CE_TSC by 1!
 
-[CE_TSC]	91
+[CE_TSC]	92
+<TST	2	##--	TeST	TSC description pane test.	0	0	0	8
 <AE+	0	----	Arms Energy +	Refill all weapon ammo.	0	0	1	4
 <AM+	2	aA--	ArMs +	Give weapon W with X ammo. Use 0000 for infinite ammo.	0	0	1	4
 <AM-	1	a---	ArMs -	Remove weapon W.	0	0	1	4

@@ -111,7 +111,7 @@ public class TscLexer {
 			//noinspection UnusedAssignment
 			eventType = TscLexer.EVENT_NORMAL;
 		} else if (argsRemaining > 0) {
-			if ((lastToken.getContents().charAt(0) == '<') || (lastToken.getContents().length() == 1)) {
+			if ((lastToken.getContents().charAt(0) == '<') || ((lastToken.getContents().length() == 1) || cmdMap.containsKey(cmd) && !cmdMap.get(cmd).paramSep)) {
 				//number token
 				//try to grab the value one character at a time
 				TscCommand c = cmdMap.get(cmd);
@@ -136,12 +136,14 @@ public class TscLexer {
 				character += c.paramLen;
 				strPos += c.paramLen;
 				argsRemaining--;
-			} else if(cmdMap.containsKey(cmd) && cmdMap.get(cmd).paramSep) {
+			} else {
 				//spacer token
-				tokenStr += line.charAt(strPos);
-				nextToken = new TscToken(TscPane.STYLE_SPACER, tokenStr, lineNum, character, character + 1);
-				character++;
-				strPos++;
+				if (cmdMap.containsKey(cmd) && cmdMap.get(cmd).paramSep) {
+					tokenStr += line.charAt(strPos);
+					nextToken = new TscToken(TscPane.STYLE_SPACER, tokenStr, lineNum, character, character + 1);
+					character++;
+					strPos++;
+				}
 			}
 		} else if (wasEnded) {
 			int tokenLen = line.substring(strPos).length();
@@ -174,7 +176,7 @@ public class TscLexer {
 				{
 					isFace = true;
 				}
-				if (cmdMap.get(cmd).endsEvent)
+				if (cmdMap.containsKey(cmd) && cmdMap.get(cmd).endsEvent)
 				{
 					wasEnded = true;
 				}

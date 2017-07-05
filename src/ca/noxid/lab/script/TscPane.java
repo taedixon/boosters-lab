@@ -309,12 +309,11 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		if (selCom.numParam <= 0) {
 			return;
 		}
-
-		int commandSize = 4 + selCom.numParam * 5 - 1;
+		int commandSize = selCom.paramLen + selCom.numParam * (selCom.paramSep ? selCom.paramLen + 1 : selCom.paramLen) - 1;
 		if (selCom.numParam < 2) commandSize -= 1;
 		if (cmd.length() > commandSize) {
 			for (int i = 0; i < selCom.numParam; i++) {
-				String arg = cmd.substring(4 + i * 5, 8 + i * 5);
+				String arg = cmd.substring(4 + i * (selCom.paramSep ? selCom.paramLen + 1 : selCom.paramLen), 4 + selCom.paramLen + i * (selCom.paramSep ? selCom.paramLen + 1 : selCom.paramLen));
 				addCommandExtra(selCom.CE_param[i], arg);
 			}
 		}
@@ -1222,20 +1221,14 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					}
 					String comStr = selCom.commandCode;
 					for (int i = 0; i < selCom.numParam; i++) {
-						if (i < 3) {
-							comStr += (char) ('X' + i);
-							comStr += (char) ('X' + i);
-							comStr += (char) ('X' + i);
-							comStr += (char) ('X' + i);
-						} else {
-							//so lazy
-							comStr += (char) ('A' + i - 3);
-							comStr += (char) ('A' + i - 3);
-							comStr += (char) ('A' + i - 3);
-							comStr += (char) ('A' + i - 3);
+						for (int j = 0; j < selCom.paramLen; j++) {
+							if (i < selCom.numParam) {
+								comStr += (char) ('W' + i);
+							} else {
+								comStr += (char) ('A' + i - selCom.numParam);
+							}
 						}
-
-						if (i != selCom.numParam - 1) {
+						if (i != selCom.numParam - 1 && selCom.paramSep) {
 							comStr += ':';
 						}
 					}
@@ -1259,20 +1252,15 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					String comStr = Messages.getString(
 							"TscPane.43") + selCom.name + "\n" + selCom.commandCode; //$NON-NLS-1$ //$NON-NLS-2$
 					for (int i = 0; i < selCom.numParam; i++) {
-						if (i < 4) {
-							comStr += (char) ('W' + i);
-							comStr += (char) ('W' + i);
-							comStr += (char) ('W' + i);
-							comStr += (char) ('W' + i);
-						} else {
-							//so lazy
-							comStr += (char) ('A' + i - 4);
-							comStr += (char) ('A' + i - 4);
-							comStr += (char) ('A' + i - 4);
-							comStr += (char) ('A' + i - 4);
+						for (int j = 0; j < selCom.paramLen; j++) {
+							if (i < selCom.numParam) {
+								comStr += (char) ('W' + i);
+							} else {
+								comStr += (char) ('A' + i - selCom.numParam);
+							}
 						}
 
-						if (i != selCom.numParam - 1) {
+						if (i != selCom.numParam - 1 && selCom.paramSep) {
 							comStr += ':';
 						}
 					}
