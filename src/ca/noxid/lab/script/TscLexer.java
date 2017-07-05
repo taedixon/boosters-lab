@@ -24,11 +24,12 @@ public class TscLexer {
 
 	private String line;
 	private int strPos;
+	private String cmd;
 	private int argsRemaining;
 
 	private TscToken lastToken;
 
-	private static Map<String, Integer> argMap = new Hashtable<>();
+	private static Map<String, TscCommand> cmdMap = new Hashtable<>();
 
 	public TscLexer() {
 
@@ -56,7 +57,7 @@ public class TscLexer {
 
 	static void initMap(Vector<TscCommand> commandInf) {
 		for (int i = 0; i < commandInf.size(); i++) {
-			argMap.put(commandInf.elementAt(i).commandCode, commandInf.elementAt(i).numParam);
+			cmdMap.put(commandInf.elementAt(i).commandCode, commandInf.elementAt(i));
 		}
 	}
 
@@ -73,7 +74,7 @@ public class TscLexer {
 			charCount = 0;
 			overLimit = false;
 		}
-		TscToken nextToken;
+		TscToken nextToken = null;
 		String tokenStr = ""; //$NON-NLS-1$
 		if (lastToken != null && lastToken.getDescription().equals(TscPane.STYLE_SBEVENT)) {
 			tokenStr = line;
@@ -113,7 +114,8 @@ public class TscLexer {
 			if ((lastToken.getContents().charAt(0) == '<') || (lastToken.getContents().length() == 1)) {
 				//number token
 				//try to grab the value one character at a time
-				for (int i = 0; i < 4; i++) {
+				TscCommand c = cmdMap.get(cmd);
+				for (int i = 0; i < c.paramLen; i++) {
 					try {
 						tokenStr += line.charAt(strPos + i);
 					} catch (IndexOutOfBoundsException e) {
@@ -125,16 +127,16 @@ public class TscLexer {
 						return nextToken;
 					}
 				}
-				nextToken = new TscToken(TscPane.STYLE_NUM, tokenStr, lineNum, character, character + 4);
+				nextToken = new TscToken(TscPane.STYLE_NUM, tokenStr, lineNum, character, character + c.paramLen);
 				if (lastToken.getContents().equals("<FAC") && //$NON-NLS-1$
 						tokenStr.equals("0000")) //$NON-NLS-1$
 				{
 					isFace = false;
 				}
-				character += 4;
-				strPos += 4;
+				character += c.paramLen;
+				strPos += c.paramLen;
 				argsRemaining--;
-			} else {
+			} else if(cmdMap.containsKey(cmd) && cmdMap.get(cmd).paramSep) {
 				//spacer token
 				tokenStr += line.charAt(strPos);
 				nextToken = new TscToken(TscPane.STYLE_SPACER, tokenStr, lineNum, character, character + 1);
@@ -162,21 +164,17 @@ public class TscLexer {
 						return nextToken;
 					}
 				}
-				if (argMap.containsKey(tokenStr)) {
-					argsRemaining = argMap.get(tokenStr);
+				cmd = tokenStr;
+				if (cmdMap.containsKey(cmd)) {
+					argsRemaining = cmdMap.get(cmd).numParam;
 				} else {
 					argsRemaining = 0;
 				}
-				if (tokenStr.equals("<FAC")) //$NON-NLS-1$
+				if (cmd.equals("<FAC")) //$NON-NLS-1$
 				{
 					isFace = true;
 				}
-				if (tokenStr.equals("<END") ||  //$NON-NLS-1$
-						tokenStr.equals("<TRA") ||  //$NON-NLS-1$
-						tokenStr.equals("<EVE") ||  //$NON-NLS-1$
-						tokenStr.equals("<LDP") ||  //$NON-NLS-1$
-						tokenStr.equals("<INI") || //$NON-NLS-1$
-						tokenStr.equals("<ESC")) //$NON-NLS-1$
+				if (cmdMap.get(cmd).endsEvent)
 				{
 					wasEnded = true;
 				}

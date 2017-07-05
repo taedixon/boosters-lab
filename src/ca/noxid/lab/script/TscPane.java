@@ -1068,6 +1068,23 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				//read description
 				tokenizer.nextToken();
 				newCommand.description = tokenizer.sval;
+				//read end event
+				tokenizer.parseNumbers();
+				tokenizer.nextToken();
+				newCommand.endsEvent = tokenizer.nval > 0;
+				// read clear msgbox
+				tokenizer.parseNumbers();
+				tokenizer.nextToken();
+				newCommand.clearsMsg = tokenizer.nval > 0;
+				// read parameter seperator
+				tokenizer.nextToken();
+				newCommand.paramSep = tokenizer.nval > 0;
+				// read parameter length
+				tokenizer.nextToken();
+				newCommand.paramLen = (int) tokenizer.nval;
+				tokenizer.resetSyntax();
+				tokenizer.whitespaceChars(0, 0x20);
+				tokenizer.wordChars(0x20, 0x7E);
 
 				retVal.add(newCommand);
 				//result.add(newCommand.commandCode + " - " + newCommand.name);
