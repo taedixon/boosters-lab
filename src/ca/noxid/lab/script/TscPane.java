@@ -313,7 +313,10 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		if (selCom.numParam < 2) commandSize -= 1;
 		if (cmd.length() > commandSize) {
 			for (int i = 0; i < selCom.numParam; i++) {
-				String arg = cmd.substring(4 + i * (selCom.paramSep ? selCom.paramLen + 1 : selCom.paramLen), 4 + selCom.paramLen + i * (selCom.paramSep ? selCom.paramLen + 1 : selCom.paramLen));
+				int paramInt = selCom.paramLen;
+				if (selCom.paramSep)
+					paramInt++;
+				String arg = cmd.substring(4 + i * paramInt, 4 + selCom.paramLen + i * paramInt);
 				addCommandExtra(selCom.CE_param[i], arg);
 			}
 		}
