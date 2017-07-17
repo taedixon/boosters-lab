@@ -1,5 +1,6 @@
 package ca.noxid.lab.script;
 
+import ca.noxid.lab.BlConfig;
 import ca.noxid.lab.Changeable;
 import ca.noxid.lab.EditorApp;
 import ca.noxid.lab.Messages;
@@ -19,6 +20,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -57,6 +59,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	private ResourceManager rm;
 	private File scriptFile;
 	private File srcFile;
+	private int mapNum;
 
 	private boolean changed;
 	private boolean justSaved = false;
@@ -75,6 +78,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	public TscPane(GameInfo inf, int num, EditorApp p, ResourceManager iMan) {
 		exeDat = inf;
 		rm = iMan;
+		mapNum = num;
 		if (EditorApp.blazed) {
 			this.setCursor(ResourceManager.cursor);
 		}
@@ -366,13 +370,35 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		case 'F': //flag
 		case 'l': //illustration #
 		case 'N': //NPC num
-		case 't': //tile
 		case 'x': //x coordinate
 		case 'y': //y coordinate
 		case '#': //number
 		case '.': //ticks
 			jp.add(new JLabel(argNum + ""));
 			break;
+        case 't': //tile
+				BlConfig conf = exeDat.getConfig();
+				BufferedImage tileImg = rm.getImg(new File(exeDat.getDataDirectory() + "/Stage/Prt" +  //$NON-NLS-1$
+						exeDat.getMapdata(mapNum).getTileset() + exeDat.getImgExtension()));
+				int setWidth = conf.getTilesetWidth();
+				if (setWidth <= 0) {
+					//get width as actual fittable tiles
+					setWidth = tileImg.getWidth() / conf.getTileSize();
+				}
+				int srcScale = exeDat.getConfig().getTileSize();
+				int sourceX = (argNum % setWidth) * srcScale;
+				int sourceY = (argNum / setWidth) * srcScale;
+				try {
+					ImageIcon tileImage = new ImageIcon(tileImg.getSubimage(sourceX,
+							sourceY,
+							srcScale,
+							srcScale));
+					JLabel label = new JLabel(tileImage);
+					label.setBackground(Color.black);
+					jp.add(label);
+				} catch (RasterFormatException ignored) {
+				}
+				break;
 		case 'a': //weapon number
 			try {
 				ImageIcon weaponImage = new ImageIcon(
