@@ -150,6 +150,10 @@ public class CSExe {
 				csHead.order(ByteOrder.LITTLE_ENDIAN);
 				csHead.putInt(0x14, mapdataLoc);
 				ExeSec csmapSec = new ExeSec(csHead, chan);
+				if (headers.length - 1 != rsrcSec) {
+					StrTools.msgBox(Messages.getString("CSExe.9")); //$NON-NLS-1$
+					System.exit(5);
+				}
 				ExeSec rsrc = headers[headers.length-1];
 				//copy the 'good' segments into their proper place
 				System.arraycopy(headers, 0, newHead, 0, headers.length - 1);
@@ -168,7 +172,7 @@ public class CSExe {
 				int tmpInt = peHead.getInt(0x198); //rsrc table address
 				tmpInt += rsrcShift;
 				peHead.putInt(0x198, tmpInt);
-				peHead.put(0x116, (byte) 5); //5 sections
+				peHead.put(0x116, (byte) newHead.length);
 				peHead.putShort(0x161, (short) 0x1930); //section list size(?)
 
 				moveMapdata(csmapSec.getPosV());
@@ -188,9 +192,7 @@ public class CSExe {
 
 			//check for sue's
 			if (mapSec == (headers.length - 1)) {
-				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5") + //$NON-NLS-1$
-						Messages.getString("CSExe.6") + //$NON-NLS-1$
-						Messages.getString("CSExe.7"), Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 				if (response != JOptionPane.YES_OPTION) {
 					System.exit(4);
 				}
