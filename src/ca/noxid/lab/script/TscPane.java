@@ -376,29 +376,36 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		case '.': //ticks
 			jp.add(new JLabel(argNum + ""));
 			break;
-        case 't': //tile
-				BlConfig conf = exeDat.getConfig();
-				BufferedImage tileImg = rm.getImg(new File(exeDat.getDataDirectory() + "/Stage/Prt" +  //$NON-NLS-1$
-						exeDat.getMapdata(mapNum).getTileset() + exeDat.getImgExtension()));
-				int setWidth = conf.getTilesetWidth();
-				if (setWidth <= 0) {
-					//get width as actual fittable tiles
-					setWidth = tileImg.getWidth() / conf.getTileSize();
-				}
-				int srcScale = exeDat.getConfig().getTileSize();
-				int sourceX = (argNum % setWidth) * srcScale;
-				int sourceY = (argNum / setWidth) * srcScale;
-				try {
-					ImageIcon tileImage = new ImageIcon(tileImg.getSubimage(sourceX,
-							sourceY,
-							srcScale,
-							srcScale));
-					JLabel label = new JLabel(tileImage);
-					label.setBackground(Color.black);
-					jp.add(label);
-				} catch (RasterFormatException ignored) {
-				}
+		case 't': //tile
+			Mapdata md = null;
+			try {
+				md = exeDat.getMapdata(mapNum);
+			} catch(Exception e) {
+				jp.add(new JLabel(argNum + ""));
 				break;
+			}
+			BlConfig conf = exeDat.getConfig();
+			BufferedImage tileImg = rm.getImg(new File(exeDat.getDataDirectory() + "/Stage/Prt" +  //$NON-NLS-1$
+					md.getTileset() + exeDat.getImgExtension()));
+			int setWidth = conf.getTilesetWidth();
+			if (setWidth <= 0) {
+				//get width as actual fittable tiles
+				setWidth = tileImg.getWidth() / conf.getTileSize();
+			}
+			int srcScale = exeDat.getConfig().getTileSize();
+			int sourceX = (argNum % setWidth) * srcScale;
+			int sourceY = (argNum / setWidth) * srcScale;
+			try {
+				ImageIcon tileImage = new ImageIcon(tileImg.getSubimage(sourceX,
+						sourceY,
+						srcScale,
+						srcScale));
+				JLabel label = new JLabel(tileImage);
+				label.setBackground(Color.black);
+				jp.add(label);
+			} catch (RasterFormatException ignored) {
+			}
+			break;
 		case 'a': //weapon number
 			try {
 				ImageIcon weaponImage = new ImageIcon(
