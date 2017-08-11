@@ -1337,7 +1337,9 @@ public class MapPane extends BgPanel {
 			}
 			repaint();
 		}
-	}	protected void drawCursor(Graphics2D g2d) {
+	}
+
+	protected void drawCursor(Graphics2D g2d) {
 		if (g2d == null) {
 			g2d = (Graphics2D) this.getGraphics();
 		}

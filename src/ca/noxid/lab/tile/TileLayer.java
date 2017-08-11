@@ -5,8 +5,7 @@ import ca.noxid.lab.SignifUndoableEdit;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
@@ -135,10 +134,12 @@ public class TileLayer {
 
 	public void setTile(int x, int y, int val) {
 		tileData[y][x] = val;
+		updateBuffer(x, y, 1, 1);
 	}
 
 	private void updateBuffer(int startX, int startY, int w, int h) {
 		Graphics2D g2d = displayBuffer.createGraphics();
+		g2d.setComposite(AlphaComposite.Src);
 		int tilesz = config.getTileSize();
 		int tilesetW = config.getTilesetWidth();
 		for (int x = startX; x < startX + w; x++) {
@@ -244,11 +245,13 @@ public class TileLayer {
 		@Override
 		public void undo() throws CannotUndoException {
 			tileData = oldData;
+			updateBuffer(0, 0, tileData[0].length, tileData.length);
 		}
 
 		@Override
 		public void redo() throws CannotRedoException {
 			tileData = newData;
+			updateBuffer(0, 0, tileData[0].length, tileData.length);
 		}
 
 		@Override
@@ -256,10 +259,5 @@ public class TileLayer {
 			return true;
 		}
 	}
-
-	private class RegionEdit extends SignifUndoableEdit {
-
-	}
-
 
 }
