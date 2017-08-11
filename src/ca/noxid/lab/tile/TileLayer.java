@@ -1,9 +1,13 @@
 package ca.noxid.lab.tile;
 
+import ca.noxid.lab.BlConfig;
 import ca.noxid.lab.SignifUndoableEdit;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 /**
@@ -18,21 +22,40 @@ public class TileLayer {
 	private boolean tilesVisible;
 	private boolean typesVisbile;
 	private String name;
+	private BufferedImage tileset;
+	private BlConfig config;
 
-	public TileLayer(String name, int w, int h) {
+	private BufferedImage displayBuffer;
+
+	public enum LAYER_TYPE {
+		TILE_LAYER, GRADIENT_LAYER
+	}
+	private LAYER_TYPE layerType;
+
+	public TileLayer(String name, int w, int h, BlConfig config, BufferedImage tileset) {
 		if (w <= 0) w = 1;
 		if (h <= 0) h = 1;
 		this.name = name;
 		tileData = new int[h][w];
 		tilesVisible = true;
 		typesVisbile = false;
+		this.config = config;
+		this.tileset = tileset;
+		displayBuffer = new BufferedImage(w*config.getTileSize(), h*config.getTileSize(), BufferedImage.TYPE_INT_ARGB);
+		updateBuffer(0, 0, w, h);
 	}
 
-	public TileLayer(String name, int[][] data) {
+	public TileLayer(String name, int[][] data, BlConfig config, BufferedImage tileset) {
 		this.name = name;
 		tileData = data;
 		tilesVisible = true;
 		typesVisbile = false;
+		this.config = config;
+		this.tileset = tileset;
+		int w = data[0].length;
+		int h = data.length;
+		displayBuffer = new BufferedImage(w*config.getTileSize(), h*config.getTileSize(), BufferedImage.TYPE_INT_ARGB);
+		updateBuffer(0, 0, w, h);
 	}
 
 	/**
@@ -112,6 +135,91 @@ public class TileLayer {
 
 	public void setTile(int x, int y, int val) {
 		tileData[y][x] = val;
+	}
+
+	private void updateBuffer(int startX, int startY, int w, int h) {
+		Graphics2D g2d = displayBuffer.createGraphics();
+		int tilesz = config.getTileSize();
+		int tilesetW = config.getTilesetWidth();
+		for (int x = startX; x < startX + w; x++) {
+			for (int y = startY; y < startY + h; y++) {
+				int tileID = tileData[y][x];
+				int dstX = x*tilesz;
+				int dstY = y*tilesz;
+				int srcX = (tileID%tilesetW) * tilesz;
+				int srcY = (tileID/tilesetW) * tilesz;
+
+				g2d.drawImage(tileset,
+						dstX, dstY, dstX + tilesz, dstY + tilesz,
+						srcX, srcY, srcX + tilesz, srcY + tilesz, null);
+			}
+		}
+	}
+
+	public void draw(Graphics graphics) {
+		graphics.drawImage(displayBuffer, 0, 0, null);
+
+
+//		BlConfig conf = dataHolder.getConfig();
+//		int mapX = dataHolder.getMapX();
+//		int mapY = dataHolder.getMapY();
+//		int scale = (int) (conf.getTileSize() * EditorApp.mapScale);
+//		int srcScale = conf.getTileSize();
+//		BufferedImage tileImg = iMan.getImg(dataHolder.getTileset());
+//		Rectangle r = g.getClipBounds();
+//		int startX = 0;
+//		int startY = 0;
+//		int endX = mapX;
+//		int endY = mapY;
+//		if (r != null) {
+//			//System.out.println(r);
+//			startX = r.x / scale;
+//			if (startX < 0) startX = 0;
+//			startY = r.y / scale;
+//			if (startY < 0) startY = 0;
+//			endX = startX + r.width / scale + 2;
+//			if (endX < 2) endX = 2;
+//			if (endX > mapX) endX = mapX;
+//			endY = startY + r.height / scale + 2;
+//			if (endY < 2) endY = 2;
+//			if (endY > mapY) endY = mapY;
+//		}
+//
+//		int setWidth = conf.getTilesetWidth();
+//		if (setWidth <= 0) {
+//			//get width as actual fittable tiles
+//			setWidth = tileImg.getWidth() / conf.getTileSize();
+//		}
+//		if (layerType == LAYER_TYPE.GRADIENT_LAYER) {
+//			float alpha = dataHolder.getConfig().getGradientAlpha() / 100f;
+//			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+//		}
+//		//int tDrawn = 0;
+//		//System.out.println("startY: " + startY + " endY: " + endY +
+//		//		" startX: " + startX + " endX: " + endX);
+//		for (int i = startY; i < endY; i++) {
+//			for (int j = startX; j < endX; j++) {
+//				//tDrawn++;
+//				int xPixel = scale * j;
+//				int yPixel = scale * i;
+//
+//				int tileNum = dataHolder.getTile(j, i, layer);
+//				//if (tileNum < 0) System.out.println("num-" + tileNum + ", ");
+//				int sourceX = (tileNum % setWidth) * srcScale;
+//				int sourceY = (tileNum / setWidth) * srcScale;
+//				g.drawImage(tileImg,
+//						xPixel,
+//						yPixel,
+//						xPixel + scale,
+//						yPixel + scale,
+//						sourceX,
+//						sourceY,
+//						sourceX + srcScale,
+//						sourceY + srcScale,
+//						null);
+//			}
+//		}
+		//System.out.println("draw " + tDrawn + " tiles");
 	}
 //
 //	public TileRegion getRegion(Rectangle area) {

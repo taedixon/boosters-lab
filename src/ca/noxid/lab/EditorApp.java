@@ -126,18 +126,6 @@ public class EditorApp extends JFrame implements ActionListener {
 	private GameInfo exeData;
 
 	//drawing related maybe?
-	public static int NUM_LAYER;
-	public static final int PHYSICAL_LAYER = 5;
-	public static final int GRADIENT_LAYER = 4;
-	private final static String[] LAYER_NAMES = {
-			Messages.getString("EditorApp.25"),
-			Messages.getString("EditorApp.26"),
-			Messages.getString("EditorApp.27"),
-			Messages.getString("EditorApp.28"),
-			"Gradient",
-			Messages.getString("EditorApp.29"),}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	private boolean[] visibleLayers; //array of which layers should be shown
-	private int activeLayer; //current layer to draw to
 	private final static String[] TILEOP_DRAWMODES = {
 			Messages.getString("EditorApp.30"), Messages.getString("EditorApp.31"), Messages.getString("EditorApp.32"),
 			Messages.getString("EditorApp.33"), Messages.getString(
@@ -177,27 +165,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		return drawMode;
 	}
 
-	public int getActiveLayer() {
-		return activeLayer;
-	}
-
-	public void setActiveLayer(int layer) {
-		if (layer != activeLayer) {
-			if (activeLayer == PHYSICAL_LAYER) {
-				activeLayer = layer;
-				switchPerspective(activePerspective);
-			}
-			activeLayer = layer;
-			if (activeLayer == PHYSICAL_LAYER) {
-				switchPerspective(activePerspective);
-			}
-		}
-	}
-
-	public boolean[] getVisibleLayers() {
-		return visibleLayers;
-	}
-
 	public boolean[] getOtherDrawOptions() {
 		return otherDrawOpts;
 	}
@@ -227,13 +194,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	EditorApp() {
 
 		//setups
-		if (EDITOR_MODE == 2) {
-			NUM_LAYER = 6;
-		} else {
-			NUM_LAYER = 4;
-		}
 		getPrefs();
-		visibleLayers = new boolean[NUM_LAYER];
 
 		//Build the window
 		this.setTitle(""); //$NON-NLS-1$
@@ -1542,6 +1503,8 @@ public class EditorApp extends JFrame implements ActionListener {
 		//local vars for setting up ops panel
 		JPanel tempPanel;
 		JLabel kittyLabel;
+		JRadioButton radio;
+		JCheckBox check;
 		java.net.URL kittenURL;
 		ImageIcon catImg;
 		GridBagConstraints c = new GridBagConstraints();
@@ -1561,50 +1524,10 @@ public class EditorApp extends JFrame implements ActionListener {
 		c.gridheight = GridBagConstraints.REMAINDER;
 		c.weightx = 0;
 		tempPanel.add(kittyLabel, c);
-		//add a set of checkboxes for visible labels
-		JCheckBox check;
-		c.gridx = 1;
-		c.gridheight = 1;
-		tempPanel.add(new JLabel(Messages.getString("EditorApp.124")), c); //$NON-NLS-1$
-		for (int i = 0; i < NUM_LAYER; i++) {
-			check = new JCheckBox(new VisibleLayerAction(i));
-			check.setText(LAYER_NAMES[i]);
-			c.gridy++;
-			check.setSelected(true);
-			check.setOpaque(false);
-			check.setMnemonic(KeyEvent.VK_6 + i);
-			visibleLayers[i] = true;
-			if (EDITOR_MODE == 0 && (i == 0 || i == 3)) {
-				check.setEnabled(false);
-			}
-			tempPanel.add(check, c);
-		}
-		//add a set of radio buttons for the active layer
-		JRadioButton radio;
-		group = new ButtonGroup();
-		c.gridx = 2;
-		c.gridy = 0;
-		tempPanel.add(new JLabel(Messages.getString("EditorApp.125")), c); //$NON-NLS-1$
-		for (int i = 0; i < NUM_LAYER; i++) {
-
-			radio = new JRadioButton(new ActiveLayerAction(i));
-			radio.setText(LAYER_NAMES[i]);
-			radio.setOpaque(false);
-			radio.setMnemonic(java.awt.event.KeyEvent.VK_1 + i);
-			group.add(radio);
-			c.gridy++;
-			if (i == 2) {
-				radio.setSelected(true);
-			}
-			if (EDITOR_MODE == 0) {
-				radio.setEnabled(false);
-			}
-			tempPanel.add(radio, c);
-		}
-		setActiveLayer(2);
 		//add a set of radio buttons for draw actions
 		group = new ButtonGroup();
-		c.gridx = 3;
+		c.gridx = 1;
+		c.gridheight = 1;
 		c.gridy = 0;
 		tempPanel.add(new JLabel(Messages.getString("EditorApp.126")), c); //$NON-NLS-1$
 		int[] mnemonicArray = {
@@ -1624,7 +1547,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			tempPanel.add(radio, c);
 		}
 		//add a set of checkboxes for other options
-		c.gridx = 4;
+		c.gridx = 2;
 		c.gridy = 0;
 		tempPanel.add(new JLabel(Messages.getString("EditorApp.127")), c); //$NON-NLS-1$
 		for (int i = 0; i < TILEOP_NUM_OTHER_OPT; i++) {
@@ -2246,44 +2169,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			setDrawMode(mode);
-			airhorn();
-		}
-	}
-
-	private class ActiveLayerAction extends AbstractAction {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 8292845970444285006L;
-		int layer;
-
-		ActiveLayerAction(int n) {
-			layer = n;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			setActiveLayer(layer);
-			airhorn();
-
-		}
-	}
-
-	private class VisibleLayerAction extends AbstractAction {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 5009351875420439556L;
-		int layer;
-
-		VisibleLayerAction(int n) {
-			layer = n;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			visibleLayers[layer] = !visibleLayers[layer];
-			refreshCurrentMap();
 			airhorn();
 		}
 	}

@@ -51,13 +51,17 @@ public class MapPane extends BgPanel {
 
 	private MouseAdapter lineAdapter = new LineMouseAdapter();
 	private PolyMouseAdapter polyAdapter = new PolyMouseAdapter();
+	
+	private int activeLayer;
 
 	public JPanel getTilePane() {
-		if (parent.getActiveLayer() != EditorApp.PHYSICAL_LAYER) {
-			return tilePane;
-		} else {
-			return linePane;
-		}
+		//TODO: re-implement logic for displaying the line pane instead of the tile pane
+//		if (activeLayer != EditorApp.PHYSICAL_LAYER) {
+//			return tilePane;
+//		} else {
+//			return linePane;
+//		}
+		return tilePane;
 	}
 
 	public PreviewPane getPreviewPane() {
@@ -291,11 +295,8 @@ public class MapPane extends BgPanel {
 		int scale = (int) (dataHolder.getConfig().getTileSize() * EditorApp.mapScale);
 		g2d.setBackground(Color.black);
 		drawBackground((Graphics2D) g2d.create());
-		boolean[] visArray = parent.getVisibleLayers();
-		for (int i = 0; i < visArray.length; i++) {
-			if (visArray[i]) {
-				drawMap(i, (Graphics2D) g2d.create());
-			}
+		for (TileLayer layer : dataHolder.getMap()) {
+			layer.draw(g2d.create());
 		}
 		//draw tile types if applicable
 		if (parent.getOtherDrawOptions()[0]) {
@@ -316,10 +317,6 @@ public class MapPane extends BgPanel {
 			for (int y = 0; y < mapY; y++) {
 				g2.drawLine(0, y * scale, mapX * scale, y * scale);
 			}
-		}
-		if (parent.getVisibleLayers().length > EditorApp.PHYSICAL_LAYER &&
-				parent.getVisibleLayers()[EditorApp.PHYSICAL_LAYER]) {
-			drawMapPhysical((Graphics2D) g2d.create());
 		}
 		//draw pink outline, just like daddy CE used to do 
 		g2d.setColor(Color.MAGENTA);
@@ -348,68 +345,6 @@ public class MapPane extends BgPanel {
 		//System.out.println("Redraw " + nDraws + " entity");
 	}
 
-	protected void drawMap(int layer, Graphics2D g) {
-		BlConfig conf = dataHolder.getConfig();
-		int mapX = dataHolder.getMapX();
-		int mapY = dataHolder.getMapY();
-		int scale = (int) (conf.getTileSize() * EditorApp.mapScale);
-		int srcScale = conf.getTileSize();
-		BufferedImage tileImg = iMan.getImg(dataHolder.getTileset());
-		Rectangle r = g.getClipBounds();
-		int startX = 0;
-		int startY = 0;
-		int endX = mapX;
-		int endY = mapY;
-		if (r != null) {
-			//System.out.println(r);
-			startX = r.x / scale;
-			if (startX < 0) startX = 0;
-			startY = r.y / scale;
-			if (startY < 0) startY = 0;
-			endX = startX + r.width / scale + 2;
-			if (endX < 2) endX = 2;
-			if (endX > mapX) endX = mapX;
-			endY = startY + r.height / scale + 2;
-			if (endY < 2) endY = 2;
-			if (endY > mapY) endY = mapY;
-		}
-
-		int setWidth = conf.getTilesetWidth();
-		if (setWidth <= 0) {
-			//get width as actual fittable tiles
-			setWidth = tileImg.getWidth() / conf.getTileSize();
-		}
-		if (layer == EditorApp.GRADIENT_LAYER) {
-			float alpha = dataHolder.getConfig().getGradientAlpha() / 100f;
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-		}
-		//int tDrawn = 0;
-		//System.out.println("startY: " + startY + " endY: " + endY + 
-		//		" startX: " + startX + " endX: " + endX);
-		for (int i = startY; i < endY; i++) {
-			for (int j = startX; j < endX; j++) {
-				//tDrawn++;
-				int xPixel = scale * j;
-				int yPixel = scale * i;
-
-				int tileNum = dataHolder.getTile(j, i, layer);
-				//if (tileNum < 0) System.out.println("num-" + tileNum + ", ");
-				int sourceX = (tileNum % setWidth) * srcScale;
-				int sourceY = (tileNum / setWidth) * srcScale;
-				g.drawImage(tileImg,
-						xPixel,
-						yPixel,
-						xPixel + scale,
-						yPixel + scale,
-						sourceX,
-						sourceY,
-						sourceX + srcScale,
-						sourceY + srcScale,
-						null);
-			}
-		}
-		//System.out.println("draw " + tDrawn + " tiles");
-	}
 
 	protected void drawTileTypes(Graphics2D g) {
 		int mapX = dataHolder.getMapX();
@@ -578,7 +513,7 @@ public class MapPane extends BgPanel {
 	}
 
 	protected void drawPen(int x, int y, int maxX, int maxY) {
-		int layer = parent.getActiveLayer();
+		int layer = activeLayer;
 		for (int xOff = 0; xOff < tilePen.getW(); xOff++) {
 			for (int yOff = 0; yOff < tilePen.getH(); yOff++) {
 				int locX = x - tilePen.dx + xOff;
@@ -600,7 +535,7 @@ public class MapPane extends BgPanel {
 
 
 	protected Rectangle fillPen(Rectangle cursor) {
-		int currentLayer = parent.getActiveLayer();
+		int currentLayer = activeLayer;
 		int width = dataHolder.getMapX();
 		int height = dataHolder.getMapY();
 		Queue<Point> q = new LinkedList<>();
@@ -651,7 +586,7 @@ public class MapPane extends BgPanel {
 					difX = ((difX - tilePen.dx) % tilePen.getW()) + tilePen.getW();
 					difY = ((difY - tilePen.dy) % tilePen.getH()) + tilePen.getH();
 					int blockTile = tilePen.get(difX % tilePen.getW(), difY % tilePen.getH());
-					dataHolder.putTile(p.x, p.y, blockTile, parent.getActiveLayer());
+					dataHolder.putTile(p.x, p.y, blockTile, activeLayer);
 
 					q.add(new Point(p.x + 1, p.y));
 					q.add(new Point(p.x - 1, p.y));
@@ -673,7 +608,7 @@ public class MapPane extends BgPanel {
 	 *
 	 */
 	public Rectangle replacePen(Rectangle cursor) {
-		int currentLayer = parent.getActiveLayer();
+		int currentLayer = activeLayer;
 		int[][] cursorSample = new int[cursor.height][cursor.width];
 		for (int cy = 0; cy < cursor.height; cy++) {
 			for (int cx = 0; cx < cursor.width; cx++) {
@@ -691,13 +626,13 @@ public class MapPane extends BgPanel {
 
 				int targetType = cursorSample[targetY % cursor.height][targetX % cursor.width];
 
-				if (dataHolder.getTile(tX, tY, parent.getActiveLayer()) == targetType) {
+				if (dataHolder.getTile(tX, tY, activeLayer) == targetType) {
 					//replace
 					difX = ((difX - tilePen.dx) % tilePen.getW()) + tilePen.getW();
 					difY = ((difY - tilePen.dy) % tilePen.getH()) + tilePen.getH();
 					dataHolder.putTile(tX, tY,
 							tilePen.get(difX % tilePen.getW(), difY % tilePen.getH()),
-							parent.getActiveLayer());
+							activeLayer);
 				}
 			}
 		}
@@ -721,10 +656,10 @@ public class MapPane extends BgPanel {
 
 		@Override
 		public void mouseExited(MouseEvent eve) {
-			//do nothing if we are editing the line layer
-			if (parent.getActiveLayer() == EditorApp.PHYSICAL_LAYER) {
-				return;
-			}
+			//TODO do nothing if we are editing the line layer
+//			if (dataHolder.getMap().get(activeLayer) instanceof LineLayer) {
+//				return;
+//			}
 			//int viewScale = (int) (EditorApp.mapScale * dataHolder.getConfig().getTileSize());
 			//int tileSize = dataHolder.getConfig().getTileSize();
 			//MapPane pane = (MapPane) eve.getSource();
@@ -756,14 +691,14 @@ public class MapPane extends BgPanel {
 			int viewScale = (int) (dataHolder.getConfig().getTileSize() * EditorApp.mapScale);
 			int currentX = mousePoint.x / viewScale;
 			int currentY = mousePoint.y / viewScale;
-			//do nothing if we are editing the line layer
-			if (parent.getActiveLayer() == EditorApp.PHYSICAL_LAYER) {
-				return;
-			}
+			//TODO do nothing if we are editing the line layer
+//			if (activeLayer == EditorApp.PHYSICAL_LAYER) {
+//				return;
+//			}
 			if (eve.isPopupTrigger()) {
 				//this needs to be copied to isrelease
 				popup_tilescript.setAction(new TilescriptAction(currentX,
-						currentY, tilePen.get(0, 0), parent.getActiveLayer()));
+						currentY, tilePen.get(0, 0), activeLayer));
 				popup_tilescript.setText(Messages.getString(
 						"MapPane.11") + mapX + "," + mapY + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				popup_tra.setAction(new TraScriptAction(currentX,
@@ -784,7 +719,7 @@ public class MapPane extends BgPanel {
 			prevLayerState = new int[mapY][mapX];
 			for (int x = 0; x < mapX; x++) {
 				for (int y = 0; y < mapY; y++) {
-					prevLayerState[y][x] = dataHolder.getTile(x, y, parent.getActiveLayer());
+					prevLayerState[y][x] = dataHolder.getTile(x, y, activeLayer);
 				}
 			}
 			
@@ -836,17 +771,17 @@ public class MapPane extends BgPanel {
 			int viewScale = (int) (dataHolder.getConfig().getTileSize() * EditorApp.mapScale);
 			int cursorX, cursorY;
 
-			//do nothing if we are editing the line layer
-			if (parent.getActiveLayer() == EditorApp.PHYSICAL_LAYER) {
-				return;
-			}
+			//TODO do nothing if we are editing the line layer
+//			if (activeLayer == EditorApp.PHYSICAL_LAYER) {
+//				return;
+//			}
 			if (eve.isPopupTrigger()) {
 				//this needs to be copied to isRelease
 				cursorX = mousePoint.x / viewScale;
 				cursorY = mousePoint.y / viewScale;
 				popup_tilescript.setAction(
 						new TilescriptAction(cursorX, cursorY, tilePen.get(0, 0),
-								parent.getActiveLayer()));
+								activeLayer));
 				popup_tilescript.setText(Messages.getString(
 						"MapPane.15") + cursorX + "," + cursorY + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				popup_tra.setAction(new TraScriptAction(cursorX, cursorY, dataHolder.getMapNumber()));
@@ -891,7 +826,7 @@ public class MapPane extends BgPanel {
 				oldDat = new int[selH][selW];
 				for (int dx = 0; dx < selW; dx++) {
 					for (int dy = 0; dy < selH; dy++) {
-						oldDat[dy][dx] = dataHolder.getTile(cursorX + dx, cursorY + dy, parent.getActiveLayer());
+						oldDat[dy][dx] = dataHolder.getTile(cursorX + dx, cursorY + dy, activeLayer);
 					}
 				}
 				//draw over it
@@ -904,7 +839,7 @@ public class MapPane extends BgPanel {
 				newDat = new int[selH][selW];
 				for (int dx = 0; dx < selW; dx++) {
 					for (int dy = 0; dy < selH; dy++) {
-						newDat[dy][dx] = dataHolder.getTile(cursorX + dx, cursorY + dy, parent.getActiveLayer());
+						newDat[dy][dx] = dataHolder.getTile(cursorX + dx, cursorY + dy, activeLayer);
 					}
 				}
 				redrawTiles(cursorX, cursorY, selW, selH);
@@ -912,7 +847,7 @@ public class MapPane extends BgPanel {
 				tilePen.dy = tmpY;
 				selW = 1;
 				selH = 1;
-				dataHolder.addEdit(dataHolder.new MapEdit(cursorX, cursorY, oldDat, newDat, parent.getActiveLayer()));
+				dataHolder.addEdit(dataHolder.new MapEdit(cursorX, cursorY, oldDat, newDat, activeLayer));
 				break;
 			case EditorApp.DRAWMODE_COPY:
 				if (selW < 0) {
@@ -938,7 +873,7 @@ public class MapPane extends BgPanel {
 				tilePen.data = new int[selH][selW];
 				for (int x = 0; x < selW; x++) {
 					for (int y = 0; y < selH; y++) {
-						tilePen.data[y][x] = dataHolder.getTile(cursorX + x, cursorY + y, parent.getActiveLayer());
+						tilePen.data[y][x] = dataHolder.getTile(cursorX + x, cursorY + y, activeLayer);
 					}
 				}
 				redrawTiles(cursorX, cursorY, selW, selH);
@@ -980,12 +915,12 @@ public class MapPane extends BgPanel {
 				newDat = new int[affected.height][affected.width];
 				for (int dx = 0; dx < affected.width; dx++) {
 					for (int dy = 0; dy < affected.height; dy++) {
-						newDat[dy][dx] = dataHolder.getTile(affected.x + dx, affected.y + dy, parent.getActiveLayer());
+						newDat[dy][dx] = dataHolder.getTile(affected.x + dx, affected.y + dy, activeLayer);
 					}
 				}
 				//create the edit
 				dataHolder.addEdit(dataHolder.new MapEdit(affected.x, affected.y,
-						oldDat, newDat, parent.getActiveLayer()));
+						oldDat, newDat, activeLayer));
 				break;
 			case EditorApp.DRAWMODE_REPLACE:
 				currentX = eve.getX() / viewScale;
@@ -1022,12 +957,12 @@ public class MapPane extends BgPanel {
 				newDat = new int[h][w];
 				for (int dx = 0; dx < w; dx++) {
 					for (int dy = 0; dy < h; dy++) {
-						newDat[dy][dx] = dataHolder.getTile(r.x + dx, r.y + dy, parent.getActiveLayer());
+						newDat[dy][dx] = dataHolder.getTile(r.x + dx, r.y + dy, activeLayer);
 					}
 				}
 				//create the edit
 				dataHolder.addEdit(dataHolder.new MapEdit(r.x, r.y, oldDat,
-						newDat, parent.getActiveLayer()));
+						newDat, activeLayer));
 				break;
 			case EditorApp.DRAWMODE_DRAW:
 				//capture the previous state
@@ -1063,12 +998,12 @@ public class MapPane extends BgPanel {
 						newDat[dy][dx] = dataHolder.getTile(
 								baseX + dx - tilePen.dx,
 								baseY + dy - tilePen.dy,
-								parent.getActiveLayer());
+								activeLayer);
 					}
 				}
 				//create the edit
 				dataHolder.addEdit(dataHolder.new MapEdit(baseX - tilePen.dx, baseY - tilePen.dy, oldDat,
-						newDat, parent.getActiveLayer()));
+						newDat, activeLayer));
 				break;
 			default:
 				break;
@@ -1079,10 +1014,10 @@ public class MapPane extends BgPanel {
 		public void mouseDragged(MouseEvent eve) {
 			int mapX = dataHolder.getMapX();
 			int mapY = dataHolder.getMapY();
-			//do nothing if we are editing the line layer
-			if (parent.getActiveLayer() == EditorApp.PHYSICAL_LAYER) {
-				return;
-			}
+			//TODO do nothing if we are editing the line layer
+//			if (activeLayer == EditorApp.PHYSICAL_LAYER) {
+//				return;
+//			}
 			if ((eve.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0) {
 				return;
 			}
@@ -1199,10 +1134,10 @@ public class MapPane extends BgPanel {
 		public void mouseMoved(MouseEvent eve) {
 			int mapX = dataHolder.getMapX();
 			int mapY = dataHolder.getMapY();
-			//do nothing if we are editing the line layer
-			if (parent.getActiveLayer() == EditorApp.PHYSICAL_LAYER) {
-				return;
-			}
+			//TODO do nothing if we are editing the line layer
+//			if (activeLayer == EditorApp.PHYSICAL_LAYER) {
+//				return;
+//			}
 			Rectangle newCursorRect;
 			//MapPane pane = (MapPane) eve.getSource();
 			Point mousePoint = eve.getPoint();
@@ -1288,8 +1223,8 @@ public class MapPane extends BgPanel {
 
 		@Override
 		public void mousePressed(MouseEvent eve) {
-			//do nothing if we are not editing the line layer
-			if (parent.getActiveLayer() != EditorApp.PHYSICAL_LAYER) {
+			//TODO do nothing if we are not editing the line layer
+			if (activeLayer != 99999999) {
 				return;
 			}
 			Point here = eve.getPoint();
@@ -1299,8 +1234,8 @@ public class MapPane extends BgPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent eve) {
-			//do nothing if we are not editing the line layer
-			if (parent.getActiveLayer() != EditorApp.PHYSICAL_LAYER) {
+			//TODO do nothing if we are not editing the line layer
+			if (activeLayer != 99999999) {
 				return;
 			}
 			if (eve.isAltDown()) {
@@ -1325,8 +1260,8 @@ public class MapPane extends BgPanel {
 
 		@Override
 		public void mouseReleased(MouseEvent eve) {
-			//do nothing if we are not editing the line layer
-			if (parent.getActiveLayer() != EditorApp.PHYSICAL_LAYER) {
+			//TODO do nothing if we are not editing the line layer
+			if (activeLayer != 99999999) {
 				return;
 			}
 			repaint();
@@ -1361,8 +1296,8 @@ public class MapPane extends BgPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent eve) {
-			//do nothing if we are not editing the line layer
-			if (parent.getActiveLayer() != EditorApp.PHYSICAL_LAYER) {
+			//TODO do nothing if we are not editing the line layer
+			if (activeLayer != 99999999) {
 				return;
 			}
 			Point p = correct(eve.getPoint());
@@ -1379,8 +1314,8 @@ public class MapPane extends BgPanel {
 
 		@Override
 		public void mousePressed(MouseEvent eve) {
-			//do nothing if we are not editing the line layer
-			if (parent.getActiveLayer() != EditorApp.PHYSICAL_LAYER) {
+			//TODO do nothing if we are not editing the line layer
+			if (activeLayer != 99999999) {
 				return;
 			}
 			if (polygon != null && polygon.getPoints().size() <= 0) {
@@ -1396,8 +1331,8 @@ public class MapPane extends BgPanel {
 
 		@Override
 		public void mouseReleased(MouseEvent eve) {
-			//do nothing if we are not editing the line layer
-			if (parent.getActiveLayer() != EditorApp.PHYSICAL_LAYER) {
+			//TODO do nothing if we are not editing the line layer
+			if (activeLayer != 99999999) {
 				return;
 			}
 			repaint();
@@ -1465,8 +1400,8 @@ public class MapPane extends BgPanel {
 
 		@Override
 		public void mouseDragged(MouseEvent eve) {
-			//do nothing if we are not editing the line layer
-			if (parent.getActiveLayer() != EditorApp.PHYSICAL_LAYER) {
+			//TODO do nothing if we are not editing the line layer
+			if (activeLayer != 99999999) {
 				return;
 			}
 			Point p = eve.getPoint();

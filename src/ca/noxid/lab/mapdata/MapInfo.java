@@ -274,8 +274,8 @@ public class MapInfo implements Changeable {
 					//map[4][y][x] = (byte) tilePane.calcPxa(next);
 				}
 			}
-			map.add(new TileLayer("Background", mapBack));
-			map.add(new TileLayer("Foreground", mapFront));
+			map.add(new TileLayer("Background", mapBack, getConfig(), iMan.getImg(tileset)));
+			map.add(new TileLayer("Foreground", mapFront, getConfig(), iMan.getImg(tileset)));
 
 		}
 			break;
@@ -289,7 +289,7 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.get() & 0xFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData));
+				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
 			}
 		}
 			break;
@@ -302,7 +302,7 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData));
+				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
 			}
 		}
 			break;
@@ -315,7 +315,7 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.get() & 0xFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData));
+				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
 			}
 			while (lineBuf.hasRemaining()) {
 				Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
@@ -334,7 +334,7 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData));
+				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
 			}
 			while (lineBuf != null && lineBuf.hasRemaining()) {
 				Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
@@ -366,7 +366,7 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData));
+				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
 
 				while (lineBuf != null && lineBuf.hasRemaining()) {
 					Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
