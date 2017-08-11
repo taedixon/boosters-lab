@@ -304,7 +304,7 @@ public class TilesetPane extends JPanel {
 		}
 		int w = Math.abs(selectionW);
 		int h = Math.abs(selectionH);
-		int[][] tileDat = new int[w][h];
+		int[][] tileDat = new int[h][w];
 		int width = dataHolder.getConfig().getTilesetWidth();
 		if (width <= 0) {
 			//get width as actual fittable tiles
@@ -313,7 +313,7 @@ public class TilesetPane extends JPanel {
 		}
 		for (int x = 0; x < w; x++) {
 			for (int y = 0; y < h; y++) {
-				tileDat[x][y] = (baseY + y) * width + (baseX + x);
+				tileDat[y][x] = (baseY + y) * width + (baseX + x);
 			}
 		}
 		retVal.data = tileDat;

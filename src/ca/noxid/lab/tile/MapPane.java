@@ -560,14 +560,14 @@ public class MapPane extends BgPanel {
 		 */
 		public int get(int x, int y) {
 			if (eraser) return 0;
-			return (data[x][y]);
-		}
-
-		public int getW() {
-			return data.length;
+			return (data[y][x]);
 		}
 
 		public int getH() {
+			return data.length;
+		}
+
+		public int getW() {
 			return data[0].length;
 		}
 	}
@@ -623,13 +623,18 @@ public class MapPane extends BgPanel {
 			if ((p.x >= 0) && (p.x < width) &&
 					(p.y >= 0) && (p.y < height)) {
 
-				int difX = Math.abs(cursor.x - p.x - tilePen.dx);
-				int difY = Math.abs(cursor.y - p.y - tilePen.dy);
-				int targetType = cursorSample[difY % cursor.height][difX % cursor.width];
+				int difX = p.x - cursor.x;
+				int difY = p.y - cursor.y;
+
+				int targetX = (difX % cursor.width) + cursor.width;
+				int targetY = (difY % cursor.height) + cursor.height;
+
+				int targetType = cursorSample[targetY % cursor.height][targetX % cursor.width];
 
 				if (!painted[p.y][p.x] &&
 						(dataHolder.getTile(p.x, p.y, currentLayer) == targetType)) {
 					painted[p.y][p.x] = true;
+					System.out.println(String.format("%s calculated difference: (%d, %d)", p.toString(), difX, difY));
 
 					if (p.x < trackMinX) {
 						trackMinX = p.x;
@@ -643,6 +648,8 @@ public class MapPane extends BgPanel {
 					if (p.y > trackMaxY) {
 						trackMaxY = p.y;
 					}
+					difX = ((difX - tilePen.dx) % tilePen.getW()) + tilePen.getW();
+					difY = ((difY - tilePen.dy) % tilePen.getH()) + tilePen.getH();
 					int blockTile = tilePen.get(difX % tilePen.getW(), difY % tilePen.getH());
 					dataHolder.putTile(p.x, p.y, blockTile, parent.getActiveLayer());
 
@@ -676,13 +683,18 @@ public class MapPane extends BgPanel {
 		Rectangle retVal = new Rectangle(0, 0, dataHolder.getMapX() - 1, dataHolder.getMapY() - 1);
 		for (int tX = 0; tX < dataHolder.getMapX(); tX++) {
 			for (int tY = 0; tY < dataHolder.getMapY(); tY++) {
+				int difX = tX - cursor.x;
+				int difY = tY - cursor.y;
 
-				int difX = Math.abs(cursor.x + tX - tilePen.dx);
-				int difY = Math.abs(cursor.y + tY - tilePen.dy);
-				int targetType = cursorSample[difY % cursor.height][difX % cursor.width];
+				int targetX = (difX % cursor.width) + cursor.width;
+				int targetY = (difY % cursor.height) + cursor.height;
+
+				int targetType = cursorSample[targetY % cursor.height][targetX % cursor.width];
 
 				if (dataHolder.getTile(tX, tY, parent.getActiveLayer()) == targetType) {
 					//replace
+					difX = ((difX - tilePen.dx) % tilePen.getW()) + tilePen.getW();
+					difY = ((difY - tilePen.dy) % tilePen.getH()) + tilePen.getH();
 					dataHolder.putTile(tX, tY,
 							tilePen.get(difX % tilePen.getW(), difY % tilePen.getH()),
 							parent.getActiveLayer());
@@ -769,10 +781,10 @@ public class MapPane extends BgPanel {
 				dragging = false;
 			}
 
-			prevLayerState = new int[mapX][mapY];
+			prevLayerState = new int[mapY][mapX];
 			for (int x = 0; x < mapX; x++) {
 				for (int y = 0; y < mapY; y++) {
-					prevLayerState[x][y] = dataHolder.getTile(x, y, parent.getActiveLayer());
+					prevLayerState[y][x] = dataHolder.getTile(x, y, parent.getActiveLayer());
 				}
 			}
 			
@@ -876,10 +888,10 @@ public class MapPane extends BgPanel {
 				tilePen.dx = 0;
 				tilePen.dy = 0;
 				//capture the previous state
-				oldDat = new int[selW][selH];
+				oldDat = new int[selH][selW];
 				for (int dx = 0; dx < selW; dx++) {
 					for (int dy = 0; dy < selH; dy++) {
-						oldDat[dx][dy] = dataHolder.getTile(cursorX + dx, cursorY + dy, parent.getActiveLayer());
+						oldDat[dy][dx] = dataHolder.getTile(cursorX + dx, cursorY + dy, parent.getActiveLayer());
 					}
 				}
 				//draw over it
@@ -889,10 +901,10 @@ public class MapPane extends BgPanel {
 					}
 				}
 				//capture the new state
-				newDat = new int[selW][selH];
+				newDat = new int[selH][selW];
 				for (int dx = 0; dx < selW; dx++) {
 					for (int dy = 0; dy < selH; dy++) {
-						newDat[dx][dy] = dataHolder.getTile(cursorX + dx, cursorY + dy, parent.getActiveLayer());
+						newDat[dy][dx] = dataHolder.getTile(cursorX + dx, cursorY + dy, parent.getActiveLayer());
 					}
 				}
 				redrawTiles(cursorX, cursorY, selW, selH);
@@ -923,10 +935,10 @@ public class MapPane extends BgPanel {
 				tilePen = new TileBuffer();
 				tilePen.dx = baseX - cursorX;
 				tilePen.dy = baseY - cursorY;
-				tilePen.data = new int[selW][selH];
+				tilePen.data = new int[selH][selW];
 				for (int x = 0; x < selW; x++) {
 					for (int y = 0; y < selH; y++) {
-						tilePen.data[x][y] = dataHolder.getTile(cursorX + x, cursorY + y, parent.getActiveLayer());
+						tilePen.data[y][x] = dataHolder.getTile(cursorX + x, cursorY + y, parent.getActiveLayer());
 					}
 				}
 				redrawTiles(cursorX, cursorY, selW, selH);
@@ -949,8 +961,7 @@ public class MapPane extends BgPanel {
 				if (currentY < 0) {
 					currentY = 0;
 				}
-				Rectangle affected = fillPen(cursorLoc
-				);
+				Rectangle affected = fillPen(cursorLoc);
 				//System.out.println(tracker);
 				redrawTiles(affected.x, affected.y,
 						affected.x + affected.width,
@@ -961,15 +972,15 @@ public class MapPane extends BgPanel {
 						tilePen.getH());
 				//put the cursor back
 				moveCursor(newCursorRect);
-				oldDat = new int[affected.width][affected.height];
-				for (int dx = 0; dx < affected.width; dx++) {
-					System.arraycopy(prevLayerState[affected.x + dx], affected.y, oldDat[dx], 0, affected.height);
+				oldDat = new int[affected.height][affected.width];
+				for (int dy = 0; dy < affected.height; dy++) {
+					System.arraycopy(prevLayerState[affected.y + dy], affected.x, oldDat[dy], 0, affected.width);
 				}
 				//capture the new state
-				newDat = new int[affected.width][affected.height];
+				newDat = new int[affected.height][affected.width];
 				for (int dx = 0; dx < affected.width; dx++) {
 					for (int dy = 0; dy < affected.height; dy++) {
-						newDat[dx][dy] = dataHolder.getTile(affected.x + dx, affected.y + dy, parent.getActiveLayer());
+						newDat[dy][dx] = dataHolder.getTile(affected.x + dx, affected.y + dy, parent.getActiveLayer());
 					}
 				}
 				//create the edit
@@ -1003,15 +1014,15 @@ public class MapPane extends BgPanel {
 
 				w = r.width - r.x;
 				h = r.height - r.y;
-				oldDat = new int[w][h];
-				for (int dx = 0; dx < w; dx++) {
-					System.arraycopy(prevLayerState[r.x + dx], r.y, oldDat[dx], 0, h);
+				oldDat = new int[h][w];
+				for (int dy = 0; dy < h; dy++) {
+					System.arraycopy(prevLayerState[r.y + dy], r.x, oldDat[dy], 0, w);
 				}
 				//capture the new state
-				newDat = new int[w][h];
+				newDat = new int[h][w];
 				for (int dx = 0; dx < w; dx++) {
 					for (int dy = 0; dy < h; dy++) {
-						newDat[dx][dy] = dataHolder.getTile(r.x + dx, r.y + dy, parent.getActiveLayer());
+						newDat[dy][dx] = dataHolder.getTile(r.x + dx, r.y + dy, parent.getActiveLayer());
 					}
 				}
 				//create the edit
@@ -1035,21 +1046,21 @@ public class MapPane extends BgPanel {
 				if (w < 1 || h < 1) {
 					return;
 				}
-				oldDat = new int[w][h];
+				oldDat = new int[h][w];
 				for (int dx = 0; dx < w; dx++) {
 					for (int dy = 0; dy < h; dy++) {
 						try {
-							oldDat[dx][dy] = prevLayerState
-									[baseX + dx - tilePen.dx][baseY + dy - tilePen.dy];
+							oldDat[dy][dx] = prevLayerState
+									[baseY + dy - tilePen.dy][baseX + dx - tilePen.dx];
 						} catch (IndexOutOfBoundsException ignored) {
 						}
 					}
 				}
 				//capture the new state
-				newDat = new int[w][h];
+				newDat = new int[h][w];
 				for (int dx = 0; dx < w; dx++) {
 					for (int dy = 0; dy < h; dy++) {
-						newDat[dx][dy] = dataHolder.getTile(
+						newDat[dy][dx] = dataHolder.getTile(
 								baseX + dx - tilePen.dx,
 								baseY + dy - tilePen.dy,
 								parent.getActiveLayer());

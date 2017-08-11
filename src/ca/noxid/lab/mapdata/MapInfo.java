@@ -1,18 +1,15 @@
 package ca.noxid.lab.mapdata;
 
-import ca.noxid.lab.BlConfig;
-import ca.noxid.lab.Changeable;
-import ca.noxid.lab.EditorApp;
-import ca.noxid.lab.Messages;
+import ca.noxid.lab.*;
 import ca.noxid.lab.entity.EntityData;
 import ca.noxid.lab.gameinfo.GameInfo;
 import ca.noxid.lab.rsrc.ResourceManager;
 import ca.noxid.lab.tile.LineSeg;
 import ca.noxid.lab.tile.MapPoly;
 import ca.noxid.lab.tile.ShiftDialog;
+import ca.noxid.lab.tile.TileLayer;
 import com.carrotlord.string.StrTools;
 
-import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import java.awt.*;
@@ -40,8 +37,8 @@ public class MapInfo implements Changeable {
 	public int getMapY() {return mapY;}
 	private int mapNumber;
 	public int getMapNumber() {return mapNumber;}
-	protected int[][][] map;
-	public int[][][] getMap() {return map;}
+	protected List<TileLayer> map;
+	public List<TileLayer> getMap() {return map;}
 
 	//MR lines
 	private LinkedList<LineSeg> nodeVec = new LinkedList<>();
@@ -257,56 +254,68 @@ public class MapInfo implements Changeable {
 			System.err.println(Messages.getString("MapInfo.0")); //$NON-NLS-1$
 			
 		}
-		map = new int[EditorApp.NUM_LAYER][mapY][mapX];
+//		map = new int[EditorApp.NUM_LAYER][mapY][mapX];
+		map = new ArrayList<TileLayer>();
 		switch (pxmVersion)
 		{
 		case 0x10: //original PXM
 			//needs pxa file
 		{
-			for (int y = 0; y < mapY; y++)
-				for (int x = 0; x < mapX; x++)
-				{
-					int next = 0xFF & mapBuf.get() ;
+			int[][] mapBack = new int[mapY][mapX];
+			int[][] mapFront = new int[mapY][mapX];
+			for (int y = 0; y < mapY; y++) {
+				for (int x = 0; x < mapX; x++) {
+					int next = 0xFF & mapBuf.get();
 					if (calcPxa(next) < 0x20)
-						map[1][y][x] = next;
+						mapBack[y][x] = next;
 					else
-						map[2][y][x] = next;
-					
+						mapFront[y][x] = next;
+
 					//map[4][y][x] = (byte) tilePane.calcPxa(next);
 				}
+			}
+			map.add(new TileLayer("Background", mapBack));
+			map.add(new TileLayer("Foreground", mapFront));
+
 		}
 			break;
 		case 0x20: //KS PXM V1 w/ 4 layers
 		{
 			//needs pxa file
 			for (int layer = 0; layer < 4; layer++) {
+				int[][] tileData = new int[mapY][mapX];
 				for (int y = 0; y < mapY; y++)
 				{
 					for (int x = 0; x < mapX; x++)
-						map[layer][y][x] = mapBuf.get() & 0xFF;
+						tileData[y][x] = mapBuf.get() & 0xFF;
 				}
+				map.add(new TileLayer("Layer " + layer, tileData));
 			}
 		}
 			break;
-		case 0x21: {
+		case 0x21: { //two-byte tiles
 			//needs pxa file
 			for (int layer = 0; layer < 4; layer++) {
+				int[][] tileData = new int[mapY][mapX];
 				for (int y = 0; y < mapY; y++)
 				{
 					for (int x = 0; x < mapX; x++)
-						map[layer][y][x] = mapBuf.getShort() & 0xFFFF;
+						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
+				map.add(new TileLayer("Layer " + layer, tileData));
 			}
 		}
 			break;
 		case 0x30: //MR PXM w/ 4 layers + lines
 			//doesn't need pxa file
 			for (int layer = 0; layer < 4; layer++) {
+				int[][] tileData = new int[mapY][mapX];
 				for (int y = 0; y < mapY; y++)
 				{
 					for (int x = 0; x < mapX; x++)
-						map[layer][y][x] = mapBuf.get() & 0xFF;
+						tileData[y][x] = mapBuf.get() & 0xFF;
 				}
+				map.add(new TileLayer("Layer " + layer, tileData));
 			}
 			while (lineBuf.hasRemaining()) {
 				Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
@@ -315,15 +324,17 @@ public class MapInfo implements Changeable {
 				nodeVec.add(seg);
 			}
 			break;
-		case 0x31:
+		case 0x31://two-byte tiles
 		case 0x32:
 			//doesn't need pxa file
 			for (int layer = 0; layer < 4; layer++) {
+				int[][] tileData = new int[mapY][mapX];
 				for (int y = 0; y < mapY; y++)
 				{
 					for (int x = 0; x < mapX; x++)
-						map[layer][y][x] = mapBuf.getShort() & 0xFFFF;
+						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
+				map.add(new TileLayer("Layer " + layer, tileData));
 			}
 			while (lineBuf != null && lineBuf.hasRemaining()) {
 				Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
@@ -332,7 +343,7 @@ public class MapInfo implements Changeable {
 				nodeVec.add(seg);
 			}
 			if (pxmVersion >= 0x32) {
-				while (polyBuf != null && polyBuf.hasRemaining()) {
+				while (polyBuf.hasRemaining()) {
 					short type = polyBuf.getShort();
 					short event = polyBuf.getShort();
 					short pointCount = polyBuf.getShort();
@@ -349,11 +360,14 @@ public class MapInfo implements Changeable {
 			break;
 		case 0x33:
 			for (int layer = 0; layer < 5; layer++) {
+				int[][] tileData = new int[mapY][mapX];
 				for (int y = 0; y < mapY; y++)
 				{
 					for (int x = 0; x < mapX; x++)
-						map[layer][y][x] = mapBuf.getShort() & 0xFFFF;
+						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
+				map.add(new TileLayer("Layer " + layer, tileData));
+
 				while (lineBuf != null && lineBuf.hasRemaining()) {
 					Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
 					Point p2 = new Point(lineBuf.getInt(), lineBuf.getInt());
@@ -760,26 +774,18 @@ public class MapInfo implements Changeable {
 		else if (x > MAX_TILES_X) x = MAX_TILES_X;
 		if (y < minY) y = minY;
 		else if (y > MAX_TILES_Y) y = MAX_TILES_Y;
-		int[][][] newArray = new int[EditorApp.NUM_LAYER][y][x];
-		for (int l = 0; l < map.length; l++) {
-			for (int c = 0; 
-					c < ((c < mapY) ? y : mapY); 
-					c++) {
-				for (int r = 0;
-						r < ((r < mapX) ? x : mapX);
-						r++) {
-					try {
-						newArray[l][c][r] = map[l][c][r];
-					} catch (ArrayIndexOutOfBoundsException err) {
-						System.out.println("nope " + l + " " + r + " " + c); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					}
-				}
-			}
+
+		for (TileLayer layer : map) {
+			SignifUndoableEdit edit = layer.resize(x, y);
+			edit.setSignificant(false);
+			undoMan.addEdit(edit);
 		}
+		Point oldSz = new Point(mapX, mapY);
+		Point newSz = new Point(x, y);
 		mapX = x;
 		mapY = y;
-		undoMan.addEdit(new ResizeEdit(map, newArray));
-		map = newArray;
+		//mark changes with a significant edit
+		undoMan.addEdit(new ResizeEdit(oldSz, newSz));
 	}	
 	
 	public void shiftMap(int dx, int dy, int options) {
@@ -835,53 +841,12 @@ public class MapInfo implements Changeable {
 		}
 		
 		if ((options & ShiftDialog.OPTION_TILE) != 0) {
-			for (int layer = 0; layer < map.length; layer++) {
-				int[][] layerDat = map[layer];
-				int[][] oldDat;
-				int[][] newDat;
-				oldDat = new int[mapX][mapY];
-				for (int dx1 = 0; dx1 < mapX; dx1++) {
-					for (int dy1 = 0; dy1 < mapY; dy1++) {
-						oldDat[dx1][dy1] = getTile(dx1, dy1, layer);
-					}
-				}
-				//Wistil was being lazy here, using memory to make all the math go away
-				//also I stole this from CE basically
-				int i, j;
-				int[][] newTiles;
-				newTiles = new int[h][w];
-	
-				for (i = 0; i < h; i++)
-				{
-					for (j = 0; j < w; j++)
-					{
-						int newX = (j+dx+w*100)%w;
-						int newY = (i+dy+h*100)%h;
-						try {
-							if ((options & ShiftDialog.OPTION_WRAP) != 0) {//well some math anyways...
-								newTiles[newY][newX] = layerDat[i][j];
-							} else {
-								if (j+dx < 0 || j+dx >= w || i+dy < 0 || i+dy >= h) 
-									newTiles[newY][newX] = 0;
-								else
-									newTiles[newY][newX] = layerDat[i][j];
-							}
-						} catch (IndexOutOfBoundsException err) {
-							System.out.println(layer + ": (" + newX + ", " + newY + ") - (" + i + ", " + j + ")");
-						}
-					}
-				}
-				map[layer] = newTiles;
-				newDat = new int[mapX][mapY];
-				for (int dx1 = 0; dx1 < mapX; dx1++) {
-					for (int dy1 = 0; dy1 < mapY; dy1++) {
-						newDat[dx1][dy1] = getTile(dx1, dy1, layer);
-					}
-				}
-				MapEdit edit = new MapEdit(0, 0, oldDat, newDat, layer);
+			for (TileLayer layer : map) {
+				SignifUndoableEdit edit = layer.shiftLayer(dx, dy, options);
 				edit.setSignificant(false);
 				undoMan.addEdit(edit);
-			}//for each layer
+			}
+
 		}
 		
 		if ((options & ShiftDialog.OPTION_LINE) != 0) {
@@ -900,35 +865,17 @@ public class MapInfo implements Changeable {
 		undoMan.addEdit(new MapEdit(0, 0, null, null, 0));
 	}
 	
-	
-	/*
-	public byte getTileB(int x, int y, int layer) {
-		byte rVal = Byte.MIN_VALUE;
-		try {
-			if (EditorApp.EDITOR_MODE == 0) {
-				rVal = map[1][y][x];
-	            rVal += map[2][y][x];
-			} else {
-				rVal = map[layer][y][x];
-			}
-		} catch (ArrayIndexOutOfBoundsException err) {
-			//ignore
-		}
-		return rVal;
-	}
-	*/
-	
 	public int getTile(int x, int y, int layer) {
 		int rVal = 0;
 		try {
 			if (EditorApp.EDITOR_MODE == 0) {
-				rVal = map[1][y][x];
-	            rVal += map[2][y][x];
+				rVal = map.get(0).getTile(x, y);
+	            rVal += map.get(1).getTile(x, y);
 	            //rVal &= 0xFF;
 			} else {
-				rVal = map[layer][y][x];
+				rVal = map.get(layer).getTile(x, y);
 			}
-		} catch (ArrayIndexOutOfBoundsException err) {
+		} catch (IndexOutOfBoundsException err) {
 			//err.printStackTrace();
 		}
 		return rVal;
@@ -938,14 +885,14 @@ public class MapInfo implements Changeable {
 		if (x >= 0 && y >= 0 && x < mapX && y < mapY) {
 			if (EditorApp.EDITOR_MODE == 0) {
 				if (calcPxa(newData) < 0x20) {
-					map[1][y][x] = newData;
-					map[2][y][x] = 0;
+					map.get(0).setTile(x, y, newData);
+					map.get(1).setTile(x, y, 0);
 				} else {
-					map[1][y][x] = 0;
-					map[2][y][x] = newData;
+					map.get(1).setTile(x, y, newData);
+					map.get(0).setTile(x, y, 0);
 				}
 			} else
-				map[layer][y][x] = newData;
+				map.get(layer).setTile(x, y, newData);
 		}
 	}
 	
@@ -1125,16 +1072,13 @@ public class MapInfo implements Changeable {
 		markUnchanged();
 	}
 	
-	public class MapEdit extends AbstractUndoableEdit {
+	public class MapEdit extends SignifUndoableEdit {
 		private static final long serialVersionUID = -4946946031855265785L;
 		int layer;
 		int[][] oldData;
 		int[][] newData;
 		int xOrigin;
 		int yOrigin;
-
-		private boolean signif = true;
-		public void setSignificant(boolean b) {signif = b;}
 		
 		/**
 		 * An undoable edit that applies to a square section of tiles
@@ -1152,12 +1096,7 @@ public class MapInfo implements Changeable {
 			yOrigin = y;
 			markChanged();
 		}
-		
-		@Override
-		public boolean isSignificant() {
-			return signif;
-		}
-		
+
 		@Override
 		public boolean canRedo() {
 			return true;
@@ -1167,11 +1106,11 @@ public class MapInfo implements Changeable {
 		public void redo() {
 			if (newData == null)
 				return;
-			int w = newData.length;
-			int h = newData[0].length;
+			int h = newData.length;
+			int w = newData[0].length;
 			for (int dx = 0; dx < w; dx++) {
 				for (int dy = 0; dy < h; dy++) {
-					putTile(xOrigin + dx, yOrigin + dy, newData[dx][dy], layer);
+					putTile(xOrigin + dx, yOrigin + dy, newData[dy][dx], layer);
 				}
 			}
 			//redrawTiles(xOrigin, yOrigin, xOrigin + w, yOrigin + h);
@@ -1181,33 +1120,26 @@ public class MapInfo implements Changeable {
 		public void undo() {
 			if (oldData == null)
 				return;
-			int w = oldData.length;
-			int h = oldData[0].length;
+			int h = oldData.length;
+			int w = oldData[0].length;
 			for (int dx = 0; dx < w; dx++) {
 				for (int dy = 0; dy < h; dy++) {
-					putTile(xOrigin + dx, yOrigin + dy, oldData[dx][dy], layer);
+					putTile(xOrigin + dx, yOrigin + dy, oldData[dy][dx], layer);
 				}
 			}
 			//redrawTiles(xOrigin, yOrigin, xOrigin + w, yOrigin + h);
 		}	
 	}
 	
-	class ResizeEdit extends AbstractUndoableEdit {
+	class ResizeEdit extends SignifUndoableEdit {
 		private static final long serialVersionUID = -3009446899803969175L;
-		int[][][] oldMap;
-		int[][][] newMap;
-		
-		private boolean signif = true;
 
-		@Override
-		public boolean isSignificant() {
-			return signif;
-		}
-		
-		ResizeEdit (int[][][] old, int[][][] newm) {
-			oldMap = old;
-			newMap = newm;
-			markChanged();
+		Point oldSize;
+		Point newSize;
+
+		ResizeEdit (Point oldsz, Point newsz) {
+			oldSize = oldsz;
+			newSize = newsz;
 		}
 
 		@Override
@@ -1216,25 +1148,19 @@ public class MapInfo implements Changeable {
 		}
 		
 		public void redo() {
-			if (newMap == null) return;
-			
-			map = newMap;
-			mapY = newMap[0].length;
-			mapX = newMap[0][0].length;
+			mapY = newSize.y;
+			mapX = newSize.x;
 			//repaint();
 		}
 		
 		public void undo() {
-			if (newMap == null) return;
-			
-			map = oldMap;
-			mapY = oldMap[0].length;
-			mapX = oldMap[0][0].length;
+			mapY = oldSize.y;
+			mapX = oldSize.x;
 			//repaint();
 		}
 	}
 	
-	public class EntityEdit extends AbstractUndoableEdit {
+	public class EntityEdit extends SignifUndoableEdit {
 
 		public static final int EDIT_MOVE = 0;
 		public static final int EDIT_PLACE = 1;
@@ -1244,10 +1170,7 @@ public class MapInfo implements Changeable {
 		PxeEntry entry;
 		int changeType;
 		Object params;
-		
-		private boolean signif = true;
-		public void setSignificant(boolean b) {signif = b;}
-		
+
 		private static final long serialVersionUID = -371877823331946549L;
 		
 		/**
@@ -1271,11 +1194,6 @@ public class MapInfo implements Changeable {
 			changeType = editType;
 			params = parameter;
 			markChanged();
-		}
-
-		@Override
-		public boolean isSignificant() {
-			return signif;
 		}
 
 		@Override
