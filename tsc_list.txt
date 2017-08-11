@@ -36,7 +36,7 @@ Format:
 
 NOTE: If you add a command, make sure to increase the number next to CE_TSC by 1!
 
-[CE_TSC]	91
+[BL_TSC]	91
 <AE+	0	----	Arms Energy +	Refill all weapon ammo.	0	0	1	4
 <AM+	2	aA--	ArMs +	Give weapon W with X ammo. Use 0000 for infinite ammo.	0	0	1	4
 <AM-	1	a---	ArMs -	Remove weapon W.	0	0	1	4
