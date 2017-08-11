@@ -296,7 +296,7 @@ public class MapPane extends BgPanel {
 		g2d.setBackground(Color.black);
 		drawBackground((Graphics2D) g2d.create());
 		for (TileLayer layer : dataHolder.getMap()) {
-			layer.draw(g2d.create());
+			layer.draw((Graphics2D)g2d.create(), EditorApp.mapScale);
 		}
 		//draw tile types if applicable
 		if (parent.getOtherDrawOptions()[0]) {

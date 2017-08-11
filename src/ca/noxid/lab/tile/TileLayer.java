@@ -6,6 +6,7 @@ import ca.noxid.lab.SignifUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
@@ -157,8 +158,10 @@ public class TileLayer {
 		}
 	}
 
-	public void draw(Graphics graphics) {
-		graphics.drawImage(displayBuffer, 0, 0, null);
+	public void draw(Graphics2D graphics, double scale) {
+		AffineTransform transform = new AffineTransform();
+		transform.setToScale(scale, scale);
+		graphics.drawImage(displayBuffer, transform, null);
 
 
 //		BlConfig conf = dataHolder.getConfig();
