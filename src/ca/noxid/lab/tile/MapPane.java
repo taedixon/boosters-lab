@@ -13,6 +13,8 @@ import ca.noxid.uiComponents.DragScrollAdapter;
 import ca.noxid.uiComponents.FormattedUpdateTextField;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -54,6 +56,8 @@ public class MapPane extends BgPanel {
 	
 	private int activeLayer;
 
+	private JList<TileLayer> layerSelect;
+
 	public JPanel getTilePane() {
 		//TODO: re-implement logic for displaying the line pane instead of the tile pane
 //		if (activeLayer != EditorApp.PHYSICAL_LAYER) {
@@ -93,6 +97,7 @@ public class MapPane extends BgPanel {
 		//exeData = p.getGameInfo();
 		//File currentFile = null;
 		initMouse();
+		initLayerSelect();
 
 		//create the tileset panel and preview
 		tilePane = new TilesetPane(this, iMan, dataHolder);
@@ -193,6 +198,14 @@ public class MapPane extends BgPanel {
 		this.add(popup);
 	}
 
+	protected void initLayerSelect() {
+		layerSelect = new JList<>();
+		layerSelect.setListData(dataHolder.getMap().toArray(new TileLayer[dataHolder.getMap().size()]));
+		layerSelect.setCellRenderer(new TileListRender());
+		layerSelect.addListSelectionListener(new LayerListListener());
+		layerSelect.setSelectedIndex(activeLayer);
+	}
+
 	protected void resizeMap() {
 		this.repaint();
 	}
@@ -211,8 +224,10 @@ public class MapPane extends BgPanel {
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent eve) {
-				if (eve.getKeyCode() == KeyEvent.VK_DELETE) {
-					LinkedList<LineSeg> ll = dataHolder.getLines();
+				LinkedList<LineSeg> ll;
+				switch (eve.getExtendedKeyCode()) {
+				case KeyEvent.VK_DELETE:
+					ll = dataHolder.getLines();
 					ListIterator<LineSeg> it = ll.listIterator();
 					while (it.hasNext()) {
 						if (it.next().isSelected()) {
@@ -233,8 +248,9 @@ public class MapPane extends BgPanel {
 						pen.toggleEraser();
 						preview.repaint();
 					}
-				} else if (eve.getKeyCode() == KeyEvent.VK_H) {
-					LinkedList<LineSeg> ll = dataHolder.getLines();
+					break;
+				case KeyEvent.VK_H:
+					ll = dataHolder.getLines();
 					for (LineSeg seg : ll) {
 						if (seg.isSelected()) {
 							seg.setLine(seg.getP2(), seg.getP1());
@@ -246,7 +262,8 @@ public class MapPane extends BgPanel {
 						}
 					}
 					repaint();
-				} else if (eve.getKeyCode() == KeyEvent.VK_A) {
+					break;
+				case KeyEvent.VK_A:
 					if (dataHolder.getSelectedNodes().size() == dataHolder.getLines().size()) {
 						for (LineSeg s : dataHolder.getLines()) {
 							s.setSelection(LineSeg.NONE, false);
@@ -257,13 +274,29 @@ public class MapPane extends BgPanel {
 						}
 					}
 					repaint();
-				} else if (eve.getKeyCode() == KeyEvent.VK_I) {
+					break;
+				case KeyEvent.VK_I:
 					for (MapPoly p : dataHolder.getPolys()) {
 						for (xPoint xp : p.getSelected()) {
 							p.insert(xp);
 						}
 					}
 					repaint();
+					break;
+				case KeyEvent.VK_MINUS:
+				case KeyEvent.VK_SUBTRACT:
+					if (activeLayer > 0) {
+						activeLayer--;
+						layerSelect.setSelectedIndex(activeLayer);
+					}
+					break;
+				case KeyEvent.VK_EQUALS:
+				case KeyEvent.VK_ADD:
+					if (activeLayer < dataHolder.getMap().size()-1) {
+						activeLayer++;
+						layerSelect.setSelectedIndex(activeLayer);
+					}
+					break;
 				}
 			}
 		});
@@ -453,6 +486,10 @@ public class MapPane extends BgPanel {
 		for (MapPoly p : dataHolder.getPolys()) {
 			p.draw(g);
 		}
+	}
+
+	public Component getLayerPane() {
+		return layerSelect;
 	}
 	
 	/* no longer necessary
@@ -1664,6 +1701,14 @@ public class MapPane extends BgPanel {
 				comStr = "<TRA" + sm + ":EVNT:" + sx + ":" + sy; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				scriptPane.insertStringAtCursor(comStr);
 			}
+		}
+	}
+
+	private class LayerListListener implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			activeLayer = layerSelect.getSelectedIndex();
 		}
 	}
 }

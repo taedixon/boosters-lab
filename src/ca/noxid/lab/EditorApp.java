@@ -344,7 +344,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		File rectFile = new File("editor.rect"); //$NON-NLS-1$
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(rectFile));
-			Window[] wArray = {this, tilesetWindow, scriptWindow, helpWindow, entityWindow, spritesheetWindow};
+			Window[] wArray = {this, tilesetWindow, scriptWindow, helpWindow, entityWindow};
 			for (Window w : wArray) {
 				Point l = w.getLocation();
 				Dimension d = w.getSize();
@@ -736,18 +736,18 @@ public class EditorApp extends JFrame implements ActionListener {
 		helpWindow.setLocation(parentPos);
 		helpWindow.setVisible(false);
 
-		spritesheetWindow = new SpritesheetOptimizer(iMan);
-		spritesheetWindow.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				showSpritesheetWindow = false;
-				((JFrame) e.getSource()).setVisible(false);
-				//switchPerspective(activePerspective);
-			}
-		});
-		parentPos.x += 50;
-		parentPos.y += 50;
-		spritesheetWindow.setLocation(parentPos);
-		spritesheetWindow.setVisible(showSpritesheetWindow);
+//		spritesheetWindow = new SpritesheetOptimizer(iMan);
+//		spritesheetWindow.addWindowListener(new WindowAdapter() {
+//			public void windowClosing(WindowEvent e) {
+//				showSpritesheetWindow = false;
+//				((JFrame) e.getSource()).setVisible(false);
+//				//switchPerspective(activePerspective);
+//			}
+//		});
+//		parentPos.x += 50;
+//		parentPos.y += 50;
+//		spritesheetWindow.setLocation(parentPos);
+//		spritesheetWindow.setVisible(showSpritesheetWindow);
 
 
 		//Attempt to remember last window sizes and positions
@@ -2340,9 +2340,15 @@ public class EditorApp extends JFrame implements ActionListener {
 		switch (activePerspective) {
 		case PERSPECTIVE_TILE:
 			MapPane mapPanel = inf.map;
+			//put the map into a scrollpane
 			JScrollPane mapScroll = new JScrollPane(mapPanel);
 			mapScroll.addMouseWheelListener(new ScrollZoomAdapter(this, mapPanel));
 			mapScroll.getVerticalScrollBar().setUnitIncrement(10);
+			//put the layer list and the map into a borderlayout
+			JPanel layerMapPanel = new JPanel(new BorderLayout());
+			layerMapPanel.add(mapPanel.getLayerPane(), BorderLayout.WEST);
+			layerMapPanel.add(mapScroll, BorderLayout.CENTER);
+
 			JScrollPane tileScroll = new JScrollPane(mapPanel.getTilePane());
 			tileScroll.getVerticalScrollBar().setUnitIncrement(5);
 			if (showTileWindow) {
@@ -2356,7 +2362,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					tilesetWindow.setContentPane(tileSplit);
 					tilesetWindow.validate();
 				}
-				return mapScroll;
+				return layerMapPanel;
 			} else {
 				JSplitPane tileSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 						tileScroll,
@@ -2364,7 +2370,7 @@ public class EditorApp extends JFrame implements ActionListener {
 				tileSplit.setDividerLocation(350);
 				JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 						tileSplit,
-						mapScroll);
+						layerMapPanel);
 				mainSplit.setDividerLocation(100);
 				return mainSplit;
 			} //if not showing helper window
