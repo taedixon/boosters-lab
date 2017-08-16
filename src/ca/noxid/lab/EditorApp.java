@@ -4,7 +4,6 @@ package ca.noxid.lab;
 import ca.noxid.lab.entity.EntityData;
 import ca.noxid.lab.entity.EntityPane;
 import ca.noxid.lab.entity.NpcTblEditor;
-import ca.noxid.lab.entity.SpritesheetOptimizer;
 import ca.noxid.lab.gameinfo.*;
 import ca.noxid.lab.mapdata.MapInfo;
 import ca.noxid.lab.mapdata.Mapdata;
@@ -48,11 +47,11 @@ public class EditorApp extends JFrame implements ActionListener {
 	public static final boolean blazed = false;
 
 	//about dialog
-	private static final String VER_NUM = "0.5.0.0"; //$NON-NLS-1$
+	private static final String VER_NUM = "0.5.1.0"; //$NON-NLS-1$
 	private static final String TITLE_STR = "Booster's Lab V" + VER_NUM;
 	private static final String ABOUT_STR =
 			Messages.getString("EditorApp.1") + VER_NUM + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
-					"By Noxid - 12/05/2017\n" +  //$NON-NLS-1$
+					"By Noxid - 16/08/2017\n" +  //$NON-NLS-1$
 					Messages.getString("EditorApp.4") + //$NON-NLS-1$
 					Messages.getString("EditorApp.5"); //$NON-NLS-1$
 

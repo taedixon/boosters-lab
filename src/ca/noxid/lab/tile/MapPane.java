@@ -8,6 +8,7 @@ import ca.noxid.lab.mapdata.MapInfo.PxeEntry;
 import ca.noxid.lab.rsrc.ResourceManager;
 import ca.noxid.lab.script.TscPane;
 import ca.noxid.lab.tile.MapPoly.xPoint;
+import ca.noxid.uiComponents.BgList;
 import ca.noxid.uiComponents.BgPanel;
 import ca.noxid.uiComponents.DragScrollAdapter;
 import ca.noxid.uiComponents.FormattedUpdateTextField;
@@ -207,7 +208,7 @@ public class MapPane extends BgPanel {
 	}
 
 	protected void initLayerSelect() {
-		layerSelect = new JList<>();
+		layerSelect = new BgList<TileLayer>(iMan.getImg(ResourceManager.rsrcBgWhite2));
 		layerSelect.setListData(dataHolder.getMap().toArray(new TileLayer[dataHolder.getMap().size()]));
 		layerSelect.setCellRenderer(new TileListRender());
 		LayerListListener lll = new LayerListListener();
@@ -215,7 +216,7 @@ public class MapPane extends BgPanel {
 		layerSelect.addKeyListener(lll);
 		layerSelect.setSelectedIndex(activeLayer);
 		//create layer control panel
-		JPanel layerControl = new JPanel();
+		JPanel layerControl = new BgPanel(iMan.getImg(ResourceManager.rsrcBgBlue));
 		JTextField txtfield;
 		final Action repaintAction = new AbstractAction() {
 			@Override
@@ -230,10 +231,12 @@ public class MapPane extends BgPanel {
 		gbc.anchor = GridBagConstraints.CENTER;
 		isSoloLayerView = new JCheckBox(repaintAction);
 		isSoloLayerView.setText("Solo layer mode");
+		isSoloLayerView.setOpaque(false);
 		layerControl.add(isSoloLayerView, gbc);
 		gbc.gridy++;
 		isFadeUnfocusedLayers = new JCheckBox(repaintAction);
 		isFadeUnfocusedLayers.setText("Fade unselected layers");
+		isFadeUnfocusedLayers.setOpaque(false);
 		layerControl.add(isFadeUnfocusedLayers, gbc);
 		gbc.gridy++;
 		//list control buttons
@@ -248,6 +251,7 @@ public class MapPane extends BgPanel {
 				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcLayerUp)),
 				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcLayerDown)),
 				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcMergeLayer)),
+				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcLayerProp)),
 		};
 		String[] btnCommands = {
 				"add",
@@ -256,6 +260,7 @@ public class MapPane extends BgPanel {
 		        "move_up",
 		        "move_down",
 		        "merge",
+		        "property",
 		};
 		String[] btnTooltips = {
 				"Add Layer",
@@ -264,6 +269,7 @@ public class MapPane extends BgPanel {
 		        "Move Layer Up",
 		        "Move Layer Down",
 		        "Merge Layer Down",
+		        "Edit Properties",
 		};
 		for (int i = 0; i < btnCommands.length; i++) {
 			button = new JButton();
@@ -280,10 +286,10 @@ public class MapPane extends BgPanel {
 
 		//add them all into one container for passing out to the main application
 		layerPanel = new JPanel();
-		layerPanel.setLayout(new BoxLayout(layerPanel, BoxLayout.Y_AXIS));
+		layerPanel.setLayout(new BorderLayout());
 		JScrollPane jsp = new JScrollPane(layerSelect);
-		layerPanel.add(layerControl);
-		layerPanel.add(jsp);
+		layerPanel.add(layerControl, BorderLayout.NORTH);
+		layerPanel.add(jsp, BorderLayout.CENTER);
 	}
 
 	protected void resizeMap() {
@@ -807,6 +813,16 @@ public class MapPane extends BgPanel {
 				popup.show(eve.getComponent(), eve.getX(), eve.getY());
 				return;
 			}
+			if ((eve.getModifiersEx() & MouseEvent.BUTTON2_DOWN_MASK) != 0) {
+				//middle click
+				//sample a tile
+				tilePen.data = new int[1][1];
+				tilePen.data[0][0] = dataHolder.getTile(currentX, currentY, activeLayer);
+				tilePen.dx = 0;
+				tilePen.dy = 0;
+				preview.repaint();
+				return;
+			}
 			if ((eve.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0) {
 				return; //do nothing if right mouse
 			}
@@ -887,6 +903,10 @@ public class MapPane extends BgPanel {
 				popup_tra.setAction(new TraScriptAction(cursorX, cursorY, dataHolder.getMapNumber()));
 				popup_tra.setText(Messages.getString("MapPane.18")); //$NON-NLS-1$
 				popup.show(eve.getComponent(), eve.getX(), eve.getY());
+				return;
+			}
+			if ((eve.getModifiersEx() & MouseEvent.BUTTON2_DOWN_MASK) != 0) {
+				//middle click
 				return;
 			}
 			if ((eve.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0) {
@@ -1118,6 +1138,10 @@ public class MapPane extends BgPanel {
 //			if (activeLayer == EditorApp.PHYSICAL_LAYER) {
 //				return;
 //			}
+			if ((eve.getModifiersEx() & MouseEvent.BUTTON2_DOWN_MASK) != 0) {
+				//middle click
+				return;
+			}
 			if ((eve.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0) {
 				return;
 			}
@@ -1842,6 +1866,8 @@ public class MapPane extends BgPanel {
 				break;
 			case "merge":
 				dataHolder.mergeTileLayer(activeLayer, activeLayer+1);
+				break;
+			case "property":
 				break;
 			}
 			reloadLayerList();

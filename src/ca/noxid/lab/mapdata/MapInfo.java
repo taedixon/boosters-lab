@@ -899,17 +899,16 @@ public class MapInfo implements Changeable {
 	}
 
 	public void addTileLayer(int layer) {
-		//TODO have this generate undo events
 		List<TileLayer> mapCopy = new ArrayList<>(map);
 		List<TileLayer> oldMap = map;
 		map = mapCopy;
 
 		map.add(layer, new TileLayer("Layer " + (map.size()+1), mapX, mapY, getConfig(), iMan.getImg(getTileset())));
 		undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+		markChanged();
 	}
 
 	public void removeTileLayer(int layer) {
-		//TODO have this generate undo events
 		if (layer >= 0 && layer < map.size()) {
 			List<TileLayer> mapCopy = new ArrayList<>(map);
 			List<TileLayer> oldMap = map;
@@ -917,6 +916,7 @@ public class MapInfo implements Changeable {
 
 			TileLayer removed = map.remove(layer);
 			undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+			markChanged();
 		}
 	}
 
@@ -930,6 +930,7 @@ public class MapInfo implements Changeable {
 			TileLayer newLayer = new TileLayer(toCopy);
 			map.add(layer+1, newLayer);
 			undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+			markChanged();
 		}
 	}
 	public void swapTileLayer(int layer1, int layer2) {
@@ -951,6 +952,7 @@ public class MapInfo implements Changeable {
 			map.add(layer1, l2);
 			map.add(layer2, l1);
 			undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+			markChanged();
 		}
 	}
 
@@ -970,6 +972,7 @@ public class MapInfo implements Changeable {
 			map.remove(fromLayer);
 
 			undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+			markChanged();
 		}
 	}
 

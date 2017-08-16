@@ -31,6 +31,7 @@ public class ResourceManager {
 	public static final String rsrcIcLayerUp = "ic_layer_up.png";
 	public static final String rsrcIcMergeLayer = "ic_merge_layer.png";
 	public static final String rsrcIcCopyLayer = "ic_copy_layer.png";
+	public static String rsrcIcLayerProp = "ic_layer_property.png";
 	
 	public static final String rsrcCursor = "weed_cursor.png";
 	public static final Cursor cursor = makeCursor();
@@ -63,6 +64,7 @@ public class ResourceManager {
 		rsrcIcLayerUp,
 		rsrcIcMergeLayer,
 		rsrcIcCopyLayer,
+		rsrcIcLayerProp,
 	};
 	public ResourceManager() {
 		imgMap = new HashMap<>();

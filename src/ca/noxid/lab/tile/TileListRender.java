@@ -20,10 +20,10 @@ public class TileListRender extends DefaultListCellRenderer {
 			this.setText(layer.getName());
 			if (isSelected) {
 				this.setBorder(BorderFactory.createLineBorder(Color.red));
-				this.setBackground(Color.gray.darker());
+				this.setBackground(Color.decode("0xFFDDA0"));
 			} else {
 				this.setBorder(BorderFactory.createLineBorder(Color.gray));
-				this.setBackground(Color.white.darker());
+				this.setBackground(Color.decode("0xF7EBD7"));
 			}
 		}
 		this.setPreferredSize(new Dimension(140, 60));
