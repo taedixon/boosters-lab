@@ -63,6 +63,14 @@ public class TileLayer {
 
 	}
 
+	public TileLayer(TileLayer copyOf) {
+		this.name = copyOf.name + " copy";
+		this.tileData = copyOf.tileData;
+		this.config = copyOf.config;
+		this.tileset = copyOf.tileset;
+		init();
+	}
+
 	private void init() {
 		tilesVisible = true;
 		typesVisbile = false;
@@ -82,6 +90,18 @@ public class TileLayer {
 		updateBuffer(0, 0, w, h);
 	}
 
+	public void merge(TileLayer layer) {
+		for (int y = 0; y < tileData.length; y++) {
+			for (int x = 0; x < tileData[0].length; x++) {
+				int tileval = layer.getTile(x, y);
+				if (tileval > 0) {
+					tileData[y][x] = tileval;
+				}
+			}
+		}
+		updateBuffer(0, 0, tileData[0].length, tileData.length);
+		updateIcon();
+	}
 
 	/**
 	 * resize the map to new dimensions keeping existing tile data where possible
@@ -155,14 +175,20 @@ public class TileLayer {
 	}
 
 	public int getTile(int x, int y) {
-		return tileData[y][x];
+		if (x < tileData[0].length && y < tileData.length) {
+			return tileData[y][x];
+		} else {
+			return 0;
+		}
 	}
 
 	public void setTile(int x, int y, int val) {
-		tileData[y][x] = val;
-		updateBuffer(x, y, 1, 1);
-		if (++tilesChanged > iconRefreshThreshold) {
-			updateIcon();
+		if (x < tileData[0].length && y < tileData.length) {
+			tileData[y][x] = val;
+			updateBuffer(x, y, 1, 1);
+			if (++tilesChanged > iconRefreshThreshold) {
+				updateIcon();
+			}
 		}
 	}
 
@@ -194,6 +220,7 @@ public class TileLayer {
 
 	private void updateIcon() {
 		Graphics2D g2d = icon.createGraphics();
+		g2d.setComposite(AlphaComposite.Src);
 		g2d.drawImage(displayBuffer, 0, 0, 100, 100, null);
 		tilesChanged = 0;
 	}
@@ -228,11 +255,6 @@ public class TileLayer {
 				updateBuffer(0, 0, tileData[0].length, tileData.length);
 			}
 			updateIcon();
-		}
-
-		@Override
-		public boolean canRedo() {
-			return true;
 		}
 	}
 

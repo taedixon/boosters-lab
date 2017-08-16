@@ -10,6 +10,8 @@ import ca.noxid.lab.tile.ShiftDialog;
 import ca.noxid.lab.tile.TileLayer;
 import com.carrotlord.string.StrTools;
 
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import java.awt.*;
@@ -499,7 +501,7 @@ public class MapInfo implements Changeable {
 	public EntityData getEntityInfo(int eNum) {
 		return exeData.getEntityInfo(eNum);
 	}
-	
+
 	public class PxeEntry implements Comparable<PxeEntry>, Cloneable {
 		private short xTile;
 		public int getX() {return xTile;}
@@ -895,7 +897,82 @@ public class MapInfo implements Changeable {
 				map.get(layer).setTile(x, y, newData);
 		}
 	}
-	
+
+	public void addTileLayer(int layer) {
+		//TODO have this generate undo events
+		List<TileLayer> mapCopy = new ArrayList<>(map);
+		List<TileLayer> oldMap = map;
+		map = mapCopy;
+
+		map.add(layer, new TileLayer("Layer " + (map.size()+1), mapX, mapY, getConfig(), iMan.getImg(getTileset())));
+		undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+	}
+
+	public void removeTileLayer(int layer) {
+		//TODO have this generate undo events
+		if (layer >= 0 && layer < map.size()) {
+			List<TileLayer> mapCopy = new ArrayList<>(map);
+			List<TileLayer> oldMap = map;
+			map = mapCopy;
+
+			TileLayer removed = map.remove(layer);
+			undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+		}
+	}
+
+	public void copyTileLayer(int layer) {
+		if (layer >= 0 && layer < map.size()) {
+			List<TileLayer> mapCopy = new ArrayList<>(map);
+			List<TileLayer> oldMap = map;
+			map = mapCopy;
+
+			TileLayer toCopy = map.get(layer);
+			TileLayer newLayer = new TileLayer(toCopy);
+			map.add(layer+1, newLayer);
+			undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+		}
+	}
+	public void swapTileLayer(int layer1, int layer2) {
+		if (layer1 >= 0 && layer2 >= 0
+				&& layer1 < map.size() && layer2 < map.size()
+				&& layer1 != layer2) {
+			//make sure layer1 is always the smaller number so things are a bit easier
+			if (layer1 > layer2) {
+				int tmp = layer1;
+				layer1 = layer2;
+				layer2 = tmp;
+			}
+			List<TileLayer> mapCopy = new ArrayList<>(map);
+			List<TileLayer> oldMap = map;
+			map = mapCopy;
+
+			TileLayer l2 = map.remove(layer2);
+			TileLayer l1 = map.remove(layer1);
+			map.add(layer1, l2);
+			map.add(layer2, l1);
+			undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+		}
+	}
+
+	public void mergeTileLayer(int from, int to) {
+		if (from >= 0 && to >= 0
+				&& from < map.size() && to < map.size()
+				&& from != to) {
+			List<TileLayer> mapCopy = new ArrayList<>(map);
+			List<TileLayer> oldMap = map;
+			map = mapCopy;
+
+			TileLayer fromLayer = map.get(from);
+			//we just create a new layer here to avoid having to deal with anything complicated regarding layer undo's
+			TileLayer toLayer = new TileLayer(map.get(to));
+			toLayer.merge(fromLayer);
+			map.set(to, toLayer);
+			map.remove(fromLayer);
+
+			undoMan.addEdit(new LayerStateEdit(oldMap, mapCopy));
+		}
+	}
+
 	public int calcPxa(int tileNum) {
 		byte[] pxaData = iMan.getPxa(pxaFile);
 		int rval = 0;
@@ -1347,5 +1424,22 @@ public class MapInfo implements Changeable {
 		pxeList.clear();
 		markChanged();
 	}
-	
+
+	private class LayerStateEdit extends SignifUndoableEdit {
+		private List<TileLayer> prevMapState, newMapState;
+		LayerStateEdit(List<TileLayer> prev, List<TileLayer> next) {
+			prevMapState = prev;
+			newMapState = next;
+		}
+
+		@Override
+		public void redo() throws CannotRedoException {
+			map = newMapState;
+		}
+
+		@Override
+		public void undo() throws CannotUndoException {
+			map = prevMapState;
+		}
+	}
 }

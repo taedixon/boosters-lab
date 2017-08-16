@@ -25,6 +25,12 @@ public class ResourceManager {
 	public static final String rsrcBgBlue = "bgblue.png";
 	public static final String rsrcBgBrown = "Brown.png";
 	public static final String rsrcCorner = "corner.png";
+	public static final String rsrcIcAddLayer = "ic_add_layer.png";
+	public static final String rsrcIcDelLayer = "ic_del_layer.png";
+	public static final String rsrcIcLayerDown = "ic_layer_down.png";
+	public static final String rsrcIcLayerUp = "ic_layer_up.png";
+	public static final String rsrcIcMergeLayer = "ic_merge_layer.png";
+	public static final String rsrcIcCopyLayer = "ic_copy_layer.png";
 	
 	public static final String rsrcCursor = "weed_cursor.png";
 	public static final Cursor cursor = makeCursor();
@@ -51,6 +57,12 @@ public class ResourceManager {
 		rsrcBgBlue, //$NON-NLS-1$
 		rsrcBgBrown, //$NON-NLS-1$
 		rsrcCorner, //$NON-NLS-1$
+		rsrcIcAddLayer,
+		rsrcIcDelLayer,
+		rsrcIcLayerDown,
+		rsrcIcLayerUp,
+		rsrcIcMergeLayer,
+		rsrcIcCopyLayer,
 	};
 	public ResourceManager() {
 		imgMap = new HashMap<>();

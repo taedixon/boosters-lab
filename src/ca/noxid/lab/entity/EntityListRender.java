@@ -50,7 +50,8 @@ public class EntityListRender extends DefaultListCellRenderer {
 			if (h < 16) h = 16;
 			if (h > 64) h = 64;
 			this.setPreferredSize(new Dimension(184, h));
-		}		
+		}
+		this.add(new JButton("*"));
 		return this;
 	}
 	

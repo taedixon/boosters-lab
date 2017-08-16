@@ -16,4 +16,9 @@ public class SignifUndoableEdit extends AbstractUndoableEdit {
 	public boolean isSignificant() {
 		return isSignificant;
 	}
+
+	@Override
+	public boolean canRedo() {
+		return true;
+	}
 }

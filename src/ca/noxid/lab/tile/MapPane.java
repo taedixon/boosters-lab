@@ -13,6 +13,7 @@ import ca.noxid.uiComponents.DragScrollAdapter;
 import ca.noxid.uiComponents.FormattedUpdateTextField;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -20,6 +21,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.List;
 import java.util.Queue;
 
 
@@ -55,8 +57,10 @@ public class MapPane extends BgPanel {
 	private PolyMouseAdapter polyAdapter = new PolyMouseAdapter();
 	
 	private int activeLayer;
-
 	private JList<TileLayer> layerSelect;
+	private JPanel layerPanel;
+	private JCheckBox isSoloLayerView;
+	private JCheckBox isFadeUnfocusedLayers;
 
 	public JPanel getTilePane() {
 		//TODO: re-implement logic for displaying the line pane instead of the tile pane
@@ -70,6 +74,10 @@ public class MapPane extends BgPanel {
 
 	public PreviewPane getPreviewPane() {
 		return preview;
+	}
+
+	public Component getLayerPane() {
+		return layerPanel;
 	}
 
 	protected JPopupMenu popup;
@@ -202,8 +210,80 @@ public class MapPane extends BgPanel {
 		layerSelect = new JList<>();
 		layerSelect.setListData(dataHolder.getMap().toArray(new TileLayer[dataHolder.getMap().size()]));
 		layerSelect.setCellRenderer(new TileListRender());
-		layerSelect.addListSelectionListener(new LayerListListener());
+		LayerListListener lll = new LayerListListener();
+		layerSelect.addListSelectionListener(lll);
+		layerSelect.addKeyListener(lll);
 		layerSelect.setSelectedIndex(activeLayer);
+		//create layer control panel
+		JPanel layerControl = new JPanel();
+		JTextField txtfield;
+		final Action repaintAction = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				repaint();
+			}
+		};
+		layerControl.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridy = 0;
+//		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		isSoloLayerView = new JCheckBox(repaintAction);
+		isSoloLayerView.setText("Solo layer mode");
+		layerControl.add(isSoloLayerView, gbc);
+		gbc.gridy++;
+		isFadeUnfocusedLayers = new JCheckBox(repaintAction);
+		isFadeUnfocusedLayers.setText("Fade unselected layers");
+		layerControl.add(isFadeUnfocusedLayers, gbc);
+		gbc.gridy++;
+		//list control buttons
+		JButton button;
+		JPanel buttonStrip = new JPanel();
+		ActionListener buttonListener = new LayerListActionListener();
+		buttonStrip.setLayout(new BoxLayout(buttonStrip, BoxLayout.X_AXIS));
+		Icon[] btnIcons = {
+				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcAddLayer)),
+				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcDelLayer)),
+				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcCopyLayer)),
+				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcLayerUp)),
+				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcLayerDown)),
+				new ImageIcon(iMan.getImg(ResourceManager.rsrcIcMergeLayer)),
+		};
+		String[] btnCommands = {
+				"add",
+		        "delete",
+		        "copy",
+		        "move_up",
+		        "move_down",
+		        "merge",
+		};
+		String[] btnTooltips = {
+				"Add Layer",
+		        "Delete Layer",
+		        "Copy Layer",
+		        "Move Layer Up",
+		        "Move Layer Down",
+		        "Merge Layer Down",
+		};
+		for (int i = 0; i < btnCommands.length; i++) {
+			button = new JButton();
+			button.addActionListener(buttonListener);
+			button.setActionCommand(btnCommands[i]);
+			button.setIcon(btnIcons[i]);
+			button.setToolTipText(btnTooltips[i]);
+			button.setBorder(new EmptyBorder(4,4,4,4));
+			buttonStrip.add(button);
+		}
+		layerControl.add(buttonStrip, gbc);
+		gbc.gridy++;
+
+
+		//add them all into one container for passing out to the main application
+		layerPanel = new JPanel();
+		layerPanel.setLayout(new BoxLayout(layerPanel, BoxLayout.Y_AXIS));
+		JScrollPane jsp = new JScrollPane(layerSelect);
+		layerPanel.add(layerControl);
+		layerPanel.add(jsp);
 	}
 
 	protected void resizeMap() {
@@ -328,8 +408,18 @@ public class MapPane extends BgPanel {
 		int scale = (int) (dataHolder.getConfig().getTileSize() * EditorApp.mapScale);
 		g2d.setBackground(Color.black);
 		drawBackground((Graphics2D) g2d.create());
-		for (TileLayer layer : dataHolder.getMap()) {
-			layer.draw((Graphics2D)g2d.create(), EditorApp.mapScale);
+		List<TileLayer> map = dataHolder.getMap();
+		for (int i = 0; i < map.size(); i++) {
+			TileLayer layer = map.get(i);
+			if (isSoloLayerView.isSelected() && activeLayer != i) {
+				continue;
+			}
+			Graphics2D layerGfx = (Graphics2D) g2d.create();
+			if (isFadeUnfocusedLayers.isSelected() && activeLayer != i) {
+				AlphaComposite composite = AlphaComposite.SrcOver.derive(0.5f);
+				layerGfx.setComposite(composite);
+			}
+			layer.draw(layerGfx, EditorApp.mapScale);
 		}
 		//draw tile types if applicable
 		if (parent.getOtherDrawOptions()[0]) {
@@ -487,33 +577,6 @@ public class MapPane extends BgPanel {
 			p.draw(g);
 		}
 	}
-
-	public Component getLayerPane() {
-		return layerSelect;
-	}
-	
-	/* no longer necessary
-	public void setTileset(File pxa, File img) {
-		iMan.addImage(img, 1);
-		iMan.addPxa(pxa);
-		tileset = img;
-		tilePane.setTileset(pxa, img);
-		preview.setTileset(img);
-	}
-	
-	public void setNpc1Img(File f) {
-		iMan.addImage(f, 1);
-		this.npcImage1 = f;
-	}
-	public void setNpc2Img(File f) {
-		iMan.addImage(f, 1);
-		this.npcImage2 = f;
-	}
-	public void setBgImg(File f) {
-		iMan.addImage(f, 0);
-		this.bgImage = f;
-	}	
-	*/
 
 	class TileBuffer {
 		int[][] data;
@@ -1481,6 +1544,7 @@ public class MapPane extends BgPanel {
 		@Override
 		public void actionPerformed(ActionEvent eve) {
 			dataHolder.doUndo();
+			reloadLayerList();
 			repaint();
 		}
 
@@ -1493,6 +1557,7 @@ public class MapPane extends BgPanel {
 		@Override
 		public void actionPerformed(ActionEvent eve) {
 			dataHolder.doRedo();
+			reloadLayerList();
 			repaint();
 		}
 
@@ -1704,11 +1769,91 @@ public class MapPane extends BgPanel {
 		}
 	}
 
-	private class LayerListListener implements ListSelectionListener {
+	private class LayerListListener implements ListSelectionListener, KeyListener {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			activeLayer = layerSelect.getSelectedIndex();
+			if ((isFadeUnfocusedLayers != null && isFadeUnfocusedLayers.isSelected())
+					|| (isSoloLayerView != null && isSoloLayerView.isSelected())) {
+				repaint();
+			}
 		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			switch (e.getExtendedKeyCode()) {
+			case KeyEvent.VK_MINUS:
+			case KeyEvent.VK_SUBTRACT:
+				if (activeLayer > 0) {
+					activeLayer--;
+					layerSelect.setSelectedIndex(activeLayer);
+				}
+				break;
+			case KeyEvent.VK_EQUALS:
+			case KeyEvent.VK_ADD:
+				if (activeLayer < dataHolder.getMap().size()-1) {
+					activeLayer++;
+					layerSelect.setSelectedIndex(activeLayer);
+				}
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+
+		}
+	}
+
+	private class LayerListActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			switch(e.getActionCommand().toLowerCase()) {
+			case "add":
+				dataHolder.addTileLayer(++activeLayer);
+				break;
+			case "delete":
+				dataHolder.removeTileLayer(activeLayer);
+				if (activeLayer > 0) {
+					activeLayer--;
+				}
+				break;
+			case "copy":
+				dataHolder.copyTileLayer(activeLayer);
+				activeLayer++;
+				break;
+			case "move_up":
+				dataHolder.swapTileLayer(activeLayer, activeLayer-1);
+				if (activeLayer > 0) {
+					activeLayer--;
+				}
+				break;
+			case "move_down":
+				dataHolder.swapTileLayer(activeLayer, activeLayer+1);
+				if (activeLayer < dataHolder.getMap().size()-1) {
+					activeLayer++;
+				}
+				break;
+			case "merge":
+				dataHolder.mergeTileLayer(activeLayer, activeLayer+1);
+				break;
+			}
+			reloadLayerList();
+		}
+	}
+
+	private void reloadLayerList() {
+		//setListData creates a listSelectionChanged event, which will reset the activeLayer to 0
+		//so, briefly copy it here so we can put it back when it's done
+		int l = activeLayer;
+		layerSelect.setListData(dataHolder.getMap().toArray(new TileLayer[0]));
+		layerSelect.setSelectedIndex(l);
+		repaint();
 	}
 }
