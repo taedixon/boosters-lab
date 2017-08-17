@@ -426,10 +426,11 @@ public class MapPane extends BgPanel {
 				layerGfx.setComposite(composite);
 			}
 			layer.draw(layerGfx, EditorApp.mapScale);
-		}
-		//draw tile types if applicable
-		if (parent.getOtherDrawOptions()[0]) {
-			drawTileTypes((Graphics2D) g2d.create());
+			//draw tile types if applicable
+			if (parent.getOtherDrawOptions()[0]
+					&& layer.getType() == TileLayer.LAYER_TYPE.TILE_PHYSICAL) {
+				drawTileTypes((Graphics2D) g2d.create(), layer);
+			}
 		}
 		//draw entities if applicable
 		drawEntities(g2d);
@@ -475,7 +476,7 @@ public class MapPane extends BgPanel {
 	}
 
 
-	protected void drawTileTypes(Graphics2D g) {
+	protected void drawTileTypes(Graphics2D g, TileLayer layer) {
 		int mapX = dataHolder.getMapX();
 		int mapY = dataHolder.getMapY();
 
@@ -506,18 +507,7 @@ public class MapPane extends BgPanel {
 				int sourceX, sourceY;
 				int xPixel = scale * j;
 				int yPixel = scale * i;
-				int tileType;
-				int tile1 = dataHolder.getTile(j, i, 1);
-				int tile2 = dataHolder.getTile(j, i, 2);
-				if (EditorApp.EDITOR_MODE == 0) {
-					if (tile1 != 0) {
-						tileType = dataHolder.calcPxa(tile1);
-					} else {
-						tileType = dataHolder.calcPxa(tile2);
-					}
-				} else {
-					tileType = dataHolder.calcPxa(tile2);
-				}
+				int tileType = dataHolder.calcPxa(layer.getTile(j, i));
 				if (legend != null) {
 					//if (tileType < 0) System.out.println("type-" + tileType + ", ");
 					sourceX = (tileType % 0x10) * 16;
@@ -1868,6 +1858,7 @@ public class MapPane extends BgPanel {
 				dataHolder.mergeTileLayer(activeLayer, activeLayer+1);
 				break;
 			case "property":
+				new LayerPropertyDialog(parent, dataHolder.getMap().get(activeLayer));
 				break;
 			}
 			reloadLayerList();

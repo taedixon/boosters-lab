@@ -258,6 +258,7 @@ public class MapInfo implements Changeable {
 		}
 //		map = new int[EditorApp.NUM_LAYER][mapY][mapX];
 		map = new ArrayList<TileLayer>();
+		TileLayer newLayer;
 		switch (pxmVersion)
 		{
 		case 0x10: //original PXM
@@ -276,8 +277,12 @@ public class MapInfo implements Changeable {
 					//map[4][y][x] = (byte) tilePane.calcPxa(next);
 				}
 			}
-			map.add(new TileLayer("Background", mapBack, getConfig(), iMan.getImg(tileset)));
-			map.add(new TileLayer("Foreground", mapFront, getConfig(), iMan.getImg(tileset)));
+			newLayer = new TileLayer("Background", mapBack, getConfig(), iMan.getImg(tileset));
+			newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
+			map.add(newLayer);
+			newLayer = new TileLayer("Foreground", mapFront, getConfig(), iMan.getImg(tileset));
+			newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
+			map.add(newLayer);
 
 		}
 			break;
@@ -291,7 +296,11 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.get() & 0xFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
+				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
+				if (layer == 2) {
+					newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
+				}
+				map.add(newLayer);
 			}
 		}
 			break;
@@ -304,7 +313,11 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
+				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
+				if (layer == 2) {
+					newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
+				}
+				map.add(newLayer);
 			}
 		}
 			break;
@@ -317,7 +330,11 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.get() & 0xFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
+				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
+				if (layer == 2) {
+					newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
+				}
+				map.add(newLayer);
 			}
 			while (lineBuf.hasRemaining()) {
 				Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
@@ -336,7 +353,8 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
+				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
+				map.add(newLayer);
 			}
 			while (lineBuf != null && lineBuf.hasRemaining()) {
 				Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
@@ -368,7 +386,8 @@ public class MapInfo implements Changeable {
 					for (int x = 0; x < mapX; x++)
 						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
 				}
-				map.add(new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset)));
+				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
+				map.add(newLayer);
 
 				while (lineBuf != null && lineBuf.hasRemaining()) {
 					Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());

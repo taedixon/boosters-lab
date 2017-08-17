@@ -1,7 +1,10 @@
 package ca.noxid.lab.tile;
 
+import ca.noxid.lab.rsrc.ResourceManager;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Created by noxid on 11/08/17.
@@ -9,6 +12,8 @@ import java.awt.*;
 public class TileListRender extends DefaultListCellRenderer {
 
 	TileLayer layer;
+	//a bit cheaty but whatever
+	BufferedImage physicalIcon = new ResourceManager().getImg(ResourceManager.rsrcIcLayerPhys);
 
 	@Override
 	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -40,6 +45,8 @@ public class TileListRender extends DefaultListCellRenderer {
 		//draw a small version of the layer's tiles on each map
 		g2d.drawImage(layer.getIcon(), 40, 0, 100, 60, null);
 		g2d.drawString(this.getText(), 4, this.getHeight()/2);
-
+		if (layer.getType() == TileLayer.LAYER_TYPE.TILE_PHYSICAL ) {
+			g2d.drawImage(physicalIcon, this.getWidth() - physicalIcon.getWidth(), 0, null);
+		}
 	}
 }

@@ -19,8 +19,6 @@ public class TileLayer {
 	// furthermore avoid exposing this weird implementation
 	// outside of this class
 	private int[][] tileData;
-	private boolean tilesVisible;
-	private boolean typesVisbile;
 	private String name;
 	private BufferedImage tileset;
 	private BufferedImage icon;
@@ -39,8 +37,16 @@ public class TileLayer {
 		return icon;
 	}
 
+	public LAYER_TYPE getType() {
+		return layerType;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public enum LAYER_TYPE {
-		TILE_LAYER, GRADIENT_LAYER
+		TILE_LAYER, GRADIENT_LAYER, TILE_PHYSICAL
 	}
 	private LAYER_TYPE layerType;
 
@@ -72,8 +78,7 @@ public class TileLayer {
 	}
 
 	private void init() {
-		tilesVisible = true;
-		typesVisbile = false;
+		layerType = LAYER_TYPE.TILE_LAYER;
 		createDisplayBuffer();
 		icon = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
 		updateIcon();
@@ -88,6 +93,10 @@ public class TileLayer {
 		displayBuffer = new BufferedImage(w*config.getTileSize(), h*config.getTileSize(), BufferedImage.TYPE_INT_ARGB);
 
 		updateBuffer(0, 0, w, h);
+	}
+
+	public void setLayerType(LAYER_TYPE t) {
+		layerType = t;
 	}
 
 	public void merge(TileLayer layer) {

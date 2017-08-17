@@ -32,6 +32,7 @@ public class ResourceManager {
 	public static final String rsrcIcMergeLayer = "ic_merge_layer.png";
 	public static final String rsrcIcCopyLayer = "ic_copy_layer.png";
 	public static String rsrcIcLayerProp = "ic_layer_property.png";
+	public static String rsrcIcLayerPhys = "ic_layer_physical.png";
 	
 	public static final String rsrcCursor = "weed_cursor.png";
 	public static final Cursor cursor = makeCursor();
@@ -49,15 +50,15 @@ public class ResourceManager {
 	
 	private static final String[] jarImgs = {
 		rsrcTiles,
-		rsrcBackdrop, //$NON-NLS-1$
-		rsrcSplash1, //$NON-NLS-1$
-		rsrcSplash2, //$NON-NLS-1$
-		rsrcSplashMid, //$NON-NLS-1$
-		rsrcBgWhite, //$NON-NLS-1$
-		rsrcBgWhite2, //$NON-NLS-1$
-		rsrcBgBlue, //$NON-NLS-1$
-		rsrcBgBrown, //$NON-NLS-1$
-		rsrcCorner, //$NON-NLS-1$
+		rsrcBackdrop,
+		rsrcSplash1,
+		rsrcSplash2,
+		rsrcSplashMid,
+		rsrcBgWhite,
+		rsrcBgWhite2,
+		rsrcBgBlue,
+		rsrcBgBrown,
+		rsrcCorner,
 		rsrcIcAddLayer,
 		rsrcIcDelLayer,
 		rsrcIcLayerDown,
@@ -65,6 +66,7 @@ public class ResourceManager {
 		rsrcIcMergeLayer,
 		rsrcIcCopyLayer,
 		rsrcIcLayerProp,
+		rsrcIcLayerPhys,
 	};
 	public ResourceManager() {
 		imgMap = new HashMap<>();
