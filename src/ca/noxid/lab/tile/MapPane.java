@@ -310,7 +310,7 @@ public class MapPane extends BgPanel {
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent eve) {
-				LinkedList<LineSeg> ll;
+				List<LineSeg> ll;
 				switch (eve.getExtendedKeyCode()) {
 				case KeyEvent.VK_DELETE:
 					ll = dataHolder.getLines();
@@ -1490,7 +1490,9 @@ public class MapPane extends BgPanel {
 				}
 			}
 			//determine if any nodes are being selected
-			for (Iterator<LineSeg> it = dataHolder.getLines().descendingIterator();
+			// this formerly iterated over the list in reverse and I cant' remember why
+			// so if this breaks something you'll know why
+			for (Iterator<LineSeg> it = dataHolder.getLines().iterator();
 			     it.hasNext(); ) {
 				LineSeg l = it.next();
 				int selection;
@@ -1708,7 +1710,7 @@ public class MapPane extends BgPanel {
 				break;
 			case SEGMENT:
 				MapPane.this.addMouseListener(lineAdapter);
-				ArrayList<LineSeg> selectedNodes = dataHolder.getSelectedNodes();
+				List<LineSeg> selectedNodes = dataHolder.getSelectedNodes();
 				for (LineSeg l : selectedNodes) {
 					l.setType(currentType);
 				}

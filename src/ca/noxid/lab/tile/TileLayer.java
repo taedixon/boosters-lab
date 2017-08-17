@@ -2,6 +2,7 @@ package ca.noxid.lab.tile;
 
 import ca.noxid.lab.BlConfig;
 import ca.noxid.lab.SignifUndoableEdit;
+import ca.noxid.lab.rsrc.ResourceManager;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -28,6 +29,7 @@ public class TileLayer {
 	int iconRefreshThreshold = 50;
 
 	private BufferedImage displayBuffer;
+	private ResourceManager iMan;
 
 	public String getName() {
 		return name;
@@ -45,8 +47,28 @@ public class TileLayer {
 		this.name = name;
 	}
 
+	public int getHeight() {
+		return tileData.length;
+	}
+
+	public int getWidth() {
+		return tileData[0].length;
+	}
+
 	public enum LAYER_TYPE {
-		TILE_LAYER, GRADIENT_LAYER, TILE_PHYSICAL
+		// because the file value is the ordinal value,
+		// please don't reorder these and add to the END only.
+		TILE_LAYER,
+		GRADIENT_LAYER,
+		TILE_PHYSICAL;
+
+		public static LAYER_TYPE fromOrdinal(int type) {
+			if (type >= 0 && type < values().length) {
+				return values()[type];
+			} else {
+				return TILE_LAYER;
+			}
+		}
 	}
 	private LAYER_TYPE layerType;
 

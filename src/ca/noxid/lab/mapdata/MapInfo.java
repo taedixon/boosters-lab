@@ -4,10 +4,7 @@ import ca.noxid.lab.*;
 import ca.noxid.lab.entity.EntityData;
 import ca.noxid.lab.gameinfo.GameInfo;
 import ca.noxid.lab.rsrc.ResourceManager;
-import ca.noxid.lab.tile.LineSeg;
-import ca.noxid.lab.tile.MapPoly;
-import ca.noxid.lab.tile.ShiftDialog;
-import ca.noxid.lab.tile.TileLayer;
+import ca.noxid.lab.tile.*;
 import com.carrotlord.string.StrTools;
 
 import javax.swing.undo.CannotRedoException;
@@ -43,9 +40,9 @@ public class MapInfo implements Changeable {
 	public List<TileLayer> getMap() {return map;}
 
 	//MR lines
-	private LinkedList<LineSeg> nodeVec = new LinkedList<>();
-	public LinkedList<LineSeg> getLines() {return nodeVec;}
-	public ArrayList<LineSeg> getSelectedNodes() {
+	private List<LineSeg> nodeVec = new LinkedList<>();
+	public List<LineSeg> getLines() {return nodeVec;}
+	public List<LineSeg> getSelectedNodes() {
 		ArrayList<LineSeg> rv = new ArrayList<>();
 		for (LineSeg l : nodeVec) {
 			if (l.isSelected())
@@ -67,6 +64,9 @@ public class MapInfo implements Changeable {
 	// Retrieve these values from the ImageManager
 	private File tileset;
 	public File getTileset() {return tileset;}
+	public BufferedImage getTilesetImage() {
+		return iMan.getImg(getTileset());
+	}
 	private File bgImage;
 	public File getBG() {return bgImage;}
 	private File npcImage1;
@@ -157,11 +157,6 @@ public class MapInfo implements Changeable {
 	}
 	
 	protected void loadMap(Mapdata d) {
-		//load the map data
-		byte pxmVersion;
-		ByteBuffer mapBuf;
-		ByteBuffer lineBuf = null;
-		ByteBuffer polyBuf = null;
 		File directory = exeData.getDataDirectory();
 		try {
 			File currentFile;
@@ -174,243 +169,22 @@ public class MapInfo implements Changeable {
 			
 			if (!currentFile.exists())
 				writeDummyPxm(currentFile);
+
+			PxmLoader loader = new PxmLoader(currentFile, this);
 			
-			FileInputStream inStream = new FileInputStream(currentFile);
-			FileChannel inChan = inStream.getChannel();
-			ByteBuffer hBuf = ByteBuffer.allocate(8);
-			hBuf.order(ByteOrder.LITTLE_ENDIAN);
-				inChan.read(hBuf);
-				//read the filetag
-				hBuf.flip();
-				byte tagArray[] = new byte[3];
-				hBuf.get(tagArray, 0, 3);
-				if (!(new String(tagArray).equals("PXM"))) { //$NON-NLS-1$
-					inChan.close();
-					inStream.close();
-					throw new IOException(Messages.getString("MapInfo.9")); //$NON-NLS-1$
-				}
-				pxmVersion = hBuf.get();
-				mapX = hBuf.getShort();
-				mapY = hBuf.getShort();
-			
-			switch (pxmVersion) {
-			case 0x10:
-				mapBuf = ByteBuffer.allocate(mapY*mapX);
-				break;
-			case 0x20:
-				mapBuf = ByteBuffer.allocate(mapY*mapX*4);
-				break;
-			case 0x30:
-				mapBuf = ByteBuffer.allocate(mapY*mapX*4);
-				break;
-			case 0x31:
-			case 0x32:
-			case 0x21:
-				mapBuf = ByteBuffer.allocate(mapY*mapX*4*2); //shorts
-				break;
-			case 0x33:
-				mapBuf = ByteBuffer.allocate(mapY*mapX*5*2); //shorts				
-				break;
-			default:
-				mapBuf = ByteBuffer.allocate(mapY*mapX);
-			}
-			mapBuf.order(ByteOrder.LITTLE_ENDIAN);
-			inChan.read(mapBuf);
-			if (pxmVersion >= 0x30) {
-				ByteBuffer lineCount = ByteBuffer.allocate(4);
-				lineCount.order(ByteOrder.LITTLE_ENDIAN);
-				inChan.read(lineCount);
-				int nLines = lineCount.getInt(0);
-				lineBuf = ByteBuffer.allocate(nLines*20); //5 ints per line, 4 bytes per int
-				lineBuf.order(ByteOrder.LITTLE_ENDIAN);
-				inChan.read(lineBuf);
-				lineBuf.flip();
-			}
-			if (pxmVersion >= 0x32) {
-				ByteBuffer polyCount = ByteBuffer.allocate(8);
-				polyCount.order(ByteOrder.LITTLE_ENDIAN);
-				inChan.read(polyCount);
-				polyCount.flip();
-				polyBuf = ByteBuffer.allocate(polyCount.getInt());
-				polyBuf.order(ByteOrder.LITTLE_ENDIAN);
-				inChan.read(polyBuf);
-				polyBuf.flip();
-				
-			}
-			inChan.close();
-			inStream.close();
-			mapBuf.flip();
+			map = loader.getLayers();
+			nodeVec = loader.getLines();
+			polygons = loader.getPolygons();
+			mapX = loader.width;
+			mapY = loader.height;
 
 		} catch (IOException e) {
 			StrTools.msgBox(Messages.getString("MapInfo.10") + directory + "/Stage/" + d.getFile() //$NON-NLS-1$ //$NON-NLS-2$
 					+ ".pxm");			 //$NON-NLS-1$
 			mapX = 21;
 			mapY = 16;
-			if (EditorApp.EDITOR_MODE == 0) {
-				pxmVersion = 0x10;
-				mapBuf = ByteBuffer.allocate(mapY*mapX);
-			} else {
-				pxmVersion = 0x20;
-				mapBuf = ByteBuffer.allocate(mapY*mapX*4);
-			}
-			System.err.println(Messages.getString("MapInfo.0")); //$NON-NLS-1$
-			
-		}
-//		map = new int[EditorApp.NUM_LAYER][mapY][mapX];
-		map = new ArrayList<TileLayer>();
-		TileLayer newLayer;
-		switch (pxmVersion)
-		{
-		case 0x10: //original PXM
-			//needs pxa file
-		{
-			int[][] mapBack = new int[mapY][mapX];
-			int[][] mapFront = new int[mapY][mapX];
-			for (int y = 0; y < mapY; y++) {
-				for (int x = 0; x < mapX; x++) {
-					int next = 0xFF & mapBuf.get();
-					if (calcPxa(next) < 0x20)
-						mapBack[y][x] = next;
-					else
-						mapFront[y][x] = next;
-
-					//map[4][y][x] = (byte) tilePane.calcPxa(next);
-				}
-			}
-			newLayer = new TileLayer("Background", mapBack, getConfig(), iMan.getImg(tileset));
-			newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
-			map.add(newLayer);
-			newLayer = new TileLayer("Foreground", mapFront, getConfig(), iMan.getImg(tileset));
-			newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
-			map.add(newLayer);
-
-		}
-			break;
-		case 0x20: //KS PXM V1 w/ 4 layers
-		{
-			//needs pxa file
-			for (int layer = 0; layer < 4; layer++) {
-				int[][] tileData = new int[mapY][mapX];
-				for (int y = 0; y < mapY; y++)
-				{
-					for (int x = 0; x < mapX; x++)
-						tileData[y][x] = mapBuf.get() & 0xFF;
-				}
-				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
-				if (layer == 2) {
-					newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
-				}
-				map.add(newLayer);
-			}
-		}
-			break;
-		case 0x21: { //two-byte tiles
-			//needs pxa file
-			for (int layer = 0; layer < 4; layer++) {
-				int[][] tileData = new int[mapY][mapX];
-				for (int y = 0; y < mapY; y++)
-				{
-					for (int x = 0; x < mapX; x++)
-						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
-				}
-				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
-				if (layer == 2) {
-					newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
-				}
-				map.add(newLayer);
-			}
-		}
-			break;
-		case 0x30: //MR PXM w/ 4 layers + lines
-			//doesn't need pxa file
-			for (int layer = 0; layer < 4; layer++) {
-				int[][] tileData = new int[mapY][mapX];
-				for (int y = 0; y < mapY; y++)
-				{
-					for (int x = 0; x < mapX; x++)
-						tileData[y][x] = mapBuf.get() & 0xFF;
-				}
-				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
-				if (layer == 2) {
-					newLayer.setLayerType(TileLayer.LAYER_TYPE.TILE_PHYSICAL);
-				}
-				map.add(newLayer);
-			}
-			while (lineBuf.hasRemaining()) {
-				Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
-				Point p2 = new Point(lineBuf.getInt(), lineBuf.getInt());
-				LineSeg seg = new LineSeg(p1, p2, lineBuf.getInt());
-				nodeVec.add(seg);
-			}
-			break;
-		case 0x31://two-byte tiles
-		case 0x32:
-			//doesn't need pxa file
-			for (int layer = 0; layer < 4; layer++) {
-				int[][] tileData = new int[mapY][mapX];
-				for (int y = 0; y < mapY; y++)
-				{
-					for (int x = 0; x < mapX; x++)
-						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
-				}
-				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
-				map.add(newLayer);
-			}
-			while (lineBuf != null && lineBuf.hasRemaining()) {
-				Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
-				Point p2 = new Point(lineBuf.getInt(), lineBuf.getInt());
-				LineSeg seg = new LineSeg(p1, p2, lineBuf.getInt());
-				nodeVec.add(seg);
-			}
-			if (pxmVersion >= 0x32) {
-				while (polyBuf.hasRemaining()) {
-					short type = polyBuf.getShort();
-					short event = polyBuf.getShort();
-					short pointCount = polyBuf.getShort();
-					MapPoly current = new MapPoly(
-							new Point(polyBuf.getInt(), polyBuf.getInt()),
-							ca.noxid.lab.tile.TypeConfig.getType(type));
-					for (int i = 1; i < pointCount; i++) {
-						current.extend(new Point(polyBuf.getInt(), polyBuf.getInt()));
-					}
-					current.setEvent(event);
-					polygons.add(current);
-				}
-			}
-			break;
-		case 0x33:
-			for (int layer = 0; layer < 5; layer++) {
-				int[][] tileData = new int[mapY][mapX];
-				for (int y = 0; y < mapY; y++)
-				{
-					for (int x = 0; x < mapX; x++)
-						tileData[y][x] = mapBuf.getShort() & 0xFFFF;
-				}
-				newLayer = new TileLayer("Layer " + layer, tileData, getConfig(), iMan.getImg(tileset));
-				map.add(newLayer);
-
-				while (lineBuf != null && lineBuf.hasRemaining()) {
-					Point p1 = new Point(lineBuf.getInt(), lineBuf.getInt());
-					Point p2 = new Point(lineBuf.getInt(), lineBuf.getInt());
-					LineSeg seg = new LineSeg(p1, p2, lineBuf.getInt());
-					nodeVec.add(seg);
-				}
-				while (polyBuf != null && polyBuf.hasRemaining()) {
-					short type = polyBuf.getShort();
-					short event = polyBuf.getShort();
-					short pointCount = polyBuf.getShort();
-					MapPoly current = new MapPoly(
-							new Point(polyBuf.getInt(), polyBuf.getInt()),
-							ca.noxid.lab.tile.TypeConfig.getType(type));
-					for (int i = 1; i < pointCount; i++) {
-						current.extend(new Point(polyBuf.getInt(), polyBuf.getInt()));
-					}
-					current.setEvent(event);
-					polygons.add(current);
-				}
-			}
-		default: //Unknown
-			break; 
+			map = new ArrayList<>();
+			map.add(new TileLayer("Error", mapX, mapY, getConfig(), getTilesetImage()));
 		}
 	}
 	
@@ -1047,19 +821,25 @@ public class MapInfo implements Changeable {
 					}
 				break;
 			case 1: //KS
-				pxmTag[3] = 0x21;
+				pxmTag[3] = 0x22;
 				headerBuf = ByteBuffer.wrap(pxmTag);
 				pxmChannel.write(headerBuf);
-				mapBuf = ByteBuffer.allocate(mapX*mapY*4*2 + 4);
+				int bytePerLayer = mapX*mapY*2+0x24;
+				mapBuf = ByteBuffer.allocate(bytePerLayer*map.size() + 8);
 				mapBuf.order(ByteOrder.LITTLE_ENDIAN);
 				mapBuf.putShort((short) mapX);
 				mapBuf.putShort((short) mapY);
-				for (int layer = 0; layer < 4; layer++)
+				mapBuf.putInt(map.size());
+				for (TileLayer layer : map) {
+					mapBuf.putInt(layer.getType().ordinal());
+					byte[] strBuf = Arrays.copyOf(layer.getName().getBytes("UTF-8"), 0x20);
+					strBuf[0x1F] = 0; // ensure this string is properly terminated in case thats an issue for someone
+					mapBuf.put(strBuf);
 					for (int y = 0; y < mapY; y++)
-						for (int x = 0; x < mapX; x++)
-						{
-							mapBuf.putShort((short) getTile(x, y, layer));
+						for (int x = 0; x < mapX; x++) {
+							mapBuf.putShort((short) layer.getTile(x, y));
 						}
+				}
 				break;
 			case 2: //MR
 				pxmTag[3] = 0x33;

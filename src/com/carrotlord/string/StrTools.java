@@ -2,11 +2,10 @@ package com.carrotlord.string;
 
 //Language = Java 6
 //credit to carrotlord for pretty much the entire contents of this file
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-
-import javax.swing.JOptionPane;
-import javax.swing.text.JTextComponent;
 
 public class StrTools {
 
@@ -201,7 +200,7 @@ public class StrTools {
 	 * at beginIndex. Returns the offset where the substring starts.<br />
 	 * The searching is done backwards by decrementing the beginning index.
 	 * @param mainString
-	 * @param beginIndex
+	 * @param startPos
 	 * @param subString
 	 * @return
 	 */
@@ -227,7 +226,7 @@ public class StrTools {
 	 * The searching is done backwards by decrementing the beginning index.
 	 * <br />Does not care about case or capitalization.
 	 * @param mainString
-	 * @param beginIndex
+	 * @param startPos
 	 * @param subString
 	 * @return
 	 */
@@ -335,11 +334,10 @@ public class StrTools {
 	
 	public static String CString(byte[] buf, String encoding)
 	{
-		int l = 0;
-		for (int i = 0; i < buf.length; i++)
+		int l;
+		for (l = 0; l < buf.length; l++)
 		{
-			if (buf[i] == 0) {
-				l = i;
+			if (buf[l] == 0) {
 				break;
 			}
 		}
