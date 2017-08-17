@@ -138,7 +138,8 @@ public class TileLayer {
 		}
 		int[][] oldData = tileData;
 		tileData = newData;
-
+		createDisplayBuffer();
+		updateIcon();
 		return new LayerEdit(oldData, newData);
 	}
 
@@ -180,6 +181,8 @@ public class TileLayer {
 			}
 		}
 		tileData = newTiles;
+		updateBuffer(0, 0, w, h);
+		updateIcon();
 		return new LayerEdit(oldDat, newTiles);
 	}
 
