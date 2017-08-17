@@ -1861,6 +1861,7 @@ public class MapPane extends BgPanel {
 				break;
 			case "property":
 				new LayerPropertyDialog(parent, dataHolder.getMap().get(activeLayer));
+				dataHolder.markChanged();
 				break;
 			}
 			reloadLayerList();
