@@ -542,7 +542,7 @@ public class MapPane extends BgPanel {
 		if (r != null) {
 			startX = r.x - r.x % bgw;
 			if (startX < 0) startX = 0;
-			startY = r.y - r.y % bgw;
+			startY = r.y - r.y % bgh;
 			if (startY < 0) startY = 0;
 			endX = startX + r.width + bgw;
 			if (endX < 2) endX = 2;
