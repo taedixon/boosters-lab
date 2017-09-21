@@ -361,10 +361,6 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 				dragSelectRect = null;
 				repaint();
 			}
-			if (EditorApp.doubleClickPlacesEntity) {
-				if (eve.getClickCount() > 1)
-					placeEntity();
-			}
 		}
 
 		@Override

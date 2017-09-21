@@ -77,7 +77,6 @@ public class EditorApp extends JFrame implements ActionListener {
 	private static final String PREF_ENTITY = "entity_list_window_visible"; //$NON-NLS-1$
 	private static final String PREF_SPRITESHEETWINDOW = "spritesheet_window_visible";
 	private static final String PREF_MISC = "misc_display_options"; //$NON-NLS-1$
-	private static final String PREF_DOUBLECLICK_ENTITY = "double_click_places_entity"; //$NON-NLS-1$
 
 	public static final String PERSPECTIVE_TILE = "Tile"; //$NON-NLS-1$
 	public static final String PERSPECTIVE_ENTITY = "Entity"; //$NON-NLS-1$
@@ -117,7 +116,6 @@ public class EditorApp extends JFrame implements ActionListener {
 			"0.25x", "0.5x", "1x", "2x", "4x"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	public static double mapScale = 1; //represents the scale to draw the map at
 	public static double tilesetScale = 1;
-	public static boolean doubleClickPlacesEntity;
 	private Vector<TabOrganizer> componentVec = new Vector<>();
 	private boolean movingMapdata = false; // for right click map list -> move
 	private int moveIndex = 0;
@@ -352,7 +350,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		//showScriptWindow = false;
 		notesText = prefs.get(PREF_NOTES, Messages.getString("EditorApp.49")); //$NON-NLS-1$
 		showingCommands = prefs.getBoolean(PREF_COM, true);
-		doubleClickPlacesEntity = prefs.getBoolean(PREF_DOUBLECLICK_ENTITY, false);
 
 		int miscDrawOpts = prefs.getInt(PREF_MISC, 0);
 		for (int i = 0; i < otherDrawOpts.length; i++) {
@@ -375,7 +372,6 @@ public class EditorApp extends JFrame implements ActionListener {
 			prefs.putBoolean(PREF_SPRITESHEETWINDOW, showSpritesheetWindow);
 			prefs.put(PREF_NOTES, notes.getText());
 			prefs.putBoolean(PREF_COM, showingCommands);
-			prefs.putBoolean(PREF_DOUBLECLICK_ENTITY, doubleClickPlacesEntity);
 
 			int misc = 0;
 			for (int i = 0; i < otherDrawOpts.length; i++) {
@@ -926,20 +922,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		});
 		pickCol.setText(Messages.getString("EditorApp.83")); //$NON-NLS-1$
 		opsMenu.add(pickCol);
-
-		JCheckBoxMenuItem doubleClickEntity = new JCheckBoxMenuItem(new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Object src = e.getSource();
-				if (!(src instanceof JCheckBoxMenuItem))
-					return;
-				doubleClickPlacesEntity = ((JCheckBoxMenuItem) src).getState();
-				setPrefs();
-			}
-		});
-		doubleClickEntity.setText("Double Click Places Entity");
-		doubleClickEntity.setState(doubleClickPlacesEntity);
-		opsMenu.add(doubleClickEntity);
 
 		JMenuItem editorConfig = new JMenuItem(new AbstractAction() {
 			private static final long serialVersionUID = 22747309347145031L;

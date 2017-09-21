@@ -37,8 +37,10 @@ atlassian-ide-plugin.xml
 
 # End of https://www.gitignore.io/api/intellij
 
+# eclipse stuff
+
 bin/
 *.rect
-.settings/org.eclipse.jdt.core.prefs
+.settings/
 .classpath
 .project
