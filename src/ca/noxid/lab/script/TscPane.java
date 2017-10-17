@@ -1224,6 +1224,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				break;
 			}
 		}
+		sc.close();
 
 		//colour it
 		highlightDoc((StyledDocument) area.getDocument(), startLine - 1, startLine + 1);
@@ -1257,6 +1258,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					break;
 				}
 			}
+			sc.close();
 
 			//colour it
 			highlightDoc(this.getStyledDocument(), startLine - 1, startLine + 1);
