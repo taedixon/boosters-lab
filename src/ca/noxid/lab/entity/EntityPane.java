@@ -459,14 +459,7 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 					e.printStackTrace();
 				}
 			} else if (eve.getKeyCode() == KeyEvent.VK_I) {
-				if (mouseLoc == null) return;
-				int entID = 0;
-				if (entityDisplay.getSelectedValue() != null) {
-					entID = entityDisplay.getSelectedValue().getID();
-				}
-				PxeEntry newEnt = dataHolder.addEntity(mouseLoc.x, mouseLoc.y,
-						entID);
-				repaint(newEnt.getDrawArea());
+				placeEntity();
 			} else if (eve.getKeyCode() == KeyEvent.VK_A && eve.isControlDown()) {
 				selectionList.clear();
 				Iterator<PxeEntry> pxeIt = dataHolder.getPxeIterator();
@@ -478,6 +471,17 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 				
 			}
 		}
+	}
+
+	private void placeEntity() {
+		if (mouseLoc == null) return;
+		int entID = 0;
+		if (entityDisplay.getSelectedValue() != null) {
+			entID = entityDisplay.getSelectedValue().getID();
+		}
+		PxeEntry newEnt = dataHolder.addEntity(mouseLoc.x, mouseLoc.y,
+				entID);
+		repaint(newEnt.getDrawArea());
 	}
 	
 	

@@ -1375,21 +1375,25 @@ public class GameInfo {
 	    if(!destFile.exists()) {
 	        destFile.createNewFile();
 	    }
-
+	    
+	    FileInputStream sourceStream = null;
 	    FileChannel source = null;
+	    FileOutputStream destStream = null;
 	    FileChannel destination = null;
 
 	    try {
-	        source = new FileInputStream(sourceFile).getChannel();
-	        destination = new FileOutputStream(destFile).getChannel();
+	    	sourceStream = new FileInputStream(sourceFile);
+	        source = sourceStream.getChannel();
+	        destStream = new FileOutputStream(destFile);
+	        destination = destStream.getChannel();
 	        destination.transferFrom(source, 0, source.size());
 	    }
 	    finally {
-	        if(source != null) {
-	            source.close();
+	        if(sourceStream != null) {
+	            sourceStream.close();
 	        }
-	        if(destination != null) {
-	            destination.close();
+	        if(destStream != null) {
+	        	destStream.close();
 	        }
 	    }
 	}
