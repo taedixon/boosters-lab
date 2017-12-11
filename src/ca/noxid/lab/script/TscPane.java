@@ -1042,6 +1042,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	}
 
 	private static Vector<TscCommand> getCommands() {
+	    boolean advanced = false;
 		BufferedReader commandFile;
 		StreamTokenizer tokenizer;
 		Vector<TscCommand> retVal = new Vector<>();
@@ -1061,11 +1062,14 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			while (tokenizer.ttype != StreamTokenizer.TT_EOF) {  //$NON-NLS-1$
 				tokenizer.nextToken();
 				if (tokenizer.sval != null) {
-					if ("[CE_TSC]".equals(tokenizer.sval)) //$NON-NLS-1$
-					{
-						break;
-					}
-				}
+                    if ("[BL_TSC]".equals(tokenizer.sval)) { //$NON-NLS-1$
+                        break;
+                    } else if ("[CE_TSC]".equals(tokenizer.sval)) //$NON-NLS-1$
+                        {
+                            advanced = false;
+                            break;
+                        }
+                    }
 			}
 			if (tokenizer.sval == null) {
 				StrTools.msgBox(Messages.getString("TscPane.15")); //$NON-NLS-1$
@@ -1103,20 +1107,41 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				//read description
 				tokenizer.nextToken();
 				newCommand.description = tokenizer.sval;
-				//read end event
-				tokenizer.parseNumbers();
-				tokenizer.nextToken();
-				newCommand.endsEvent = tokenizer.nval > 0;
-				// read clear msgbox
-				tokenizer.parseNumbers();
-				tokenizer.nextToken();
-				newCommand.clearsMsg = tokenizer.nval > 0;
-				// read parameter seperator
-				tokenizer.nextToken();
-				newCommand.paramSep = tokenizer.nval > 0;
-				// read parameter length
-				tokenizer.nextToken();
-				newCommand.paramLen = (int) tokenizer.nval;
+                if (advanced) {
+                    //read end event
+                    tokenizer.parseNumbers();
+                    tokenizer.nextToken();
+                    newCommand.endsEvent = tokenizer.nval > 0;
+                    // read clear msgbox
+                    tokenizer.parseNumbers();
+                    tokenizer.nextToken();
+                    newCommand.clearsMsg = tokenizer.nval > 0;
+                    // read parameter seperator
+                    tokenizer.nextToken();
+                    newCommand.paramSep = tokenizer.nval > 0;
+                    // read parameter length
+                    tokenizer.nextToken();
+                    newCommand.paramLen = (int) tokenizer.nval;
+                } else {
+                    if (newCommand.commandCode.equals("<END") ||  //$NON-NLS-1$
+                            newCommand.commandCode.equals("<TRA") ||  //$NON-NLS-1$
+                            newCommand.commandCode.equals("<EVE") ||  //$NON-NLS-1$
+                            newCommand.commandCode.equals("<LDP") ||  //$NON-NLS-1$
+                            newCommand.commandCode.equals("<INI") || //$NON-NLS-1$
+                            newCommand.commandCode.equals("<ESC")) //$NON-NLS-1$
+                    {
+                        newCommand.endsEvent = true;
+                    }
+                    if (newCommand.commandCode.equals("<MSG") ||  //$NON-NLS-1$
+                            newCommand.commandCode.equals("<MS2") ||  //$NON-NLS-1$
+                            newCommand.commandCode.equals("<MS3") ||  //$NON-NLS-1$
+                            newCommand.commandCode.equals("<CLR"))  //$NON-NLS-1$
+                    {
+                        newCommand.clearsMsg = true;
+                    }
+                    newCommand.paramSep = true;
+                    newCommand.paramLen = 4;
+                }
 				tokenizer.resetSyntax();
 				tokenizer.whitespaceChars(0, 0x20);
 				tokenizer.wordChars(0x20, 0x7E);
