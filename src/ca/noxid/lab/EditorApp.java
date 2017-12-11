@@ -224,12 +224,12 @@ public class EditorApp extends JFrame implements ActionListener {
 	 */
 	EditorApp() {
 
-        //blazed
-        if (!new File("nofun").exists()) {
-            Calendar cal = Calendar.getInstance();
-            if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
-                blazed = true;
-        }
+		//blazed
+		if (!new File("nofun").exists()) {
+			Calendar cal = Calendar.getInstance();
+			if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
+				blazed = true;
+		}
 
 		//setups
 		if (EDITOR_MODE == 2) {
@@ -1129,7 +1129,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		});
 		menuItem.setText(Messages.getString("EditorApp.104")); //$NON-NLS-1$
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnExeLoad.add(menuItem);
 		ops.add(menuItem);
@@ -1151,7 +1151,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		});
 		menuItem.setText(Messages.getString("EditorApp.110")); //$NON-NLS-1$
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnExeLoad.add(menuItem);
 		ops.add(menuItem);
@@ -1200,7 +1200,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		});
 		menuItem.setText(Messages.getString("EditorApp.53")); //$NON-NLS-1$
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnProjectLoad.add(menuItem);
 		ops.add(menuItem);
