@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="New Game values">
-	<panel title="hax">
+<hack name="New Game Values (IntroState 3)" author="Noxid">
+	<panel>
 		<field type="label">
 			Starting health (max)
 		</field>

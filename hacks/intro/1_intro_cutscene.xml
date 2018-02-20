@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Title Screen Stuff">
-	<panel title="hax">
-		<field type="label">
-			Window Title
-		</field>
-		<field type="text" offset="0x48EFD0" size="40"/>
+<hack name="Intro Cutscene (IntroState 1)" author="Noxid and BLink">
+	<panel>
 		<field  type="label">
 			Title event
 		</field>
@@ -22,6 +18,9 @@
 			Title focus(Y)
 		</field>
 		<field type="text" offset="0x00F75F" size="1"/>
-		
+		<field  type="label">
+			Intro cutscene screen time
+		</field>
+		<field type="text" offset="0x40F7A0" size="4"/>
 	</panel>	
 </hack>
