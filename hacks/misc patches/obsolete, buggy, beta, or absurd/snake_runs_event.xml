@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Gun Event" author="EnlightenedOne">
+	<panel>
+		<field type="label">Snake Level 1 Event</field>
+		<field type="info">
+			Adds a function into the lvl 1 Snake Bullet (ID: 1) so that it runs event #0010 every frame it lives. Make sure to add this event in head.tsc !
+		</field>
+			
+		<field type="data" offset="0x4043CE">
+6A 0A E8 BB D5 01 00 89 EC 5D C3 90
+		</field>
+	</panel>
+
+	<panel>
+		<field type = "info">
+			I highly recommend you set the "Frames to Live" value below to "0", otherwise it will run more than once!
+		</field>
+
+		<field type="text" size="1" offset="0x48f078" />
+	</panel>
+
+</hack>

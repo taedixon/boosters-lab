@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Possible Beta Room Name Printout" author="Clownacy">
+	<panel>
+	<field type="info">
+		Restores an unused RECT hidden in the mapsystem menu's code, and moves the room name text to the top-left.
+		Pixel replaced this with the wide version seen in the final game.
+	</field>
+	<field type="data" offset="0x414296">
+		8D 45 F0 50 E8 41 87 FF FF 83 C4 08 6A 0D 68 50
+		36 49 00 6A 03 6A 00
+	</field>
+	</panel>
+</hack>
