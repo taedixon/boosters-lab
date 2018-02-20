@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Text Colour">
+<hack name="Text Colour" author="Noxid?">
 	<panel>
 		<field type="info">
 		Change these all to the same value to alter the text colour of the game.
 		Hint: try converting the number to hex, it's an RGB value.
+		(Also you might want to use a different font to remove the shadow effect.)
 		</field>
 		
 		<field type="text" size="4" offset="0x40D21A"/>

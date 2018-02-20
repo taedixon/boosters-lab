@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Translate Errors">
+<hack name="Translate Errors" author="Noxid">
 	<panel>
 	<field type="info">
 		This hack translates the error messages in the game,

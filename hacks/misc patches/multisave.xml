@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Multiple Save Files">
+<hack name="Multiple Save Files" author="Noxid">
 	<panel>
 		<field type="info">
 			Adds a save selection menu to the title screen with 3 save slots. Uses Undead Core space.

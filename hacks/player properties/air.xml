@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Air Amount">
+<hack name="Air Amount" author="Noxid">
 	<panel>
 	<field type="info">
 		Allows you to specify the max air available to the player.

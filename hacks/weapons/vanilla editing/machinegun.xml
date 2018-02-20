@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Machine Gun (ID: 4)">
+<hack name="Machine Gun (ID: 4)" author="EnlightenedOne">
 	<panel>
 		<panel>
 			<panel title="Bullet IDs">
@@ -16,20 +16,11 @@
 				<field type="text" size="1" offset="0x41E3E2" col="1"></field>
 				<field type="text" size="1" offset="0x41E3D7"></field>
 			</panel>
-			<panel title="Effects Spawning">	
-				<field type="label">Up-Left:</field>
-				<field type="label">Up-Right:</field>
-				<field type="label">Mid-Left:</field>
-				<field type="label">Mid-Right:</field>
-				<field type="label">Down-Left:</field>
-				<field type="label">Down-Right:</field>
-				<field type="text" size="1" offset="0x41E50A" col="1"></field>
-				<field type="text" size="1" offset="0x41E558"></field>
-				<field type="text" size="1" offset="0x41E6B6"></field>
-				<field type="text" size="1" offset="0x41E704"></field>
-				<field type="text" size="1" offset="0x41E610"></field>
-				<field type="text" size="1" offset="0x41E65E"></field>
-			</panel>	
+			<panel>	
+				<field type="label">*Lower value = Faster speed</field>
+				<field type="label">†Set to 0 to remove reloading</field>
+				<field type="label">‡Plus 1, so "1" actually means "2"</field>
+			</panel>
 		</panel>
 		<panel col="1">
 			<panel title="Properties">
@@ -52,11 +43,6 @@
 				<field type="text" size="1" offset="0x41E73E"></field>
 				<field type="text" size="1" offset="0x41E730"></field>
 			</panel>	
-			<panel>	
-				<field type="label">*Lower value = Faster speed</field>
-				<field type="label">†Set to 0 to remove reloading</field>
-				<field type="label">‡Plus 1, so "1" actually means "2"</field>
-			</panel>
 		</panel>		
 	</panel>
 </hack>

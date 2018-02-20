@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Nemesis (ID: 12)">
+<hack name="Nemesis (ID: 12)" author="EnlightenedOne">
 	<panel>
 		<panel>
 			<panel title="Bullet IDs">
@@ -10,22 +10,6 @@
 				<field type="text" size="1" offset="0x41F73C"></field>
 				<field type="text" size="1" offset="0x41F745"></field>
 			</panel>
-			<panel title="Effects Spawning">	
-				<field type="label">Up-Left:</field>
-				<field type="label">Up-Right:</field>
-				<field type="label">Mid-Left:</field>
-				<field type="label">Mid-Right:</field>
-				<field type="label">Down-Left:</field>
-				<field type="label">Down-Right:</field>
-				<field type="text" size="1" offset="0x41F7CD" col="1"></field>
-				<field type="text" size="1" offset="0x41F81B"></field>
-				<field type="text" size="1" offset="0x41F928"></field>
-				<field type="text" size="1" offset="0x41F976"></field>
-				<field type="text" size="1" offset="0x41F882"></field>
-				<field type="text" size="1" offset="0x41F8CE"></field>
-			</panel>
-		</panel>
-		<panel col="1">
 			<panel title="Properties">
 				<field type="label">Maximum Shots On-Screen*:</field>
 				<field type="label">Maximum Shots Family:</field>
@@ -34,6 +18,8 @@
 				<field type="text" size="1" offset="0x41F74A"></field>
 				<field type="text" size="1" offset="0x41F770"></field>
 			</panel>
+		</panel>
+		<panel col="1">
 			<panel title="SFX">
 				<field type="label">Out of Ammo Sound:</field>
 				<field type="label">LVL 1 Sound:</field>

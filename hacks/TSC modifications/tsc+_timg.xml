@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="TSC+ TIMG addon">
+<hack name="TSC+ TIMG addon" author="Noxid">
 	<panel>
 		<field type="info">
 		 An addon for TSC+ that lets you use TIMG commands.
-		 Note that this also modifies the title screen behaviour.
+		 Note that this also modifies the title screen behavior.
 		</field>
 		
 		<!-- inject main loop 1 -->

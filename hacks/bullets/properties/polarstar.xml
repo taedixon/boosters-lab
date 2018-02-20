@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Polar Star">
+<hack name="Polar Star" author="Noxid">
 <panel>
 	<panel title="Level 1 (ID: 4)">
 		<panel title="Bullet stats">

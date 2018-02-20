@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Missile Launcher (ID: 5)">
+<hack name="Missile Launcher (ID: 5)" author="EnlightenedOne">
 	<panel>
 		<panel>
 			<panel title="Bullet IDs">
@@ -10,31 +10,22 @@
 				<field type="text" size="1" offset="0x41E8B2"></field>
 				<field type="text" size="1" offset="0x41E8BB"></field>
 			</panel>
-			<panel title="Properties and SFX">	
-				<field type="label">LVL 1 and 2 Ammo Consumed Per Shot‡:</field>
-				<field type="label">LVL 3 Ammo Consumed Per Shot‡:</field>
-				<field type="label">LVL 1 and 2 Out of Ammo Sound‡:</field>
-				<field type="label">LVL 3 Out of Ammo Sound‡:</field>
-				<field type="label">Firing Sound‡:</field>
+			<panel title="Properties and SFX‡">	
+				<field type="label">LVL 1 and 2 Ammo Consumed Per Shot:</field>
+				<field type="label">LVL 3 Ammo Consumed Per Shot:</field>
+				<field type="label">LVL 1 and 2 Out of Ammo Sound:</field>
+				<field type="label">LVL 3 Out of Ammo Sound:</field>
+				<field type="label">Firing Sound:</field>
 				<field type="text" size="1" offset="0x41E970" col="1"></field>
 				<field type="text" size="1" offset="0x41EBB3"></field>
 				<field type="text" size="1" offset="0x41E980"></field>
 				<field type="text" size="1" offset="0x41EBC3"></field>
 				<field type="text" size="1" offset="0x41EFB5"></field>
 			</panel>
-			<panel title="Effects Spawning">	
-				<field type="label">Up-Left:</field>
-				<field type="label">Up-Right:</field>
-				<field type="label">Mid-Left:</field>
-				<field type="label">Mid-Right:</field>
-				<field type="label">Down-Left:</field>
-				<field type="label">Down-Right:</field>
-				<field type="text" size="1" offset="0x41E9FB" col="1"></field>
-				<field type="text" size="1" offset="0x41EA49"></field>
-				<field type="text" size="1" offset="0x41EB51"></field>
-				<field type="text" size="1" offset="0x41EB92"></field>
-				<field type="text" size="1" offset="0x41EAAE"></field>
-				<field type="text" size="1" offset="0x41EAFC"></field>
+			<panel>
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+				<field type="label">†Remember: Each shot creates 3 bullets</field>
+				<field type="label">‡These are shared with Super Missile Launcher (ID: 10)</field>
 			</panel>
 		</panel>
 		<panel col="1">	
@@ -54,7 +45,7 @@
 				<field type="text" size="1" offset="0x41E916"></field>
 				<field type="text" size="1" offset="0x41E921"></field>
 			</panel>
-			<panel title="Level 3 Maximum Shots on Screen">	
+			<panel title="Level 3 Maximum Shots on Screen†">	
 				<field type="label">First Max-Shot Family:</field>
 				<field type="label">First Family Shot Limit*:</field>
 				<field type="label">Second Family:</field>
@@ -63,11 +54,6 @@
 				<field type="text" size="1" offset="0x41E937"></field>
 				<field type="text" size="1" offset="0x41E940"></field>
 				<field type="text" size="1" offset="0x41E94B"></field>
-			</panel>
-			<panel>
-				<field type="label">*Plus 1, so "1" actually means "2"</field>
-				<field type="label">†Remember: Each shot creates 3 bullets</field>
-				<field type="label">‡These are shared with Super Missile Launcher (ID: 10)</field>
 			</panel>
 		</panel>
 	</panel>

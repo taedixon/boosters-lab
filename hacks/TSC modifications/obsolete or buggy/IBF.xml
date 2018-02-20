@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="IBF command">
+<hack name="IBF command" author="BLink">
 	<panel>
-		<field type="label">NPC 352</field>
+		<field type="label">Replaces NPC 352</field>
 		<field type="info">
 			Infinite Booster Fuel
-			An TSC hack that let's you fly forever with booster when set. Set = *IBF0002 Not set = *IBF 0000 NOTE: it says set/unset even if you die so you might want to throw an extra flag into the death script.
+			An TSC hack that let's you fly forever with booster when set. Set = *IBF0002 Not set = *IBF 0000
+			NOTE: it stays set/unset even if you die so you might want to throw an extra flag into the death script.
+			Also does NOT save to Profile!
 		</field>
 			
 		<field type="data" offset="0x46d5d0">

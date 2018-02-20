@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="FPS">
+<hack name="Frames Per Second (FPS)" author="EnlightenedOne">
 	<panel>
 		<field type="info">
 		Change both of these to the same value to alter the waiting period

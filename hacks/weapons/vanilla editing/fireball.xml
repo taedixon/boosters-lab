@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Fireball (ID: 3)">
+<hack name="Fireball (ID: 3)" author="EnlightenedOne">
 	<panel>
 		<panel>
 			<panel title="Bullet IDs">
@@ -10,28 +10,17 @@
 				<field type="text" size="1" offset="0x41E164"></field>
 				<field type="text" size="1" offset="0x41E181"></field>
 			</panel>
-			<panel title="Effects Spawning">	
-				<field type="label">Up-Left:</field>
-				<field type="label">Up-Right:</field>
-				<field type="label">Mid-Left:</field>
-				<field type="label">Mid-Right:</field>
-				<field type="label">Down-Left:</field>
-				<field type="label">Down-Right:</field>
-				<field type="text" size="1" offset="0x41E1EE" col="1"></field>
-				<field type="text" size="1" offset="0x41E23C"></field>
-				<field type="text" size="1" offset="0x41E349"></field>
-				<field type="text" size="1" offset="0x41E397"></field>
-				<field type="text" size="1" offset="0x41E2A3"></field>
-				<field type="text" size="1" offset="0x41E2EF"></field>
-			</panel>
-		</panel>
-		<panel col="1">
 			<panel title="SFX">
 				<field type="label">Ammo Consumed Per Shot:</field>
 				<field type="label">Firing Sound:</field>
 				<field type="text" size="1" offset="0x41E198" col="1"></field>
 				<field type="text" size="1" offset="0x41E3BB"></field>
 			</panel>
+			<panel>
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+			</panel>
+		</panel>
+		<panel col="1">
 			<panel title="Maximum Shots on Screen">
 				<field type="label">LVL 1 Maximum Shots*:</field>
 				<field type="label">LVL 1 Max-Shot Family:</field>
@@ -45,9 +34,6 @@
 				<field type="text" size="1" offset="0x41E14E"></field>
 				<field type="text" size="1" offset="0x41E176"></field>
 				<field type="text" size="1" offset="0x41E16B"></field>
-			</panel>
-			<panel>
-				<field type="label">*Plus 1, so "1" actually means "2"</field>
 			</panel>
 		</panel>
 	</panel>

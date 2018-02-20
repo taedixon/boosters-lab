@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Polar Star (ID: 2)">
+<hack name="Polar Star (ID: 2)" author="EnlightenedOne">
 	<panel>
 		<panel>
 			<panel title="Bullet IDs">
@@ -18,6 +18,8 @@
 				<field type="text" size="1" offset="0x41DE9A"></field>		
 				<field type="text" size="1" offset="0x41DEC0"></field>
 			</panel>
+		</panel>
+		<panel col="1">
 			<panel title="SFX">	
 				<field type="label">Out of Ammo Sound:</field>
 				<field type="label">LVL 1 and 2 Sound:</field>
@@ -25,23 +27,7 @@
 				<field type="text" size="1" offset="0x41DED0" col="1"></field>
 				<field type="text" size="1" offset="0x41E0F0"></field>
 				<field type="text" size="1" offset="0x41E0FE"></field>
-			</panel>
-		</panel>
-		<panel col="1">
-			<panel title="Effects Spawning">	
-					<field type="label">Up-Left:</field>
-					<field type="label">Up-Right:</field>
-					<field type="label">Mid-Left:</field>
-					<field type="label">Mid-Right:</field>
-					<field type="label">Down-Left:</field>
-					<field type="label">Down-Right:</field>
-					<field type="text" size="1" offset="0x41DF1D" col="1"></field>
-					<field type="text" size="1" offset="0x41DF6B"></field>
-					<field type="text" size="1" offset="0x41E078"></field>
-					<field type="text" size="1" offset="0x41E0C6"></field>
-					<field type="text" size="1" offset="0x41DFD2"></field>
-					<field type="text" size="1" offset="0x41E01E"></field>
-				</panel>	
+			</panel>	
 			<panel>
 				<field type="label">*Plus 1, so "1" actually means "2"</field>
 			</panel>

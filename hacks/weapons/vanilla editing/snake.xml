@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Snake (ID: 1)">
+<hack name="Snake (ID: 1)" author="EnlightenedOne">
 	<panel>
 		<panel>
 			<panel title="Bullet IDs">
@@ -10,6 +10,11 @@
 				<field type="text" size="1" offset="0x41DBFC"></field>
 				<field type="text" size="1" offset="0x41DC05"></field>
 			</panel>
+			<panel>
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+			</panel>
+		</panel>
+		<panel col="1">
 			<panel title="Properties and SFX">	
 				<field type="label">Maximum Shots On-Screen*:</field>
 				<field type="label">Maximum Shots Family:</field>
@@ -19,26 +24,7 @@
 				<field type="text" size="1" offset="0x41DC0A"></field>
 				<field type="text" size="1" offset="0x41DC30"></field>
 				<field type="text" size="1" offset="0x41DE53"></field>
-			</panel>
-		</panel>
-		<panel col="1">
-			<panel title="Effects Spawning">	
-					<field type="label">Up-Left:</field>
-					<field type="label">Up-Right:</field>
-					<field type="label">Mid-Left:</field>
-					<field type="label">Mid-Right:</field>
-					<field type="label">Down-Left:</field>
-					<field type="label">Down-Right:</field>
-					<field type="text" size="1" offset="0x41DC86" col="1"></field>
-					<field type="text" size="1" offset="0x41DCD4"></field>
-					<field type="text" size="1" offset="0x41DDE1"></field>
-					<field type="text" size="1" offset="0x41DE2F"></field>
-					<field type="text" size="1" offset="0x41DD3B"></field>
-					<field type="text" size="1" offset="0x41DD87"></field>
 			</panel>	
-			<panel>
-					<field type="label">*Plus 1, so "1" actually means "2"</field>
-			</panel>
 		</panel>
 	</panel>
 </hack>

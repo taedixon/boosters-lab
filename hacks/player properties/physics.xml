@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Player Physics">
+<hack name="Player Physics" author="Noxid">
 	<panel>
-		<panel title="water physics">
+		<panel title="Water physics">
 			<field type="label">Max run speed:</field>
 			<field type="label">Max fall speed:</field>
 			<field type="label">Gravity</field>
@@ -21,7 +21,7 @@
 			<field type="text" size="4" offset="0x415719" />
 		</panel>
 		
-		<panel title="regular physics" col="1">
+		<panel title="Regular physics" col="1">
 			<field type="label">Max run speed:</field>
 			<field type="label">Max fall speed:</field>
 			<field type="label">Gravity</field>

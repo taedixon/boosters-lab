@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Map Boss Health">
-	<panel title="hax">
+<hack name="Map Boss Health" author="EnlightenedOne">
+	<panel title="">
 		<field type="label">
 			Omega
 		</field>
