@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Contact Event">
+<hack name="Contact Event" author="Noxid">
 	<panel>
 		<field type="label">NPC037</field>
 		<field type="info">
 		activate-on-touch event that deactivates itself until
- the player has moved off of it. This entity has no sprite.
+		the player has moved off of it, (runs its event when you move away). This entity has no sprite.
+		Replaces Signpost.
 		</field>
 		
 		<field type="data" offset="0x42d760">

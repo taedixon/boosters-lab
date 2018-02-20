@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="BlinkBeam">
+<hack name="BlinkBeam" author="Noxid">
 	<panel>
 		<field type="label">NPC048</field>
 		<field type="info">
-		 replaces omega projectile
-		 a laser thing that runs on a timer
+		 Replaces Omega projectile
+		 A laser thing that runs on a timer
 		</field>
 		
 		<field type="data" offset="0x42f780">

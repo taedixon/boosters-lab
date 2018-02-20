@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Trolly NPC">
+<hack name="Trolley NPC" author="Noxid">
 	<panel>
 		<field type="label">NPC 56</field>
 		<field type="info">
-			Replaces NPC 56 with a trolly
+			Replaces NPC 56 (SandZone Beetle) with a trolley
 			that moves left and right. It can be turned on/off with some
 			script state. State 0 is idle, state 1 is roll.
 		</field>

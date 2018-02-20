@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="NPC Spawner (Periodic)" author="BLink">
+	<panel>
+		<field type="label">NPC 100</field>
+		<field type="info">
+		Periodic NpcSpawner
+		&gt;ANP----:XXXX:YYYY
+		XXXX is the entity ID and YYYY is the frames between spawn time.
+		It will not spawn endless null NPC's at ANP 0
+		Replaces Grate.
+		</field>
+		
+		<field type="data" offset="0x43b350">
+		55 89 e5 8b 7d 08 a0 38 e6 49 00 84 c0 74 35 83
+		7f 74 00 74 2f 8b 57 4c 39 57 64 7f 05 ff 47 64
+		eb 22 31 c0 89 47 64 68 00 01 00 00 50 50 50 50
+		8b 5f 0c 53 8b 5f 08 53 8b 47 74 50 e8 9f c4 00
+		00 83 c4 20 89 ec 5d c3
+		</field>
+	</panel>
+</hack>

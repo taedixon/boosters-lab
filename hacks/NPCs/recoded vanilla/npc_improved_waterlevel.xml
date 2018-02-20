@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Improved Water NPC" author="BLink">
+	<panel>
+		<field type="label">NPC 191</field>
+		<field type="info">
+		&lt;ANP0000 makes water rise to wherever the npc is at a vanilla rate (0x1000)
+		&lt;ANPXXXX does the same but the speedcap is X multiplied by 10 (so &lt;ANP0004 would make the speed 0x40)
+		</field>
+			
+		<field type="data" offset="0x44d740">
+			55 89 e5 8b 7d 08 83 7f 70 00 7f 10 8b 47 0c 05
+			00 20 00 00 a3 90 9c 49 00 ff 47 70 8b 47 0c 39
+			05 90 9c 49 00 7f 06 83 47 14 03 eb 04 83 6f 14
+			03 83 7f 74 00 74 08 8b 47 74 6b c0 10 eb 05 b8
+			00 10 00 00 39 47 14 7c 03 89 47 14 f7 d8 39 47
+			14 7f 03 89 47 14 8b 47 14 01 05 90 9c 49 00 eb
+			13 39 47 14 7c 03 89 47 14 8b 47 14 01 05 90 9c
+			49 00 eb 00 89 ec 5d c3
+		</field>
+	</panel>
+</hack>
