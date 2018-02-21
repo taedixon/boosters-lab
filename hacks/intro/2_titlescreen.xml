@@ -29,7 +29,7 @@
 			<field type = "label">
 				Character X position [NEW]
 			</field>
-			<field type="text" size="2" offset="0x41033A" />
+			<field type="text" size="1" offset="0x41033A" />
 			<field type = "label">
 				Character Y position [NEW]
 			</field>
@@ -37,7 +37,7 @@
 			<field type = "label">
 				Character X position [LOAD]
 			</field>
-			<field type="text" size="2" offset="0x410317" />
+			<field type="text" size="1" offset="0x410317" />
 			<field type = "label">
 				Character Y position [LOAD]
 			</field>
