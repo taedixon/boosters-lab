@@ -1045,7 +1045,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	}
 
 	private static Vector<TscCommand> getCommands() {
-		boolean advanced = false;
+		boolean advanced = true;
 		BufferedReader commandFile;
 		StreamTokenizer tokenizer;
 		Vector<TscCommand> retVal = new Vector<>();
@@ -1089,10 +1089,8 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			retVal = new Vector<>();
 			for (int i = 0; i < numCommand; i++) {
 				TscCommand newCommand = new TscCommand();
-				System.out.println(tokenizer.lineno());
 				//read command code
 				tokenizer.nextToken();
-				System.out.println(tokenizer.sval);
 				newCommand.commandCode = tokenizer.sval;
 				//read how many parameters it has
 				tokenizer.parseNumbers();
@@ -1104,7 +1102,6 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				//read the CE parameters
 				newCommand.CE_param = new char[4];
 				tokenizer.nextToken();
-				System.out.println(tokenizer.sval);
 				tokenizer.sval.getChars(0, 4, newCommand.CE_param, 0);
 				//read short name
 				tokenizer.nextToken();
@@ -1113,7 +1110,6 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				tokenizer.nextToken();
 				newCommand.description = tokenizer.sval;
 				if (advanced) {
-					System.out.println("ADVANCED!!");
 					tokenizer.parseNumbers();
 					//read end event
 					tokenizer.nextToken();
@@ -1128,12 +1124,11 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					int[] paramLen = new int[4];
 					for (int j = 0; j < paramLen.length; j++) {
 						tokenizer.nextToken();
-						paramLen[i] = (int) tokenizer.nval;
-						System.out.println("paramLen[" + i + "] = " + (int) tokenizer.nval);
+						paramLen[j] = (int) tokenizer.nval;
+						System.out.println("paramLen[" + j + "] = " + (int) tokenizer.nval);
 					}
 					newCommand.paramLen = paramLen;
 				} else {
-					System.out.println("Basic...");
 					if (newCommand.commandCode.equals("<END") ||  //$NON-NLS-1$
 							newCommand.commandCode.equals("<TRA") ||  //$NON-NLS-1$
 							newCommand.commandCode.equals("<EVE") ||  //$NON-NLS-1$
