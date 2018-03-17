@@ -310,17 +310,20 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			return;
 		}
 
-		if (selCom.numParam <= 0) {
-			return;
+		int commandSize = 0;
+		for (int i = 0; i < selCom.numParam; i++) {
+			commandSize += selCom.paramLen[i];
+			if (selCom.paramSep && i < selCom.numParam - 1)
+				commandSize++;
 		}
-		int commandSize = selCom.paramLen + selCom.numParam * (selCom.paramSep ? selCom.paramLen + 1 : selCom.paramLen) - 1;
-		if (selCom.numParam < 2) commandSize -= 1;
+		int paramStart = 4;
 		if (cmd.length() > commandSize) {
 			for (int i = 0; i < selCom.numParam; i++) {
-				int paramInt = selCom.paramLen;
+				int paramLen = selCom.paramLen[i];
+				String arg = cmd.substring(paramStart, paramStart + paramLen);
+				paramStart += paramLen;
 				if (selCom.paramSep)
-					paramInt++;
-				String arg = cmd.substring(4 + i * paramInt, 4 + selCom.paramLen + i * paramInt);
+					paramStart++;
 				addCommandExtra(selCom.CE_param[i], arg);
 			}
 		}
@@ -1120,8 +1123,12 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					tokenizer.nextToken();
 					newCommand.paramSep = tokenizer.nval > 0;
 					// read parameter length
-					tokenizer.nextToken();
-					newCommand.paramLen = (int) tokenizer.nval;
+					int[] paramLen = new int[4];
+					for (int j = 0; j < paramLen.length; j++) {
+						tokenizer.nextToken();
+						paramLen[i] = (int) tokenizer.nval;
+					}
+					newCommand.paramLen = paramLen;
 				} else {
 					if (newCommand.commandCode.equals("<END") ||  //$NON-NLS-1$
 							newCommand.commandCode.equals("<TRA") ||  //$NON-NLS-1$
@@ -1140,7 +1147,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 						newCommand.clearsMsg = true;
 					}
 					newCommand.paramSep = true;
-					newCommand.paramLen = 4;
+					newCommand.paramLen = new int[] {4, 4, 4, 4};
 				}
 				tokenizer.resetSyntax();
 				tokenizer.whitespaceChars(0, 0x20);
@@ -1282,7 +1289,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					}
 					String comStr = selCom.commandCode;
 					for (int i = 0; i < selCom.numParam; i++) {
-						for (int j = 0; j < selCom.paramLen; j++) {
+						for (int j = 0; j < selCom.paramLen[i]; j++) {
 							if (i < selCom.numParam) {
 								comStr += (char) ('W' + i);
 							} else {
@@ -1313,7 +1320,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					String comStr = Messages.getString(
 							"TscPane.43") + selCom.name + "\n" + selCom.commandCode; //$NON-NLS-1$ //$NON-NLS-2$
 					for (int i = 0; i < selCom.numParam; i++) {
-						for (int j = 0; j < selCom.paramLen; j++) {
+						for (int j = 0; j < selCom.paramLen[i]; j++) {
 							if (i < selCom.numParam) {
 								comStr += (char) ('W' + i);
 							} else {

@@ -26,6 +26,7 @@ public class TscLexer {
 	private int strPos;
 	private String cmd;
 	private int argsRemaining;
+	private int paramNum;
 
 	private TscToken lastToken;
 
@@ -115,7 +116,7 @@ public class TscLexer {
 				//number token
 				//try to grab the value one character at a time
 				TscCommand c = cmdMap.get(cmd);
-				for (int i = 0; i < c.paramLen; i++) {
+				for (int i = 0; i < c.paramLen[paramNum]; i++) {
 					try {
 						tokenStr += line.charAt(strPos + i);
 					} catch (IndexOutOfBoundsException e) {
@@ -127,15 +128,16 @@ public class TscLexer {
 						return nextToken;
 					}
 				}
-				nextToken = new TscToken(TscPane.STYLE_NUM, tokenStr, lineNum, character, character + c.paramLen);
+				nextToken = new TscToken(TscPane.STYLE_NUM, tokenStr, lineNum, character, character + c.paramLen[paramNum]);
 				if (lastToken.getContents().equals("<FAC") && //$NON-NLS-1$
 						tokenStr.equals("0000")) //$NON-NLS-1$
 				{
 					isFace = false;
 				}
-				character += c.paramLen;
-				strPos += c.paramLen;
+				character += c.paramLen[paramNum];
+				strPos += c.paramLen[paramNum];
 				argsRemaining--;
+				paramNum++;
 			} else {
 				//spacer token
 				if (cmdMap.containsKey(cmd) && cmdMap.get(cmd).paramSep) {
@@ -167,6 +169,7 @@ public class TscLexer {
 					}
 				}
 				cmd = tokenStr;
+				paramNum = 0;
 				if (cmdMap.containsKey(cmd)) {
 					argsRemaining = cmdMap.get(cmd).numParam;
 				} else {
@@ -176,14 +179,14 @@ public class TscLexer {
 				{
 					isFace = true;
 				}
-				if (cmdMap.containsKey(cmd) && cmdMap.get(cmd).endsEvent)
-				{
-					wasEnded = true;
-				}
-				if (tokenStr.equals("<CLR")) //$NON-NLS-1$
-				{
-					charCount = 0;
-					overLimit = false;
+				if (cmdMap.containsKey(cmd)) {
+					TscCommand cmdDef = cmdMap.get(cmd);
+					if (cmdDef.endsEvent)
+						wasEnded = true;
+					if (cmdDef.clearsMsg) {
+						charCount = 0;
+						overLimit = false;
+					}
 				}
 				nextToken = new TscToken(TscPane.STYLE_TAG, tokenStr, lineNum, character, character + 4);
 				character += 4;

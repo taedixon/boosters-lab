@@ -37,94 +37,94 @@ Format:
 NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1!
 
 [BL_TSC]	91
-<AE+	0	----	Arms Energy +	Refill all weapon ammo.	0	0	1	4
-<AM+	2	aA--	ArMs +	Give weapon W with X ammo. Use 0000 for infinite ammo.	0	0	1	4
-<AM-	1	a---	ArMs -	Remove weapon W.	0	0	1	4
-<AMJ	2	ae--	ArMs Jump	Jump to event X if the PC has weapon W.	0	0	1	4
-<ANP	3	N#d-	Animate NPc	Give all entities W scriptstate X and direction Y. Used for animation.	0	0	1	4
-<BOA	1	#---	BOss Animation	Give map-boss (eg Omega) scriptstate W.	0	0	1	4
-<BSL	1	N---	Boss Script Load	Start boss fight with entity W. Use 0000 to end the boss fight.	0	0	1	4
-<CAT	0	----	(C?) All Text	Instantly display text. Use before a <MSG/2/3; works until <END. Same command as <SAT.	0	0	1	4
-<CIL	0	----	Clear ILlustration	Clear illustration (during credits).	0	0	1	4
-<CLO	0	----	CLOse	Close message box.	0	1	1	4
-<CLR	0	----	CLeaR	Clear message box.	0	1	1	4
-<CMP	3	xyt-	Change MaP	tile Change the tile at coordinates W:X to type Y. Produces smoke.	0	0	1	4
-<CMU	1	u---	Change MUsic	Change music to song W.	0	0	1	4
-<CNP	3	Nnd-	Change NPc	Change all entities W to type X with direction Y.	0	0	1	4
-<CPS	0	----	Clear Prop. Sound	Stops the propeller sound.	0	0	1	4
-<CRE	0	----	CREdits	Rolls credits.	0	0	1	4
-<CSS	0	----	Clear Stream Sound	Stops the stream sound.	0	0	1	4
-<DNA	1	n---	Delete Npc (All?)	Remove all entities of type W.	0	0	1	4
-<DNP	1	N---	Delete NPc	Remove all entities W.	0	0	1	4
-<ECJ	2	#e--	Event Check Jump	Jump to event X if any entities W exist.	0	0	1	4
-<END	0	----	END	End the current scripted event.	0	0	1	4
-<EQ+	1	#---	EQuip +	Equip item W.	0	0	1	4
-<EQ-	1	#---	EQuip -	Dequip item W.	0	0	1	4
-<ESC	0	----	ESCape	Quit to title screen.	1	0	1	4
-<EVE	1	e---	EVEnt	Go to event W.	0	0	1	4
-<FAC	1	f---	FACe	Show face W in the message box.	0	0	1	4
-<FAI	1	d---	FAde In	Fade in with direction W.	0	0	1	4
-<FAO	1	d---	FAde Out	Fade out with direction W.	0	0	1	4
-<FL+	1	F---	FLag +	Set flag W. Using flags over 8000 is inadvisable.	0	0	1	4
-<FL-	1	F---	FLag -	Clear flag W.	0	0	1	4
-<FLA	0	----	FLAsh	Flash the screen white.	0	0	1	4
-<FLJ	2	Fe--	FLag Jump	Jump to event X if flag W is set.	0	0	1	4
-<FMU	0	----	Fade MUsic	Fade the music out.	0	0	1	4
-<FOB	2	N.--	Focus On Boss	Focus on boss W in X ticks. Use X ] 0.	0	0	1	4
-<FOM	1	.---	Focus On Me	Focus on the PC in W ticks. Use W ] 0.	0	0	1	4
-<FON	2	N.--	Focus On Npc	Focus on entity W in X ticks. Use X ] 0.	0	0	1	4
-<FRE	0	----	FREe	Free game action and the PC.	0	0	1	4
-<GIT	1	g---	Graphic ITem	Display an item or weapon icon above the message box. Add 1000 to W for items. Use 0000 to remove.	0	0	1	4
-<HMC	0	----	Hide My Character	Hide the PC.	0	0	1	4
-<INI	0	----	INItialize	Reset memory and restart game.	1	0	1	4
-<INP	3	Nnd-	(Initialize?) NPc	Change entity W to type X with direction Y and set entity flag 100 (0x8000).	0	0	1	4
-<IT+	1	i---	ITem +	Give item W.	0	0	1	4
-<IT-	1	i---	ITem -	Remove item W.	0	0	1	4
-<ITJ	2	ie--	ITem Jump	Jump to event X if the PC has item W.	0	0	1	4
-<KEY	0	----	KEY lock	Lock player controls and hide status bars until <END.	0	0	1	4
-<LDP	0	----	LoaD Profile	Load the saved game.	1	0	1	4
-<LI+	1	#---	LIfe +	Recover W health.	0	0	1	4
-<ML+	1	#---	Max Life +	Increase the current and maximum health by W.	0	0	1	4
-<MLP	0	----	Map (LP?)	Display a map of the current area.	0	0	1	4
-<MM0	0	----	My Motion 0	Halt the PC's forward motion.	0	0	1	4
-<MNA	0	----	Map NAme	Display the map name.	0	0	1	4
-<MNP	4	Nxyd	Move NPc	Move entity W to coordinates X:Y with direction Z.	0	0	1	4
-<MOV	2	xy--	MOVe	Move the PC to coordinates W:X.	0	0	1	4
-<MPJ	1	e---	MaP Jump	Jump to event W if the map flag for the current area is set.	0	0	1	4
-<MP+	1	#---	MaP +	Set map flag W. Map flags cannot be unset. Highest usable flag is 127.	0	0	1	4
-<MS2	0	----	MeSsage 2	Open an invisible message box at the top of screen.	0	1	1	4
-<MS3	0	----	MeSsage 3	Open a message box at the top of screen.	0	1	1	4
-<MSG	0	----	MeSsaGe	Open a message box at the bottom of the screen.	0	1	1	4
-<MYB	1	d---	MY Bump	Causes the PC to hop in the direction opposite of W. Using up or down causes the jump to be vertical.	0	0	1	4
-<MYD	1	d---	MY Direction	Causes the PC to face direction W.	0	0	1	4
-<NCJ	2	ne--	Npc Check Jump	Jump to event X if any entity of type W exists.	0	0	1	4
-<NOD	0	----	NOD	Wait for player input before resuming script.	0	0	1	4
-<NUM	1	#---	NUMber	Prints the value [4a5b34+W*4] to the message box. Use 0000 to print the last used W from compatible commands (eg AM+).	0	0	1	4.
-<PRI	0	----	PRevent Interaction	Lock player controls and freeze game action.	0	0	1	4
-<PS+	2	#m--	Portal Slot +	Set teleporter slot W to event X. Selecting slot W while using the teleporter menu will jump to event X.	0	0	1	4
-<QUA	1	.---	QUAke	Shake the screen for W ticks.	0	0	1	4
-<RMU	0	----	Restore MUsic	Resume the song last played.	0	0	1	4
-<SAT	0	----	Speed-up All Text	Instantly display text. Use before a <MSG/2/3; works until <END. Same command as <CAT.	0	0	1	4
-<SIL	1	l---	Show ILlustration	Show illustration W (during credits).	0	0	1	4
-<SK+	1	F---	SKipflag +	Set skipflag W.	0	0	1	4
-<SK-	1	F---	Skipflag -	Clear skipflag W.	0	0	1	4
-<SKJ	2	Fe--	SKipflag Jump	Jump to event X if skipflag W is set.	0	0	1	4
-<SLP	0	----	Show Location Portals	Show the teleporter menu.	1	0	1	4
-<SMC	0	----	Show My Character	Unhides the PC.	0	0	1	4
-<SMP	2	xy--	Shift MaP	tile Subtract 1 from the tile type at coordinates W:X. Does not create smoke.	0	0	1	4
-<SNP	4	nxyd	Set NPc	Create an entity of type W at coordinates X:Y with direction Z.	0	0	1	4
-<SOU	1	s---	SOUnd	Play sound effect W.	0	0	1	4
-<SPS	0	----	Start Propeller Sound	Start the propeller sound.	0	0	1	4
-<SSS	1	#---	Start Stream Sound	Start the stream sound with volume W.	0	0	1	4
-<STC	0	----	Save Time Counter	Saves current time to 290.rec.	0	0	1	4
-<SVP	0	----	SaVe Profile	Saves current game.	0	0	1	4
-<TAM	3	aaA-	Trade ArMs	Trade weapon W for weapon X and set max ammo to Y. Use 0000 to keep the same amount of ammo.	0	0	1	4
-<TRA	4	mexy	TRAnsport	Travel to map W, run event X, and move the PC to coordinates Y:Z.	1	0	1	4
-<TUR	0	----	Text UnRead?	Instantly display text. Use after a <MSG/2/3; works until another <MSG/2/3 or an <END.	0	0	1	4
-<UNI	1	#---	UNIverse?	Set character movement type. Use 0000 for normal, 0001 for zero-G and 0002 to disallow movement.	0	0	1	4
-<UNJ	2	#e--	UNiverse Jump	Jump to event X if movement is of type W (0000 for normal, 0001 for zero-G).	0	0	1	4
-<WAI	1	.---	WAIt	Pause script for W ticks.	0	0	1	4
-<WAS	0	----	WAit until Standing	Pause script until character is on ground.	0	0	1	4
-<XX1	1	l---	XX1	Show the island falling in manner W. Use 0000 to have it crash and 0001 to have it stop midway.	0	0	1	4
-<YNJ	1	e---	Yes/No Jump	Prompt Yes/No; jump to event W if No is selected.	0	0	1	4
-<ZAM	0	----	Zero ArMs	Sets all weapon energy to zero.	0	0	1	4
+<AE+	0	----	Arms Energy +	Refill all weapon ammo.	0	0	1	4	4	4	4
+<AM+	2	aA--	ArMs +	Give weapon W with X ammo. Use 0000 for infinite ammo.	0	0	1	4	4	4	4
+<AM-	1	a---	ArMs -	Remove weapon W.	0	0	1	4	4	4	4
+<AMJ	2	ae--	ArMs Jump	Jump to event X if the PC has weapon W.	0	0	1	4	4	4	4
+<ANP	3	N#d-	Animate NPc	Give all entities W scriptstate X and direction Y. Used for animation.	0	0	1	4	4	4	4
+<BOA	1	#---	BOss Animation	Give map-boss (eg Omega) scriptstate W.	0	0	1	4	4	4	4
+<BSL	1	N---	Boss Script Load	Start boss fight with entity W. Use 0000 to end the boss fight.	0	0	1	4	4	4	4
+<CAT	0	----	(C?) All Text	Instantly display text. Use before a <MSG/2/3; works until <END. Same command as <SAT.	0	0	1	4	4	4	4
+<CIL	0	----	Clear ILlustration	Clear illustration (during credits).	0	0	1	4	4	4	4
+<CLO	0	----	CLOse	Close message box.	0	1	1	4	4	4	4
+<CLR	0	----	CLeaR	Clear message box.	0	1	1	4	4	4	4
+<CMP	3	xyt-	Change MaP	tile Change the tile at coordinates W:X to type Y. Produces smoke.	0	0	1	4	4	4	4
+<CMU	1	u---	Change MUsic	Change music to song W.	0	0	1	4	4	4	4
+<CNP	3	Nnd-	Change NPc	Change all entities W to type X with direction Y.	0	0	1	4	4	4	4
+<CPS	0	----	Clear Prop. Sound	Stops the propeller sound.	0	0	1	4	4	4	4
+<CRE	0	----	CREdits	Rolls credits.	0	0	1	4	4	4	4
+<CSS	0	----	Clear Stream Sound	Stops the stream sound.	0	0	1	4	4	4	4
+<DNA	1	n---	Delete Npc (All?)	Remove all entities of type W.	0	0	1	4	4	4	4
+<DNP	1	N---	Delete NPc	Remove all entities W.	0	0	1	4	4	4	4
+<ECJ	2	#e--	Event Check Jump	Jump to event X if any entities W exist.	0	0	1	4	4	4	4
+<END	0	----	END	End the current scripted event.	0	0	1	4	4	4	4
+<EQ+	1	#---	EQuip +	Equip item W.	0	0	1	4	4	4	4
+<EQ-	1	#---	EQuip -	Dequip item W.	0	0	1	4	4	4	4
+<ESC	0	----	ESCape	Quit to title screen.	1	0	1	4	4	4	4
+<EVE	1	e---	EVEnt	Go to event W.	0	0	1	4	4	4	4
+<FAC	1	f---	FACe	Show face W in the message box.	0	0	1	4	4	4	4
+<FAI	1	d---	FAde In	Fade in with direction W.	0	0	1	4	4	4	4
+<FAO	1	d---	FAde Out	Fade out with direction W.	0	0	1	4	4	4	4
+<FL+	1	F---	FLag +	Set flag W. Using flags over 8000 is inadvisable.	0	0	1	4	4	4	4
+<FL-	1	F---	FLag -	Clear flag W.	0	0	1	4	4	4	4
+<FLA	0	----	FLAsh	Flash the screen white.	0	0	1	4	4	4	4
+<FLJ	2	Fe--	FLag Jump	Jump to event X if flag W is set.	0	0	1	4	4	4	4
+<FMU	0	----	Fade MUsic	Fade the music out.	0	0	1	4	4	4	4
+<FOB	2	N.--	Focus On Boss	Focus on boss W in X ticks. Use X ] 0.	0	0	1	4	4	4	4
+<FOM	1	.---	Focus On Me	Focus on the PC in W ticks. Use W ] 0.	0	0	1	4	4	4	4
+<FON	2	N.--	Focus On Npc	Focus on entity W in X ticks. Use X ] 0.	0	0	1	4	4	4	4
+<FRE	0	----	FREe	Free game action and the PC.	0	0	1	4	4	4	4
+<GIT	1	g---	Graphic ITem	Display an item or weapon icon above the message box. Add 1000 to W for items. Use 0000 to remove.	0	0	1	4	4	4	4
+<HMC	0	----	Hide My Character	Hide the PC.	0	0	1	4	4	4	4
+<INI	0	----	INItialize	Reset memory and restart game.	1	0	1	4	4	4	4
+<INP	3	Nnd-	(Initialize?) NPc	Change entity W to type X with direction Y and set entity flag 100 (0x8000).	0	0	1	4	4	4	4
+<IT+	1	i---	ITem +	Give item W.	0	0	1	4	4	4	4
+<IT-	1	i---	ITem -	Remove item W.	0	0	1	4	4	4	4
+<ITJ	2	ie--	ITem Jump	Jump to event X if the PC has item W.	0	0	1	4	4	4	4
+<KEY	0	----	KEY lock	Lock player controls and hide status bars until <END.	0	0	1	4	4	4	4
+<LDP	0	----	LoaD Profile	Load the saved game.	1	0	1	4	4	4	4
+<LI+	1	#---	LIfe +	Recover W health.	0	0	1	4	4	4	4
+<ML+	1	#---	Max Life +	Increase the current and maximum health by W.	0	0	1	4	4	4	4
+<MLP	0	----	Map (LP?)	Display a map of the current area.	0	0	1	4	4	4	4
+<MM0	0	----	My Motion 0	Halt the PC's forward motion.	0	0	1	4	4	4	4
+<MNA	0	----	Map NAme	Display the map name.	0	0	1	4	4	4	4
+<MNP	4	Nxyd	Move NPc	Move entity W to coordinates X:Y with direction Z.	0	0	1	4	4	4	4
+<MOV	2	xy--	MOVe	Move the PC to coordinates W:X.	0	0	1	4	4	4	4
+<MPJ	1	e---	MaP Jump	Jump to event W if the map flag for the current area is set.	0	0	1	4	4	4	4
+<MP+	1	#---	MaP +	Set map flag W. Map flags cannot be unset. Highest usable flag is 127.	0	0	1	4	4	4	4
+<MS2	0	----	MeSsage 2	Open an invisible message box at the top of screen.	0	1	1	4	4	4	4
+<MS3	0	----	MeSsage 3	Open a message box at the top of screen.	0	1	1	4	4	4	4
+<MSG	0	----	MeSsaGe	Open a message box at the bottom of the screen.	0	1	1	4	4	4	4
+<MYB	1	d---	MY Bump	Causes the PC to hop in the direction opposite of W. Using up or down causes the jump to be vertical.	0	0	1	4	4	4	4
+<MYD	1	d---	MY Direction	Causes the PC to face direction W.	0	0	1	4	4	4	4
+<NCJ	2	ne--	Npc Check Jump	Jump to event X if any entity of type W exists.	0	0	1	4	4	4	4
+<NOD	0	----	NOD	Wait for player input before resuming script.	0	0	1	4	4	4	4
+<NUM	1	#---	NUMber	Prints the value [4a5b34+W*4] to the message box. Use 0000 to print the last used W from compatible commands (eg AM+).	0	0	1	4	4	4	4.
+<PRI	0	----	PRevent Interaction	Lock player controls and freeze game action.	0	0	1	4	4	4	4
+<PS+	2	#m--	Portal Slot +	Set teleporter slot W to event X. Selecting slot W while using the teleporter menu will jump to event X.	0	0	1	4	4	4	4
+<QUA	1	.---	QUAke	Shake the screen for W ticks.	0	0	1	4	4	4	4
+<RMU	0	----	Restore MUsic	Resume the song last played.	0	0	1	4	4	4	4
+<SAT	0	----	Speed-up All Text	Instantly display text. Use before a <MSG/2/3; works until <END. Same command as <CAT.	0	0	1	4	4	4	4
+<SIL	1	l---	Show ILlustration	Show illustration W (during credits).	0	0	1	4	4	4	4
+<SK+	1	F---	SKipflag +	Set skipflag W.	0	0	1	4	4	4	4
+<SK-	1	F---	Skipflag -	Clear skipflag W.	0	0	1	4	4	4	4
+<SKJ	2	Fe--	SKipflag Jump	Jump to event X if skipflag W is set.	0	0	1	4	4	4	4
+<SLP	0	----	Show Location Portals	Show the teleporter menu.	1	0	1	4	4	4	4
+<SMC	0	----	Show My Character	Unhides the PC.	0	0	1	4	4	4	4
+<SMP	2	xy--	Shift MaP	tile Subtract 1 from the tile type at coordinates W:X. Does not create smoke.	0	0	1	4	4	4	4
+<SNP	4	nxyd	Set NPc	Create an entity of type W at coordinates X:Y with direction Z.	0	0	1	4	4	4	4
+<SOU	1	s---	SOUnd	Play sound effect W.	0	0	1	4	4	4	4
+<SPS	0	----	Start Propeller Sound	Start the propeller sound.	0	0	1	4	4	4	4
+<SSS	1	#---	Start Stream Sound	Start the stream sound with volume W.	0	0	1	4	4	4	4
+<STC	0	----	Save Time Counter	Saves current time to 290.rec.	0	0	1	4	4	4	4
+<SVP	0	----	SaVe Profile	Saves current game.	0	0	1	4	4	4	4
+<TAM	3	aaA-	Trade ArMs	Trade weapon W for weapon X and set max ammo to Y. Use 0000 to keep the same amount of ammo.	0	0	1	4	4	4	4
+<TRA	4	mexy	TRAnsport	Travel to map W, run event X, and move the PC to coordinates Y:Z.	1	0	1	4	4	4	4
+<TUR	0	----	Text UnRead?	Instantly display text. Use after a <MSG/2/3; works until another <MSG/2/3 or an <END.	0	0	1	4	4	4	4
+<UNI	1	#---	UNIverse?	Set character movement type. Use 0000 for normal, 0001 for zero-G and 0002 to disallow movement.	0	0	1	4	4	4	4
+<UNJ	2	#e--	UNiverse Jump	Jump to event X if movement is of type W (0000 for normal, 0001 for zero-G).	0	0	1	4	4	4	4
+<WAI	1	.---	WAIt	Pause script for W ticks.	0	0	1	4	4	4	4
+<WAS	0	----	WAit until Standing	Pause script until character is on ground.	0	0	1	4	4	4	4
+<XX1	1	l---	XX1	Show the island falling in manner W. Use 0000 to have it crash and 0001 to have it stop midway.	0	0	1	4	4	4	4
+<YNJ	1	e---	Yes/No Jump	Prompt Yes/No; jump to event W if No is selected.	0	0	1	4	4	4	4
+<ZAM	0	----	Zero ArMs	Sets all weapon energy to zero.	0	0	1	4	4	4	4
