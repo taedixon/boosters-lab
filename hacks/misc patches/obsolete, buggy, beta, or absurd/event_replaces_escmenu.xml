@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Opening ESC Menu runs Event Instead" author="Enlight">
+<hack name="Opening ESC Menu runs Event Instead" author="EnlightenedOne">
 	<panel>
 		<panel>
 			<field type="label">Instead of pulling up the ESC/RESET menu</field>

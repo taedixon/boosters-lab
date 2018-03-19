@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Disable Parts of the HUD UI" author="Enlight">
+<hack name="Disable Parts of the HUD UI" author="EnlightenedOne">
 	<panel><panel>
 		<field type="info">
 			Just check the elements you don't want to appear.

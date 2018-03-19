@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Player Size" author="SlightlyInteligentMonkey">
+<hack name="Player Size" author="SlightlyIntelligentMonkey">
 
 	<panel col = "1" >
 		<field type="info">

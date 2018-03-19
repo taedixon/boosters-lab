@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="Text Colour" author="Noxid?">
+<hack name="Text Colour" author="Noxid">
 	<panel>
 		<field type="info">
 		Change these all to the same value to alter the text colour of the game.

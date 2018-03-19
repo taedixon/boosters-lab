@@ -3,7 +3,7 @@
 	<panel>
 		<field type="info">
 		 An addon for TSC+ that lets you use TIMG commands.
-		 Note that this also modifies the title screen behavior.
+		 Note that this also modifies the title screen behaviour.
 		</field>
 		
 		<!-- inject main loop 1 -->

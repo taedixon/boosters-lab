@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="UNDO: Multiple Save Files" author="Enlight">
+<hack name="UNDO: Multiple Save Files" author="EnlightenedOne">
 	<panel>
 		<field type="info">
 			Undoes the Multisave Hack, though this could mess up other title hacks.
