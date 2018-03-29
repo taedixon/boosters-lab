@@ -1,20 +1,20 @@
 0000 (none - silence)
 0001 Mischievous Robot
 0002 Safety
-0003 (no title)
+0003 Game Over
 0004 Gravity
 0005 On To Grasstown
 0006 Meltdown 2
 0007 Eyes of Flame
 0008 Gestation
 0009 Mimiga Town
-0010 (no title)
+0010 Get Item!
 0011 Balrog's Theme
 0012 Cemetary
 0013 Plant
 0014 Pulse
-0015 (no title)
-0016 (no title)
+0015 Victory!
+0016 Get Life Capsule!
 0017 Tyrant
 0018 Run!
 0019 Jenka 1
