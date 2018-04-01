@@ -1125,7 +1125,6 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					for (int j = 0; j < paramLen.length; j++) {
 						tokenizer.nextToken();
 						paramLen[j] = (int) tokenizer.nval;
-						System.out.println("paramLen[" + j + "] = " + (int) tokenizer.nval);
 					}
 					newCommand.paramLen = paramLen;
 				} else {
