@@ -395,7 +395,7 @@ public class HackDialog extends JDialog implements TreeSelectionListener {
 					}
 				}
 				
-				rv = new PluggableImage(img);
+				rv = new PluggableLabel(img);
 				break;
 			}
 
@@ -583,6 +583,14 @@ public class HackDialog extends JDialog implements TreeSelectionListener {
 		 * 
 		 */
 		private static final long serialVersionUID = -6896681669212669152L;
+		
+		public PluggableLabel(ImageIcon icon) {
+			this.setIcon(icon);
+		}
+		
+		public PluggableLabel() {
+			this(null);
+		}
 
 		@Override
 		public int getOffset() {
@@ -596,13 +604,12 @@ public class HackDialog extends JDialog implements TreeSelectionListener {
 
 		@Override
 		public void addText(String txt) {
-			this.setText(txt);
+			if (this.getIcon() == null)
+				this.setText(txt);
 		}
 
 		@Override
 		public void addAttribute(String name, String value) {
-			// TODO Auto-generated method stub
-
 		}
 
 	}
@@ -829,39 +836,6 @@ public class HackDialog extends JDialog implements TreeSelectionListener {
 		} else {
 			return Integer.parseInt(nv);
 		}
-	}
-
-	private class PluggableImage extends JLabel implements PluggableComponent {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 4747820319314384700L;
-
-		public PluggableImage(ImageIcon icon) {
-			this.setIcon(icon);
-		}
-
-		@Override
-		public int getOffset() {
-			return 0;
-		}
-
-		@Override
-		public List<Patch> getData() {
-			return null;
-		}
-
-		@Override
-		public void addText(String txt) {
-			if (this.getIcon() == null)
-				this.setText(txt);
-		}
-
-		@Override
-		public void addAttribute(String name, String value) {
-		}
-
 	}
 
 	@Override
