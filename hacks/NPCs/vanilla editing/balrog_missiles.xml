@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Balrog (Missiles) Editor" author="Jables">
+    <panel>
+	
+	<panel>
+	<field type="info">
+		This patch allows you to modify the Balrog (Missiles) entity and his Missiles.
+	</field>
+	</panel>
+        
+    <panel>
+    <panel title="Balrog's Missiles">
+
+	<field type="label">Missile Quantity:</field>
+	<field type="label">*The higher the value, the more missiles Balrog will shoot.</field>
+	<field type="label">**30 is the default value.</field>
+	<field type="label">WARNING: a value over 99 may break your game.</field>
+    <field type="text" size="1" offset="0x0448EE9" />
+	
+	<field type="label">Missile Intelligence:</field>
+	<field type="label">*The higher the value, the more precise and direct the missiles home in on Quote.</field>
+    <field type="text" size="1" offset="0x04497A2" />
+	
+	<field type="label">Missile Speed (Left)</field>
+	<field type="label">*The higher the value, the slower the missiles travel left.</field>
+    <field type="text" size="4" offset="0x0449807" />
+	
+	<field type="label">Missile Acceleration (Left)</field>
+	<field type="label">*The higher the value, the slower the missiles accelerate left.</field>
+    <field type="text" size="4" offset="0x0449813" />
+	
+	<field type="label">Missile Speed (Right)</field>
+	<field type="label">*The lower the value, the slower the missiles travel right.</field>
+    <field type="text" size="4" offset="0x044981D" />
+	
+	<field type="label">Missile Acceleration (Right)</field>
+	<field type="label">*The lower the value, the slower the missiles accelerate right.</field>
+    <field type="text" size="4" offset="0x0449829" />
+	</panel>
+	
+	<panel>
+    <panel title="Balrog (Missiles) Attributes">
+	
+		<field type="label">Missile firing behavior frequency:</field>
+	<field type="label">*The higher the value, the more often Balrog will jump and shoot missiles.</field>
+    <field type="text" size="1" offset="0x0448C1C" />
+	
+	<field type="label">Waiting Time:</field>
+	<field type="label">*Balrog's waiting time before he runs. The higher the value, the longer Balrog will stand around before he starts moving.</field>
+    <field type="text" size="1" offset="0x0448C30" />
+	
+	<field type="label">Grab Timer:</field>
+	<field type="label">*The lower the value, the quicker Quote gets thrown from Balrog's grasp.</field>
+    <field type="text" size="1" offset="0x0449105" />
+</panel>
+</panel>
+
+<panel>
+    <panel title="Balrog (Missiles) Misc. Cosmetics">
+	
+		<field type="label">Running animation speed:</field>
+	<field type="label">*The higher the value, the slower the running animation is.</field>
+    <field type="text" size="1" offset="0x0448CD0" />
+	
+	<field type="label">Sound Effect for Balrog's running animation:</field>
+	<field type="label">Experiment, and have fun!</field>
+    <field type="text" size="1" offset="0x0448D01" />
+	
+	</panel>
+	</panel>
+	</panel>
+	</panel>
+
+</hack>

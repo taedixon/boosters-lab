@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Polar Star (ID: 2)" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<panel title="Bullet IDs">
+				<field type="label">LVL 1 Bullet ID:</field>
+				<field type="label">LVL 2 Bullet ID:</field>
+				<field type="label">LVL 3 Bullet ID:</field>
+				<field type="text" size="1" offset="0x41DE83" col="1"></field>
+				<field type="text" size="1" offset="0x41DE8C"></field>
+				<field type="text" size="1" offset="0x41DE95"></field>
+			</panel>
+			<panel title="Properties">
+				<field type="label">Maximum Shots On-Screen*:</field>
+				<field type="label">Maximum Shots Family:</field>
+				<field type="label">Ammo Consumed Per Shot:</field>
+				<field type="text" size="1" offset="0x41DEA5" col="1"></field>
+				<field type="text" size="1" offset="0x41DE9A"></field>		
+				<field type="text" size="1" offset="0x41DEC0"></field>
+			</panel>
+		</panel>
+		<panel col="1">
+			<panel title="SFX">	
+				<field type="label">Out of Ammo Sound:</field>
+				<field type="label">LVL 1 and 2 Sound:</field>
+				<field type="label">LVL 3 Sound:</field>
+				<field type="text" size="1" offset="0x41DED0" col="1"></field>
+				<field type="text" size="1" offset="0x41E0F0"></field>
+				<field type="text" size="1" offset="0x41E0FE"></field>
+			</panel>	
+			<panel>
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

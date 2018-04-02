@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Missile Ammo Drops" author="EnlightenedOne">
+	<panel>
+		<field type = "label">Missile Drops (Entity #86) attempts to</field>
+		<field type = "label">load ammo to weapon ID</field>
+		<field type="text" size="1" offset="0x419BBD" />
+		<field type = "label">But if it isn't equipped, it instead</field>
+		<field type = "label">loads ammo to weapon ID</field>
+		<field type="text" size="1" offset="0x419BEA" />
+		<field type = "label">(Set them to "6" or something to disable them)</field>
+	</panel>	
+</hack>

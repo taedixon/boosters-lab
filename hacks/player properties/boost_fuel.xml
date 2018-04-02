@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Booster Fuel" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<field type = "label">Booster 0.8</field>
+			<field type="text" size="2" offset="0x4157a7"/>
+			<field type = "label">Booster 2.0</field>
+			<field type="text" size="2" offset="0x4157bd"/>
+		</panel>
+		<panel>
+			<field type="info">
+			(Default is 50 for both.)
+			</field>
+		</panel>
+	</panel>
+</hack>

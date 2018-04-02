@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Remove the Player Aiming Up and Down" author="BLink">
+	<panel>
+		<panel>
+			<field type="label">Removes up/down aiming for the player.</field>
+			<field type="label">(They can still look up/down to move the camera.)</field>
+		</panel>
+		<panel>
+			<field type="data" offset="0x415B75">
+			90 90 90 90 90 90 90 90 90 90 EB 0A C7 05 44 E6
+			49 00 00 00 00 00 8B 0D 10 E2 49 00 23 0D 3C 36
+			49 00 74 17 8B 15 3C E6 49 00 83 E2 08 75 0C 90
+			90 90 90 90 90 90 90 90 90
+			</field>
+		</panel>
+	</panel>
+</hack>

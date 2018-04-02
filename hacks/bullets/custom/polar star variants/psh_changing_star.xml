@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="The Changing Star" author="Hina">
+	<panel>
+		<field type="label">Polar Star bullet</field>
+		<field type="info">
+			Instead of disappearing, the bullet changes into some other bullet after reaching its maximum range.
+		</field>
+			
+		<field type="data" offset="0x4047B0">
+c8 00 00 00 8b 4d 08 ff 41 4c 8b 41 4c 3b 41 54
+7e 27 c7 41 0c 00 00 00 00 ff 71 38 ff 71 14 ff
+71 10 8b 45 0c 83 e8 01 83 c0 1c 50 e8 9f f7 ff
+ff 83 c4 10 e9 9b 00 00 00 83 79 28 00 75 3a c7
+41 28 01 00 00 00 8b 41 38 83 f8 03 77 2b ff 24
+85 86 48 40 00 c7 41 18 00 f0 ff ff eb 19 c7 41
+1c 00 f0 ff ff eb 10 c7 41 18 00 10 00 00 eb 07
+c7 41 1c 00 10 00 00 eb 0c 8b 41 18 01 41 10 8b
+41 1c 01 41 14 8b 45 0c 83 f8 01 74 07 83 f8 02
+74 09 eb 13 b8 80 00 00 00 eb 05 b8 a0 00 00 00
+ba 20 00 00 00 eb 0a b8 80 00 00 00 ba 30 00 00
+00 83 79 38 01 74 08 83 79 38 03 74 02 eb 03 83
+c0 10 89 51 40 83 c2 10 89 51 48 89 41 3c 83 c0
+10 89 41 44 c9 c3 05 48 40 00 0e 48 40 00 17 48
+40 00 20 48 40 00
+		</field>
+	</panel>
+
+	<panel>
+		<field type = "label">
+			ID of the spawned bullet (please use level 1 bullets)
+		</field>
+
+		<field type="text" size="1" offset="0x4047da" />
+	</panel>
+
+</hack>

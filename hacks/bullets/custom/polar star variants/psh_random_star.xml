@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="The Random Star" author="Hina">
+	<panel>
+		<field type="label">Polar Star bullet</field>
+		<field type="info">
+			Makes Polar Star bullets spin like crazy and fly in random direction with random speed.
+		</field>
+			
+		<field type="data" offset="0x4047B0">
+c8 00 00 00 8b 4d 08 ff 41 4c 8b 41 4c 3b 41 54
+7e 1e c7 41 0c 00 00 00 00 6a 00 6a 03 ff 71 14
+ff 71 10 e8 b8 64 00 00 83 c4 10 e9 aa 00 00 00
+83 79 28 00 75 39 c7 41 28 01 00 00 00 68 00 10
+00 00 68 00 f0 ff ff e8 54 ab 00 00 83 c4 08 8b
+4d 08 89 41 18 68 00 10 00 00 68 00 f0 ff ff e8
+3c ab 00 00 83 c4 08 8b 4d 08 89 41 1c eb 0c 8b
+41 18 01 41 10 8b 41 1c 01 41 14 8b 45 0c 83 f8
+01 74 07 83 f8 02 74 09 eb 13 b8 80 00 00 00 eb
+05 b8 a0 00 00 00 ba 20 00 00 00 eb 0a b8 80 00
+00 00 ba 30 00 00 00 83 79 38 01 7e 06 83 69 38
+01 eb 04 83 41 38 01 83 79 38 01 74 08 83 79 38
+03 74 02 eb 03 83 c0 10 89 51 40 83 c2 10 89 51
+48 89 41 3c 83 c0 10 89 41 44 c9 c3
+		</field>
+	</panel>
+
+	<panel>
+		<field type = "label">
+			I'm not making this modifiable, have a nice day
+		</field>
+	</panel>
+
+</hack>

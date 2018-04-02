@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Weapon Effects" author="EnlightenedOne">
+	<panel><panel>
+		<field type = "info">I need to add the modes later.</field>
+		<panel>
+	<panel>
+		<panel title="Both Missile Launchers">
+			<panel title="Level 1 and 2">	
+				<field type="label">Up-Left:</field>
+				<field type="label">Up-Right:</field>
+				<field type="label">Mid-Left:</field>
+				<field type="label">Mid-Right:</field>
+				<field type="label">Down-Left:</field>
+				<field type="label">Down-Right:</field>
+				<field type="text" size="1" offset="0x41E9FB" col="1"></field>
+				<field type="text" size="1" offset="0x41EA49"></field>
+				<field type="text" size="1" offset="0x41EB51"></field>
+				<field type="text" size="1" offset="0x41EB92"></field>
+				<field type="text" size="1" offset="0x41EAAE"></field>
+				<field type="text" size="1" offset="0x41EAFC"></field>
+			</panel>
+			<panel title="Level 3">	
+				<field type="label">Up-Left:</field>
+				<field type="label">Up-Right:</field>
+				<field type="label">Mid-Left:</field>
+				<field type="label">Mid-Right:</field>
+				<field type="label">Down-Left:</field>
+				<field type="label">Down-Right:</field>
+				<field type="text" size="1" offset="0x41EC41" col="1"></field>
+				<field type="text" size="1" offset="0x41ECD0"></field>
+				<field type="text" size="1" offset="0x41EEAE"></field>
+				<field type="text" size="1" offset="0x41EF49"></field>
+				<field type="text" size="1" offset="0x41ED7F"></field>
+				<field type="text" size="1" offset="0x41EE12"></field>
+			</panel>
+		</panel>
+		<panel title="Spur">	
+			<field type="label">Up-Left:</field>
+			<field type="label">Up-Right:</field>
+			<field type="label">Mid-Left:</field>
+			<field type="label">Mid-Right:</field>
+			<field type="label">Down-Left:</field>
+			<field type="label">Down-Right:</field>
+			<field type="text" size="1" offset="0x41FC0A" col="1"></field>
+			<field type="text" size="1" offset="0x41FC58"></field>
+			<field type="text" size="1" offset="0x41FD65"></field>
+			<field type="text" size="1" offset="0x41FDB1"></field>
+			<field type="text" size="1" offset="0x41FCBD"></field>
+			<field type="text" size="1" offset="0x41FD0B"></field>
+		</panel>
+		<panel title="Fireball">	
+				<field type="label">Up-Left:</field>
+				<field type="label">Up-Right:</field>
+				<field type="label">Mid-Left:</field>
+				<field type="label">Mid-Right:</field>
+				<field type="label">Down-Left:</field>
+				<field type="label">Down-Right:</field>
+				<field type="text" size="1" offset="0x41E1EE" col="1"></field>
+				<field type="text" size="1" offset="0x41E23C"></field>
+				<field type="text" size="1" offset="0x41E349"></field>
+				<field type="text" size="1" offset="0x41E397"></field>
+				<field type="text" size="1" offset="0x41E2A3"></field>
+				<field type="text" size="1" offset="0x41E2EF"></field>
+		</panel>
+		<panel title="Polarstar">	
+			<field type="label">Up-Left:</field>
+			<field type="label">Up-Right:</field>
+			<field type="label">Mid-Left:</field>
+			<field type="label">Mid-Right:</field>
+			<field type="label">Down-Left:</field>
+			<field type="label">Down-Right:</field>
+			<field type="text" size="1" offset="0x41DF1D" col="1"></field>
+			<field type="text" size="1" offset="0x41DF6B"></field>
+			<field type="text" size="1" offset="0x41E078"></field>
+			<field type="text" size="1" offset="0x41E0C6"></field>
+			<field type="text" size="1" offset="0x41DFD2"></field>
+			<field type="text" size="1" offset="0x41E01E"></field>
+		</panel>
+	</panel>
+	<panel col="1">
+		<panel title="Bubbler">
+			<panel title="Bubbler">	
+				<field type="label">Up-Left:</field>
+				<field type="label">Up-Right:</field>
+				<field type="label">Mid-Left:</field>
+				<field type="label">Mid-Right:</field>
+				<field type="label">Down-Left:</field>
+				<field type="label">Down-Right:</field>
+				<field type="text" size="1" offset="0x41F081" col="1"></field>
+				<field type="text" size="1" offset="0x41F0CD"></field>
+				<field type="text" size="1" offset="0x41F130"></field>
+				<field type="text" size="1" offset="0x41F17C"></field>
+				<field type="text" size="1" offset="0x41F1D4"></field>
+				<field type="text" size="1" offset="0x41F21E"></field>
+			</panel>
+		</panel>
+		<panel title="Machine Gun">	
+			<field type="label">Up-Left:</field>
+			<field type="label">Up-Right:</field>
+			<field type="label">Mid-Left:</field>
+			<field type="label">Mid-Right:</field>
+			<field type="label">Down-Left:</field>
+			<field type="label">Down-Right:</field>
+			<field type="text" size="1" offset="0x41E50A" col="1"></field>
+			<field type="text" size="1" offset="0x41E558"></field>
+			<field type="text" size="1" offset="0x41E6B6"></field>
+			<field type="text" size="1" offset="0x41E704"></field>
+			<field type="text" size="1" offset="0x41E610"></field>
+			<field type="text" size="1" offset="0x41E65E"></field>
+		</panel>
+		<panel title="Nemesis">	
+			<field type="label">Up-Left:</field>
+			<field type="label">Up-Right:</field>
+			<field type="label">Mid-Left:</field>
+			<field type="label">Mid-Right:</field>
+			<field type="label">Down-Left:</field>
+			<field type="label">Down-Right:</field>
+			<field type="text" size="1" offset="0x41F7CD" col="1"></field>
+			<field type="text" size="1" offset="0x41F81B"></field>
+			<field type="text" size="1" offset="0x41F928"></field>
+			<field type="text" size="1" offset="0x41F976"></field>
+			<field type="text" size="1" offset="0x41F882"></field>
+			<field type="text" size="1" offset="0x41F8CE"></field>
+		</panel>
+		<panel title="Snake">	
+			<field type="label">Up-Left:</field>
+			<field type="label">Up-Right:</field>
+			<field type="label">Mid-Left:</field>
+			<field type="label">Mid-Right:</field>
+			<field type="label">Down-Left:</field>
+			<field type="label">Down-Right:</field>
+			<field type="text" size="1" offset="0x41DC86" col="1"></field>
+			<field type="text" size="1" offset="0x41DCD4"></field>
+			<field type="text" size="1" offset="0x41DDE1"></field>
+			<field type="text" size="1" offset="0x41DE2F"></field>
+			<field type="text" size="1" offset="0x41DD3B"></field>
+			<field type="text" size="1" offset="0x41DD87"></field>
+		</panel>
+	</panel>
+	</panel></panel></panel>
+</hack>

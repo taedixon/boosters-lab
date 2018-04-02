@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Player Physics" author="Noxid">
+	<panel>
+		<panel title="Water physics">
+			<field type="label">Max run speed:</field>
+			<field type="label">Max fall speed:</field>
+			<field type="label">Gravity</field>
+			<field type="label">Rising gravity</field>
+			<field type="label">Jump speed</field>
+			<field type="label">Walk speed</field>
+			<field type="label">Air control</field>
+			<field type="label">Friction</field>
+			
+			<field type="text" size="4" offset="0x4156E8" col="1"/>
+			<field type="text" size="4" offset="0x4156EF" />
+			<field type="text" size="4" offset="0x4156F6" />
+			<field type="text" size="4" offset="0x4156FD" />
+			<field type="text" size="4" offset="0x415704" />
+			<field type="text" size="4" offset="0x41570B" />
+			<field type="text" size="4" offset="0x415712" />
+			<field type="text" size="4" offset="0x415719" />
+		</panel>
+		
+		<panel title="Regular physics" col="1">
+			<field type="label">Max run speed:</field>
+			<field type="label">Max fall speed:</field>
+			<field type="label">Gravity</field>
+			<field type="label">Rising gravity</field>
+			<field type="label">Jump speed</field>
+			<field type="label">Walk speed</field>
+			<field type="label">Air control</field>
+			<field type="label">Friction</field>
+			
+			<field type="text" size="4" offset="0x415722" col="1"/>
+			<field type="text" size="4" offset="0x415729" />
+			<field type="text" size="4" offset="0x415730" />
+			<field type="text" size="4" offset="0x415737" />
+			<field type="text" size="4" offset="0x41573E" />
+			<field type="text" size="4" offset="0x415745" />
+			<field type="text" size="4" offset="0x41574C" />
+			<field type="text" size="4" offset="0x415753" />
+		</panel>
+	</panel>
+</hack>

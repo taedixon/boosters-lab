@@ -30,10 +30,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.MalformedURLException;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
-import java.util.Vector;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
 //import javax.swing.filechooser.FileNameExtensionFilter;
@@ -44,7 +42,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -2975049719856443233L;
 
 	private static final boolean disable_logging = true;
-	public static final boolean blazed = false;
+	public static boolean blazed = false;
 
 	//about dialog
 	private static final String VER_NUM = "0.5.1.0"; //$NON-NLS-1$
@@ -191,6 +189,13 @@ public class EditorApp extends JFrame implements ActionListener {
 	 * Begin functions
 	 */
 	EditorApp() {
+
+		//blazed
+		if (!new File("nofun").exists()) {
+			Calendar cal = Calendar.getInstance();
+			if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
+				blazed = true;
+		}
 
 		//setups
 		getPrefs();
@@ -1084,6 +1089,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		});
 		menuItem.setText(Messages.getString("EditorApp.104")); //$NON-NLS-1$
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.CTRL_MASK));
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnExeLoad.add(menuItem);
 		ops.add(menuItem);
@@ -1104,7 +1110,8 @@ public class EditorApp extends JFrame implements ActionListener {
 				}
 			}
 		});
-		menuItem.setText("Hacking Tool"); //$NON-NLS-1$
+		menuItem.setText(Messages.getString("EditorApp.110")); //$NON-NLS-1$
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnExeLoad.add(menuItem);
 		ops.add(menuItem);
@@ -1153,6 +1160,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		});
 		menuItem.setText(Messages.getString("EditorApp.53")); //$NON-NLS-1$
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnProjectLoad.add(menuItem);
 		ops.add(menuItem);

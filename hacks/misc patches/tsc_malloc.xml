@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="TSC Memory Allocation" author="SlightlyIntelligentMonkey and Clownacy">
+   	<panel>
+	<field type="info">
+		Change the amount of memory allocated for .tsc files (in bytes).
+		RAM might be shifted, so it might not be 100% compatible with everything,
+	</field>
+	
+	<panel>
+	<field type="text" size = "4" offset = "0x421545"/>
+	</panel>
+	
+	</panel>
+</hack>

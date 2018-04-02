@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Bubbler (ID: 7)" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<panel title="Level 1 Bullet ID">
+				<field type="label">Up-Left:</field>
+				<field type="label">Up-Right:</field>
+				<field type="label">Mid-Left:</field>
+				<field type="label">Mid-Right:</field>
+				<field type="label">Down-Left:</field>
+				<field type="label">Down-Right:</field>
+				<field type="text" size="1" offset="0x41F075" col="1"></field>
+				<field type="text" size="1" offset="0x41F0C1"></field>
+				<field type="text" size="1" offset="0x41F1C8"></field>
+				<field type="text" size="1" offset="0x41F212"></field>
+				<field type="text" size="1" offset="0x41F124"></field>
+				<field type="text" size="1" offset="0x41F170"></field>
+			</panel>
+			<panel title="Level 2 and 3 Bullet ID">	
+				<field type="label">LVL 2 and 3 ID†:</field>
+				<field type="text" size="1" offset="0x41F29C" col="1"></field>
+			</panel>
+			<panel title="SFX">		
+				<field type="label">LVL 1 Firing Sound:</field>
+				<field type="label">LVL 2 and 3 Firing Sound:</field>
+				<field type="label">LVL 1 Out-of-Ammo Sound:</field>
+				<field type="label">LVL 2 and 3 Out-of-Ammo Sound:</field>
+				<field type="text" size="1" offset="0x41F244" col="1"></field>
+				<field type="text" size="1" offset="0x41F542"></field>
+				<field type="text" size="1" offset="0x41F009"></field>
+				<field type="text" size="1" offset="0x41F2FC"></field>
+			</panel>
+		</panel>
+		<panel col="1">
+			<panel title="Level 1 Properties">	
+				<field type="label">Maximum Shots On-Screen*:</field>
+				<field type="label">Maximum Shots Family:</field>
+				<field type="label">Ammo Consumed Per Shot:</field>
+				<field type="text" size="1" offset="0x41EFDF" col="1"></field>
+				<field type="text" size="1" offset="0x41EFD4"></field>
+				<field type="text" size="1" offset="0x41EFF9"></field>
+			</panel>
+			<panel title="Level 2 and 3 Properties">	
+				<field type="label">Firing Speed‡:</field>
+				<field type="label">Maximum Shots On-Screen*:</field>
+				<field type="label">Maximim Shots Family:</field>
+				<field type="label">Ammo Consumed Per Shot:</field>
+				<field type="text" size="1" offset="0x41F2DC" col="1"></field>
+				<field type="text" size="1" offset="0x41F28F"></field>
+				<field type="text" size="1" offset="0x41F284"></field>
+				<field type="text" size="1" offset="0x41F2EC"></field>
+			</panel>
+			<panel title="Ammo Reloading">	
+				<field type="label">LVL 1 Ammo Reload Speed‡:</field>
+				<field type="label">LVL 1 Amount of Ammo Loaded:</field>
+				<field type="label">LVL 2 and 3 Ammo Reload Speed‡:</field>
+				<field type="label">LVL 2 and 3 Amount of Ammo Loaded:</field>
+				<field type="text" size="1" offset="0x41F262" col="1"></field>
+				<field type="text" size="1" offset="0x41F270"></field>
+				<field type="text" size="1" offset="0x41F562"></field>
+				<field type="text" size="1" offset="0x41F570"></field>
+			</panel>
+			<panel>
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+				<field type="label">†Minus 2, so "18" actually means "20"</field>
+				<field type="label">(LVL 3 will be the bullet right after LVL 2)</field>
+				<field type="label">‡Lower value = Faster speed</field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

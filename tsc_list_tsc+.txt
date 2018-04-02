@@ -34,9 +34,9 @@ TSC List revised by Jackalope and Lace
 Format:
 [command name, starts with <]	[number of arguments]	[parameter types, shown above]	[command name]	[command description] [1 if command ends event, 0 otherwise]	[1 if command clears textbox, 0 otherwise]	[1 if args are seperated, 0 otherwise]	[length of each parameter]
 
-NOTE: If you add a command, make sure to increase the number next to CE_TSC by 1!
+NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1!
 
-[CE_TSC]	100
+[BL_TSC]	100
 <AE+	0	----	Arms Energy +	Refill all weapon ammo.	0	0	1	4
 <AM+	2	aA--	ArMs +	Give weapon W with X ammo. Use 0000 for infinite ammo.	0	0	1	4
 <AM-	1	a---	ArMs -	Remove weapon W.	0	0	1	4
