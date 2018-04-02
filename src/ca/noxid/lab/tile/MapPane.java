@@ -60,8 +60,8 @@ public class MapPane extends BgPanel {
 	private int activeLayer;
 	private JList<TileLayer> layerSelect;
 	private JPanel layerPanel;
-	private JCheckBox isSoloLayerView;
-	private JCheckBox isFadeUnfocusedLayers;
+	protected boolean isSoloLayerView = false;
+	protected boolean isFadeUnfocusedLayers = true;
 
 	public JPanel getTilePane() {
 		//TODO: re-implement logic for displaying the line pane instead of the tile pane
@@ -218,26 +218,34 @@ public class MapPane extends BgPanel {
 		//create layer control panel
 		JPanel layerControl = new BgPanel(iMan.getImg(ResourceManager.rsrcBgBlue));
 		JTextField txtfield;
-		final Action repaintAction = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				repaint();
-			}
-		};
 		layerControl.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridy = 0;
 //		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.CENTER;
-		isSoloLayerView = new JCheckBox(repaintAction);
-		isSoloLayerView.setText("Solo layer mode");
-		isSoloLayerView.setOpaque(false);
-		layerControl.add(isSoloLayerView, gbc);
+		JCheckBox check;
+		check = new JCheckBox(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				repaint();
+				isSoloLayerView = ((JCheckBox)e.getSource()).isSelected();
+			}
+		});
+		check.setText("Solo layer mode");
+		check.setOpaque(false);
+		layerControl.add(check, gbc);
 		gbc.gridy++;
-		isFadeUnfocusedLayers = new JCheckBox(repaintAction);
-		isFadeUnfocusedLayers.setText("Fade unselected layers");
-		isFadeUnfocusedLayers.setOpaque(false);
-		layerControl.add(isFadeUnfocusedLayers, gbc);
+		check = new JCheckBox(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				repaint();
+				isFadeUnfocusedLayers = ((JCheckBox)e.getSource()).isSelected();
+			}
+		});
+		check.setText("Fade unselected layers");
+		check.setOpaque(false);
+		check.setSelected(true);
+		layerControl.add(check, gbc);
 		gbc.gridy++;
 		//list control buttons
 		JButton button;
@@ -542,7 +550,7 @@ public class MapPane extends BgPanel {
 		if (r != null) {
 			startX = r.x - r.x % bgw;
 			if (startX < 0) startX = 0;
-			startY = r.y - r.y % bgw;
+			startY = r.y - r.y % bgh;
 			if (startY < 0) startY = 0;
 			endX = startX + r.width + bgw;
 			if (endX < 2) endX = 2;
@@ -1790,8 +1798,7 @@ public class MapPane extends BgPanel {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			activeLayer = layerSelect.getSelectedIndex();
-			if ((isFadeUnfocusedLayers != null && isFadeUnfocusedLayers.isSelected())
-					|| (isSoloLayerView != null && isSoloLayerView.isSelected())) {
+			if (isFadeUnfocusedLayers || isSoloLayerView) {
 				repaint();
 			}
 		}

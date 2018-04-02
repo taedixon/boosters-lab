@@ -44,6 +44,7 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 		this.parent = p;
 		dataHolder = data;
 		selectionList = new HashSet<>();
+		this.isFadeUnfocusedLayers = false;
 		this.initMouse();
 		this.buildPopup();
 		entityDisplay.setListData(p.getEntityList());

@@ -1464,7 +1464,12 @@ public class GameInfo {
 				if (t.getDescription().equals("eveNum")) //$NON-NLS-1$
 				{
 					currentEvent = StrTools.ascii2Num_CS(t.getContents().substring(1));
-				} else if (t.getContents().equals("<FL+") || t.getContents().equals("<FL-") || t.getContents().equals("<FLJ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				} else if (t.getContents().equals("<FL+")
+						|| t.getContents().equals("<FL-")
+						|| t.getContents().equals("<FLJ")
+						|| t.getContents().equals("<SK+")
+						|| t.getContents().equals("<SK-")
+						|| t.getContents().equals("<SKJ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					String tag = t.getContents();
 					if ((t = tLex.getNextToken()) != null)
 					{
