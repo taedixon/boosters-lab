@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Contact Event" author="Noxid">
+	<panel>
+		<field type="label">NPC037</field>
+		<field type="info">
+		activate-on-touch event that deactivates itself until
+		the player has moved off of it, (runs its event when you move away). This entity has no sprite.
+		Replaces Signpost.
+		</field>
+		
+		<field type="data" offset="0x42d760">
+		55 89 e5 8b 5d 08 8b 43 74 ff 24 85 ba d7 42 00
+81 4b 50 00 01 00 00 eb 07 81 63 50 ff fe ff ff
+8b 43 08 2b 43 7c 50 8b 43 0c 2b 83 80 00 00 00
+50 8b 53 7c 03 93 84 00 00 00 52 8b 83 80 00 00
+00 03 83 88 00 00 00 50 e8 a0 e2 05 00 83 c4 10
+8b 5d 08 89 43 74 89 ec 5d c3 70 d7 42 00 79 d7
+42 00
+		</field>
+		<!-- player_in_bounds func -->
+		<field type="data" offset="0x48BA4D" >
+		55 89 e5 83 ec 08 a1 54 e6 49 00 89 45 fc 8b 0d
+58 e6 49 00 89 4d f8 8b 15 84 e6 49 00 03 55 fc
+8b 45 14 39 c2 7c 39 03 45 0c 8b 15 7c e6 49 00
+f7 da 03 55 fc 39 c2 7f 27 8b 15 88 e6 49 00 03
+55 f8 8b 45 10 39 c2 7c 17 03 45 08 8b 15 80 e6
+49 00 f7 da 03 55 f8 39 c2 7f 05 31 c0 40 eb 02
+31 c0 89 ec 5d c3
+		</field>
+	</panel>
+</hack>

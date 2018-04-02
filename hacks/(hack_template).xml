@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Hack Name" author="(Invisible) Author Name">
+	<panel>
+	<field type="info">
+		Describe what the hack does
+	</field>
+	</panel>
+</hack>

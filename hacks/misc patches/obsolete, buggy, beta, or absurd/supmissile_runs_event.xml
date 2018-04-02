@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Gun Event" author="EnlightenedOne">
+	<panel>
+		<field type="label">Super Missile Event</field>
+		<field type="info">
+			Adds a function into the Super Missile Bullets (Weapon ID: 10) so that it runs event #0010 every frame it lives. Make sure to add this event in head.tsc !
+		</field>
+			
+		<field type="data" offset="0x40801D">
+EB 52
+		</field>
+		<field type="data" offset="0x408071">
+6A 0A E8 18 99 01 00 89 EC 5D C3
+		</field>
+	</panel>
+
+	<panel>
+		<field type = "label">I highly recommend you set all of these "Frames to Live" values below to "0"</field>
+		<field type = "label">otherwise it will run more than once!</field>
+		<field type="text" size="1" offset="0x48f51c" />
+		<field type="text" size="1" offset="0x48f548" />
+		<field type="text" size="1" offset="0x48f574" />
+	</panel>	
+	<panel>
+		<field type = "label">This effect is spawned with the missiles.</field>
+		<field type = "label">Set it to zero to prevent them from showing up.</field>
+		<field type = "label">(It's especially noticeable at level 3)</field>
+		<field type="text" size="1" offset="0x407943" />
+		<field type = "label">You should also modify the /weapons/supermissile.xml file as well</field>
+	</panel>
+
+</hack>

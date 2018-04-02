@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Air Amount" author="Noxid">
+	<panel>
+	<field type="info">
+		Allows you to specify the max air available to the player.
+		10 units = 1 tick
+	</field>
+	
+	<field type="label">Air given when wearing air tank:</field>
+	<field type="text" size="4" offset="0x4169A3" />
+	
+	<field type="label">Air given when not in water:</field>
+	<field type="text" size="4" offset="0x4169CA" />
+	
+	<field type="label">Air given when game is loaded:</field>
+	<field type="text" size="4" offset="0x41D485" />	
+
+	</panel>
+</hack>

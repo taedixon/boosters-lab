@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Opening ESC Menu runs Event Instead" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<field type="label">Instead of pulling up the ESC/RESET menu</field>
+			<field type="label">it runs TSC event #0051 instead.</field>
+		</panel>
+		<panel>
+			<field type="data" offset="0x4104E1">
+			90 90 90 90 90 6A 33 E8 A3 14 01 00
+			</field>
+		</panel>
+	</panel>
+</hack>

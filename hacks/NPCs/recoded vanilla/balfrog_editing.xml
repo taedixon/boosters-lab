@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Balfrog stuff" author="SlightlyIntelligentMonkey">
+    <panel>
+	
+	<field type="info">
+		This patch allows you to modify the Balfrog to give you more control over spawning.
+	</field>
+        
+	<panel col = "0">
+		<panel col = "0">
+	
+		 <field type="data" offset="0x4799EA">
+			BF 6C 00 00 00 90 8B 8D 64 FF FF FF 0F B6 91 9C 00 00 00 85 D2 74 4B 8B 51 70
+
+		 </field>
+		 <field type="data" offset="0x479BC3">
+			57 90
+		 </field>
+		 <field type="data" offset="0x479C05">
+			57 90
+		 </field>
+		 </panel>
+	 
+		 <panel col = "1">
+		 <field type="data" offset="0x4796DE">
+			BF 6E 00 00 00 90 8B 95 64 FF FF FF 83 7A 4C 00 75 22 8B 4A 04
+
+		 </field>
+	 
+		 <field type="data" offset="0x479843">
+			57 90
+		 </field>
+	 
+		</panel>
+	</panel>
+	
+	<panel title = "entities created" col = "0">
+		<panel title="Balfrog projectile" col = "0">
+
+
+	
+		<field type="label">Shot entity:</field>
+		<field type="text" size="4" offset = "0x4799EB" />
+		<field type="label">Shot delay:</field>
+		<field type="text" size="1" offset = "0x479AA1" />
+		<field type="label">number of shots:</field>
+		<field type="text" size="4" offset = "0x4799BF" />
+		<field type="label">Shot direction:</field>
+		<field type="text" size="1" offset = "0x479B95" />
+		<field type="text" size="1" offset = "0x479BD7" />
+		</panel>
+		
+		<panel title = "Balfrog ceiling entity" col = "1">
+		
+		<field type="label">drop entity:</field>
+		<field type="text" size="4" offset = "0x4796DF" />
+		
+		</panel>
+	</panel>
+	
+</panel>
+</hack>

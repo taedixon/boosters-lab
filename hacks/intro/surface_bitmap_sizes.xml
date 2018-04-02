@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Startup Surface (Bitmap) Sizes" author="EnlightenedOne and Clownacy">
+		<panel>
+			<field type="info">Some surfaces are set to specific sizes (editable below)
+			while the rest are set from the bitmaps they are loaded from. You shouldn't edit
+			these unless you know what you are doing. I don't even know what all of these are
+			to be perfectly honest, I just added every single one.
+			</field>
+	<panel>
+		<panel title="Screenshot (for Map System, Pause)">
+			<field type="label">Height</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x411527" size="4" col="1"/>
+			<field type="text" offset="0x41152C" size="4"/>
+		</panel>
+		<panel title="Background">
+			<field type="label">Height</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x41153D" size="4" col="1"/>
+			<field type="text" offset="0x411542" size="4"/>
+		</panel>
+		<panel title="Map System?">
+			<field type="label">Height</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x411553" size="4" col="1"/>
+			<field type="text" offset="0x411558" size="4"/>
+		</panel>
+		<panel title="Credits?">
+			<field type="label">Height</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x411569" size="4" col="1"/>
+			<field type="text" offset="0x41156E" size="4"/>
+		</panel>
+		<panel title="Tileset *">
+			<field type="label">Height</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x41157F" size="4" col="1"/>
+			<field type="text" offset="0x411584" size="4"/>
+		</panel>
+		<panel title="&lt;MNA Text" col="1">
+			<field type="label">Height †</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x411595" size="1" col="1"/>
+			<field type="text" offset="0x411597" size="4"/>
+		</panel>
+		<panel title="numberObj_buff">
+			<field type="label">Height</field>
+			<field type="label">Width †</field>
+			<field type="text" offset="0x4115A8" size="4" col="1"/>
+			<field type="text" offset="0x4115AD" size="1"/>
+		</panel>
+		<panel title="NPC SpriteSheet 1">
+			<field type="label">Height</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x4115BB" size="4" col="1"/>
+			<field type="text" offset="0x4115C0" size="4"/>
+		</panel>
+		<panel title="NPC SpriteSheet 2">
+			<field type="label">Height</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x4115D1" size="4" col="1"/>
+			<field type="text" offset="0x4115D6" size="4"/>
+		</panel>
+		<panel title="Credits Text Bitmap?">
+			<field type="label">Height</field>
+			<field type="label">Width</field>
+			<field type="text" offset="0x4115E7" size="4" col="1"/>
+			<field type="text" offset="0x4115EC" size="4"/>
+		</panel>
+	</panel>
+	<panel>
+		<panel>
+			<field type="label">* .PXA files (and booster's lab) are still limited to 16x16 tiles,</field>
+			<field type="label">so you can't actually accomplish anything yet by increasing this.</field>
+			<field type="label">† Limited to 127 maximum.</field>
+		</panel>
+	</panel>
+	</panel>
+</hack>
