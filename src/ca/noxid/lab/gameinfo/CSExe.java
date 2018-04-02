@@ -1,9 +1,5 @@
 package ca.noxid.lab.gameinfo;
 
-import ca.noxid.lab.Messages;
-import com.carrotlord.string.StrTools;
-
-import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +8,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.util.Vector;
+
+import javax.swing.JOptionPane;
+
+import com.carrotlord.string.StrTools;
+
+import ca.noxid.lab.Messages;
+import ca.noxid.lab.mapdata.Mapdata;
 
 
 /*
@@ -178,6 +181,53 @@ public class CSExe {
 				moveMapdata(csmapSec.getPosV());
 
 				modified = true;
+			} else {
+				//check if .csmap was actually initialized
+				//we do this by checking if map 0 is empty
+				ExeSec csmapSec = headers[mapSec];
+				chan.position(csmapSec.getPos());
+				Mapdata newMap = new Mapdata(0);
+				uBuf = ByteBuffer.allocate(200);
+				uBuf.order(ByteOrder.LITTLE_ENDIAN);
+				chan.read(uBuf);
+				uBuf.flip();
+				byte[] buffer = new byte[0x23];
+				uBuf.get(buffer, 0, 0x20);
+				newMap.setTileset(StrTools.CString(buffer));
+				uBuf.get(buffer, 0, 0x20);
+				newMap.setFile(StrTools.CString(buffer));
+				int argh = uBuf.getInt();
+				newMap.setScroll(argh & 0xFF);
+				uBuf.get(buffer, 0, 0x20);
+				newMap.setBG(StrTools.CString(buffer));
+				uBuf.get(buffer, 0, 0x20);
+				newMap.setNPC1(StrTools.CString(buffer));
+				uBuf.get(buffer, 0, 0x20);
+				newMap.setNPC2(StrTools.CString(buffer));
+				newMap.setBoss(uBuf.get());
+				uBuf.get(buffer, 0, 0x23);
+				newMap.setMapname(StrTools.CString(buffer));
+				if (newMap.getTileset().isEmpty() &&
+						newMap.getFile().isEmpty() &&
+						newMap.getScroll() == 0 &&
+						newMap.getBG().isEmpty() &&
+						newMap.getNPC1().isEmpty() &&
+						newMap.getNPC2().isEmpty() &&
+						newMap.getBoss() == 0 &&
+						newMap.getMapname().isEmpty()) {
+					//copy over mapdata
+					int mapCount = 95;
+					ByteBuffer mapdataBuf = ByteBuffer.allocate(200*mapCount);
+					chan.position(mapdataLoc);
+					chan.read(mapdataBuf);
+					mapdataBuf.flip();
+					ByteBuffer segData = csmapSec.getData();
+					segData.position(0);
+					segData.put(mapdataBuf);
+					//move mapdata virtually
+					moveMapdata(csmapSec.getPosV());
+					commit(); //save changes now to ensure GameInfo will read maps correctly
+				}
 			}
 			chan.close();
 			inStream.close();
