@@ -100,17 +100,19 @@ public class GameInfo {
 	public GameInfo(File base) throws IOException {
 		mapdataStore = new Vector<>();
 		categoryMap = new HashMap<>();
+		File configFile = new File(dataDir + "/bl.ini"); //$NON-NLS-1$
+		gameConfig = new BlConfig(configFile, type);
 		if (base.toString().endsWith(".exe")) { //$NON-NLS-1$
 			dataDir = new File(base.getParent() + "/data"); //$NON-NLS-1$
-			
-			if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
+			// dummy out GUXT """support"""
+			/*if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
 				type = MOD_TYPE.MOD_GUXT;
-				executable = new GuxtExe(base);
-			} else {
-				type = MOD_TYPE.MOD_CS;
-				executable = new CSExe(base); //can fix swdata
-				getExeData(executable);
-			}			
+				executable = new GuxtExe(base, gameConfig.getEncoding());
+			} else {*/
+			type = MOD_TYPE.MOD_CS;
+			executable = new CSExe(base, gameConfig.getEncoding()); //can fix swdata
+			getExeData(executable);
+			//}			
 		} else if (base.toString().endsWith(".tbl")){ //$NON-NLS-1$
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile();
@@ -131,8 +133,6 @@ public class GameInfo {
 			dataDir = base.getParentFile().getParentFile();
 			imageExtension = CSPLUS_IMG_EXT; //$NON-NLS-1$
 		}
-		File configFile = new File(dataDir + "/bl.ini"); //$NON-NLS-1$
-		gameConfig = new BlConfig(configFile, type);
 		fillMapdata(base);
 		mycharFile = new File(dataDir + "/MyChar" + imageExtension); //$NON-NLS-1$
 		mycharFile = ResourceManager.checkBase(mycharFile);
@@ -886,46 +886,17 @@ public class GameInfo {
 					for (int i = 0; i < numMaps; i++)
 					{
 						//for each map
-						Mapdata newMap = new Mapdata(i);
 						uBuf = ByteBuffer.allocate(200);
 						uBuf.order(ByteOrder.LITTLE_ENDIAN);
 						inChan.read(uBuf);
 						uBuf.flip();
-						/*
-						typedef struct {
-							   char tileset[32];
-							   char filename[32];
-							   char scrollType[4];
-							   char bgName[32];
-							   char npc1[32];
-							   char npc2[32];
-							   char bossNum;
-							   char mapName[35];
-							}nMapData;
-							*/
-						byte[] buffer = new byte[0x23];
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setTileset(StrTools.CString(buffer, encoding));
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setFile(StrTools.CString(buffer, encoding));
-						int argh = uBuf.getInt();
-						newMap.setScroll(argh & 0xFF);
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setBG(StrTools.CString(buffer, encoding));
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setNPC1(StrTools.CString(buffer, encoding));
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setNPC2(StrTools.CString(buffer, encoding));
-						newMap.setBoss(uBuf.get());
-						uBuf.get(buffer, 0, 0x23);
-						newMap.setMapname(StrTools.CString(buffer, encoding));
-						newMap.markUnchanged();
-						mapdataStore.add(newMap);			
-					} //for each map
+						mapdataStore.add(new Mapdata(i, uBuf, type, encoding));			
+					}
 				} else {
-					StrTools.msgBox("There is a swdata here and I don't like it"); //$NON-NLS-1$
-					/*sue's shit
-					 * should no longer be needed 
+					StrTools.msgBox(Messages.getString("GameInfo.2")); //$NON-NLS-1$
+					/* Code to read SW maps
+					 * Should no longer be needed, since BL converts SW's arcane map format
+					 * to the somewhat more sensible .csmap
 					 *
 					//read up where yo' data is at
 					uBuf = ByteBuffer.allocate(4);
@@ -998,41 +969,7 @@ public class GameInfo {
 			dBuf.flip();
 			
 			for (int i = 0; i < numMaps; i++) //for each map
-			{
-				/*
-				typedef struct {
-					   char tileset[32];
-					   char filename[32];
-					   char scrollType[4];
-					   char bgName[32];
-					   char npc1[32];
-					   char npc2[32];
-					   char bossNum;
-					   char jpName[32];
-					   char mapName[32];
-					}nMapData;
-					*/
-				Mapdata newMap = new Mapdata(i);
-				byte[] buf32 = new byte[32];
-				dBuf.get(buf32);
-				newMap.setTileset(StrTools.CString(buf32, encoding));
-				dBuf.get(buf32);
-				newMap.setFile(StrTools.CString(buf32, encoding));
-				newMap.setScroll(dBuf.getInt());
-				dBuf.get(buf32);
-				newMap.setBG(StrTools.CString(buf32, encoding));
-				dBuf.get(buf32);
-				newMap.setNPC1(StrTools.CString(buf32, encoding));
-				dBuf.get(buf32);
-				newMap.setNPC2(StrTools.CString(buf32, encoding));
-				newMap.setBoss(dBuf.get());
-				dBuf.get(buf32);
-				newMap.setJpName(buf32);
-				dBuf.get(buf32);
-				newMap.setMapname(StrTools.CString(buf32, encoding));
-				newMap.markUnchanged();
-				mapdataStore.add(newMap);
-			}
+				mapdataStore.add(new Mapdata(i, dBuf, type, encoding));
 			inChan.close();
 			inStream.close();
 		} else if (f.getName().endsWith(".bin")) { //$NON-NLS-1$
@@ -1058,27 +995,8 @@ public class GameInfo {
 			inChan.read(dBuf);
 			dBuf.flip();
 			//loop
-			byte[] buf16 = new byte[16];
-			byte[] nameBuf = new byte[34];
-			for (int i = 0; i < nMap; i++) {
-				Mapdata newMap = new Mapdata(i);
-				dBuf.get(buf16);
-				newMap.setTileset(StrTools.CString(buf16, encoding));
-				dBuf.get(buf16);
-				newMap.setFile(StrTools.CString(buf16, encoding));
-				newMap.setScroll(dBuf.get());
-				dBuf.get(buf16);
-				newMap.setBG(StrTools.CString(buf16, encoding));
-				dBuf.get(buf16);
-				newMap.setNPC1(StrTools.CString(buf16, encoding));
-				dBuf.get(buf16);
-				newMap.setNPC2(StrTools.CString(buf16, encoding));
-				newMap.setBoss(dBuf.get());
-				dBuf.get(nameBuf);
-				newMap.setMapname(StrTools.CString(nameBuf, encoding));
-				newMap.markUnchanged();
-				mapdataStore.add(newMap);
-			}
+			for (int i = 0; i < nMap; i++)
+				mapdataStore.add(new Mapdata(i, dBuf, type, encoding));
 		}
 	}
 	

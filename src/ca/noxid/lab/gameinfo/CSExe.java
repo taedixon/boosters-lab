@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import com.carrotlord.string.StrTools;
 
 import ca.noxid.lab.Messages;
+import ca.noxid.lab.gameinfo.GameInfo.MOD_TYPE;
 import ca.noxid.lab.mapdata.Mapdata;
 
 
@@ -92,7 +93,7 @@ public class CSExe {
 	};
 
 	@SuppressWarnings("unused")
-	CSExe(File inFile) {
+	CSExe(File inFile, String charEncoding) {
 		location = inFile;
 		lastModify = location.lastModified();
 		//File tblFile;
@@ -186,27 +187,11 @@ public class CSExe {
 				//we do this by checking if map 0 is empty
 				ExeSec csmapSec = headers[mapSec];
 				chan.position(csmapSec.getPos());
-				Mapdata newMap = new Mapdata(0);
 				uBuf = ByteBuffer.allocate(200);
 				uBuf.order(ByteOrder.LITTLE_ENDIAN);
 				chan.read(uBuf);
 				uBuf.flip();
-				byte[] buffer = new byte[0x23];
-				uBuf.get(buffer, 0, 0x20);
-				newMap.setTileset(StrTools.CString(buffer));
-				uBuf.get(buffer, 0, 0x20);
-				newMap.setFile(StrTools.CString(buffer));
-				int argh = uBuf.getInt();
-				newMap.setScroll(argh & 0xFF);
-				uBuf.get(buffer, 0, 0x20);
-				newMap.setBG(StrTools.CString(buffer));
-				uBuf.get(buffer, 0, 0x20);
-				newMap.setNPC1(StrTools.CString(buffer));
-				uBuf.get(buffer, 0, 0x20);
-				newMap.setNPC2(StrTools.CString(buffer));
-				newMap.setBoss(uBuf.get());
-				uBuf.get(buffer, 0, 0x23);
-				newMap.setMapname(StrTools.CString(buffer));
+				Mapdata newMap = new Mapdata(0, uBuf, MOD_TYPE.MOD_CS, charEncoding);
 				if (newMap.getTileset().isEmpty() &&
 						newMap.getFile().isEmpty() &&
 						newMap.getScroll() == 0 &&
@@ -215,7 +200,6 @@ public class CSExe {
 						newMap.getNPC2().isEmpty() &&
 						newMap.getBoss() == 0 &&
 						newMap.getMapname().isEmpty()) {
-					
 					//copy over mapdata
 					int mapCount = 95;
 					ByteBuffer mapdataBuf = ByteBuffer.allocate(200*mapCount);

@@ -4,8 +4,8 @@ import java.io.File;
 
 public class GuxtExe extends CSExe {
 
-	GuxtExe(File inFile) {
-		super(inFile);
+	GuxtExe(File inFile, String charEncoding) {
+		super(inFile, charEncoding);
 		// TODO Auto-generated constructor stub
 	}
 
