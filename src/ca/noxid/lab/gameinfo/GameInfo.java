@@ -104,15 +104,14 @@ public class GameInfo {
 		gameConfig = new BlConfig(configFile, type);
 		if (base.toString().endsWith(".exe")) { //$NON-NLS-1$
 			dataDir = new File(base.getParent() + "/data"); //$NON-NLS-1$
-			// dummy out GUXT """support"""
-			/*if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
+			if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
 				type = MOD_TYPE.MOD_GUXT;
 				executable = new GuxtExe(base, gameConfig.getEncoding());
-			} else {*/
-			type = MOD_TYPE.MOD_CS;
-			executable = new CSExe(base, gameConfig.getEncoding()); //can fix swdata
-			getExeData(executable);
-			//}			
+			} else {
+				type = MOD_TYPE.MOD_CS;
+				executable = new CSExe(base, gameConfig.getEncoding()); //can fix swdata
+				getExeData(executable);
+			}			
 		} else if (base.toString().endsWith(".tbl")){ //$NON-NLS-1$
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile();
