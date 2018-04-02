@@ -833,6 +833,11 @@ public class HackDialog extends JDialog implements TreeSelectionListener {
 
 	private class PluggableImage extends JLabel implements PluggableComponent {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4747820319314384700L;
+
 		public PluggableImage(ImageIcon icon) {
 			this.setIcon(icon);
 		}
