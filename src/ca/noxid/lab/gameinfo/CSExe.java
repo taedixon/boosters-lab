@@ -215,6 +215,7 @@ public class CSExe {
 						newMap.getNPC2().isEmpty() &&
 						newMap.getBoss() == 0 &&
 						newMap.getMapname().isEmpty()) {
+					
 					//copy over mapdata
 					int mapCount = 95;
 					ByteBuffer mapdataBuf = ByteBuffer.allocate(200*mapCount);
@@ -227,6 +228,7 @@ public class CSExe {
 					//move mapdata virtually
 					moveMapdata(csmapSec.getPosV());
 					commit(); //save changes now to ensure GameInfo will read maps correctly
+					StrTools.msgBox(Messages.getString("CSExe.12")); //$NON-NLS-1$
 				}
 			}
 			chan.close();
@@ -380,19 +382,16 @@ public class CSExe {
 	}
 
 	public void commit() {
-		File backuploc = null;
-		if (location.lastModified() > lastModify) {
+		File outloc = location;
+		if (outloc.lastModified() > lastModify) {
 			//the file has been changed since we last wrote it
-			int choice = JOptionPane.showConfirmDialog(null, "EXE has been modified since last save/load.\n"
-					+ "It may contain changes that will be lost if overwritten.\n"
-					+ "Do you want to overwrite?" , "EXE on file newer than in memory", JOptionPane.YES_NO_OPTION);
+			int choice = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.6"), //$NON-NLS-1$
+					Messages.getString("CSExe.7"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
 
 			if (choice != JOptionPane.YES_OPTION) {
-				JOptionPane.showMessageDialog(null, "Select 'Load Last' from the File menu\n"
-						+ "to discard changes, or try saving again later.\n"
-						+ "Current state has been written to:\n"
-						+ location + ".bkp");
-				backuploc = new File(location + ".blbkp");
+				outloc = new File(location + ".blalt");
+				StrTools.msgBox(Messages.getString("CSExe.3") //$NON-NLS-1$
+						+ outloc);
 			}
 		}
 
@@ -405,13 +404,29 @@ public class CSExe {
 			head_sz += (sc.getLenV() + 0xFFF) / 0x1000 * 0x1000;
 		}
 		peHead.putInt(0x160, head_sz + 0x1000);
-
-		try {
-			if (backuploc != null) {
+		
+		if (outloc == location) {
+			//backup existing file
+			try {
+				File backuploc = new File(location + ".blbkp");
+				FileInputStream iStream = new FileInputStream(location);
+				FileChannel cInput = iStream.getChannel();
 				oStream = new FileOutputStream(backuploc);
-			} else {
-				oStream = new FileOutputStream(location);
+				c = oStream.getChannel();
+				ByteBuffer exeDat = ByteBuffer.allocate(iStream.available());
+				cInput.read(exeDat);
+				exeDat.flip();
+				c.write(exeDat);
+				iStream.close();
+				oStream.close();
+			} catch (IOException err) {
+				err.printStackTrace();
+				StrTools.msgBox(Messages.getString("CSExe.10")); //$NON-NLS-1$
 			}
+		}
+		//actually write to file
+		try {
+			oStream = new FileOutputStream(outloc);
 			c = oStream.getChannel();
 			peHead.position(0);
 			c.write(peHead);
@@ -426,14 +441,12 @@ public class CSExe {
 				buf.position(0);
 				c.write(buf);
 			}
-			c.close();
 			oStream.close();
 		} catch (IOException err) {
 			err.printStackTrace();
-			StrTools.msgBox(Messages.getString("CSExe.2") + //$NON-NLS-1$
-					Messages.getString("CSExe.3")); //$NON-NLS-1$
+			StrTools.msgBox(Messages.getString("CSExe.2")); //$NON-NLS-1$
 		}
-		if (backuploc == null) {
+		if (outloc == location) {
 			modified = false;
 			lastModify = location.lastModified();
 		}
