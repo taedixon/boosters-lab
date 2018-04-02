@@ -26,7 +26,7 @@ public class GameInfo {
 	private String imageExtension;
 	private File dataDir;
 	private BlConfig gameConfig;
-	private static final String CSPLUS_IMG_EXT = ".png";
+	private static final String CSPLUS_IMG_EXT = ".bmp";
 	private static final boolean GIRS_SPECIAL_MAP_SORT = false;
 	
 	private static final String entityInfo_head = "//num	short1	short2	long rect desc category\r\n" +
