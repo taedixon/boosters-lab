@@ -185,23 +185,38 @@ public class CSExe {
 			} else {
 				//check if .csmap was actually initialized
 				//we do this by checking if map 0 is empty
+				int mapCount = 95;
 				ExeSec csmapSec = headers[mapSec];
-				chan.position(csmapSec.getPos());
-				uBuf = ByteBuffer.allocate(200);
-				uBuf.order(ByteOrder.LITTLE_ENDIAN);
-				chan.read(uBuf);
-				uBuf.flip();
-				Mapdata newMap = new Mapdata(0, uBuf, MOD_TYPE.MOD_CS, charEncoding);
-				if (newMap.getTileset().isEmpty() &&
-						newMap.getFile().isEmpty() &&
-						newMap.getScroll() == 0 &&
-						newMap.getBG().isEmpty() &&
-						newMap.getNPC1().isEmpty() &&
-						newMap.getNPC2().isEmpty() &&
-						newMap.getBoss() == 0 &&
-						newMap.getMapname().isEmpty()) {
+				boolean init = false;
+				// if .csmap is too small for 95 maps, it's not initialized
+				// resize it to fit 95 maps
+				if (csmapSec.rSize < 200*mapCount) {
+					init = true;
+					int shift = csmapSec.resize(200*mapCount);
+					for (int i = mapSec; i < headers.length - 1; i++)
+						headers[i].shift(shift);
+				}
+				// if .csmap is big enough, check if it's empty
+				if (!init) {
+					chan.position(csmapSec.getPos());
+					uBuf = ByteBuffer.allocate(200);
+					uBuf.order(ByteOrder.LITTLE_ENDIAN);
+					chan.read(uBuf);
+					uBuf.flip();
+					Mapdata newMap = new Mapdata(0, uBuf, MOD_TYPE.MOD_CS, charEncoding);
+					init = newMap.getTileset().isEmpty() &&
+							newMap.getFile().isEmpty() &&
+							newMap.getScroll() == 0 &&
+							newMap.getBG().isEmpty() &&
+							newMap.getNPC1().isEmpty() &&
+							newMap.getNPC2().isEmpty() &&
+							newMap.getBoss() == 0 &&
+							newMap.getMapname().isEmpty();
+				}
+				// if either .csmap was just resized or was detected to be empty,
+				// initialize it
+				if (init) {
 					//copy over mapdata
-					int mapCount = 95;
 					ByteBuffer mapdataBuf = ByteBuffer.allocate(200*mapCount);
 					chan.position(mapdataLoc);
 					chan.read(mapdataBuf);
