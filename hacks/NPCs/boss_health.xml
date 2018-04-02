@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Map Boss Health" author="EnlightenedOne">
+	<panel title="">
+		<field type="label">
+			Omega
+		</field>
+		<field type="text" offset="0x47b7cf" size="2"/>
+		<field  type="label">
+			Balfrog
+		</field>
+		<field type="text" offset="0x4793e7" size="2"/>
+		<field type="label">
+			Monster X
+		</field>
+		<field type="text" offset="0x47e816" size="2"/>
+		<field type="label">
+			Core
+		</field>
+		<field type="text" offset="0x4744d0" size="2"/>
+		<field type="label">
+			Ironhead
+		</field>
+		<field type="text" offset="0x47aa4e" size="2"/>
+		<field type="label">
+			Dragon Sisters
+		</field>
+		<field type="text" offset="0x47d2f1" size="2"/>
+		<field type="label">
+			Undead Core
+		</field>
+		<field type="text" offset="0x4754c3" size="2"/>
+		<field type="label">
+			Heavy Press
+		</field>
+		<field type="text" offset="0x47c988" size="2"/>
+		<field type="label">
+			Ballos (Ball) (Phase 2)
+		</field>
+		<field type="text" offset="0x4774c7" size="2"/>
+		<field type="label">
+			Ballos (Ball) (Phase 4)
+		</field>
+		<field type="text" offset="0x477ae9" size="2"/>
+	</panel>	
+</hack>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Machine Gun Recoil on all levels" author="RareBeeph">
+	<panel>
+	<panel>
+		<field type="label">Machine gun</field>
+		<field type="info">
+			Patches the machinegun to have recoil in all directions on all levels,
+			where the recoil is scaled by the weapon level.
+		</field>
+			
+		<field type="data" offset="0x41E4C0">
+8B 55 08 6B D2 55 8B 0D 70 E6 49 00 03 CA 90 90
+90 90
+		</field>
+		<field type="data" offset="0x41E58D">
+8B 4D 08 6B C9 60 83 3D 70 E6 49 00 00 7E 0F A1
+70 E6 49 00 99 2B C2 D1 F8 A3 70 E6 49 00 81 3D
+70 E6 49 00 00 FC FF FF 7E 25 A1 70 E6 49 00 2B
+C1 90 90 90
+		</field>
+	</panel>
+	<panel col="1">
+		<field type="data" offset="0x41E684">
+90 90 90 90 90 90 8B 4D 08 6B C9 30 83 3D 40 E6
+49 00 00 75 04 F7 D9 90 90 90 90 90 90 90 90 90
+8B 15 6C E6 49 00 2B D1 89 15 6C E6 49 00 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 8B 1D 40 E6
+49 00 53 4B 90 90 90 90 69 DB 00 18 00 00 8B 0D
+58 E6 49 00 81 C1 00 06 00 00 51 8B 15 54 E6 49
+00 03 D3 52 8B 4D FC 51 E8 8F 58 FE FF 83 C4 10
+6A 00 6A 03 8B 15 58 E6 49 00 81 C2 00 06 00 00
+52 8B 0D 54 E6 49 00 03 CB 51 E8 7D C5 FE FF 83
+C4 10 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90
+		</field>
+		<field type = "label">Downwards Recoil (default: 85)</field>
+		<field type="text" size="1" offset="0x41E4C5" />
+		<field type = "label">Upwards Recoil (default: 96)</field>
+		<field type="text" size="1" offset="0x41E592" />
+		<field type = "label">Left/Right Recoil (default: 48)</field>
+		<field type="text" size="1" offset="0x41E68F" />
+	</panel>
+	</panel>
+</hack>

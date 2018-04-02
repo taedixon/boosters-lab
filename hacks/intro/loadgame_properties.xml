@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Loadgame Properties" author="EnlightenedOne">
+	<panel><panel>
+		<field type="label">TSC event ran when the game is loaded (PUT IN HEAD.TSC):</field>
+		<field type="check" name="Load the game faded out, so you FAI yourself">
+				<checked>
+					<field type="data" offset="0x41D508">
+						E8 83 09 FF FF
+					</field>
+				</checked>
+				<unchecked>
+					<field type="data" offset="0x41D508">
+						E8 93 09 FF FF 
+					</field>
+				</unchecked>
+			</field>
+		<field type="text" size="1" offset="0x41D411" col="1"/>
+	</panel></panel>
+</hack>

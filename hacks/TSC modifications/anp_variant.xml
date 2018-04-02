@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="ANP Variant">
+<hack name="ANP Variant" author="Noxid">
 	<panel>
 		<field type="info">
-		 special version of ANP that animates all entities with given
+		 Special version of ANP that animates all entities with given
 		 event number, not just the first one found
 		 normally giving ANP a direction of 4 will make it face the direction of the player.
 		 however, this version does not. It does however allow directions higher than 3.

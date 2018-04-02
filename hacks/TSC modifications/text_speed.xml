@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Text Speed" author="EnlightenedOne (Blink and Noxid also kinda)">
+	<panel><panel>
+		<field type = "info">Set between 0 through 4 to edit the speed
+		messages appear without a key held down. (0 = Fastest)
+		(Increasing it above 4 will make the game lag during TSC events)</field>
+		<field type="text" size="1" offset="0x4225B2" />
+	</panel></panel>	
+</hack>

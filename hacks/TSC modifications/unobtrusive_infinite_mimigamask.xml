@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Unobtrusive Infinite MimigaMask Hack" author="Lace and Noxid and BLink and ZarroTsu">
+	<panel>
+		<field type="info">
+		 Optimizes &lt;END and sticks &lt;MIM in the extra space,
+		  of course doesn't work with TSC+. Stack player sprites on top of each other
+		  and use the MIM command to switch between them. Also edits NPC 150, 111, and 112
+		  to show the character correctly using this hack.
+		</field>
+		<panel>
+			<panel>
+				<field type="data" offset="0x4225ED">
+				81 39 3C 45 4E 44 75 3B C6 05 DC 5A 4A 00 00 0F
+				B6 05 38 E6 49 00 83 E0 FE A2 38 E6 49 00 8B 0D
+				E8 E1 49 00 83 C9 03 89 0D E8 E1 49 00 C7 05 0C
+				5B 4A 00 00 00 00 00 C7 45 D4 01 00 00 00 E9 77
+				2C 00 00 8B 0D D8 5A 4A 00 03 0D E0 5A 4A 00 81
+				39 3C 4D 49 4D 75 31 A1 E0 5A 4A 00 83 C0 04 50
+				E8 AE F2 FF FF 83 C4 04 A3 84 E1 49 00 83 05 E0
+				5A 4A 00 08 E9 41 2C 00 00 90 90 90 90 90 90 90
+				90 90 90 90 90 90 90 90 80 79 01 4C 75 5E
+				</field>
+				<field type="data" offset="0x4154b8">
+				A1 84 E1 49 00 C1 E0 05 01 45 F4 01 45 FC EB 0C
+				</field>
+				<field type="data" offset="0x445D09" comment="NPC 150 hook">
+				A1 84 E1 49 00 C1 E0 05 01 41 04 01 41 0C 80 79 20 15
+				75 3A 8B 41 24 99 83 E2 03 03 C2 C1 F8 02 03 41 04 89
+				41 0C 8B 41 24 90
+				</field>
+			</panel>
+			<panel col="1">
+				<field type="data" offset="0x43D003" comment="NPC 111 hook">
+				8B 0D 84 E1 49 00 C1 E1 05 90 90 8B 55 08 8B 42
+				58 01 C8 90 8B 55 08 89 42 58 8B 55 08 8B 42 60
+				01 C8 90
+				</field>
+				<field type="data" offset="0x43D291" comment="NPC 112 hook">
+				8B 15 84 E1 49 00 C1 E2 05 90 90 8B 45 08 8B 48
+				58 01 D1 90 8B 45 08 89 48 58 8B 45 08 8B 48 60
+				01 D1 90
+				</field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

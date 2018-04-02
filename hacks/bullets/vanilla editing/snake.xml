@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Snake Bullets" author="EnlightenedOne">
+	<panel>
+		<field type="info">
+			I'm kinda lazy to add everything right now, I just need to put
+			something in this folder. These are editing vanilla Snake bullets (IDs 0 to 3)
+		</field>
+		<panel title="Wave Speed">
+			<field type="label">Down</field>
+			<field type="label">Up</field>
+			<field type="label">Right</field>
+			<field type="label">Left</field>
+			
+			<field type="text" offset="0x4045D1" size="4" col="1"/>
+			<field type="text" offset="0x4045DD" size="4" col="1"/>
+			<field type="text" offset="0x404605" size="4" col="1"/>
+			<field type="text" offset="0x404611" size="4" col="1"/>
+		</panel>
+	</panel>
+</hack>

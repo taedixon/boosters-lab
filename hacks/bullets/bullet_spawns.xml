@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Things that spawn bullets" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<panel title="Spur Trail (applies to all levels)">
+				<field type="label">ID of lvl 1 trail (Minus 1):</field>
+				<field type="text" size="1" offset="0x408A99" col="1"></field>
+			</panel>
+			<panel title="Bubbler LVL 3 pops into:">
+				<field type="label">Up:</field>
+				<field type="label">Down:</field>
+				<field type="label">Left and Right:</field>
+				<field type="text" size="1" offset="0x40654A" col="1"></field>
+				<field type="text" size="1" offset="0x40656F"></field>
+				<field type="text" size="1" offset="0x40658F"></field>
+			</panel>
+			<panel title="Blade LVL 3 creates:">
+				<field type="label">While-Traveling Left:</field>
+				<field type="label">While-Traveling Right:</field>
+				<field type="label">On-Impact Left:</field>
+				<field type="label">On-Impact Right:</field>
+				<field type="text" size="1" offset="0x407332" col="1"></field>
+				<field type="text" size="1" offset="0x40734E"></field>
+				<field type="text" size="1" offset="0x407448"></field>
+				<field type="text" size="1" offset="0x407482"></field>
+			</panel>
+			<panel title="Nemesis NPC (These are entity ID's)">
+				<field type="label">Left:</field>
+				<field type="label">Up:</field>
+				<field type="label">Right:</field>
+				<field type="label">Down:</field>
+				<field type="text" size="1" offset="0x4083AF" col="1"></field>
+				<field type="text" size="1" offset="0x4083ED"></field>
+				<field type="text" size="1" offset="0x408428"></field>
+				<field type="text" size="1" offset="0x408463"></field>
+			</panel>
+		</panel>
+		<panel col="1">
+			<panel title="CurlyCarry (entity #320) Bullet">
+				<field type="label">Bullet ID (All directions):</field>
+				<field type="text" size="1" offset="0x46762E" col="1"></field>
+			</panel>
+			<panel title="CurlyAI (entity #180) RapidFire">
+				<field type="label">Left:</field>
+				<field type="label">Right:</field>
+				<field type="label">Up (Facing Left):</field>
+				<field type="label">Up (Facing Right):</field>
+				<field type="text" size="1" offset="0x44C07D" col="1"></field>
+				<field type="text" size="1" offset="0x44C0C9"></field>
+				<field type="text" size="1" offset="0x44C122"></field>
+				<field type="text" size="1" offset="0x44C16F"></field>
+			</panel>
+			<panel title="CurlyAI (entity #180) SingleFire">
+				<field type="label">Left:</field>
+				<field type="label">Right:</field>
+				<field type="label">Up (Facing Left):</field>
+				<field type="label">Up (Facing Right):</field>
+				<field type="text" size="1" offset="0x44C48D" col="1"></field>
+				<field type="text" size="1" offset="0x44C4D9"></field>
+				<field type="text" size="1" offset="0x44C532"></field>
+				<field type="text" size="1" offset="0x44C57F"></field>
+				
+			</panel>
+			<panel>
+				<field type="label">Curly AI defaults to RapidFire</field>
+				<field type="label">Unless flag 563 is set, then it uses SingleFire.</field>
+				<field type="label">Don't forget these will affect "Maximum Shots on Screen"!</field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

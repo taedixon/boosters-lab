@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="OOB Tile Collision" author="SlightlyIntelligentMonkey">
+	<panel>
+	<field type="info">
+		Enabled collision for tiles outside of the map bounds, which makes
+		the camera_unlock.xml way more fun.
+	</field>
+	<field type="data" offset="0x4139A4">
+		8B 15 80 E4 49 00 03 55 08 0F BF 05 86 E5 49 00
+		0F AF 45 0C 0F B6 0C 02 89 4D FC 8B 55 FC 8A 82
+		84 E4 49 00 89 EC 5D C3
+	</field>
+	</panel>
+</hack>

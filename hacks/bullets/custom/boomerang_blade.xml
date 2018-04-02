@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Boomerang Blade" author="CyberSleuth and Txin">
+	<panel>
+		<field type="label">Blade level 1 and 2 bullets</field>
+		<field type="info">
+			Blade bullets (first 2 levels) will fly back to the player instead of disappearing.
+		</field>
+			
+		<field type="data" offset="0x406E60">
+C8 00 01 10 8B 7D 08 FF 47 4C 8B 47 4C 3B 47 54
+7E 68 DB 05 58 E6 49 00 DA 67 14 D8 C8 DB 05 54
+E6 49 00 DA 67 10 D8 C8 DE C1 D9 FA DF 3C E4 58
+3D 00 08 00 00 7F 04 83 67 0C 00 8B 4F 14 8B 57
+10 B8 54 E6 49 00 2B 48 04 2B 10 51 52 E8 2E EA
+01 00 50 E8 F8 E9 01 00 93 E8 02 EA 01 00 6B 4F
+18 07 6B 57 1C 07 C1 F9 03 C1 FA 03 D1 F8 D1 FB
+01 C8 01 D3 89 47 18 89 5F 1C 8B 47 4C 99 6A 05
+59 F7 F9 4A 75 09 6A 01 6A 6A E8 51 97 01 00 83
+7F 28 00 75 57 FF 47 28 9B
+		</field>
+		<field type="data" offset="0x406BB0">
+C8 00 01 10 8B 7D 08 FF 47 4C 8B 47 4C 3B 47 54
+7E 68 DB 05 58 E6 49 00 DA 67 14 D8 C8 DB 05 54
+E6 49 00 DA 67 10 D8 C8 DE C1 D9 FA DF 3C E4 58
+3D 00 08 00 00 7F 04 83 67 0C 00 8B 4F 14 8B 57
+10 B8 54 E6 49 00 2B 48 04 2B 10 51 52 E8 DE EC
+01 00 50 E8 A8 EC 01 00 93 E8 B2 EC 01 00 6B 4F
+18 07 6B 57 1C 07 C1 F9 03 C1 FA 03 D1 F8 D1 FB
+01 C8 01 D3 89 47 18 89 5F 1C 8B 47 4C 99 6A 05
+59 F7 F9 4A 75 09 6A 01 6A 22 E8 01 9A 01 00 83
+7F 28 00 75 57 FF 47 28 9B
+		</field>
+	</panel>
+
+	
+
+</hack>

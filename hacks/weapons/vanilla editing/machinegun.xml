@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Machine Gun (ID: 4)" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<panel title="Bullet IDs">
+				<field type="label">LVL 1 Bullet ID:</field>
+				<field type="label">LVL 2 Bullet ID:</field>
+				<field type="label">LVL 3 Bullet ID:</field>
+				<field type="text" size="1" offset="0x41E407" col="1"></field>
+				<field type="text" size="1" offset="0x41E410"></field>
+				<field type="text" size="1" offset="0x41E419"></field>
+			</panel>
+			<panel title="Maximum Shots on Screen">	
+				<field type="label">Maximum Shots On-Screen‡:</field>
+				<field type="label">Maximum Shots Family:</field>
+				<field type="text" size="1" offset="0x41E3E2" col="1"></field>
+				<field type="text" size="1" offset="0x41E3D7"></field>
+			</panel>
+			<panel>	
+				<field type="label">*Lower value = Faster speed</field>
+				<field type="label">†Set to 0 to remove reloading</field>
+				<field type="label">‡Plus 1, so "1" actually means "2"</field>
+			</panel>
+		</panel>
+		<panel col="1">
+			<panel title="Properties">
+				<field type="label">Firing Speed*:</field>
+				<field type="label">Ammo Reload Speed*:</field>
+				<field type="label">(With Turbocharge)*:</field>
+				<field type="label">Amount of Ammo Loaded†:</field>
+				<field type="label">(With Turbocharge)†:</field>
+				<field type="text" size="1" offset="0x41E459" col="1"></field>
+				<field type="text" size="1" offset="0x41E786"></field>
+				<field type="text" size="1" offset="0x41E767"></field>
+				<field type="text" size="1" offset="0x41E794"></field>
+				<field type="text" size="1" offset="0x41E775"></field>
+			</panel>
+			<panel title="SFX">	
+				<field type="label">Out of Ammo Sound:</field>
+				<field type="label">LVL 1 and 2 Sound:</field>
+				<field type="label">LVL 3 Sound:</field>
+				<field type="text" size="1" offset="0x41E479" col="1"></field>
+				<field type="text" size="1" offset="0x41E73E"></field>
+				<field type="text" size="1" offset="0x41E730"></field>
+			</panel>	
+		</panel>		
+	</panel>
+</hack>

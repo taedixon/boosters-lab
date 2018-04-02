@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Preserve Velocity in TSC" author="BLink">
+	<panel>
+		<panel>
+			<field type="label">When Flag 4001 is set, MOV and TRA will not</field>
+			<field type="label">reset velocity, keeping all player momentum.</field>
+		</panel>
+		<panel>
+			<field type="data" offset="0x416AEA">
+			B8 64 E6 49 00 31 DB 89 18 89 58 04 68 A1 0F 00
+			00 E8 30 7E FF FF 83 C4 04 83 F8 01 74 0C B8 6C
+			E6 49 00 31 DB 89 18 89 58 04 0F B6 0D 38 E6 49
+			00 83 E1 FE 88 0D 38 E6 49 00 E8 77 A4 00 00 5D
+			C3
+			</field>
+		</panel>
+	</panel>
+</hack>

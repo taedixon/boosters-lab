@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Easier to Edit Alternate Menus" author="EnlightenedOne">
+<panel>
+	<field type="info">
+		This edits the framerects of the alternate menu characters to be in PIXEL.bmp,
+		which is hidden in the exe (use a resource hacker to edit) instead of
+		all over NpcRegu. Look at "alternatemenus_example.bmp" in the /hacks/bitmap/
+		folder for how to set it up.
+	</field>
+	<panel>
+	<field type="data" offset="0x4101E2">
+		01
+	</field>
+	<field type="data" offset="0x00410235">
+		01
+	</field>
+	<field type="data" offset="0x00410288">
+		01
+	</field>
+	<field type="data" offset="0x4102D8" col="1">
+		01
+	</field>
+		<field type="data" offset="0x40FB2F">
+		C7 85 24 FF FF FF 10 00 00 00 C7 85 28 FF FF FF
+		10 00 00 00 C7 85 2C FF FF FF 20 00 00 00 C7 85
+		30 FF FF FF 10 00 00 00 C7 85 34 FF FF FF 10 00
+		00 00 C7 85 38 FF FF FF 20 00 00 00 C7 85 3C FF
+		FF FF 20 00 00 00 C7 85 40 FF FF FF 20 00 00 00
+		C7 85 44 FF FF FF 10 00 00 00 C7 85 48 FF FF FF
+		30 00 00 00 C7 85 4C FF FF FF 20 00 00 00 C7 85
+		50 FF FF FF 30 00 00 00 C7 85 54 FF FF FF 10 00
+		00 00 C7 85 58 FF FF FF 40 00 00 00 C7 85 5C FF
+		FF FF 20 00 00 00 C7 85 A0 FE FF FF 40 00 00 00
+		C7 85 A4 FE FF FF 10 00 00 00 C7 85 A8 FE FF FF
+		50 00 00 00 C7 85 AC FE FF FF 20 00 00 00 C7 85
+		B0 FE FF FF 50 00 00 00 C7 85 B4 FE FF FF 10 00
+		00 00 C7 85 B8 FE FF FF 60 00 00 00 C7 85 BC FE
+		FF FF 20 00 00 00 C7 85 C0 FE FF FF 60 00 00 00
+		C7 85 C4 FE FF FF 10 00 00 00 C7 85 C8 FE FF FF
+		70 00 00 00 C7 85 CC FE FF FF 20 00 00 00 C7 85
+		D0 FE FF FF 70 00 00 00 C7 85 D4 FE FF FF 10 00
+		00 00 C7 85 D8 FE FF FF 80 00 00 00 C7 85 DC FE
+		FF FF 20 00 00 00 C7 85 78 FF FF FF 00 00 00 00
+		C7 85 7C FF FF FF 20 00 00 00 C7 45 80 10 00 00
+		00 C7 45 84 30 00 00 00 C7 45 88 10 00 00 00 C7
+		45 8C 20 00 00 00 C7 45 90 20 00 00 00 C7 45 94
+		30 00 00 00 C7 45 98 20 00 00 00 C7 45 9C 20 00
+		00 00 C7 45 A0 30 00 00 00 C7 45 A4 30 00 00 00
+		C7 45 A8 30 00 00 00 C7 45 AC 20 00 00 00 C7 45
+		B0 40 00 00 00 C7 45 B4 30 00 00 00 C7 85 58 FE
+		FF FF 40 00 00 00 C7 85 5C FE FF FF 20 00 00 00
+		C7 85 60 FE FF FF 50 00 00 00 C7 85 64 FE FF FF
+		30 00 00 00 C7 85 68 FE FF FF 50 00 00 00 C7 85
+		6C FE FF FF 20 00 00 00 C7 85 70 FE FF FF 60 00
+		00 00 C7 85 74 FE FF FF 30 00 00 00 C7 85 78 FE
+		FF FF 60 00 00 00 C7 85 7C FE FF FF 20 00 00 00
+		C7 85 80 FE FF FF 70 00 00 00 C7 85 84 FE FF FF
+		30 00 00 00 C7 85 88 FE FF FF 70 00 00 00 C7 85
+		8C FE FF FF 20 00 00 00 C7 85 90 FE FF FF 80 00
+		00 00 C7 85 94 FE FF FF 30 00 00 00
+	</field>
+	</panel>
+	</panel>
+</hack>

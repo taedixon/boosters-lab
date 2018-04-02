@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="CMP Entity" author="EnlightenedOne">
+	<panel>
+		<field type = "label">This is the entity that is spawned when you use</field>
+		<field type = "label">the CMP command, set it to "3" if you just want</field>
+		<field type = "label">to remove the smoke that usually spawns.</field>
+		<field type="text" size="1" offset="0x413AD8" />
+	</panel>	
+</hack>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Reverse Timer" author="Txin and EnlightenedOne">
+	<panel>
+		<panel>
+			<field type="label">This makes the 290 timer count down to zero, and will</field>
+			<field type="label">run event #0005 when it reaches zero (Add it in Head.TSC!)</field>
+			<field type="label">You can set the timer with OOB flags (Starting with Flag C104)</field>
+			<field type="label">It's tics that are then converted into seconds,</field>
+			<field type="label">so you will have to do some math... </field>
+			<field type="label">or set a random flag between C113 and C120 ¯\_(ツ)_/¯</field>
+			<field type="label">[ You probably also want to add EQ-0256 to event 5 ]</field>
+		</panel>
+		<panel>
+			<field type="data" offset="0x41A4B1">
+			FF 0D F4 E6 49 00 7D 07 6A 05 E8 D0 74 00 00
+			</field>
+		</panel>
+	</panel>
+</hack>

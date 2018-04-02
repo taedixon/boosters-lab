@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Frames Per Second (FPS)" author="EnlightenedOne">
+	<panel>
+		<field type="info">
+		Change both of these to the same value to alter the waiting period
+		inbetween frames/processes of the game.
+		</field>
+		<field type = "label">"20" is the default 50 FPS</field>
+		<field type = "label">"17" is roughly 60 FPS</field>
+		<field type="text" size="1" offset="0x40B36F"/>
+		<field type="text" size="1" offset="0x40B3A9"/>
+	</panel>
+</hack>
