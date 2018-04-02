@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Title Screen (IntroState 2)" author="Doors and Kayya and Enlight">
+    <panel>
+		<panel title="Rendering">
+			<field type = "label">
+				Top-left X Framerect
+			</field>
+			<field type="text" size="1" offset="0x40F9BC" />
+			<field type = "label">
+				Top-left Y Framerect
+			</field>
+			<field type="text" size="1" offset="0x40F9C3" />
+			<field type = "label">
+				Bottom-right X Framerect
+			</field>
+			<field type="text" size="2" offset="0x40F9CA" />
+			<field type = "label">
+				Bottom-right Y Framerect
+			</field>
+			<field type="text" size="2" offset="0x40F9D1" />
+			<field type = "label">
+				X Render Position
+			</field>
+			<field type="text" size="1" offset="0x4100B7" />
+			<field type = "label">
+				Y Render Position
+			</field>
+			<field type="text" size="1" offset="0x4100B5" />
+			<field type = "label">
+				Character X position [NEW]
+			</field>
+			<field type="text" size="1" offset="0x41033A" />
+			<field type = "label">
+				Character Y position [NEW]
+			</field>
+			<field type="text" size="4" offset="0x4102F7" />
+			<field type = "label">
+				Character X position [LOAD]
+			</field>
+			<field type="text" size="1" offset="0x410317" />
+			<field type = "label">
+				Character Y position [LOAD]
+			</field>
+			<field type="text" size="4" offset="0x4102EB" />
+					<field type="check" name="Don't draw NEW/LOAD">
+				<checked>
+					<field type="data" offset="0x4100C5">
+						EB 3B
+					</field>
+				</checked>
+				<unchecked>
+					<field type="data" offset="0x4100C5">
+						6A 00 
+					</field>
+				</unchecked>
+			</field>
+			<field type="check" name="Don't draw STUDIO PIXEL/Version">
+				<checked>
+					<field type="data" offset="0x410102">
+						EB 1B
+					</field>
+					<field type="data" offset="0x410014">
+						E9 95 00 00 00
+					</field>
+				</checked>
+				<unchecked>
+					<field type="data" offset="0x410102">
+						6A 01 
+					</field>
+					<field type="data" offset="0x410014">
+						6A 1A 8D 4D C8
+					</field>
+				</unchecked>
+			</field>
+		</panel>
+		<panel col="1">
+		<panel title="Defaults">
+            <field type="label">Default Song Number</field>
+            <field type="text" size="1" offset="0x40FECB"></field>
+			<field type="label">Selection Sound</field>
+            <field type="text" size="1" offset="0x40FFB4"></field>
+			<field type="label">Confirmation Sound</field>
+            <field type="text" size="1" offset="0x40FF48"></field>
+        </panel>
+		<panel title="Alternate Menus">
+            <field type="label">1st Record</field>
+			<field type="label">2nd Record</field>
+			<field type="label">3rd Record</field>
+			<field type="label">4th Record</field>
+			<field type="label">For Records:</field>
+			<field type="label">1st Song</field>
+			<field type="label">2nd Song</field>
+			<field type="label">3rd Song</field>
+			<field type="label">4th Song</field>
+            <field type="text" size="4" offset="0x40FE09" col="1"/>
+			<field type="text" size="4" offset="0x40FE28"/>
+			<field type="text" size="4" offset="0x40FE47"/>
+			<field type="text" size="4" offset="0x40FE66"/>
+			<field type="label">(1 minute = 3000)</field>
+			<field type="text" size="1" offset="0x40FEBF"/>
+			<field type="text" size="1" offset="0x40FEAA"/>
+			<field type="text" size="1" offset="0x40FE95"/>
+			<field type="text" size="1" offset="0x40FE80"/>
+        </panel>
+		<panel title="Background Color">
+            <field type="label">Convert the number to hex,</field>
+			<field type="label">it's an RGB value.</field>
+			<field type="text" size="4" offset="0x40FDA9"/>
+        </panel>
+		</panel>
+    </panel>
+    <panel>
+        <field type = "label">For the full title screen hack:</field>
+        <field type = "label">Set the framerects to {0,0,320,240} and the render position to {0,0}.</field>
+        <field type = "label">Check both checkboxes to restrict drawing info.</field>
+		<field type = "label">   ‍   </field>
+		<field type = "label">To revert to the vanilla title screen:</field>
+        <field type = "label">Set the framerects to {0,0,144,40} and the render position to {88,40}.</field>
+		<field type = "label">Uncheck both checkboxes to restore info drawn.</field>
+    </panel>
+</hack>

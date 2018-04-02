@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Balrog (Shoot) Editor" author="Jables">
+    <panel>
+	
+	<panel>
+	<field type="info">
+		This patch allows you to modify the Balrog (Shoot) Entity.
+		
+	</field>
+	</panel>
+        
+    <panel>
+    <panel title="Balrog (Shoot) bullet parameters:">
+
+	<field type="label">Number of "mouth shots":</field>
+    <field type="text" size="1" offset="0x04285AB" />
+	<field type="label">"Mouth shot" fire rate:</field>
+	<field type="label">*The higher the value, the slower Balrog shoots his shots.</field>
+    <field type="text" size="1" offset="0x04285D3" />
+		<field type="label">"Mouth shot" Bullet ID:</field>
+	<field type="label">Changing this parameter will change what Balrog shoots out from his mouth.</field>
+    <field type="text" size="1" offset="0x0428679" />
+	</panel>
+	</panel>
+	
+        <panel>
+        <panel title="Balrog (Shoot) Turret Behavior">
+			<panel>
+			<field type="label">Value 1 is the default behavior.</field>
+			<field type="label">Value 2 makes Balrog stand in place and endlessly shoot his mouth shots.</field>
+			<field type="label">**Other variables have NOT BEEN TESTED! Be careful if you experiment!</field>
+			</panel>
+			
+	<field type="label">Behavior is set to:</field>
+        <field type="text" size="1" offset="0x0428575" />
+	
+    </panel>
+	</panel>
+	
+	<panel>
+	 <panel title="Balrog (Shoot) Jump Attributes">
+	 <field type="label">Jump Height:</field>
+	 <field type="label">*The higher the value, the lower Balrog jumps.</field>
+	 <field type="text" size="4" offset="0x04286FB" />
+	 <field type="label">Rest timer after landing:</field>
+	  <field type="label">*The higher the value, the longer Balrog rests.</field>
+	 <field type="text" size="1" offset="0x042858E" /> 
+	</panel>
+	</panel>
+	
+</panel>
+</hack>

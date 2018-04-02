@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Disable Parts of the HUD UI" author="EnlightenedOne">
+	<panel><panel>
+		<field type="info">
+			Just check the elements you don't want to appear.
+			They will still function regardless, so you gotta get dirty if you want to
+			actually disable these things. With the exception of the last two options, it's just the display.
+		</field>
+		<panel>
+		<field type="check" name="HUD enabled during Events and Fades">
+			<checked>
+				<field type="data" offset="0x410834">
+					90 90
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x410834">
+					74 25
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name="Disable HP Bar">
+			<checked>
+				<field type="data" offset="0x410836">
+					90 90 90 90 90 90 90 90 90 90
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x410836">
+					6A 01 E8 93 99 00 00 83 C4 04
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name="Disable Weapon Icons">
+			<checked>
+				<field type="data" offset="0x410856">
+					90 90 90 90 90
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x410856">
+					E8 55 98 00 00
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name="Disable Ammo Numbers">
+			<checked>
+				<field type="data" offset="0x419DCC">
+					E9 92 00 00 00 90 90
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x419DCC">
+					83 BA D4 9B 49 00 00
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name="Disable Ammo Slash">
+			<checked>
+				<field type="data" offset="0x419E8A">
+					EB 1F
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x419E8A">
+					6A 1A
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name=" Disable EXP lvl #" col="1">
+			<checked>
+				<field type="data" offset="0x419EAB">
+					EB 41
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x419EAB">
+					6A 1A
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name="Disable EXP Bar">
+			<checked>
+				<field type="data" offset="0x419FA9">
+					E9 A5 00 00 00
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x419FA9">
+					6A 1A 8D 45 B4
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name="Disable EXP Bar Flashes">
+			<checked>
+				<field type="data" offset="0x41A085">
+					EB 20
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x41A085">
+					74 20
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name="Disable Ability to switch weapons">
+			<checked>
+				<field type="data" offset="0x4107B5">
+					EB 27
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x4107B5">
+					74 27
+				</field>
+			</unchecked>
+		</field>
+		<field type="check" name="Disable Ability to open inventory">
+			<checked>
+				<field type="data" offset="0x412F92">
+					EB 7A 90 90 90 90
+				</field>
+			</checked>
+			<unchecked>
+				<field type="data" offset="0x412F92">
+					8B 15 10 E2 49 00
+				</field>
+			</unchecked>
+		</field>
+	</panel></panel></panel>
+</hack>

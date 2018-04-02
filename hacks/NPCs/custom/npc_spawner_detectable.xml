@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="NPC Spawner (Detectable)" author="Noxid">
+	<panel>
+		<field type="label">NPC060</field>
+		<field type="info">
+		NpcSpawner
+		when &gt;ANP with animation 10, spawns an entity at its
+		position. If the entity is killed, it runs its event.
+		If given animation 20, it will delete the NPC it has spawned last.
+		Replaces Toroko.
+		</field>
+		
+		<field type="data" offset="0x432460">
+		55 89 e5 8b 5d 08 8b 83 a8 00 00 00 85 c0 74 2e
+8b 00 85 c0 75 28 66 83 3d cc e6 49 00 00 7e 11
+83 7b 4c 00 75 0b ff 73 30 e8 02 f5 fe ff 83 c4
+04 8b 5d 08 c7 83 a8 00 00 00 00 00 00 00 83 7b
+74 0a 74 08 83 7b 74 14 74 49 eb 68 c7 43 74 00
+00 00 00 8b 83 a8 00 00 00 85 c0 74 10 c7 00 00
+00 00 00 c7 83 a8 00 00 00 00 00 00 00 6a 7f 6a
+00 6a 00 6a 00 6a 00 ff 73 0c ff 73 08 ff 73 2c
+e8 eb ca 03 00 83 c4 20 8b 5d 08 89 83 a8 00 00
+00 eb 21 c7 43 74 00 00 00 00 8b 83 a8 00 00 00
+85 c0 74 10 c7 00 00 00 00 00 c7 83 a8 00 00 00
+00 00 00 00 89 ec 5d c3
+		</field>
+	</panel>
+</hack>

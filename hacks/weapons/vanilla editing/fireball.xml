@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Fireball (ID: 3)" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<panel title="Bullet IDs">
+				<field type="label">LVL 1 Bullet ID:</field>
+				<field type="label">LVL 2 Bullet ID:</field>
+				<field type="label">LVL 3 Bullet ID:</field>
+				<field type="text" size="1" offset="0x41E147" col="1"></field>
+				<field type="text" size="1" offset="0x41E164"></field>
+				<field type="text" size="1" offset="0x41E181"></field>
+			</panel>
+			<panel title="SFX">
+				<field type="label">Ammo Consumed Per Shot:</field>
+				<field type="label">Firing Sound:</field>
+				<field type="text" size="1" offset="0x41E198" col="1"></field>
+				<field type="text" size="1" offset="0x41E3BB"></field>
+			</panel>
+			<panel>
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+			</panel>
+		</panel>
+		<panel col="1">
+			<panel title="Maximum Shots on Screen">
+				<field type="label">LVL 1 Maximum Shots*:</field>
+				<field type="label">LVL 1 Max-Shot Family:</field>
+				<field type="label">LVL 2 Maximum Shots*:</field>
+				<field type="label">LVL 2 Max-Shot Family:</field>
+				<field type="label">LVL 3 Maximum Shots*:</field>
+				<field type="label">LVL 3 Max-Shot Family:</field>
+				<field type="text" size="1" offset="0x41E13C" col="1"></field>
+				<field type="text" size="1" offset="0x41E131"></field>
+				<field type="text" size="1" offset="0x41E159"></field>
+				<field type="text" size="1" offset="0x41E14E"></field>
+				<field type="text" size="1" offset="0x41E176"></field>
+				<field type="text" size="1" offset="0x41E16B"></field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

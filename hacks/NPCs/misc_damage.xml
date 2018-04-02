@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Misc. Damage Values" author="Noxid and EnlightenedOne">
+	<panel>
+		<field type="label">Tile Spike damage:</field>
+		<field type="label">Lightning damage:</field>
+		<field type="label">Bute (Sword) damage:</field>
+		<field type="text" size="1" offset="0x4162F0" col="1"/>
+		<field type="text" size="1" offset="0x4448C6"/>
+		<field type="text" size="1" offset="0x463EEA"/>
+	</panel>
+</hack>

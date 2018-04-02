@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Opening Inventory runs Event Instead" author="BLink">
+	<panel>
+		<panel>
+			<field type="label">Instead of pulling up the inventory menu</field>
+			<field type="label">it runs a TSC event #0050 instead.</field>
+		</panel>
+		<panel>
+			<field type="data" offset="0x410716">
+			6A 32 E8 73 12 01 00 83 C4 04 90 90 90 90 90 90
+			90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+			90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+			90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+			90 90 90 90 90 90 90 90
+			</field>
+		</panel>
+	</panel>
+</hack>

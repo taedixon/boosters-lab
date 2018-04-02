@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Super Missile Launcher (ID: 10)" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<panel title="Bullet IDs">
+				<field type="label">LVL 1 Bullet ID:</field>
+				<field type="label">LVL 2 Bullet ID:</field>
+				<field type="label">LVL 3 Bullet ID:</field>
+				<field type="text" size="1" offset="0x41E7DD" col="1"></field>
+				<field type="text" size="1" offset="0x41E7E6"></field>
+				<field type="text" size="1" offset="0x41E7EF"></field>
+			</panel>
+			<panel title="Properties and SFX‡">	
+				<field type="label">LVL 1 and 2 Ammo Consumed Per Shot:</field>
+				<field type="label">LVL 3 Ammo Consumed Per Shot:</field>
+				<field type="label">LVL 1 and 2 Out of Ammo Sound:</field>
+				<field type="label">LVL 3 Out of Ammo Sound:</field>
+				<field type="label">Firing Sound:</field>
+				<field type="text" size="1" offset="0x41E970" col="1"></field>
+				<field type="text" size="1" offset="0x41EBB3"></field>
+				<field type="text" size="1" offset="0x41E980"></field>
+				<field type="text" size="1" offset="0x41EBC3"></field>
+				<field type="text" size="1" offset="0x41EFB5"></field>
+			</panel>
+			<panel>
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+				<field type="label">†Remember: Each shot creates 3 bullets</field>
+				<field type="label">‡These are shared with Missile Launcher (ID: 5)</field>
+			</panel>
+		</panel>
+		<panel col="1">	
+			<panel title="Level 1 Maximum Shots on Screen">	
+				<field type="label">First Maximum Shots Family:</field>
+				<field type="label">Second Family:</field>
+				<field type="text" size="1" offset="0x41E80E" col="1"></field>
+				<field type="text" size="1" offset="0x41E821"></field>
+			</panel>
+			<panel title="Level 2 Maximum Shots on Screen">	
+				<field type="label">First Max-Shot Family:</field>
+				<field type="label">First Family Shot Limit*:</field>
+				<field type="label">Second Family:</field>
+				<field type="label">Second Family Shot Limit*:</field>
+				<field type="text" size="1" offset="0x41E836" col="1"></field>
+				<field type="text" size="1" offset="0x41E841"></field>
+				<field type="text" size="1" offset="0x41E84A"></field>
+				<field type="text" size="1" offset="0x41E855"></field>
+			</panel>
+			<panel title="Level 3 Maximum Shots on Screen†">	
+				<field type="label">First Max-Shot Family:</field>
+				<field type="label">First Family Shot Limit*:</field>
+				<field type="label">Second Family:</field>
+				<field type="label">Second Family Shot Limit*:</field>
+				<field type="text" size="1" offset="0x41E860" col="1"></field>
+				<field type="text" size="1" offset="0x41E86B"></field>
+				<field type="text" size="1" offset="0x41E874"></field>
+				<field type="text" size="1" offset="0x41E87F"></field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

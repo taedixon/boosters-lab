@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Spur Ammo Modification" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<field type="label">Normally the Spur will deduct ammo for every shot taken,</field>
+			<field type="label">which means for a charged shot it will deduct both the</field>
+			<field type="label">polar star AND the beam, resulting in 2 ammo lost.</field>
+			<field type="label">This basically removes the non-charged shot from taking ammo.</field>
+		</panel>
+		<panel>
+			<field type="data" offset="0x41FB9F">
+			11
+			</field>
+		</panel>
+	</panel>
+</hack>

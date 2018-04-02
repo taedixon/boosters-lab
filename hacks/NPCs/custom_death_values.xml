@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Custom Death Values" author="EnlightenedOne">
+	<panel>
+	<panel>
+		<field type="info">
+		 Some enemies start at 1000 HP and switch to a custom death animation/NPC
+		 when dropping below a certain value, ignoring the "run event on death" condition.
+		 Set to 0 (or negative?) to have them either die immediately like normal entities or otherwise run
+		 their event on death. *NOTE: Colons are abit unusual I'll have to actually spend effort turning them regular enemies.
+		</field>
+	<panel>
+	<panel>
+			<field type="label">Bute (Sword):</field>
+			<field type="label">Polish (Spawns Babies):</field>
+			<field type="label">Igor (Goes Phase 2):</field>
+			<field type="label">Colon Enemy (Full HP):</field>
+			<field type="label">Colon Enemy (Ditto):</field>
+			<field type="label">Gaudi (Normal):</field>
+			<field type="label">Gaudi (Flying):</field>
+			<field type="label">Gaudi (Armor):</field>
+			<field type="label">Gaudi (Egg):</field>
+			<field type="label">BuyoBuyo Base:</field>
+			<field type="label">BalrogFlying (Begin Phase 2):</field>
+			<field type="text" size="4" offset="0x46401F" col="1"/>
+			<field type="text" size="1" offset="0x42EE72"/>
+			<field type="text" size="4" offset="0x438F7E"/>
+			<field type="text" size="4" offset="0x43F892"/>
+			<field type="text" size="4" offset="0x43FAD2"/>
+			<field type="text" size="4" offset="0x4464A2"/>
+			<field type="text" size="4" offset="0x446B3A"/>
+			<field type="text" size="4" offset="0x44A34D"/>
+			<field type="text" size="1" offset="0x44A695"/>
+			<field type="text" size="4" offset="0x44A88D"/>
+			<field type="text" size="1" offset="0x42D1F0"/>
+		</panel>
+		<panel col="1">
+			<field type="label">Dragon Zombie:</field>
+			<field type="label">Misery (Damage taken before tele):</field>
+			<field type="label">Misery (Begin Phase 2):</field>
+			<field type="label">Misery (Begin Phase 3):</field>
+			<field type="label">Miniboss Misery:</field>
+			<field type="label">Miniboss Sue:</field>
+			<field type="label">Bute (Flying #309):</field>
+			<field type="label">Bute (Archer):</field>
+			<field type="label">Mesa:</field>
+			<field type="label">Delet:</field>
+			<field type="label">Ballos (Damage taken before lunging):</field>
+			<field type="text" size="4" offset="0x44E794" col="1"/>
+			<field type="text" size="1" offset="0x456686"/>
+			<field type="text" size="4" offset="0x456A4A"/>
+			<field type="text" size="4" offset="0x456A99"/>
+			<field type="text" size="4" offset="0x45EC83"/>
+			<field type="text" size="4" offset="0x45FCE9"/>
+			<field type="text" size="4" offset="0x463A82"/>
+			<field type="text" size="4" offset="0x4646C5"/>
+			<field type="text" size="4" offset="0x466B2C"/>
+			<field type="text" size="4" offset="0x467739"/>
+			<field type="text" size="1" offset="0x469DD0"/>
+		</panel>
+	</panel>
+	</panel>
+	</panel>
+</hack>
