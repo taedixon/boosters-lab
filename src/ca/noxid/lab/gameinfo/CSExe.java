@@ -183,20 +183,19 @@ public class CSExe {
 
 				modified = true;
 			} else {
-				//check if .csmap was actually initialized
-				//we do this by checking if map 0 is empty
 				int mapCount = 95;
 				ExeSec csmapSec = headers[mapSec];
 				boolean init = false;
-				// if .csmap is too small for 95 maps, it's not initialized
-				// resize it to fit 95 maps
+				//if .csmap is too small for 95 maps, it's not initialized
+				//resize it to fit 95 maps
 				if (csmapSec.rSize < 200*mapCount) {
 					init = true;
 					int shift = csmapSec.resize(200*mapCount);
 					for (int i = mapSec; i < headers.length - 1; i++)
 						headers[i].shift(shift);
 				}
-				// if .csmap is big enough, check if it's empty
+				//if .csmap is big enough, check if it's initialized
+				//we do that by checking if map 0 is empty
 				if (!init) {
 					chan.position(csmapSec.getPos());
 					uBuf = ByteBuffer.allocate(200);
@@ -242,7 +241,7 @@ public class CSExe {
 			}
 
 			//check for sue's
-			if (mapSec == (headers.length - 1)) {
+			if (mapSec == (headers.length - 1) && headers[mapSec].getTag().equals(".swdata")) {
 				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 				if (response != JOptionPane.YES_OPTION) {
 					System.exit(4);
