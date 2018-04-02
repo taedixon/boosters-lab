@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Bubbler with Turbocharge" author="EnlightenedOne">
+	<panel>
+		<field type="label">This adds a turbocharge modifier to the Bubbler.</field>
+		<field type="label">This replaces the "Clear_All" bullet (ID: 2C).</field>
+		<field type="label">Also, level 1 will no longer be separate.</field>	
+		<field type="data" offset="0x41F24F">
+E9 E4 9C FE FF 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90</field>
+		<field type="data" offset="0x41F54D">
+E9 E6 99 FE FF 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90</field>
+		<field type="data" offset="0x408F38">
+A1 58 55 4A 00 83 C0 01 A3 58 55 4A 00 8B 0D 50
+E6 49 00 83 E1 08 74 1F 83 3D 58 55 4A 00 04 7E
+14 C7 05 58 55 4A 00 00 00 00 00 6A 01 E8 B6 90
+FF FF 83 C4 04 EB 1D 83 3D 58 55 4A 00 14 7E 14
+C7 05 58 55 4A 00 00 00 00 00 6A 01 E8 97 90 FF
+FF 83 C4 04 89 EC 5D C3</field>
+	</panel>
+	<panel>
+		<panel title="Edit these here instead of in the other file">
+			<panel title="Ammo Reloading (All Levels)">	
+				<field type="label">Ammo Reload Speed*:</field>
+				<field type="label">(With Turbocharge)*:</field>
+				<field type="label">Amount of Ammo Loaded†:</field>
+				<field type="label">(With Turbocharge)†:</field>
+				<field type="text" size="1" offset="0x408F75" col="1"></field>
+				<field type="text" size="1" offset="0x408F56"></field>
+				<field type="text" size="1" offset="0x408F83"></field>
+				<field type="text" size="1" offset="0x408F64"></field>
+			</panel>
+			<panel>
+				<field type="label">*Lower value = Faster speed</field>
+				<field type="label">†Set to 0 to remove reloading</field>
+				<field type="label">A good default: Set them to "14" "4" "1" "1"</field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

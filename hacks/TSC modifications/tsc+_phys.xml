@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hack name="TSC+ PHYS addon">
+<hack name="TSC+ PHYS addon" author="Noxid and Lowell">
 	<panel>
 		<field type="label">NPC048</field>
 		<field type="info">

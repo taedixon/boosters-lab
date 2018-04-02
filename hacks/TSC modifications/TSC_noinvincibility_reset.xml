@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="TSC Does not Reset Invincibility" author="Noxid">
+	<panel>
+		<panel>
+			<field type="label">Running TSC events and opening inventory does not reset</field>
+			<field type="label">Invincibility Frames. It can both cause bugs and avoid them,</field>
+			<field type="label">depending on how you use TSC without locking the player.</field>
+		</panel>
+		<panel>
+			<field type="data" offset="0x4219F2">
+			90 90 90 90 90 90 90
+			</field>
+		</panel>
+	</panel>
+</hack>

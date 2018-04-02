@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Booster Acceleration and Max Speed" author="EnlightenedOne">
+	<panel>
+		<field type="info">
+		 Boosting can't go over max speed, but it's important to note
+		 editing max speed also alters gravity and currents. Increasing downward
+		 max speed has the side effect of increased player gravity!
+		 This is completely incompatible with any &lt;PHY hack.
+		</field>
+	<panel>
+	<panel>
+		<panel title="2.0 Booster Acceleration">
+			<field type="label">Up</field>
+			<field type="label">Left</field>
+			<field type="label">Right</field>
+			<field type="label">Down</field>
+			<field type="label">Up (NoKey)</field>
+			<field type="text" offset="0x4159BA" size="4" col="1"/>
+			<field type="text" offset="0x4159E8" size="4"/>
+			<field type="text" offset="0x415A13" size="4"/>
+			<field type="text" offset="0x415A3D" size="4"/>
+			<field type="text" offset="0x415A5A" size="4"/>
+		</panel>
+		<panel title="0.8 Booster Acceleration">
+			<field type="label">Added Per Frame (Limited to 127)</field>
+			<field type="label">Max Speed/Sputter Limit</field>
+			<field type="text" offset="0x415EEE" size="1" col="1"/>
+			<field type="text" offset="0x415EE0" size="4"/>
+		</panel>
+		</panel>
+		<panel title="Player Max Speed" col="1">
+			<field type="label">Left</field>
+			<field type="label">Left</field>
+			<field type="label">Right</field>
+			<field type="label">Right</field>
+			<field type="label">Up</field>
+			<field type="label">Up</field>
+			<field type="label">Down</field>
+			<field type="label">Down</field>
+			<field type="text" offset="0x4160DD" size="4" col="1"/>
+			<field type="text" offset="0x4160E9" size="4"/>
+			<field type="text" offset="0x4160F3" size="4"/>
+			<field type="text" offset="0x4160FF" size="4"/>
+			<field type="text" offset="0x416109" size="4"/>
+			<field type="text" offset="0x416115" size="4"/>
+			<field type="text" offset="0x41611F" size="4"/>
+			<field type="text" offset="0x41612B" size="4"/>
+		</panel>
+		<panel title="(Underwater) Max Speed" col="2">
+			<field type="label">Left</field>
+			<field type="label">Left</field>
+			<field type="label">Right</field>
+			<field type="label">Right</field>
+			<field type="label">Up</field>
+			<field type="label">Up</field>
+			<field type="label">Down</field>
+			<field type="label">Down</field>
+			<field type="text" offset="0x416083" size="4" col="1"/>
+			<field type="text" offset="0x41608F" size="4"/>
+			<field type="text" offset="0x416099" size="4"/>
+			<field type="text" offset="0x4160A5" size="4"/>
+			<field type="text" offset="0x4160AF" size="4"/>
+			<field type="text" offset="0x4160BB" size="4"/>
+			<field type="text" offset="0x4160C5" size="4"/>
+			<field type="text" offset="0x4160D1" size="4"/>
+		</panel>
+	</panel>
+	</panel>
+</hack>

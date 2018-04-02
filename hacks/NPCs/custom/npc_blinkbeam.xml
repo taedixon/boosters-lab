@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="BlinkBeam" author="Noxid">
+	<panel>
+		<field type="label">NPC048</field>
+		<field type="info">
+		 Replaces Omega projectile
+		 A laser thing that runs on a timer
+		</field>
+		
+		<field type="data" offset="0x42f780">
+		55 89 e5 83 ec 08 8b 5d 08 8b 43 74 ff 24 85 6f
+f8 42 00 c7 83 a8 00 00 00 00 00 00 00 6a 01 6a
+3e e8 9a 0e ff ff 83 c4 08 8b 43 4c 89 43 78 31
+c0 89 45 fc 8b 43 08 c1 e8 0d 8b 4b 0c c1 e9 0d
+03 4d fc 51 50 e8 d6 41 fe ff 83 c4 08 8b 5d 08
+83 f8 41 7d 38 6a 00 ff b3 a8 00 00 00 6a 00 6a
+00 6a 00 8b 43 0c 8b 55 fc 69 d2 00 20 00 00 01
+d0 50 ff 73 08 6a 0d e8 d4 f7 03 00 83 c4 20 8b
+5d 08 89 83 a8 00 00 00 ff 45 fc eb a7 c7 43 74
+02 00 00 00 c7 43 4c 40 00 00 00 eb 4e ff 4b 4c
+75 49 c7 43 74 03 00 00 00 eb 40 83 bb a8 00 00
+00 00 74 0e 8b 9b a8 00 00 00 c7 03 00 00 00 00
+eb e9 8b 5d 08 c7 43 74 04 00 00 00 c7 43 4c 40
+00 00 00 c7 83 a8 00 00 00 00 00 00 00 eb 0c ff
+4b 4c 75 07 c7 43 74 01 00 00 00 89 ec 5d c3 93
+f7 42 00 9d f7 42 00 1d f8 42 00 2b f8 42 00 5f
+f8 42 00
+		</field>
+	</panel>
+</hack>

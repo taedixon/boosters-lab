@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Nemesis (ID: 12)" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<panel title="Bullet IDs">
+				<field type="label">LVL 1:</field>
+				<field type="label">LVL 2:</field>
+				<field type="label">LVL 3:</field>
+				<field type="text" size="1" offset="0x41F733" col="1"></field>
+				<field type="text" size="1" offset="0x41F73C"></field>
+				<field type="text" size="1" offset="0x41F745"></field>
+			</panel>
+			<panel title="Properties">
+				<field type="label">Maximum Shots On-Screen*:</field>
+				<field type="label">Maximum Shots Family:</field>
+				<field type="label">Ammo Consumed Per Shot:</field>
+				<field type="text" size="1" offset="0x41F755" col="1"></field>
+				<field type="text" size="1" offset="0x41F74A"></field>
+				<field type="text" size="1" offset="0x41F770"></field>
+			</panel>
+		</panel>
+		<panel col="1">
+			<panel title="SFX">
+				<field type="label">Out of Ammo Sound:</field>
+				<field type="label">LVL 1 Sound:</field>
+				<field type="label">LVL 2 Sound:</field>
+				<field type="label">LVL 3 Sound:</field>
+				<field type="text" size="1" offset="0x41F780" col="1"></field>
+				<field type="text" size="1" offset="0x41F9B4"></field>
+				<field type="text" size="1" offset="0x41F9C2"></field>
+				<field type="text" size="1" offset="0x41F9D0"></field>
+			</panel>
+			<panel>	
+				<field type="label">*Plus 1, so "1" actually means "2"</field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

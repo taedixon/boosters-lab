@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="The Faster Star" author="Hina">
+	<panel>
+		<field type="label">Polar Star bullet</field>
+		<field type="info">
+			Changes Polar Star bullets into Faster Star bullets, which gain some velocity each frame. The velocity drop can be adjusted. If the velocity is too high, the bullet may go through walls!
+		</field>
+			
+		<field type="data" offset="0x4047B0">
+c8 04 00 00 8b 4d 08 ff 41 4c 8b 41 4c 3b 41 54
+7e 1e c7 41 0c 00 00 00 00 6a 00 6a 03 ff 71 14
+ff 71 10 e8 b8 64 00 00 83 c4 10 e9 cc 00 00 00
+83 79 28 00 75 3a c7 41 28 01 00 00 00 8b 41 38
+83 f8 03 77 2b ff 24 85 ae 48 40 00 c7 41 18 00
+f0 ff ff eb 19 c7 41 1c 00 f0 ff ff eb 10 c7 41
+18 00 10 00 00 eb 07 c7 41 1c 00 10 00 00 eb 3d
+8b 41 38 83 f8 03 77 29 ff 24 85 be 48 40 00 81
+69 18 00 01 00 00 eb 19 81 69 1c 00 01 00 00 eb
+10 81 41 18 00 01 00 00 eb 07 81 41 1c 00 01 00
+00 8b 41 18 01 41 10 8b 41 1c 01 41 14 8b 45 0c
+83 f8 01 74 07 83 f8 02 74 09 eb 13 b8 80 00 00
+00 eb 05 b8 a0 00 00 00 ba 20 00 00 00 eb 0a b8
+80 00 00 00 ba 30 00 00 00 83 79 38 01 74 08 83
+79 38 03 74 02 eb 03 83 c0 10 89 51 40 83 c2 10
+89 51 48 89 41 3c 83 c0 10 89 41 44 c9 c3 fc 47
+40 00 05 48 40 00 0e 48 40 00 17 48 40 00 2f 48
+40 00 38 48 40 00 41 48 40 00 4a 48 40 00
+		</field>
+	</panel>
+
+	<panel>
+		<field type = "label">
+			Velocity gain each frame (change all to the same value)
+		</field>
+
+		<field type="text" size="2" offset="0x404832" />
+		<field type="text" size="2" offset="0x40483b" />
+		<field type="text" size="2" offset="0x404844" />
+		<field type="text" size="2" offset="0x40484d" />
+	</panel>
+
+</hack>

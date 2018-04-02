@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Player Size" author="SlightlyIntelligentMonkey">
+
+	<panel col = "1" >
+		<field type="info">
+		A recode of the hitbox and rendering that allows you to easily change the player size.
+		The values are cucked for the first time when you use this because it rewrites large portions of the players code.
+		Change the values to the default to get the default MyChar.
+		</field>
+		<panel col = "0">
+		<panel col = "0" >
+			<field type="data" offset="0x414bf0">
+		55 89 e5 f7 05 38 e6 49 00 01 00 00 00 75 68 f7
+		05 3c e6 49 00 08 00 00 00 75 75 c7 05 78 e6 49
+		00 00 00 00 00 83 3d 70 e6 49 00 00 7f 0c c7 05
+		5d 38 49 00 02 00 00 00 eb 0a c7 05 5d 38 49 00
+		01 00 00 00 a1 44 e6 49 00 85 c0 0f 85 e8 00 00
+		00 a1 48 e6 49 00 85 c0 0f 84 e5 00 00 00 c7 05
+		78 e6 49 00 06 00 00 00 c7 05 5d 38 49 00 00 00
+		00 00 e9 cc 00 00 00 c7 05 78 e6 49 00 07 00 00
+		00 c7 05 5d 38 49 00 00 00 00 00 e9 b3 00 00 00
+		a1 30 36 49 00 0b 05 38 36 49 00 85 05 10 e2 49
+		00 75 16 a1 3c 36 49 00 85 05 10 e2 49 00 74 6c
+		83 0d 38 e6 49 00 01 eb be a1 6c e6 49 00 85 c0
+		74 4f 83 0d 38 e6 49 00 04 c7 05 78 e6 49 00 00
+		00 00 00 ff 05 74 e6 49 00 83 3d 74 e6 49 00 04
+		7c 2f c7 05 74 e6 49 00 00 00 00 00 ff 05 5d 38
+		49 00 83 3d 5d 38 49 00 03 7c 16 6a 01 6a 18 e8
+		4c b9 00 00 83 ec 08 c7 05 5d 38 49 00 00 00 00
+		00 a1 44 e6 49 00 85 c0 75 1f eb 27 c7 05 78 e6
+		49 00 00 00 00 00 c7 05 5d 38 49 00 00 00 00 00
+		a1 44 e6 49 00 85 c0 74 0a c7 05 78 e6 49 00 03
+		00 00 00 a1 5d 38 49 00 01 05 78 e6 49 00 a1 40
+		e6 49 00 ba 44 00 00 00 d1 e8 0f af c2 a3 a0 e6
+		49 00 83 c0 44 a3 a8 e6 49 00 a1 78 e6 49 00 ba
+		26 00 00 00 0f af c2 a3 9c e6 49 00 83 c0 26 a3
+		a4 e6 49 00 89 ec 5d c3
+			</field>
+		</panel>
+		
+		<panel col = "1" >
+			<field type="data" offset="0x417E40">
+		55 89 e5 83 ec 34 a1 54 e6 49 00 c1 f8 0d 89 45
+		f8 a1 58 e6 49 00 c1 f8 0d 89 45 fc c7 45 d4 01
+		00 00 00 c7 45 d0 00 00 00 00 c7 45 d8 00 00 00
+		00 c7 45 dc 01 00 00 00 c7 45 ec 00 00 00 00 c7
+		45 f0 01 00 00 00 c7 45 f4 01 00 00 00 c7 45 e8
+		00 00 00 00 8b 45 fc 83 e8 01 89 45 e4 8b 45 f8
+		83 e8 01 89 45 e8 ff 45 e4 8b 45 fc 83 c0 01 39
+		45 e4 0f 8f fd 04 00 00 ff 45 e8 8b 45 f8 83 c0
+		01 39 45 e8 7f d7 ff 75 e4 ff 75 e8 e8 cf ba ff
+		ff 83 c4 08 0f b6 d0 83 ea 02 81 fa a1 00 00 00
+		0f 87 ca 04 00 00 0f b6 82 51 84 41 00 ff 24 85
+		d5 83 41 00 ff 75 e4 ff 75 e8 e8 31 ef ff ff 83
+		c4 08 0b 05 3c e6 49 00 a3 3c e6 49 00 e9 9e 04
+		00 00 ff 75 e4 ff 75 e8 e8 b3 f2 ff ff 83 c4 08
+		0b 05 3c e6 49 00 a3 3c e6 49 00 e9 80 04 00 00
+		ff 75 e4 ff 75 e8 e8 a5 f3 ff ff 83 c4 08 0b 05
+		3c e6 49 00 a3 3c e6 49 00 e9 62 04 00 00 ff 75
+		e4 ff 75 e8 e8 97 f4 ff ff 83 c4 08 0b 05 3c e6
+		49 00 a3 3c e6 49 00 e9 44 04 00 00 8b 45 fc ff
+		75 e4 ff 75 e8 e8 86 f5 ff ff 83 c4 08 0b 05 3c
+		e6 49 00 a3 3c e6 49 00 e9 23 04 00 00 ff 75 e4
+		ff 75 e8 e8 78 f6 ff ff 83 c4 08 0b 05 3c e6 49
+		00 a3 3c e6 49 00 e9 05 04 00 00 ff 75 e4 ff 75
+		e8 e8 6a f7 ff ff 83 c4 08 0b 05 3c e6 49 00 a3
+		3c e6 49 00 e9 e7 03 00 00 ff 75 e4 ff 75 e8 e8
+		5c f8 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c e6
+		49 00 e9 c9 03 00 00 ff 75 e4 ff 75 e8 e8 4e f9
+		ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49 00
+		e9 ab 03 00 00 ff 75 e4 ff 75 e8 e8 d0 fa ff ff
+		83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49 00 e9 8d
+		03 00 00 ff 75 e4 ff 75 e8 e8 42 fb ff ff 83 c4
+		08 0b 05 3c e6 49 00 a3 3c e6 49 00 e9 6f 03 00
+		00 ff 75 e4 ff 75 e8 e8 b4 fb ff ff 83 c4 08 0b
+		05 3c e6 49 00 a3 3c e6 49 00 e9 51 03 00 00 ff
+		75 e4 ff 75 e8 e8 26 fc ff ff 83 c4 08 0b 05 3c
+		e6 49 00 a3 3c e6 49 00 e9 33 03 00 00 ff 75 e4
+		ff 75 e8 e8 98 fc ff ff 83 c4 08 0b 05 3c e6 49
+		00 a3 3c e6 49 00 e9 15 03 00 00 ff 75 e4 ff 75
+		e8 e8 0a fd ff ff 83 c4 08 0b 05 3c e6 49 00 a3
+		3c e6 49 00 e9 f7 02 00 00 ff 75 e4 ff 75 e8 e8
+		8c f9 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c e6
+		49 00 e9 d9 02 00 00 ff 75 e4 ff 75 e8 e8 6e f9
+		ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49 00
+		e9 bb 02 00 00 ff 75 e4 ff 75 e8 e8 30 ed ff ff
+		83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49 00 ff 75
+		e4 ff 75 e8 e8 37 f9 ff ff 83 c4 08 0b 05 3c e6
+		49 00 a3 3c e6 49 00 e9 84 02 00 00 ff 75 e4 ff
+		75 e8 e8 99 f0 ff ff 83 c4 08 0b 05 3c e6 49 00
+		a3 3c e6 49 00 ff 75 e4 ff 75 e8 e8 00 f9 ff ff
+		83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49 00 e9 4d
+		02 00 00 ff 75 e4 ff 75 e8 e8 72 f1 ff ff 83 c4
+		08 0b 05 3c e6 49 00 a3 3c e6 49 00 ff 75 e4 ff
+		75 e8 e8 c9 f8 ff ff 83 c4 08 0b 05 3c e6 49 00
+		a3 3c e6 49 00 e9 16 02 00 00 ff 75 e4 ff 75 e8
+		e8 4b f2 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c
+		e6 49 00 ff 75 e4 ff 75 e8 e8 92 f8 ff ff 83 c4
+		08 0b 05 3c e6 49 00 a3 3c e6 49 00 e9 df 01 00
+		00 ff 75 e4 ff 75 e8 e8 24 f3 ff ff 83 c4 08 0b
+		05 3c e6 49 00 a3 3c e6 49 00 ff 75 e4 ff 75 e8
+		e8 5b f8 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c
+		e6 49 00 e9 a8 01 00 00 ff 75 e4 ff 75 e8 e8 fd
+		f3 ff ff 83 c4 08 0b 05 3c e6 49 00 ff 75 e4 ff
+		75 e8 e8 29 f8 ff ff 83 c4 08 0b 05 3c e6 49 00
+		a3 3c e6 49 00 e9 76 01 00 00 ff 75 e4 ff 75 e8
+		e8 db f4 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c
+		e6 49 00 ff 75 e4 ff 75 e8 e8 f2 f7 ff ff 83 c4
+		08 0b 05 3c e6 49 00 a3 3c e6 49 00 e9 3f 01 00
+		00 ff 75 e4 ff 75 e8 e8 b4 f5 ff ff 83 c4 08 0b
+		05 3c e6 49 00 a3 3c e6 49 00 ff 75 e4 ff 75 e8
+		e8 bb f7 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c
+		e6 49 00 e9 08 01 00 00 ff 75 e4 ff 75 e8 e8 8d
+		f6 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49
+		00 ff 75 e4 ff 75 e8 e8 84 f7 ff ff 83 c4 08 0b
+		05 3c e6 49 00 a3 3c e6 49 00 e9 d1 00 00 00 ff
+		75 e4 ff 75 e8 e8 16 f9 ff ff 83 c4 08 0b 05 3c
+		e6 49 00 a3 3c e6 49 00 ff 75 e4 ff 75 e8 e8 4d
+		f7 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49
+		00 e9 9a 00 00 00 ff 75 e4 ff 75 e8 e8 6f f9 ff
+		ff 83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49 00 ff
+		75 e4 ff 75 e8 e8 16 f7 ff ff 83 c4 08 0b 05 3c
+		e6 49 00 a3 3c e6 49 00 eb 66 ff 75 e4 ff 75 e8
+		e8 cb f9 ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c
+		e6 49 00 ff 75 e4 ff 75 e8 e8 e2 f6 ff ff 83 c4
+		08 0b 05 3c e6 49 00 a3 3c e6 49 00 eb 32 ff 75
+		e4 ff 75 e8 e8 27 fa ff ff 83 c4 08 0b 05 3c e6
+		49 00 a3 3c e6 49 00 ff 75 e4 ff 75 e8 e8 ae f6
+		ff ff 83 c4 08 0b 05 3c e6 49 00 a3 3c e6 49 00
+		e9 03 fb ff ff a1 90 9c 49 00 05 00 08 00 00 39
+		05 58 e6 49 00 7e 0a 81 0d 3c e6 49 00 00 01 00
+		00 89 ec 5d c3 b9 80 41 00 f4 7e 41 00 05 80 41
+		00 12 7f 41 00 30 7f 41 00 4e 7f 41 00 6c 7f 41
+		00 8d 7f 41 00 ab 7f 41 00 c9 7f 41 00 e7 7f 41
+		00 d7 80 41 00 f5 80 41 00 23 80 41 00 2c 81 41
+		00 63 81 41 00 9a 81 41 00 d1 81 41 00 08 82 41
+		00 3a 82 41 00 71 82 41 00 a8 82 41 00 41 80 41
+		00 5f 80 41 00 7d 80 41 00 9b 80 41 00 df 82 41
+		00 16 83 41 00 4a 83 41 00 7e 83 41 00 b0 83 41
+		00 00 1e 1e 01 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e
+		1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e
+		1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e
+		1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e
+		01 02 01 1e 1e 01 1e 1e 1e 1e 1e 1e 1e 1e 1e 03
+		04 05 06 07 08 09 0a 1e 1e 1e 1e 1e 1e 1e 1e 0b
+		0c 0d 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 0e
+		0f 10 11 12 13 14 15 1e 1e 1e 1e 1e 1e 1e 1e 16
+		17 18 19 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e
+		1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1e 1a
+		1b 1c 1d
+		</field>
+		</panel>
+		</panel>
+	
+	<panel title = "Player Hitbox Size" col = "0" >
+		<panel>
+			<field type = "label">This is the max hitbox in tiles, change this to be larger than your custom hitbox (default is 1)</field>
+			<field type = "label">Tilesize Left</field>
+			<field type = "text" size = "1" offset = "0x417EA2" />
+			<field type = "label">Tilesize Top</field>
+			<field type = "text" size = "1" offset = "0x417EAE" />
+			<field type = "label">Tilesize Right</field>
+			<field type = "text" size = "1" offset = "0x417EC0" />
+			<field type = "label">Tilesize Bottom</field>
+			<field type = "text" size = "1" offset = "0x417E99" />
+			<field type = "label">Hitbox is in coordinates instead of pixels</field>
+			<field type = "label">Default coords per pixel is 512 (default is 4096 top/bottom, 2560 left/right)</field>
+			<field type = "label">Hitbox Left</field>
+			<field type = "text" size = "4" offset = "0x414BBA" />
+			<field type = "label">Hitbox Top</field>
+			<field type = "text" size = "4" offset = "0x414BB0" />
+			<field type = "label">Hitbox Right</field>
+			<field type = "text" size = "4" offset = "0x414BA6" />
+			<field type = "label">Hitbox Bottom</field>
+			<field type = "text" size = "4" offset = "0x414BC4" />
+		</panel>
+		<panel title = "This is the entity hitbox" col= "1" >
+			<field type = "label">I suggest changing the values below to the same thing</field>
+			<field type = "label">In 512ths of a pixel (default is 1024)</field>
+			<field type = "label">Hurtbox Left</field>
+			<field type = "text" size = "4" offset = "0x418B3E" />
+			<field type = "label">Hurtbox Top</field>
+			<field type = "text" size = "4" offset = "0x418B7C" />
+			<field type = "label">Hurtbox Right</field>
+			<field type = "text" size = "4" offset = "0x418B24" />
+			<field type = "label">Hurtbox Bottom</field>
+			<field type = "text" size = "4" offset = "0x418B5D" />
+			
+			<field type = "label">Hurtbox Left</field>
+			<field type = "text" size = "4" offset = "0x418BBE" />
+			<field type = "label">Hurtbox Top</field>
+			<field type = "text" size = "4" offset = "0x418BF7" />
+			<field type = "label">Hurtbox Right</field>
+			<field type = "text" size = "4" offset = "0x418B9F" />
+			<field type = "label">Hurtbox Bottom</field>
+			<field type = "text" size = "4" offset = "0x418BDA" />
+		</panel>
+	</panel>
+	
+	<panel col = "0" >
+		<panel title = "Player Render Location"  col = "0">
+			<field type = "label">These are how many coords off from the x,y of the player to display the sprite</field>
+			<field type = "label">Default coords per pixel is 512 (default is 4096)</field>
+			<field type = "label">Display Left</field>
+			<field type = "text" size = "4" offset = "0x414B92" />
+			<field type = "label">Display Top</field>
+			<field type = "text" size = "4" offset = "0x414B88" />
+			<field type = "label">Display Right</field>
+			<field type = "text" size = "4" offset = "0x414B7E" />
+			<field type = "label">Display Bottom</field>
+			<field type = "text" size = "4" offset = "0x414B9C" />
+		</panel>
+	
+		<panel title = "Player Sprite Stuff" col = "1" >
+			<field type = "label">pixel width and height of player sprite</field>
+			<field type = "label">*change duplicates to the same number (default is 16)</field>
+			<field type = "label">Sprite Height</field>
+			<field type = "text" size = "4" offset = "0x414D44" />
+			<field type = "label">Sprite Height</field>
+			<field type = "text" size = "1" offset = "0x414D54" />
+			<field type = "label">Sprite Width</field>
+			<field type = "text" size = "4" offset = "0x414D60" />
+			<field type = "label">Sprite Width</field>
+			<field type = "text" size = "1" offset = "0x414D6E" />
+		</panel>
+	</panel>
+	
+	<panel>
+		<panel title = "Player animation stuff" col = "0" >
+			<field type = "label">the various animation frames</field>
+			<field type = "label">number of walk animation sprites (default is 3)</field>
+			<field type = "text" size = "1" offset = "0x414CE8" />
+			<field type = "label">walking animation sprites *how many frames off from the left (default is 0)</field>
+			<field type = "text" size = "4" offset = "0x414CBF" />
+			<field type = "label">looking up sprites *how many frames off from the left (default is 3)</field>
+			<field type = "text" size = "4" offset = "0x414D2F" />
+			<field type = "label">walk frame delay (default is 4)</field>
+			<field type = "text" size = "1" offset = "0x414CCF" />
+			<field type = "label">falling frame (default is 1)</field>
+			<field type = "text" size = "4" offset = "0x414C30" />
+			<field type = "label">going up frame (default is 2)</field>
+			<field type = "text" size = "4" offset = "0x414C24" />
+			<field type = "label">looking down frame (default is 6)</field>
+			<field type = "text" size = "4" offset = "0x414C54" />
+			<field type = "label">inspecting frame (default is 7)</field>
+			<field type = "text" size = "4" offset = "0x414C6D" />
+			<field type = "label">standing frame (default is 0)</field>
+			<field type = "text" size = "4" offset = "0x414D12" />
+			<field type = "label">walk noise (default is 24)</field>
+			<field type = "text" size = "1" offset = "0x414CEE" />
+		</panel>
+	</panel>
+
+	
+	</panel>
+</hack>

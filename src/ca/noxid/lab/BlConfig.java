@@ -4,10 +4,15 @@ import ca.noxid.lab.gameinfo.GameInfo;
 import com.carrotlord.string.StrTools;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption.*;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import static java.nio.file.StandardCopyOption.*;
+
 public class BlConfig {
+	private static final String CONFIGNAME = "bl.ini";
 	private int lineResolution = 4;
 	private int entityResolution = 16;
 	private int tileSize = 16;
@@ -117,7 +122,7 @@ public class BlConfig {
 	}
 
 	public BlConfig(File configFile, GameInfo.MOD_TYPE type) {
-		this.configFile = configFile;
+		this.configFile = solveLegacyDirectory(configFile);
 		if (type == GameInfo.MOD_TYPE.MOD_CS) {
 			tileSize = 16;
 		}
@@ -178,6 +183,34 @@ public class BlConfig {
 			e.printStackTrace();
 			StrTools.msgBox("Error writing to " + configFile + " !");
 		}
+	}
 
+	/**
+	 * Previously. bl.ini was stored directly in the project's Data Directory.
+	 * Attempt to resolve this
+	 * @param dataDir
+	 * @return
+	 */
+	private File solveLegacyDirectory(File dataDir) {
+		File canonicalFile = new File(dataDir, ".boostlab/" + CONFIGNAME);
+		if (canonicalFile.exists()) {
+			return canonicalFile;
+		}
+		// the new-style project directory may not exist. If it doesn't, create it.
+		canonicalFile.getParentFile().mkdirs();
+		File legacyFile = new File(dataDir, CONFIGNAME);
+		if (legacyFile.exists()) {
+			try {
+				canonicalFile.getParentFile().mkdirs();
+				Files.copy(legacyFile.toPath(), canonicalFile.toPath(), REPLACE_EXISTING);
+				return canonicalFile;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return legacyFile;
+			}
+		} else {
+			// there is no ini file..
+			return canonicalFile;
+		}
 	}
 }

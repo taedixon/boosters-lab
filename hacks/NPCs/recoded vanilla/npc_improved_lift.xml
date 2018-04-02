@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Improved Programmable Lift" author="SlightlyIntelligentMonkey">
+	<panel>
+		<field type="label">NPC 025</field>
+		<field type="info">
+		 A better version of the Egg Corridor Lift (NPC 25).
+		 It has 3 states, off (0), one where it goes up and then goes down (1),
+		 and one where it goes up twice then down twice (2). 
+		 You can choose how many frames (distance) it goes up or down with
+		 the direction variable when setting the ANP.
+		</field>
+		
+		<field type="data" offset="0x42b280">
+		55 89 e5 8b 7d 08 8b 47 18 85 c0 75 0a ff 47 18
+		81 47 08 00 10 00 00 8b 47 74 ff 24 85 e2 b3 42
+		00 31 c0 c7 47 68 01 00 00 00 89 47 10 89 47 14
+		e9 f6 00 00 00 8b 47 14 85 c0 74 0b ff 47 1c 8b
+		47 4c 39 47 1c 7c 40 c7 47 14 00 00 00 00 ff 47
+		6c 83 7f 6c 50 7c 4b ff 47 70 83 7f 70 02 7c 17
+		c7 47 14 00 04 00 00 c7 47 1c 00 00 00 00 c7 47
+		70 00 00 00 00 eb 2b c7 47 14 00 fc ff ff c7 47
+		1c 00 00 00 00 eb 1b c7 47 6c 00 00 00 00 ff 47
+		68 83 7f 68 02 0f 8c 90 00 00 00 c7 47 68 00 00
+		00 00 e9 84 00 00 00 8b 47 14 85 c0 74 0b ff 47
+		1c 8b 47 4c 39 47 1c 7c 56 c7 47 14 00 00 00 00
+		ff 47 6c 83 7f 6c 50 7c 5d 83 7f 70 03 74 19 ff
+		47 70 83 7f 70 03 7c 27 c7 47 14 00 04 00 00 c7
+		47 1c 00 00 00 00 eb 3e c7 47 1c 00 00 00 00 c7
+		47 14 00 04 00 00 c7 47 70 00 00 00 00 eb 27 c7
+		47 14 00 fc ff ff c7 47 1c 00 00 00 00 eb 17 c7
+		47 6c 00 00 00 00 ff 47 68 83 7f 68 02 7c 0c c7
+		47 68 00 00 00 00 eb 03 ff 4f 14 8b 47 10 8b 57
+		14 01 47 08 01 57 0c c7 47 54 00 01 00 00 c7 47
+		5c 20 01 00 00 ba 10 00 00 00 8b 47 68 0f af c2
+		83 c0 40 89 47 58 83 c0 10 89 47 60 eb 00 89 ec
+		5d c3 a1 b2 42 00 b5 b2 42 00 27 b3 42 00 a8 b3
+		42 00
+		</field>
+	</panel>
+</hack>

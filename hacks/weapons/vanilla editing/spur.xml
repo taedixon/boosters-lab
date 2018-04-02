@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Spur (ID: 13)" author="EnlightenedOne">
+	<panel>
+		<panel>
+			<panel title="Bullet IDs">
+				<field type="label">LVL 1 Bullet ID:</field>
+				<field type="label">LVL 2 Bullet ID:</field>
+				<field type="label">LVL 3 Bullet ID:</field>
+				<field type="label">LVL MAX Bullet ID:</field>
+				<field type="text" size="1" offset="0x41FB43" col="1"></field>
+				<field type="text" size="1" offset="0x41FB53"></field>
+				<field type="text" size="1" offset="0x41FB6E"></field>
+				<field type="text" size="1" offset="0x41FB65"></field>
+			</panel>
+			<panel title="Properties">		
+				<field type="label">Ammo Consumed Per Shot:</field>
+				<field type="label">Maximum Shots Family:</field>
+				<field type="label">Second Max-Shots Family:</field>
+				<field type="text" size="1" offset="0x41FBAB" col="1"></field>
+				<field type="text" size="1" offset="0x41FB73"></field>
+				<field type="text" size="1" offset="0x41FB81"></field>
+			</panel>
+			<field type="data" offset="0x41FDD2">
+				8B 4D F0 83 F9 01 74 1E 83 F9 02 74 27 83 F9 03
+				74 02 EB 48 80 3D 60 55 4A 00 00 74 25 EB 31 90
+				90 90 90 90 90 90
+			</field>
+		</panel>
+		<panel col="1">
+			<panel title="SFX">			
+				<field type="label">Out of Ammo Sound:</field>
+				<field type="label">LVL 1 Charging Sound:</field>
+				<field type="label">LVL 2 Charging Sound:</field>
+				<field type="label">LVL 3 Charging Sound:</field>
+				<field type="label">MAX Charge Sound:</field>
+				<field type="label">LVL 1 Firing Sound:</field>
+				<field type="label">LVL 2 Firing Sound:</field>
+				<field type="label">LVL 3 Firing Sound:</field>
+				<field type="label">MAX Firing Sound:</field>
+				<field type="text" size="1" offset="0x41FBBB" col="1"></field>
+				<field type="text" size="1" offset="0x41FA95"></field>
+				<field type="text" size="1" offset="0x41FAA3"></field>
+				<field type="text" size="1" offset="0x41FABA"></field>
+				<field type="text" size="1" offset="0x41FAFE"></field>
+				<field type="text" size="1" offset="0x41FDFB"></field>
+				<field type="text" size="1" offset="0x41FE09"></field>
+				<field type="text" size="1" offset="0x41FE17"></field>
+				<field type="text" size="1" offset="0x41FE25"></field>
+			</panel>
+			<panel>
+				<field type="label">The patch to the left is to fix the firing SFX</field>
+				<field type="label">since Pixel was silly and made it depend on bullets.</field>
+				<field type="label">(For ASM hackers, the space at 0x41FE32</field>
+				<field type="label">is now obsolete and can be used for whatever)</field>
+			</panel>
+		</panel>
+	</panel>
+</hack>

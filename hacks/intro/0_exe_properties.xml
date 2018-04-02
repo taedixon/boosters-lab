@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Exe Properties" author="EnlightenedOne and Clownacy">
+	<panel>
+	<panel>
+		<panel title="General Properties">
+			<field type="label">Window Title</field>
+			<field type="text" offset="0x48EFD0" size="40"/>
+			<panel>
+				<field type="label">Save File</field>
+				<field type="label">Window Position File</field>
+				<field type="label">(Edit this too)</field>
+				<field type="label">Config File*</field>
+				<field type="label">Timer File</field>
+				<field type="label">(Edit this too)</field>
+				<field type="text" offset="0x48C700" size="12" col="1"/>
+				<field type="text" offset="0x48C610" size="12"/>
+				<field type="text" offset="0x48C3D4" size="12"/>
+				<field type="text" offset="0x48C2A4" size="12"/>
+				<field type="text" offset="0x48C6B7" size="8"/>
+				<field type="text" offset="0x48C6A3" size="8"/>
+			</panel>
+		</panel>
+		<panel title="Version/About Popup">
+			<field type="label">All 3 lines, a bit tricky to edit within the hackinator.</field>
+			<field type="text" offset="0x48C2BC" size="64"/>
+		<panel>
+			<field type="label">Date for Line 2</field>
+			<field type="label">Quit Dialouge</field>
+			<field type="text" offset="0x48C420" size="12" col="1"/>
+			<field type="text" offset="0x48C61C" size="7"/>
+		</panel>
+		</panel>
+	</panel>
+	<panel col="1">
+		<panel title="Starting State">
+			<field type="label">(Set these all to</field>
+			<field type="label">the same number)</field>
+			<field type="label">0 = Quit</field>
+			<field type="label">1 = Cutscene</field>
+			<field type="label">2 = Menu</field>
+			<field type="label">3 = NewGame</field>
+			<field type="label">NA = Crash</field>
+			<field type="text" offset="0x40F693" size="1" col="1"/>
+			<field type="text" offset="0x40F7EE" size="1"/>
+			<field type="text" offset="0x40F7EE" size="1"/>
+			<field type="text" offset="0x40FF94" size="1"/>
+			<field type="text" offset="0x410509" size="1"/>
+			<field type="text" offset="0x41080C" size="1"/>
+			<field type="text" offset="0x4107A3" size="1"/>
+			<field type="text" offset="0x410743" size="1"/>
+		</panel>
+		<panel>
+			<field type="info">* DoConfig.exe will need to be edited in
+			a hex editor to use custom file names.</field>
+		</panel>
+	</panel>
+	</panel>	
+</hack>

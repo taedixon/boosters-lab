@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="&lt;MS4 (Invisible Bottom Textbox)" author="TLinkan and Txin">
+	<panel>
+		<field type="info">
+		 Spawns invisible textbox at bottom of the screen, contrasting to &lt;MS2
+		Replaces &lt;CAT command.
+		</field>
+		
+		<field type="data" offset="0x4236C0">
+		A1 D8 5A 4A 00 03 05 E0 5A 4A 00 81 38 3C 4D 53
+		34 75 4E E8 B8 E7 FF FF 80 0D DD 5A 4A 00 01 80
+		25 DD 5A 4A 00 CD F6 05 DD 5A 4A 00 40 74 07 80
+		0D DD 5A 4A 00 10 83 25 0C 5B 4A 00 00 83 05 E0
+		5A 4A 00 04 6A 01 8F 45 D4 E9 BD EE FF FF
+		</field>
+	</panel>
+</hack>
