@@ -478,15 +478,14 @@ public class MapPane extends BgPanel {
 		int scale = (int) (dataHolder.getConfig().getTileSize() * EditorApp.mapScale);
 		int mapX = dataHolder.getMapX();
 		int mapY = dataHolder.getMapY();
-		int bgw = background.getWidth();
-		int bgh = background.getHeight();
+		int bgw = (int) (background.getWidth() * EditorApp.mapScale);
+		int bgh = (int) (background.getHeight() * EditorApp.mapScale);
 		Rectangle r = g.getClipBounds();
 		int startX = 0;
 		int startY = 0;
 		int endX = mapX * scale;
 		int endY = mapY * scale;
 		if (r != null) {
-			//System.out.println(r);
 			startX = r.x - r.x % bgw;
 			if (startX < 0) startX = 0;
 			startY = r.y - r.y % bgw;
@@ -499,7 +498,14 @@ public class MapPane extends BgPanel {
 
 		for (int y = startY; y < endY; y += bgh) {
 			for (int x = startX; x < endX; x += bgw) {
-				g.drawImage(background, x, y, this);
+				g.drawImage(background, x, y,
+						x + bgw,
+						y + bgh,
+						0,
+						0,
+						background.getWidth(),
+						background.getHeight(),
+						this);
 			}
 		}
 

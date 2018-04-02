@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Balrog (Hover) XML Addon by JableMcables">
+    <panel>
+	
+	<panel>
+	<field type="info">
+		This patch allows you to modify the Balrog (Hover) Entity.
+		
+	</field>
+	</panel>
+        
+    <panel>
+    <panel title="Balrog (Hover) Projectile #'s">
+
+	<field type="label">Number of "mouth shots":</field>
+    <field type="text" size="1" offset="0x042D07B" />
+	<field type="label">Number of bouncing projectiles:</field>
+    <field type="text" size="1" offset="0x042D42F" />
+	</panel>
+	</panel>
+	
+        <panel>
+        <panel title="Balrog (Hover) Behaviors">
+			<panel>
+			<field type="label">2 is the default behavior. (Balrog shoots mouth shots, then jump and hover towards the player.)</field>
+			<field type="label">5 makes Balrog fly upwards vertically, then lands. Does not jump towards the player.</field>
+			<field type="label">1, 0 or 7 makes Balrog stand in place and do absolutely nothing.</field>
+			<field type="label">6 makes Balrog go into a constant fit, pulsing his landing behavior and endlessly spawning bouncing projectiles.</field>
+			<field type="label">4 makes Balrog hover in place, then does a pulse, spawning bouncing projectiles.</field>
+			<field type="label">3 just makes Balrog jump and hover. He will not shoot from his mouth.</field>
+			<field type="label">**Other variables have NOT BEEN TESTED! Be careful if you experiment!</field>
+			</panel>
+			
+
+	<field type="label">Behavior is set to:</field>
+        <field type="text" size="1" offset="0x042D067" />
+	
+    </panel>
+	</panel>
+
+    <panel>
+    <panel title="Balrog (Hover) Fire Rate">
+   
+	<field type="label">**The higher the value, the slower Balrog will shoot from his mouth.</field>
+	</panel>
+	
+	<panel>
+	<field type="label">"Mouth Shot" fire rate:</field>
+        <field type="text" size="1" offset="0x042D0A3" />
+		</panel>
+    
+	</panel>
+	
+	<panel>
+	 <panel title="Balrog (Hover) Jump Attributes">
+	 <field type="label">Jump Height:</field>
+	 <field type="label">*The lower the value, the higher Balrog jumps into the air before he hovers.</field>
+	 <field type="text" size="4" offset="0x042D1CB" />
+	 <field type="label">Rest timer after landing:</field>
+	  <field type="label">*The higher the value, the longer Balrog rests.</field>
+	 <field type="text" size="1" offset="0x042D4B7" />
+	 </panel>
+	</panel>
+	
+	<panel>
+	 <panel title="Balrog (Hover) Hovering Attributes">
+	 <field type="label">Hovering Speed:</field>
+	 <field type="label">*The lower the value, the faster Balrog hovers.</field>
+	 <field type="text" size="1" offset="0x042D1B9" />
+	  <field type="label">Timer for when hover begins:</field>
+	  <field type="label">*The lower the value, the faster Balrog starts hovering after jumping? Results may vary.</field>
+	 <field type="text" size="4" offset="0x042D1E4" />
+	 <field type="label">Animation speed of the hover:</field>
+	 <field type="label">*The higher the value, the slower Balrog flaps his wings.</field>
+	 <field type="text" size="1" offset="0x042D24D" />
+	  <field type="label">Hovering time:</field>
+	  <field type="label">*The higher the value, the longer Balrog will hover. Cannot go higher than 100..?</field>
+	  <field type="text" size="1" offset="0x042D29D" />
+	    <field type="label">Hovering "Wave" parameter:</field>
+	  <field type="text" size="1" offset="0x042D4D4" />
+	</panel>
+	</panel>
+</panel>
+</hack>

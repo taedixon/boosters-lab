@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="No-Invincibility Events">
+	<panel>
+	<field type="info">
+		Allows damage and death during events.
+	</field>
+	<field type="data" offset="0x4193A0">
+		90 90
+	</field>
+	
+	</panel>
+</hack>
