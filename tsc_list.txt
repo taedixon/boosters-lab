@@ -31,8 +31,16 @@ y	y coord
 Tab and newline are token delimeters...
 TSC List revised by Jackalope and Lace
 
-Format:
-[command name, starts with <]	[number of arguments]	[parameter types, shown above]	[command name]	[command description] [1 if command ends event, 0 otherwise]	[1 if command clears textbox, 0 otherwise]	[1 if args are seperated, 0 otherwise]	[length of each parameter]
+Format (each property is seperated with a tab character):
+[command name, starts with <]
+[number of parameters]
+[parameter types, shown above]
+[command name]
+[command description]
+[1 if command ends event, 0 otherwise]
+[1 if command clears textbox, 0 otherwise]
+[1 if args are seperated, 0 otherwise]
+[lengths of each parameter]
 
 NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1!
 
