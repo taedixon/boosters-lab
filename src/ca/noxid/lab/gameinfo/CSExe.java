@@ -17,59 +17,59 @@ import ca.noxid.lab.Messages;
 import ca.noxid.lab.gameinfo.GameInfo.MOD_TYPE;
 import ca.noxid.lab.mapdata.Mapdata;
 
-
 /*
- * //**** offsets into .text section ****   -0x001000
-
-#define CS_TITLE_MAP_X_OFFSET            0x00E761//unsigned char
-#define CS_TITLE_MAP_Y_OFFSET            0x00E75F//unsigned char
-#define CS_TITLE_MAP_EVENT_OFFSET        0x00E763//unsigned char
-#define CS_TITLE_MAP_OFFSET              0x00E765//unsigned char
-
-#define CS_START_HEALTH_CURRENT_OFFSET   0x013BCF//unsigned short int
-#define CS_START_HEALTH_MAX_OFFSET       0x013BD8//unsigned short int
-#define CS_START_PLAYER_FACING           0x013B74//int
-
-#define CS_MAXIMUM_MAP_COUNT_OFFSET      0x013B24//unsigned char
-
-#define CS_START_UNKOWN1                 0x013B6D//unsigned char
-
-#define CS_START_PLAYER_X_OFFSET         0x01C592//unsigned char
-#define CS_START_PLAYER_Y_OFFSET         0x01C590//unsigned char
-#define CS_START_EVENT_OFFSET            0x01C594//int?
-#define CS_START_MAP_OFFSET              0x01C599//unsigned char
-
-#define CS_SCRIPT_LIMT                   0x020545  //0x021545
-
-//These are the most important offsets
-//these offsets reference the map data and must be updated to expand the map area
-#define CS_MAP_JMP1_OFFSET1              0x020C2F
-#define CS_MAP_JMP1_OFFSET2              0x020C73
-
-//these reference 0x0937D0 not 0x0937B0 (file name)
-#define CS_MAP_JMP2_OFFSET1              0x020CB5
-#define CS_MAP_JMP2_OFFSET2              0x020CF6
-#define CS_MAP_JMP2_OFFSET3              0x020D38
-
-//these reference 0x0937F4 not 0x0937B0 (background)
-#define CS_MAP_JMP3_OFFSET1              0x020D7A
-
-//these reference 0x0937F0 not 0x0937B0 (background type)
-#define CS_MAP_JMP8_OFFSET1              0x020D9E
-
-//these reference 0x093814 not 0x0937B0 (npc tileset 1)
-#define CS_MAP_JMP4_OFFSET1              0x020DD9
-
-//these reference 0x093834 not 0x0937B0 (npc tileset 2)
-#define CS_MAP_JMP5_OFFSET1              0x020E1C
-
-//these reference 0x093855 not 0x0937B0 (caption)
-#define CS_MAP_JMP6_OFFSET1              0x020E6A
-
-//these reference 0x093854 not 0x0937B0 (boss number)
-#define CS_MAP_JMP7_OFFSET1              0x020EA8
-
- (C)Pixel offset 0x08C4D8
+ * //**** offsets into .text section **** -0x001000
+ * 
+ * #define CS_TITLE_MAP_X_OFFSET 0x00E761//unsigned char
+ * #define CS_TITLE_MAP_Y_OFFSET 0x00E75F//unsigned char
+ * #define CS_TITLE_MAP_EVENT_OFFSET 0x00E763//unsigned char
+ * #define CS_TITLE_MAP_OFFSET 0x00E765//unsigned char
+ * 
+ * #define CS_START_HEALTH_CURRENT_OFFSET 0x013BCF//unsigned short int
+ * #define CS_START_HEALTH_MAX_OFFSET 0x013BD8//unsigned short int
+ * #define CS_START_PLAYER_FACING 0x013B74//int
+ * 
+ * #define CS_MAXIMUM_MAP_COUNT_OFFSET 0x013B24//unsigned char
+ * 
+ * #define CS_START_UNKOWN1 0x013B6D//unsigned char
+ * 
+ * #define CS_START_PLAYER_X_OFFSET 0x01C592//unsigned char
+ * #define CS_START_PLAYER_Y_OFFSET 0x01C590//unsigned char
+ * #define CS_START_EVENT_OFFSET 0x01C594//int?
+ * #define CS_START_MAP_OFFSET 0x01C599//unsigned char
+ * 
+ * #define CS_SCRIPT_LIMT 0x020545 //0x021545
+ * 
+ * //These are the most important offsets
+ * //these offsets reference the map data and must be updated to expand the map
+ * area
+ * #define CS_MAP_JMP1_OFFSET1 0x020C2F
+ * #define CS_MAP_JMP1_OFFSET2 0x020C73
+ * 
+ * //these reference 0x0937D0 not 0x0937B0 (file name)
+ * #define CS_MAP_JMP2_OFFSET1 0x020CB5
+ * #define CS_MAP_JMP2_OFFSET2 0x020CF6
+ * #define CS_MAP_JMP2_OFFSET3 0x020D38
+ * 
+ * //these reference 0x0937F4 not 0x0937B0 (background)
+ * #define CS_MAP_JMP3_OFFSET1 0x020D7A
+ * 
+ * //these reference 0x0937F0 not 0x0937B0 (background type)
+ * #define CS_MAP_JMP8_OFFSET1 0x020D9E
+ * 
+ * //these reference 0x093814 not 0x0937B0 (npc tileset 1)
+ * #define CS_MAP_JMP4_OFFSET1 0x020DD9
+ * 
+ * //these reference 0x093834 not 0x0937B0 (npc tileset 2)
+ * #define CS_MAP_JMP5_OFFSET1 0x020E1C
+ * 
+ * //these reference 0x093855 not 0x0937B0 (caption)
+ * #define CS_MAP_JMP6_OFFSET1 0x020E6A
+ * 
+ * //these reference 0x093854 not 0x0937B0 (boss number)
+ * #define CS_MAP_JMP7_OFFSET1 0x020EA8
+ * 
+ * (C)Pixel offset 0x08C4D8
  */
 
 public class CSExe {
@@ -81,29 +81,28 @@ public class CSExe {
 	private boolean modified = false;
 	long lastModify;
 
-	public boolean isModified() {return modified;}
+	public boolean isModified() {
+		return modified;
+	}
 
-	private static final int pMapdata   = 0x20C2F; //address of the pointer to map data
-	private static final int mapdataLoc = 0x937B0; //address of the original mapdata
-	private static final byte[] csmapHead = {
-		0x2E, 0x63, 0x73, 0x6D, 0x61, 0x70, 0x00, 0x00, 0x38, 0x4A,
-		0x00, 0x00, 0x00, (byte) 0xF0, 0x0B, 0x00, 0x38, 0x4A, 0x00, 0x00,
-		0x00, (byte) 0xA0, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, (byte) 0xC0
-	};
+	private static final int pMapdata = 0x20C2F; // address of the pointer to map data
+	private static final int mapdataLoc = 0x937B0; // address of the original mapdata
+	private static final byte[] csmapHead = { 0x2E, 0x63, 0x73, 0x6D, 0x61, 0x70, 0x00, 0x00, 0x38, 0x4A, 0x00, 0x00,
+			0x00, (byte) 0xF0, 0x0B, 0x00, 0x38, 0x4A, 0x00, 0x00, 0x00, (byte) 0xA0, 0x09, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, (byte) 0xC0 };
 
 	@SuppressWarnings("unused")
 	CSExe(File inFile, String charEncoding) {
 		location = inFile;
 		lastModify = location.lastModified();
-		//File tblFile;
+		// File tblFile;
 		FileInputStream inStream;
 		FileChannel chan;
 		try {
-			//read operations
+			// read operations
 			inStream = new FileInputStream(inFile);
 			chan = inStream.getChannel();
-			//read PE header
+			// read PE header
 			peHead = ByteBuffer.allocate(0x208);
 			peHead.order(ByteOrder.nativeOrder());
 			chan.read(peHead);
@@ -111,19 +110,18 @@ public class CSExe {
 			ByteBuffer uBuf = ByteBuffer.allocate(2);
 			uBuf.order(ByteOrder.LITTLE_ENDIAN);
 
-			//find how many sections
+			// find how many sections
 			chan.position(0x116);
 			chan.read(uBuf);
 			uBuf.flip();
 			int numSection = uBuf.getShort();
-			//read each segment
-			//find the .csmap or .swdata segment
-			//String[] secHeaders = new String[numSection];
+			// read each segment
+			// find the .csmap or .swdata segment
+			// String[] secHeaders = new String[numSection];
 			Vector<ByteBuffer> sections = new Vector<>();
 			chan.position(0x208);
 			int mapSec = -1, dataSec = -1, rsrcSec = -1, rdataSec = -1;
-			for (int i = 0; i < numSection; i++)
-			{
+			for (int i = 0; i < numSection; i++) {
 				ByteBuffer nuBuf = ByteBuffer.allocate(0x28);
 				nuBuf.order(ByteOrder.nativeOrder());
 				chan.read(nuBuf);
@@ -137,19 +135,19 @@ public class CSExe {
 					mapSec = i;
 				else if (segStr.contains(".data")) //$NON-NLS-1$
 					dataSec = i;
-				else if (segStr.contains(".rsrc"))  //$NON-NLS-1$
+				else if (segStr.contains(".rsrc")) //$NON-NLS-1$
 					rsrcSec = i;
 				else if (segStr.contains(".rdata")) //$NON-NLS-1$
 					rdataSec = i;
-				//secHeaders[i] = segStr;
+				// secHeaders[i] = segStr;
 			}
 			headers = new ExeSec[sections.size()];
 			for (int i = 0; i < sections.size(); i++) {
 				headers[i] = new ExeSec(sections.get(i), chan);
 			}
-			if (mapSec == -1) { //there is no map section yet, so we must create it.
+			if (mapSec == -1) { // there is no map section yet, so we must create it.
 				ExeSec[] newHead = new ExeSec[headers.length + 1];
-				//create the .csmap section. To do this, fudge it a bit.
+				// create the .csmap section. To do this, fudge it a bit.
 				ByteBuffer csHead = ByteBuffer.wrap(csmapHead);
 				csHead.order(ByteOrder.LITTLE_ENDIAN);
 				csHead.putInt(0x14, mapdataLoc);
@@ -158,91 +156,81 @@ public class CSExe {
 					StrTools.msgBox(Messages.getString("CSExe.9")); //$NON-NLS-1$
 					System.exit(5);
 				}
-				ExeSec rsrc = headers[headers.length-1];
-				//copy the 'good' segments into their proper place
+				ExeSec rsrc = headers[headers.length - 1];
+				// copy the 'good' segments into their proper place
 				System.arraycopy(headers, 0, newHead, 0, headers.length - 1);
 				headers = newHead;
-				//adjust the indices
+				// adjust the indices
 				rsrcSec++;
 				mapSec = rsrcSec - 1;
-				//relocate
+				// relocate
 				csmapSec.rAddr = rsrc.getPos();
 				int rsrcShift = (csmapSec.getLen() + 0xFFF) / 0x1000 * 0x1000;
 				rsrc.shift(rsrcShift);
 				headers[mapSec] = csmapSec;
 				headers[rsrcSec] = rsrc;
 
-				//update PE Header
-				int tmpInt = peHead.getInt(0x198); //rsrc table address
+				// update PE Header
+				int tmpInt = peHead.getInt(0x198); // rsrc table address
 				tmpInt += rsrcShift;
 				peHead.putInt(0x198, tmpInt);
 				peHead.put(0x116, (byte) newHead.length);
-				peHead.putShort(0x161, (short) 0x1930); //section list size(?)
+				peHead.putShort(0x161, (short) 0x1930); // section list size(?)
 
 				moveMapdata(csmapSec.getPosV());
 
 				modified = true;
 			} else {
 				int mapCount = 95;
+				int mapdataSize = mapCount * 200;
 				ExeSec csmapSec = headers[mapSec];
-				boolean init = false;
-				//if .csmap is too small for 95 maps, it's not initialized
-				//resize it to fit 95 maps
-				if (csmapSec.rSize < 200*mapCount) {
-					init = true;
-					int shift = csmapSec.resize(200*mapCount);
-					for (int i = mapSec; i < headers.length - 1; i++)
-						headers[i].shift(shift);
-				}
-				//if .csmap is big enough, check if it's initialized
-				//we do that by checking if map 0 is empty
-				if (!init) {
-					chan.position(csmapSec.getPos());
-					uBuf = ByteBuffer.allocate(200);
-					uBuf.order(ByteOrder.LITTLE_ENDIAN);
-					chan.read(uBuf);
-					uBuf.flip();
-					Mapdata newMap = new Mapdata(0, uBuf, MOD_TYPE.MOD_CS, charEncoding);
-					init = newMap.getTileset().isEmpty() &&
-							newMap.getFile().isEmpty() &&
-							newMap.getScroll() == 0 &&
-							newMap.getBG().isEmpty() &&
-							newMap.getNPC1().isEmpty() &&
-							newMap.getNPC2().isEmpty() &&
-							newMap.getBoss() == 0 &&
-							newMap.getMapname().isEmpty();
-				}
-				// if either .csmap was just resized or was detected to be empty,
-				// initialize it
-				if (init) {
-					//copy over mapdata
-					ByteBuffer mapdataBuf = ByteBuffer.allocate(200*mapCount);
+				// check if .csmap initialized
+				// we do that by checking if map 0 is empty
+				chan.position(csmapSec.getPos());
+				uBuf = ByteBuffer.allocate(200);
+				uBuf.order(ByteOrder.LITTLE_ENDIAN);
+				chan.read(uBuf);
+				uBuf.flip();
+				Mapdata newMap = new Mapdata(0, uBuf, MOD_TYPE.MOD_CS, charEncoding);
+				if (newMap.getTileset().isEmpty() && newMap.getFile().isEmpty() && newMap.getScroll() == 0
+						&& newMap.getBG().isEmpty() && newMap.getNPC1().isEmpty() && newMap.getNPC2().isEmpty()
+						&& newMap.getBoss() == 0 && newMap.getMapname().isEmpty()) {
+					// if .csmap was detected to be empty, initialize it
+					// resize if mapdata doesn't fit
+					if (csmapSec.rSize < mapdataSize) {
+						int shift = csmapSec.resize(mapdataSize);
+						for (int i = mapSec; i < headers.length - 1; i++)
+							headers[i].shift(shift);
+					}
+					// copy over mapdata
+					ByteBuffer mapdataBuf = ByteBuffer.allocate(mapdataSize);
 					chan.position(mapdataLoc);
 					chan.read(mapdataBuf);
 					mapdataBuf.flip();
 					ByteBuffer segData = csmapSec.getData();
 					segData.position(0);
 					segData.put(mapdataBuf);
-					//move mapdata virtually
+					// move mapdata virtually
 					moveMapdata(csmapSec.getPosV());
-					commit(); //save changes now to ensure GameInfo will read maps correctly
+					commit(); // save changes now to ensure GameInfo will read maps correctly
 					StrTools.msgBox(Messages.getString("CSExe.12")); //$NON-NLS-1$
 				}
 			}
 			chan.close();
 			inStream.close();
 
-			//check (C)Pixel
+			// check (C)Pixel
 			ByteBuffer pBuf = read(0x08C4D8, 1);
 			if (pBuf.get(0) != 0) {
-				pBuf.put((byte)0, (byte)0);
+				pBuf.put((byte) 0, (byte) 0);
 				patch(pBuf, 0x08C4D8);
 				StrTools.msgBox(Messages.getString("CSExe.0")); //$NON-NLS-1$
 			}
 
-			//check for sue's
+			// check for sue's
 			if (mapSec == (headers.length - 1) && headers[mapSec].getTag().equals(".swdata")) {
-				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), //$NON-NLS-1$
+						Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
 				if (response != JOptionPane.YES_OPTION) {
 					System.exit(4);
 				}
@@ -252,7 +240,7 @@ public class CSExe {
 				headers[rsrcSec].shift(rsrcShift);
 				headers[mapSec].setTag(".csmap"); //$NON-NLS-1$
 
-				//swap
+				// swap
 				ExeSec tmpSec = headers[rsrcSec];
 				headers[rsrcSec] = headers[mapSec];
 				headers[mapSec] = tmpSec;
@@ -260,15 +248,15 @@ public class CSExe {
 				rsrcSec = mapSec;
 				mapSec = tmpInt;
 
-				//update PE Header
-				tmpInt = peHead.getInt(0x198); //rsrc table address
+				// update PE Header
+				tmpInt = peHead.getInt(0x198); // rsrc table address
 				tmpInt += rsrcShift;
 				peHead.putInt(0x198, tmpInt);
 
-				//update mapdata position
+				// update mapdata position
 				moveMapdata(headers[mapSec].getPosV());
 
-				//oh shit
+				// oh shit
 				StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
 				commit();
 			}
@@ -280,7 +268,7 @@ public class CSExe {
 	public void saveMap(ByteBuffer bytes, int mapNum) {
 		int pos = mapNum * 200;
 		int csmapLoc = 0;
-		//make sure the map will fit
+		// make sure the map will fit
 		int rsrcShift = 0;
 		for (ExeSec s : headers) {
 			s.shift(rsrcShift);
@@ -290,13 +278,13 @@ public class CSExe {
 				}
 				csmapLoc = s.getPos();
 			} else if (s.getTag().equals(".rsrc")) { //$NON-NLS-1$
-				//update PE Header
-				int tmpInt = peHead.getInt(0x198); //rsrc table address
+				// update PE Header
+				int tmpInt = peHead.getInt(0x198); // rsrc table address
 				tmpInt += rsrcShift;
 				peHead.putInt(0x198, tmpInt);
 			}
 		}
-		patch(bytes, pos+csmapLoc);
+		patch(bytes, pos + csmapLoc);
 	}
 
 	public void setMapdataSize(int nMaps) {
@@ -304,12 +292,12 @@ public class CSExe {
 		for (ExeSec s : headers) {
 			s.shift(rsrcShift);
 			if (s.getTag().equals(".csmap")) { //$NON-NLS-1$
-				if (s.getLen() != nMaps*200) {
-					rsrcShift = s.resize(nMaps*200);
+				if (s.getLen() != nMaps * 200) {
+					rsrcShift = s.resize(nMaps * 200);
 				}
 			} else if (s.getTag().equals(".rsrc")) { //$NON-NLS-1$
-				//update PE Header
-				int tmpInt = peHead.getInt(0x198); //rsrc table address
+				// update PE Header
+				int tmpInt = peHead.getInt(0x198); // rsrc table address
 				tmpInt += rsrcShift;
 				peHead.putInt(0x198, tmpInt);
 			}
@@ -317,12 +305,12 @@ public class CSExe {
 	}
 
 	public void patch(ByteBuffer data, int offset) {
-		//int shift = 0;
-		if (offset >= 0x400000) offset -= 0x400000;
+		// int shift = 0;
+		if (offset >= 0x400000)
+			offset -= 0x400000;
 		for (ExeSec s : headers) {
-			if (offset >= s.getPos() &&
-					offset < s.getPos() + s.getLen()) {
-				//it's within this section
+			if (offset >= s.getPos() && offset < s.getPos() + s.getLen()) {
+				// it's within this section
 				ByteBuffer d = s.getData();
 				d.position(offset - s.getPos());
 				data.position(0);
@@ -335,16 +323,16 @@ public class CSExe {
 
 	public ByteBuffer read(int imgStrOffset1, int size) {
 		ByteBuffer retVal = null;
-		if (imgStrOffset1 >= 0x400000) imgStrOffset1 -= 0x400000;
+		if (imgStrOffset1 >= 0x400000)
+			imgStrOffset1 -= 0x400000;
 		for (ExeSec s : headers) {
-			if (imgStrOffset1 >= s.getPos() &&
-					imgStrOffset1 < s.getPos() + s.getLen()) {
-				//it's within this section
-				//make sure we don't overflow
-				size = (size < s.getPos() + s.getLen() - imgStrOffset1) ? size :
-					s.getPos() + s.getLen() - imgStrOffset1;
+			if (imgStrOffset1 >= s.getPos() && imgStrOffset1 < s.getPos() + s.getLen()) {
+				// it's within this section
+				// make sure we don't overflow
+				size = (size < s.getPos() + s.getLen() - imgStrOffset1) ? size
+						: s.getPos() + s.getLen() - imgStrOffset1;
 				ByteBuffer d = s.getData();
-				byte[] dat = new byte[ size];
+				byte[] dat = new byte[size];
 				d.position((imgStrOffset1 - s.getPos()));
 				d.get(dat);
 				retVal = ByteBuffer.wrap(dat);
@@ -382,7 +370,7 @@ public class CSExe {
 	public void commit() {
 		File outloc = location;
 		if (outloc.lastModified() > lastModify) {
-			//the file has been changed since we last wrote it
+			// the file has been changed since we last wrote it
 			int choice = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.6"), //$NON-NLS-1$
 					Messages.getString("CSExe.7"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
 
@@ -395,16 +383,16 @@ public class CSExe {
 
 		FileOutputStream oStream;
 		FileChannel c;
-		//update the SIZE_OF_IMAGE optional value in the header
-		//this is really important
+		// update the SIZE_OF_IMAGE optional value in the header
+		// this is really important
 		int head_sz = 0;
 		for (ExeSec sc : headers) {
 			head_sz += (sc.getLenV() + 0xFFF) / 0x1000 * 0x1000;
 		}
 		peHead.putInt(0x160, head_sz + 0x1000);
-		
+
 		if (outloc == location) {
-			//backup existing file
+			// backup existing file
 			try {
 				File backuploc = new File(location + ".blbkp");
 				FileInputStream iStream = new FileInputStream(location);
@@ -422,17 +410,17 @@ public class CSExe {
 				StrTools.msgBox(Messages.getString("CSExe.10")); //$NON-NLS-1$
 			}
 		}
-		//actually write to file
+		// actually write to file
 		try {
 			oStream = new FileOutputStream(outloc);
 			c = oStream.getChannel();
 			peHead.position(0);
 			c.write(peHead);
-			//write section headers
+			// write section headers
 			for (ExeSec s : headers) {
 				c.write(s.toBuf());
 			}
-			//write section data
+			// write section data
 			for (ExeSec s : headers) {
 				c.position(s.getPos());
 				ByteBuffer buf = s.getData();
@@ -478,13 +466,33 @@ public class CSExe {
 
 		private ByteBuffer data;
 
-		public String getTag() {return tag;}
-		public void setTag(String t) {tag = t;}
-		public int getPos() {return rAddr;}
-		public int getLen() {return rSize;}
-		public int getPosV() {return vAddr;}
-		public ByteBuffer getData() {return data;}
-		public int getLenV() {return vSize;}
+		public String getTag() {
+			return tag;
+		}
+
+		public void setTag(String t) {
+			tag = t;
+		}
+
+		public int getPos() {
+			return rAddr;
+		}
+
+		public int getLen() {
+			return rSize;
+		}
+
+		public int getPosV() {
+			return vAddr;
+		}
+
+		public ByteBuffer getData() {
+			return data;
+		}
+
+		public int getLenV() {
+			return vSize;
+		}
 
 		ExeSec(ByteBuffer in, FileChannel f) {
 			in.position(0);
@@ -510,9 +518,9 @@ public class CSExe {
 					f.position(rAddr + 0x10);
 					f.read(data);
 					data.flip();
-					//count the maps
+					// count the maps
 					int size = 0;
-					while(true) {
+					while (true) {
 						if (data.getInt(size) != -1) {
 							size += 200;
 						} else {
@@ -564,20 +572,21 @@ public class CSExe {
 		}
 
 		private void shiftDirTable(int amt, int pointer) {
-			//get the # of rsrc subdirs indexed by name
+			// get the # of rsrc subdirs indexed by name
 			int nEntry = data.getShort(pointer + 12);
-			//get the # of rsrc subdirs indexed by id
+			// get the # of rsrc subdirs indexed by id
 			nEntry += data.getShort(pointer + 14);
 
-			//read and shift entries
+			// read and shift entries
 			int pos = pointer + 16;
 			for (int i = 0; i < nEntry; i++) {
-				rsrcShift(amt, pos + i*8);
+				rsrcShift(amt, pos + i * 8);
 			}
 		}
+
 		private void rsrcShift(int amt, int pointer) {
 			int rva = data.getInt(pointer + 4);
-			if ((rva & 0x80000000) != 0) { //if hi bit 1 points to another directory table
+			if ((rva & 0x80000000) != 0) { // if hi bit 1 points to another directory table
 				shiftDirTable(amt, rva & 0x7FFFFFFF);
 			} else {
 				int oldVal = data.getInt(rva);
@@ -594,7 +603,7 @@ public class CSExe {
 			int diff = newSize - oldSize;
 			ByteBuffer newDat = ByteBuffer.allocate(newSize);
 			data.position(0);
-			//transfer as many bytes as possible into the new array from the old
+			// transfer as many bytes as possible into the new array from the old
 			while (data.hasRemaining()) {
 				if (newDat.hasRemaining())
 					newDat.put(data.get());
@@ -606,7 +615,7 @@ public class CSExe {
 			vSize = newSize;
 			if (diff != 0)
 				modified = true;
-			return ((newSize+0xFFF) / 0x1000 * 0x1000)-((oldSize+0xFFF) / 0x1000 * 0x1000);
+			return ((newSize + 0xFFF) / 0x1000 * 0x1000) - ((oldSize + 0xFFF) / 0x1000 * 0x1000);
 		}
 	}
 

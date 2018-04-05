@@ -88,10 +88,10 @@ public class GameInfo {
 	public GameInfo(File base) throws IOException {
 		mapdataStore = new Vector<>();
 		categoryMap = new HashMap<>();
-		File configFile = new File(dataDir + "/bl.ini"); //$NON-NLS-1$
-		gameConfig = new BlConfig(configFile, type);
 		if (base.toString().endsWith(".exe")) { //$NON-NLS-1$
 			dataDir = new File(base.getParent() + "/data"); //$NON-NLS-1$
+			File configFile = new File(dataDir + "/bl.ini"); //$NON-NLS-1$
+			gameConfig = new BlConfig(configFile, type);
 			if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
 				type = MOD_TYPE.MOD_GUXT;
 				executable = new GuxtExe(base, gameConfig.getEncoding());
@@ -119,6 +119,10 @@ public class GameInfo {
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile().getParentFile();
 			imageExtension = CSPLUS_IMG_EXT; //$NON-NLS-1$
+		}
+		if (gameConfig == null) {
+			File configFile = new File(dataDir + "/bl.ini"); //$NON-NLS-1$
+			gameConfig = new BlConfig(configFile, type);
 		}
 		fillMapdata(base);
 		mycharFile = new File(dataDir + "/MyChar" + imageExtension); //$NON-NLS-1$
