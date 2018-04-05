@@ -921,7 +921,7 @@ public class MapInfo implements Changeable {
 	public int getTile(int x, int y, int layer) {
 		int rVal = 0;
 		try {
-			if (EditorApp.EDITOR_MODE == 0) {
+			if (EditorApp.EDITOR_MODE == 0 && layer == -1) {
 				rVal = map[1][y][x];
 	            rVal += map[2][y][x];
 	            //rVal &= 0xFF;
