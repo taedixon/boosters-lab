@@ -2,6 +2,7 @@
 package ca.noxid.lab.gameinfo;
 
 import ca.noxid.lab.EditorApp;
+import ca.noxid.lab.Messages;
 import ca.noxid.lab.rsrc.ResourceManager;
 import ca.noxid.uiComponents.BgPanel;
 import com.carrotlord.string.StrTools;
@@ -85,7 +86,7 @@ public class HackDialog extends JDialog implements TreeSelectionListener{
 			this.setCursor(ResourceManager.cursor);
 		this.iMan = iMan;
 		this.setLocation(aFrame.getLocation());
-		this.setTitle("Hackinator");
+		this.setTitle(Messages.getString("EditorApp.110"));
 		
 		this.exe = exe;
 		hackPanel = new BgPanel(iMan.getImg(ResourceManager.rsrcBgBlue));

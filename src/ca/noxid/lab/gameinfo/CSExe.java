@@ -186,7 +186,7 @@ public class CSExe {
 				int mapCount = 95;
 				int mapdataSize = 200*mapCount;
 				ExeSec csmapSec = headers[mapSec];
-				//if .csmap is big enough, check if it's initialized
+				//check if .csmap is initialized
 				//we do that by checking if map 0 is empty
 				chan.position(csmapSec.getPos());
 				uBuf = ByteBuffer.allocate(200);
@@ -194,7 +194,7 @@ public class CSExe {
 				chan.read(uBuf);
 				uBuf.flip();
 				Mapdata newMap = new Mapdata(0, uBuf, MOD_TYPE.MOD_CS, charEncoding);
-				// if .csmap was detected to be empty, initialize it
+				//if .csmap was detected to be empty, initialize it
 				if (newMap.getTileset().isEmpty() &&
 						newMap.getFile().isEmpty() &&
 						newMap.getScroll() == 0 &&
@@ -203,7 +203,7 @@ public class CSExe {
 						newMap.getNPC2().isEmpty() &&
 						newMap.getBoss() == 0 &&
 						newMap.getMapname().isEmpty()) {
-					// if it's not big enough, resize the segment
+					//if it's not big enough, resize the segment
 					if (csmapSec.rSize < mapdataSize) {
 						int shift = csmapSec.resize(mapdataSize);
 						for (int i = mapSec; i < headers.length - 1; i++)
