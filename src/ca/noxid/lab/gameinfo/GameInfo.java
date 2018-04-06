@@ -94,12 +94,20 @@ public class GameInfo {
 			gameConfig = new BlConfig(configFile, type);
 			if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
 				type = MOD_TYPE.MOD_GUXT;
-				executable = new GuxtExe(base, gameConfig.getEncoding());
+                // I don't actually think this ever worked properly, since it's going to certainly damage the EXE in modern versions.
+                // Better to have executable be null in this case.
+				// executable = new GuxtExe(base, gameConfig.getEncoding());
 			} else {
 				type = MOD_TYPE.MOD_CS;
-				executable = new CSExe(base, gameConfig.getEncoding()); //can fix swdata
-				getExeData(executable);
-			}			
+				try {
+                    executable = new CSExe(base, gameConfig.getEncoding()); //can fix swdata
+                    getExeData(executable);
+                } catch (Exception ioe) {
+				    ioe.printStackTrace();
+                    StrTools.msgBox(Messages.getString("GameInfo.95")); //$NON-NLS-1$
+                    // executable may be null.
+                }
+			}
 		} else if (base.toString().endsWith(".tbl")){ //$NON-NLS-1$
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile();
@@ -787,172 +795,18 @@ public class GameInfo {
 		inStream = new FileInputStream(f);
 		inChan = inStream.getChannel();
 		
-		if (f.getName().endsWith(".exe")) //$NON-NLS-1$
+		if (type == MOD_TYPE.MOD_CS) //$NON-NLS-1$
 		{
-			type = MOD_TYPE.MOD_CS;
-			//the hard part
-			ByteBuffer uBuf = ByteBuffer.allocate(2);
-			uBuf.order(ByteOrder.LITTLE_ENDIAN);
-			//find how many sections
-			inChan.position(0x116);
-			inChan.read(uBuf);
-			uBuf.flip();
-			int numSection = uBuf.getShort();
-			//read each segment
-			//find the .csmap or .swdata segment
-			int mapSec = -1;
-			String[] secHeaders = new String[numSection];
-			for (int i = 0; i < numSection; i++)
-			{
-				uBuf = ByteBuffer.allocate(8);
-				inChan.position(0x208 + 0x28 * i);
-				inChan.read(uBuf);
-				uBuf.flip();
-				String segStr = new String(uBuf.array());
-				
-				if (segStr.contains(".csmap")) //$NON-NLS-1$
-					mapSec = i;
-				else if (segStr.contains(".swdata")) //$NON-NLS-1$
-					mapSec = i;
-				secHeaders[i] = segStr;
-			}
-			
-			if (mapSec == -1) //virgin executable
-			{
-				int numMaps = 95;
-				inChan.position(0x937B0); //seek to start of mapdatas
-				for (int i = 0; i < numMaps; i++)
-				{
-					Mapdata newMap = new Mapdata(i);
-					//for each map
-					uBuf = ByteBuffer.allocate(200);
-					uBuf.order(ByteOrder.LITTLE_ENDIAN);
-					inChan.read(uBuf);
-					uBuf.flip();
-					/*
-					typedef struct {
-						   char tileset[32];
-						   char filename[32];
-						   char scrollType[4];
-						   char bgName[32];
-						   char npc1[32];
-						   char npc2[32];
-						   char bossNum;
-						   char mapName[35];
-						}nMapData;
-						*/
-					byte[] buffer = new byte[0x23];
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setTileset(StrTools.CString(buffer, encoding));
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setFile(StrTools.CString(buffer, encoding));
-					newMap.setScroll(uBuf.getInt() & 0xFF);						
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setBG(StrTools.CString(buffer, encoding));
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setNPC1(StrTools.CString(buffer, encoding));
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setNPC2(StrTools.CString(buffer, encoding));
-					newMap.setBoss(uBuf.get());
-					uBuf.get(buffer, 0, 0x23);
-					newMap.setMapname(StrTools.CString(buffer, encoding));
-					newMap.markUnchanged();
-					mapdataStore.add(newMap);	
-				} //for each map
-			} else { //exe has been edited probably
-				if (secHeaders[mapSec].contains(".csmap")) //$NON-NLS-1$
-				{
-					uBuf = ByteBuffer.allocate(4);
-					uBuf.order(ByteOrder.LITTLE_ENDIAN);
-					inChan.position(0x208 + 0x28*mapSec + 0x10); //read the PE header
-					inChan.read(uBuf);
-					uBuf.flip();
-					int numMaps = uBuf.getInt() / 200;
-					uBuf.flip();
-					inChan.read(uBuf);
-					uBuf.flip();
-					int pData = uBuf.getInt();
-					
-					inChan.position(pData);//seek to start of CS map data
-					for (int i = 0; i < numMaps; i++)
-					{
-						//for each map
-						uBuf = ByteBuffer.allocate(200);
-						uBuf.order(ByteOrder.LITTLE_ENDIAN);
-						inChan.read(uBuf);
-						uBuf.flip();
-						mapdataStore.add(new Mapdata(i, uBuf, type, encoding));			
-					}
-				} else {
-					StrTools.msgBox(Messages.getString("GameInfo.2")); //$NON-NLS-1$
-					/* Code to read SW maps
-					 * Should no longer be needed, since BL converts SW's arcane map format
-					 * to the somewhat more sensible .csmap
-					 *
-					//read up where yo' data is at
-					uBuf = ByteBuffer.allocate(4);
-					uBuf.order(ByteOrder.LITTLE_ENDIAN);
-					inChan.position(0x208 + 0x28*mapSec + 0x10);
-					inChan.read(uBuf);
-					uBuf.flip();
-					@SuppressWarnings("unused")
-					int numMaps = uBuf.getInt() / 200;
-					uBuf.flip();
-					inChan.read(uBuf);
-					uBuf.flip();
-					int pData = uBuf.getInt();
-					inChan.position(pData + 0x10);//seek to start of Sue's map data
-					int nMaps = 0;
-					while (true)
-					{
-						//for each map
-						uBuf = ByteBuffer.allocate(200);
-						inChan.read(uBuf);
-						uBuf.flip();
-						//check if it's the FFFFFFFFFFFFFFinal map
-						if (uBuf.getInt(0) == -1)
-							break;
-
-						Mapdata newMap = new Mapdata(nMaps);
-						/*
-						typedef struct {
-							   char tileset[32];
-							   char filename[32];
-							   char scrollType[4];
-							   char bgName[32];
-							   char npc1[32];
-							   char npc2[32];
-							   char bossNum;
-							   char mapName[35];
-							}nMapData;
-							//
-
-						byte[] buffer = new byte[0x23];
-						uBuf.get(buffer, 0, 0x20);
-						newMap.tilesetName = StrTools.CString(buffer);
-						uBuf.get(buffer, 0, 0x20);
-						newMap.fileName = StrTools.CString(buffer);
-						newMap.scrollType = uBuf.getInt() & 0xFF;						
-						uBuf.get(buffer, 0, 0x20);
-						newMap.bgName = StrTools.CString(buffer);
-						uBuf.get(buffer, 0, 0x20);
-						newMap.npcSet1 = StrTools.CString(buffer);
-						uBuf.get(buffer, 0, 0x20);
-						newMap.npcSet2 = StrTools.CString(buffer);
-						newMap.bossNum = uBuf.get();
-						uBuf.get(buffer, 0, 0x23);
-						newMap.mapName = StrTools.CString(buffer);
-						mapDataStore.add(newMap);	
-						
-						nMaps++;
-					} //for each map
-				*/
-				}
-			}
-			
+            // If we got here, then executable had to initialize successfully or become null.
+            if (executable == null) {
+                StrTools.msgBox(Messages.getString("GameInfo.47")); //$NON-NLS-1$
+            } else {
+                ByteBuffer bb = executable.loadMaps();
+                for (int i = 0; i < executable.getMapdataSize(); i++)
+                    mapdataStore.add(new Mapdata(i, bb, type, encoding));
+            }
 		} else if (f.getName().endsWith("tbl")) { //CS+ type //$NON-NLS-1$
-			type = MOD_TYPE.MOD_CS_PLUS;
-			//int maps array data
+            //int maps array data
 			int numMaps = (int) (f.length() / 229);
 			ByteBuffer dBuf = ByteBuffer.allocate(numMaps * 229);
 			dBuf.order(ByteOrder.LITTLE_ENDIAN);
@@ -964,6 +818,7 @@ public class GameInfo {
 			inChan.close();
 			inStream.close();
 		} else if (f.getName().endsWith(".bin")) { //$NON-NLS-1$
+            // Possibly GIR/Noxid's "MR" engine. Sorry if I broke this with my meddling. - 20kdc
 			/*
 			typedef struct {
 			    char tileset[16];

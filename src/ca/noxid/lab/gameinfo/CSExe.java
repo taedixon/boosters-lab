@@ -75,8 +75,11 @@ import ca.noxid.lab.mapdata.Mapdata;
 public class CSExe {
 
 	private File location;
-	private ExeSec[] headers;
-	private ByteBuffer peHead;
+
+	// The csmap section must always exist,
+    //  and the PEFile must always be the same.
+	private final PEFile peData;
+	private final PEFile.Section csmapSection;
 
 	private boolean modified = false;
 	long lastModify;
@@ -85,270 +88,148 @@ public class CSExe {
 
 	private static final int pMapdata   = 0x20C2F; //address of the pointer to map data
 	private static final int mapdataLoc = 0x937B0; //address of the original mapdata
-	private static final byte[] csmapHead = {
-		0x2E, 0x63, 0x73, 0x6D, 0x61, 0x70, 0x00, 0x00, 0x38, 0x4A,
-		0x00, 0x00, 0x00, (byte) 0xF0, 0x0B, 0x00, 0x38, 0x4A, 0x00, 0x00,
-		0x00, (byte) 0xA0, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, (byte) 0xC0
-	};
 
 	@SuppressWarnings("unused")
-	CSExe(File inFile, String charEncoding) {
+	CSExe(File inFile, String charEncoding) throws IOException {
 		location = inFile;
 		lastModify = location.lastModified();
 		//File tblFile;
-		FileInputStream inStream;
-		FileChannel chan;
-		try {
-			//read operations
-			inStream = new FileInputStream(inFile);
-			chan = inStream.getChannel();
-			//read PE header
-			peHead = ByteBuffer.allocate(0x208);
-			peHead.order(ByteOrder.nativeOrder());
-			chan.read(peHead);
-			peHead.flip();
-			ByteBuffer uBuf = ByteBuffer.allocate(2);
-			uBuf.order(ByteOrder.LITTLE_ENDIAN);
 
-			//find how many sections
-			chan.position(0x116);
-			chan.read(uBuf);
-			uBuf.flip();
-			int numSection = uBuf.getShort();
-			//read each segment
-			//find the .csmap or .swdata segment
-			//String[] secHeaders = new String[numSection];
-			Vector<ByteBuffer> sections = new Vector<>();
-			chan.position(0x208);
-			int mapSec = -1, dataSec = -1, rsrcSec = -1, rdataSec = -1;
-			for (int i = 0; i < numSection; i++)
-			{
-				ByteBuffer nuBuf = ByteBuffer.allocate(0x28);
-				nuBuf.order(ByteOrder.nativeOrder());
-				chan.read(nuBuf);
-				nuBuf.flip();
-				sections.add(nuBuf);
-				String segStr = new String(nuBuf.array());
+        FileInputStream inStream = new FileInputStream(inFile);
+        FileChannel chan = inStream.getChannel();
+        long l = chan.size();
+        if (l > 0x7FFFFFFF)
+            throw new IOException("Too big!");
+        ByteBuffer bb = ByteBuffer.allocate((int) l);
+        if (chan.read(bb) != l)
+            throw new IOException("Didn't read whole file.");
+        chan.close();
 
-				if (segStr.contains(".csmap")) //$NON-NLS-1$
-					mapSec = i;
-				else if (segStr.contains(".swdata")) //$NON-NLS-1$
-					mapSec = i;
-				else if (segStr.contains(".data")) //$NON-NLS-1$
-					dataSec = i;
-				else if (segStr.contains(".rsrc"))  //$NON-NLS-1$
-					rsrcSec = i;
-				else if (segStr.contains(".rdata")) //$NON-NLS-1$
-					rdataSec = i;
-				//secHeaders[i] = segStr;
-			}
-			headers = new ExeSec[sections.size()];
-			for (int i = 0; i < sections.size(); i++) {
-				headers[i] = new ExeSec(sections.get(i), chan);
-			}
-			if (mapSec == -1) { //there is no map section yet, so we must create it.
-				ExeSec[] newHead = new ExeSec[headers.length + 1];
-				//create the .csmap section. To do this, fudge it a bit.
-				ByteBuffer csHead = ByteBuffer.wrap(csmapHead);
-				csHead.order(ByteOrder.LITTLE_ENDIAN);
-				csHead.putInt(0x14, mapdataLoc);
-				ExeSec csmapSec = new ExeSec(csHead, chan);
-				if (headers.length - 1 != rsrcSec) {
-					StrTools.msgBox(Messages.getString("CSExe.9")); //$NON-NLS-1$
-					System.exit(5);
-				}
-				ExeSec rsrc = headers[headers.length-1];
-				//copy the 'good' segments into their proper place
-				System.arraycopy(headers, 0, newHead, 0, headers.length - 1);
-				headers = newHead;
-				//adjust the indices
-				rsrcSec++;
-				mapSec = rsrcSec - 1;
-				//relocate
-				csmapSec.rAddr = rsrc.getPos();
-				int rsrcShift = (csmapSec.getLen() + 0xFFF) / 0x1000 * 0x1000;
-				rsrc.shift(rsrcShift);
-				headers[mapSec] = csmapSec;
-				headers[rsrcSec] = rsrc;
+        peData = new PEFile(bb, 0x1000);
 
-				//update PE Header
-				int tmpInt = peHead.getInt(0x198); //rsrc table address
-				tmpInt += rsrcShift;
-				peHead.putInt(0x198, tmpInt);
-				peHead.put(0x116, (byte) newHead.length);
-				peHead.putShort(0x161, (short) 0x1930); //section list size(?)
+        int mapSection = peData.getSectionIndexByTag(".csmap");
 
-				moveMapdata(csmapSec.getPosV());
+        if (mapSection == -1) {
+            int sueSection = peData.getSectionIndexByTag(".swdata");
+            if ((sueSection != -1) && (sueSection == (peData.sections.size() - 1))) {
+                // Sue's Workshop has interfered. Fix this.
+                int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+                if (response != JOptionPane.YES_OPTION) {
+                    // ;.;
+                    System.exit(4);
+                }
+                PEFile.Section removeMe = peData.sections.get(sueSection);
+                csmapSection = universalMapDataPortMechanism(true);
+                peData.sections.remove(removeMe);
+                // oh shit
+                StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
+                commit();
+            } else {
+                csmapSection = universalMapDataPortMechanism(false);
+            }
+        } else {
+            csmapSection = peData.sections.get(mapSection);
+        }
 
-				modified = true;
-			} else {
-				int mapCount = 95;
-				int mapdataSize = 200*mapCount;
-				ExeSec csmapSec = headers[mapSec];
-				//check if .csmap is initialized
-				//we do that by checking if map 0 is empty
-				chan.position(csmapSec.getPos());
-				uBuf = ByteBuffer.allocate(200);
-				uBuf.order(ByteOrder.LITTLE_ENDIAN);
-				chan.read(uBuf);
-				uBuf.flip();
-				Mapdata newMap = new Mapdata(0, uBuf, MOD_TYPE.MOD_CS, charEncoding);
-				//if .csmap was detected to be empty, initialize it
-				if (newMap.getTileset().isEmpty() &&
-						newMap.getFile().isEmpty() &&
-						newMap.getScroll() == 0 &&
-						newMap.getBG().isEmpty() &&
-						newMap.getNPC1().isEmpty() &&
-						newMap.getNPC2().isEmpty() &&
-						newMap.getBoss() == 0 &&
-						newMap.getMapname().isEmpty()) {
-					//if it's not big enough, resize the segment
-					if (csmapSec.rSize < mapdataSize) {
-						int shift = csmapSec.resize(mapdataSize);
-						for (int i = mapSec; i < headers.length - 1; i++)
-							headers[i].shift(shift);
-					}
-					//copy over mapdata
-					ByteBuffer mapdataBuf = ByteBuffer.allocate(200*mapCount);
-					chan.position(mapdataLoc);
-					chan.read(mapdataBuf);
-					mapdataBuf.flip();
-					ByteBuffer segData = csmapSec.getData();
-					segData.position(0);
-					segData.put(mapdataBuf);
-					//move mapdata virtually
-					moveMapdata(csmapSec.getPosV());
-					commit(); //save changes now to ensure GameInfo will read maps correctly
-					StrTools.msgBox(Messages.getString("CSExe.12")); //$NON-NLS-1$
-				}
-			}
-			chan.close();
-			inStream.close();
+        //check (C)Pixel
+        ByteBuffer pBuf = read(0x08C4D8, 1);
+        if (pBuf.get(0) != 0) {
+            pBuf.put((byte)0, (byte)0);
+            patch(pBuf, 0x08C4D8);
+            StrTools.msgBox(Messages.getString("CSExe.0")); //$NON-NLS-1$
+        }
+    }
 
-			//check (C)Pixel
-			ByteBuffer pBuf = read(0x08C4D8, 1);
-			if (pBuf.get(0) != 0) {
-				pBuf.put((byte)0, (byte)0);
-				patch(pBuf, 0x08C4D8);
-				StrTools.msgBox(Messages.getString("CSExe.0")); //$NON-NLS-1$
-			}
+    // The map porting mechanism. Creates .csmap, but does not set as such.
+    // DO NOT call if a .csmap already exists!
+    private PEFile.Section universalMapDataPortMechanism(boolean allAvailableMaps) throws IOException {
+	    if (csmapSection != null)
+	        throw new IOException("What kind of prank are you trying to pull, mister? *throws cake* This one is much better!");
+        int mapCount = 95;
+        int mapDataPtr = peData.setupRVAPoint(pMapdata).getInt() - 0x400000;
+        // System.out.println("Porting via : " + Integer.toHexString(mapDataPtr));
+        ByteBuffer bb = peData.setupRVAPoint(mapDataPtr);
+        int area = bb.capacity() - bb.position();
+        int areaMapCount = area / 200;
+        if ((areaMapCount < mapCount) || allAvailableMaps)
+            mapCount = areaMapCount;
+        byte[] data = new byte[mapCount * 200];
+        bb.get(data);
+        PEFile.Section s = new PEFile.Section();
+        s.encodeTag(".csmap");
+        s.rawData = data;
+        s.virtualSize = data.length;
+        s.metaLinearize = false;
+        s.characteristics = 0xE0000040;
+        peData.malloc(s);
+        return s;
+    }
 
-			//check for sue's
-			if (mapSec == (headers.length - 1) && headers[mapSec].getTag().equals(".swdata")) {
-				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
-				if (response != JOptionPane.YES_OPTION) {
-					System.exit(4);
-				}
-				int mapShift = headers[rsrcSec].getPos() - headers[mapSec].getPos();
-				int rsrcShift = (headers[mapSec].getLen() + 0xFFF) / 0x1000 * 0x1000;
-				headers[mapSec].shift(mapShift);
-				headers[rsrcSec].shift(rsrcShift);
-				headers[mapSec].setTag(".csmap"); //$NON-NLS-1$
+    // Gets a ByteBuffer for passing to Mapdata
+    public ByteBuffer loadMaps() {
+	    byte[] dataCopy = new byte[getMapdataSize() * 200];
+	    System.arraycopy(csmapSection.rawData, 0, dataCopy, 0, dataCopy.length);
+	    ByteBuffer bb = ByteBuffer.wrap(dataCopy);
+	    bb.order(ByteOrder.LITTLE_ENDIAN);
+	    return bb;
+    }
 
-				//swap
-				ExeSec tmpSec = headers[rsrcSec];
-				headers[rsrcSec] = headers[mapSec];
-				headers[mapSec] = tmpSec;
-				int tmpInt = rsrcSec;
-				rsrcSec = mapSec;
-				mapSec = tmpInt;
-
-				//update PE Header
-				tmpInt = peHead.getInt(0x198); //rsrc table address
-				tmpInt += rsrcShift;
-				peHead.putInt(0x198, tmpInt);
-
-				//update mapdata position
-				moveMapdata(headers[mapSec].getPosV());
-
-				//oh shit
-				StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
-				commit();
-			}
-		} catch (IOException err) {
-			err.printStackTrace();
-		}
-	}
-
+    // Takes a Mapdata-output ByteBuffer and puts it in the executable
 	public void saveMap(ByteBuffer bytes, int mapNum) {
 		int pos = mapNum * 200;
-		int csmapLoc = 0;
-		//make sure the map will fit
-		int rsrcShift = 0;
-		for (ExeSec s : headers) {
-			s.shift(rsrcShift);
-			if (s.getTag().equals(".csmap")) { //$NON-NLS-1$
-				if (s.getLen() <= pos) {
-					rsrcShift = s.resize(pos + 200);
-				}
-				csmapLoc = s.getPos();
-			} else if (s.getTag().equals(".rsrc")) { //$NON-NLS-1$
-				//update PE Header
-				int tmpInt = peHead.getInt(0x198); //rsrc table address
-				tmpInt += rsrcShift;
-				peHead.putInt(0x198, tmpInt);
-			}
-		}
-		patch(bytes, pos+csmapLoc);
+		if (csmapSection.rawData.length <= (pos + 199))
+		    setMapdataSize(mapNum + 1);
+		patch(bytes, pos + csmapSection.virtualAddrRelative);
 	}
 
+	// Also used for initial injection
 	public void setMapdataSize(int nMaps) {
-		int rsrcShift = 0;
-		for (ExeSec s : headers) {
-			s.shift(rsrcShift);
-			if (s.getTag().equals(".csmap")) { //$NON-NLS-1$
-				if (s.getLen() != nMaps*200) {
-					rsrcShift = s.resize(nMaps*200);
-				}
-			} else if (s.getTag().equals(".rsrc")) { //$NON-NLS-1$
-				//update PE Header
-				int tmpInt = peHead.getInt(0x198); //rsrc table address
-				tmpInt += rsrcShift;
-				peHead.putInt(0x198, tmpInt);
-			}
-		}
+	    // csmap section no longer valid! get rid of it
+        peData.sections.remove(csmapSection);
+	    byte[] sectionData = new byte[nMaps * 200];
+	    System.arraycopy(csmapSection.rawData, 0, sectionData, 0, Math.min(csmapSection.rawData.length, sectionData.length));
+	    csmapSection.virtualSize = sectionData.length;
+	    csmapSection.rawData = sectionData;
+        // reinstall csmap section now we've fixed it
+        peData.malloc(csmapSection);
+        updateMapdataRVA(csmapSection.virtualAddrRelative);
 	}
+
+	public int getMapdataSize() {
+	    return csmapSection.rawData.length / 200;
+    }
 
 	public void patch(ByteBuffer data, int offset) {
 		//int shift = 0;
 		if (offset >= 0x400000) offset -= 0x400000;
-		for (ExeSec s : headers) {
-			if (offset >= s.getPos() &&
-					offset < s.getPos() + s.getLen()) {
-				//it's within this section
-				ByteBuffer d = s.getData();
-				d.position(offset - s.getPos());
-				data.position(0);
-				d.put(data);
-				modified = true;
-				break;
-			}
-		}
+        ByteBuffer d = peData.setupRVAPoint(offset);
+        if (d != null) {
+            // it's within this section
+            data.position(0);
+            d.put(data);
+            modified = true;
+        }
 	}
 
 	public ByteBuffer read(int imgStrOffset1, int size) {
 		ByteBuffer retVal = null;
 		if (imgStrOffset1 >= 0x400000) imgStrOffset1 -= 0x400000;
-		for (ExeSec s : headers) {
-			if (imgStrOffset1 >= s.getPos() &&
-					imgStrOffset1 < s.getPos() + s.getLen()) {
-				//it's within this section
-				//make sure we don't overflow
-				size = (size < s.getPos() + s.getLen() - imgStrOffset1) ? size :
-					s.getPos() + s.getLen() - imgStrOffset1;
-				ByteBuffer d = s.getData();
-				byte[] dat = new byte[ size];
-				d.position((imgStrOffset1 - s.getPos()));
-				d.get(dat);
-				retVal = ByteBuffer.wrap(dat);
-				break;
-			}
-		}
+        ByteBuffer d = peData.setupRVAPoint(imgStrOffset1);
+        if (d != null) {
+            //make sure we don't overflow
+            int available = d.capacity() - d.position();
+            size = Math.min(size, available);
+            // it's within this section
+            byte[] data = new byte[size];
+            d.get(data);
+            modified = true;
+            retVal = ByteBuffer.wrap(data);
+        }
 		return retVal;
 	}
 
-	private void moveMapdata(int newPos) {
+	// The newPos given is an RVA
+	private void updateMapdataRVA(int newPos) {
 		newPos += 0x400000;
 		ByteBuffer buf = ByteBuffer.allocate(4);
 		buf.order(ByteOrder.LITTLE_ENDIAN);
@@ -388,15 +269,7 @@ public class CSExe {
 		}
 
 		FileOutputStream oStream;
-		FileChannel c;
-		//update the SIZE_OF_IMAGE optional value in the header
-		//this is really important
-		int head_sz = 0;
-		for (ExeSec sc : headers) {
-			head_sz += (sc.getLenV() + 0xFFF) / 0x1000 * 0x1000;
-		}
-		peHead.putInt(0x160, head_sz + 0x1000);
-		
+
 		if (outloc == location) {
 			//backup existing file
 			try {
@@ -404,7 +277,7 @@ public class CSExe {
 				FileInputStream iStream = new FileInputStream(location);
 				FileChannel cInput = iStream.getChannel();
 				oStream = new FileOutputStream(backuploc);
-				c = oStream.getChannel();
+                FileChannel c = oStream.getChannel();
 				ByteBuffer exeDat = ByteBuffer.allocate(iStream.available());
 				cInput.read(exeDat);
 				exeDat.flip();
@@ -418,21 +291,10 @@ public class CSExe {
 		}
 		//actually write to file
 		try {
+		    // Make sure to do this here so we don't damage anything if the file turns out to fail tests
+		    byte[] b = peData.write();
 			oStream = new FileOutputStream(outloc);
-			c = oStream.getChannel();
-			peHead.position(0);
-			c.write(peHead);
-			//write section headers
-			for (ExeSec s : headers) {
-				c.write(s.toBuf());
-			}
-			//write section data
-			for (ExeSec s : headers) {
-				c.position(s.getPos());
-				ByteBuffer buf = s.getData();
-				buf.position(0);
-				c.write(buf);
-			}
+			oStream.write(b);
 			oStream.close();
 		} catch (IOException err) {
 			err.printStackTrace();
@@ -444,168 +306,7 @@ public class CSExe {
 		}
 	}
 
-	/*
-	 * PE segment descriptor
-	 * 0-7 tag
-	 * 8-B virtual size
-	 * C-F virtual address
-	 * 10-13 size of raw data
-	 * 14-17 raw data pointer
-	 * 18-1B relocations pointer
-	 * 1C-1F line numbers pointer
-	 * 20-21 # of relocations
-	 * 22-23 # of line #s
-	 * 24-27 characteristics
-	 */
-
-	public class ExeSec {
-		private String tag;
-		private int vSize;
-		private int vAddr;
-		private int rSize;
-		private int rAddr;
-		private int pReloc;
-		private int pLine;
-		private short numReloc;
-		private short numLine;
-		private int attrib;
-
-		private ByteBuffer data;
-
-		public String getTag() {return tag;}
-		public void setTag(String t) {tag = t;}
-		public int getPos() {return rAddr;}
-		public int getLen() {return rSize;}
-		public int getPosV() {return vAddr;}
-		public ByteBuffer getData() {return data;}
-		public int getLenV() {return vSize;}
-
-		ExeSec(ByteBuffer in, FileChannel f) {
-			in.position(0);
-			byte[] tagArray = new byte[8];
-			in.get(tagArray);
-			tag = new String(tagArray);
-			tag = tag.replaceAll("\0", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			vSize = in.getInt();
-			vAddr = in.getInt();
-			rSize = in.getInt();
-			rAddr = in.getInt();
-			pReloc = in.getInt();
-			pLine = in.getInt();
-			numReloc = in.getShort();
-			numLine = in.getShort();
-			attrib = in.getInt();
-
-			data = ByteBuffer.allocate(rSize);
-			data.order(ByteOrder.nativeOrder());
-			try {
-				if (tag.equals(".swdata")) { //$NON-NLS-1$
-					attrib = 0xC0000040;
-					f.position(rAddr + 0x10);
-					f.read(data);
-					data.flip();
-					//count the maps
-					int size = 0;
-					while(true) {
-						if (data.getInt(size) != -1) {
-							size += 200;
-						} else {
-							break;
-						}
-					}
-					rSize = size;
-					vSize = size;
-					data = ByteBuffer.allocate(rSize);
-					data.order(ByteOrder.nativeOrder());
-					f.position(rAddr + 0x10);
-					f.read(data);
-					data.flip();
-				} else {
-					f.position(rAddr);
-					f.read(data);
-					data.flip();
-				}
-			} catch (IOException err) {
-				err.printStackTrace();
-			}
-		}
-
-		public ByteBuffer toBuf() {
-			ByteBuffer retVal = ByteBuffer.allocate(0x28);
-			retVal.order(ByteOrder.nativeOrder());
-
-			byte[] tagDat = java.util.Arrays.copyOf(tag.getBytes(), 8);
-			retVal.put(tagDat);
-			retVal.putInt(vSize);
-			retVal.putInt(vAddr);
-			retVal.putInt(rSize);
-			retVal.putInt(rAddr);
-			retVal.putInt(pReloc);
-			retVal.putInt(pLine);
-			retVal.putShort(numReloc);
-			retVal.putShort(numLine);
-			retVal.putInt(attrib);
-			retVal.flip();
-			return retVal;
-		}
-
-		public void shift(int amt) {
-			if (tag.equals(".rsrc")) { //$NON-NLS-1$
-				shiftDirTable(amt, 0);
-			}
-			vAddr += amt;
-			rAddr += amt;
-		}
-
-		private void shiftDirTable(int amt, int pointer) {
-			//get the # of rsrc subdirs indexed by name
-			int nEntry = data.getShort(pointer + 12);
-			//get the # of rsrc subdirs indexed by id
-			nEntry += data.getShort(pointer + 14);
-
-			//read and shift entries
-			int pos = pointer + 16;
-			for (int i = 0; i < nEntry; i++) {
-				rsrcShift(amt, pos + i*8);
-			}
-		}
-		private void rsrcShift(int amt, int pointer) {
-			int rva = data.getInt(pointer + 4);
-			if ((rva & 0x80000000) != 0) { //if hi bit 1 points to another directory table
-				shiftDirTable(amt, rva & 0x7FFFFFFF);
-			} else {
-				int oldVal = data.getInt(rva);
-				data.putInt(rva, oldVal + amt);
-			}
-		}
-
-		/**
-		 * @param newSize
-		 * @return how much future sections need to be shifted
-		 */
-		public int resize(int newSize) {
-			int oldSize = data.capacity();
-			int diff = newSize - oldSize;
-			ByteBuffer newDat = ByteBuffer.allocate(newSize);
-			data.position(0);
-			//transfer as many bytes as possible into the new array from the old
-			while (data.hasRemaining()) {
-				if (newDat.hasRemaining())
-					newDat.put(data.get());
-				else
-					break;
-			}
-			data = newDat;
-			rSize = newSize;
-			vSize = newSize;
-			if (diff != 0)
-				modified = true;
-			return ((newSize+0xFFF) / 0x1000 * 0x1000)-((oldSize+0xFFF) / 0x1000 * 0x1000);
-		}
-	}
-
 	public void execute() {
-
 		File gameLoc = location.getParentFile();
 		Runtime rt = Runtime.getRuntime();
 		try {

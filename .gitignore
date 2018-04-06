@@ -42,10 +42,5 @@ bin/
 .settings/org.eclipse.jdt.core.prefs
 .classpath
 .project
-hacks/.DS_Store
-hacks/intro/.DS_Store
-hacks/misc patches/.DS_Store
-hacks/TSC modifications/.DS_Store
-hacks/bullets/.DS_Store
-hacks/NPCs/.DS_Store
-hacks/weapons/.DS_Store
+*.DS_Store
+*.patch
