@@ -183,7 +183,7 @@ public class ResourceManager {
 			for (int x = 0; x < src.getWidth(); x++)
 			{
 				int px = src.getRGB(x, y);
-				if (px == -16777216) //argb black full opaque
+				if (px == Color.BLACK.getRGB())
 					dest.setRGB(x, y, 0);
 				else
 					dest.setRGB(x, y, px);
@@ -198,7 +198,7 @@ public class ResourceManager {
 			for (int x = 0; x < src.getWidth(); x++)
 			{
 				int px = src.getRGB(x, y);
-				if (px == 0xFFFF00FF) //argb black full opaque
+				if (px == Color.MAGENTA.getRGB())
 					dest.setRGB(x, y, 0);
 				else
 					dest.setRGB(x, y, px);
