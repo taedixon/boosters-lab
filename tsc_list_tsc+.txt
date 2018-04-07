@@ -31,30 +31,21 @@ y	y coord
 Tab and newline are token delimeters...
 TSC List revised by Jackalope and Lace
 
-Format (each property is seperated with a tab character):
-[command name, starts with <]
-[number of parameters]
-[parameter types, shown above]
-[command name]
-[command description]
-[1 if command ends event, 0 otherwise]
-[1 if command clears textbox, 0 otherwise]
-[1 if args are seperated, 0 otherwise]
-[lengths of each parameter]
+Format:
+[command name, starts with <]	[number of arguments]	[parameter types, shown above]	[command name]	[command description] [1 if command ends event, 0 otherwise]	[1 if command clears textbox, 0 otherwise]	[1 if args are seperated, 0 otherwise]	[length of each parameter]
 
 NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1!
-
 [BL_TSC]	100
 <AE+	0	----	Arms Energy +	Refill all weapon ammo.	0	0	1	4	4	4	4
 <AM+	2	aA--	ArMs +	Give weapon W with X ammo. Use 0000 for infinite ammo.	0	0	1	4	4	4	4
 <AM-	1	a---	ArMs -	Remove weapon W.	0	0	1	4	4	4	4
 <AMJ	2	ae--	ArMs Jump	Jump to event X if the PC has weapon W.	0	0	1	4	4	4	4
 <ANP	3	N#d-	Animate NPc	Give all entities W scriptstate X and direction Y. Used for animation.	0	0	1	4	4	4	4
-<BOA	1	#---	BOss Animation	Give map-boss (eg Omega) scriptstate W.	0	0	1	4	4	4	4
+<BOA	1	#---	BOss Animation	Give map-boss (eg Omega) scriptstate W	0	0	1	4	4	4	4
 <BSL	1	N---	Boss Script Load	Start boss fight with entity W. Use 0000 to end the boss fight.	0	0	1	4	4	4	4
 <CAT	0	----	(C?) All Text	Instantly display text. Use before a <MSG/2/3; works until <END. Same command as <SAT.	0	0	1	4	4	4	4
 <CIL	0	----	Clear ILlustration	Clear illustration (during credits).	0	0	1	4	4	4	4
-<CLO	0	----	CLOse	Close message box.	0	1	1	4	4	4	4
+<CLO	0	----	CLOse	Close message box.	0	0	1	4	4	4	4
 <CLR	0	----	CLeaR	Clear message box.	0	1	1	4	4	4	4
 <CMP	3	xyt-	Change MaP	tile Change the tile at coordinates W:X to type Y. Produces smoke.	0	0	1	4	4	4	4
 <CMU	1	u---	Change MUsic	Change music to song W.	0	0	1	4	4	4	4
@@ -65,11 +56,11 @@ NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1
 <DNA	1	n---	Delete Npc (All?)	Remove all entities of type W.	0	0	1	4	4	4	4
 <DNP	1	N---	Delete NPc	Remove all entities W.	0	0	1	4	4	4	4
 <ECJ	2	#e--	Event Check Jump	Jump to event X if any entities W exist.	0	0	1	4	4	4	4
-<END	0	----	END	End the current scripted event.	0	0	1	4	4	4	4
+<END	0	----	END	End the current scripted event.	1	0	1	4	4	4	4
 <EQ+	1	#---	EQuip +	Equip item W.	0	0	1	4	4	4	4
 <EQ-	1	#---	EQuip -	Dequip item W.	0	0	1	4	4	4	4
 <ESC	0	----	ESCape	Quit to title screen.	1	0	1	4	4	4	4
-<EVE	1	e---	EVEnt	Go to event W.	0	0	1	4	4	4	4
+<EVE	1	e---	EVEnt	Go to event W.	1	0	1	4	4	4	4
 <FAC	1	f---	FACe	Show face W in the message box.	0	0	1	4	4	4	4
 <FAI	1	d---	FAde In	Fade in with direction W.	0	0	1	4	4	4	4
 <FAO	1	d---	FAde Out	Fade out with direction W.	0	0	1	4	4	4	4
@@ -78,9 +69,9 @@ NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1
 <FLA	0	----	FLAsh	Flash the screen white.	0	0	1	4	4	4	4
 <FLJ	2	Fe--	FLag Jump	Jump to event X if flag W is set.	0	0	1	4	4	4	4
 <FMU	0	----	Fade MUsic	Fade the music out.	0	0	1	4	4	4	4
-<FOB	2	N.--	Focus On Boss	Focus on boss W in X ticks. Use X ] 0.	0	0	1	4	4	4	4
-<FOM	1	.---	Focus On Me	Focus on the PC in W ticks. Use W ] 0.	0	0	1	4	4	4	4
-<FON	2	N.--	Focus On Npc	Focus on entity W in X ticks. Use X ] 0.	0	0	1	4	4	4	4
+<FOB	2	N.--	Focus On Boss	Focus on boss W in X ticks. Use X > 0.	0	0	1	4	4	4	4
+<FOM	1	.---	Focus On Me	Focus on the PC in W ticks. Use W > 0.	0	0	1	4	4	4	4
+<FON	2	N.--	Focus On Npc	Focus on entity W in X ticks. Use X > 0.	0	0	1	4	4	4	4
 <FRE	0	----	FREe	Free game action and the PC.	0	0	1	4	4	4	4
 <GIT	1	g---	Graphic ITem	Display an item or weapon icon above the message box. Add 1000 to W for items. Use 0000 to remove.	0	0	1	4	4	4	4
 <HMC	0	----	Hide My Character	Hide the PC.	0	0	1	4	4	4	4
@@ -107,7 +98,7 @@ NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1
 <MYD	1	d---	MY Direction	Causes the PC to face direction W.	0	0	1	4	4	4	4
 <NCJ	2	ne--	Npc Check Jump	Jump to event X if any entity of type W exists.	0	0	1	4	4	4	4
 <NOD	0	----	NOD	Wait for player input before resuming script.	0	0	1	4	4	4	4
-<NUM	1	#---	NUMber	Prints the value [4a5b34+W*4] to the message box. Use 0000 to print the last used W from compatible commands (eg AM+).	0	0	1	4	4	4	4.
+<NUM	1	#---	NUMber	Prints the value [4a5b34+W*4] to the message box. Use 0000 to print the last used W from compatible commands (eg AM+).	0	0	1	4	4	4	4
 <PRI	0	----	PRevent Interaction	Lock player controls and freeze game action.	0	0	1	4	4	4	4
 <PS+	2	#m--	Portal Slot +	Set teleporter slot W to event X. Selecting slot W while using the teleporter menu will jump to event X.	0	0	1	4	4	4	4
 <QUA	1	.---	QUAke	Shake the screen for W ticks.	0	0	1	4	4	4	4
@@ -117,7 +108,7 @@ NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1
 <SK+	1	F---	SKipflag +	Set skipflag W.	0	0	1	4	4	4	4
 <SK-	1	F---	Skipflag -	Clear skipflag W.	0	0	1	4	4	4	4
 <SKJ	2	Fe--	SKipflag Jump	Jump to event X if skipflag W is set.	0	0	1	4	4	4	4
-<SLP	0	----	Show Location Portals	Show the teleporter menu.	1	0	1	4	4	4	4
+<SLP	0	----	Show Location Portals	Show the teleporter menu.	0	0	1	4	4	4	4
 <SMC	0	----	Show My Character	Unhides the PC.	0	0	1	4	4	4	4
 <SMP	2	xy--	Shift MaP	tile Subtract 1 from the tile type at coordinates W:X. Does not create smoke.	0	0	1	4	4	4	4
 <SNP	4	nxyd	Set NPc	Create an entity of type W at coordinates X:Y with direction Z.	0	0	1	4	4	4	4
@@ -138,10 +129,10 @@ NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1
 <ZAM	0	----	Zero ArMs	Sets all weapon energy to zero.	0	0	1	4	4	4	4
 <LRX	3	eee-	Left Right X	Jump to W, X, or Y if player moves Left, Right, or Shoots.	0	0	1	4	4	4	4
 <FNJ	2	Fe--	Flag NotJump	Jump if flag X is not set.	0	0	1	4	4	4	4
-<VAR	2	##--	VARiable set	Puts XXXX into variable WWWW.	0	0	1	4	4	4	4
-<VAZ	2	##--	VAriable Zero	Zeros XXXX variables, starting at variable WWWW.	0	0	1	4	4	4	4
-<VAO	2	##--	VAriable Operation	Performs operation : on WWWW using XXXX. Valid values of : are listed in help file.	0	0	1	4	4	4	4
+<VAR	2	##--	VARiable set	Puts XXXX into variable WWWW	0	0	1	4	4	4	4
+<VAZ	2	##--	VAriable Zero	Zeros XXXX variables, starting at variable WWWW	0	0	1	4	4	4	4
+<VAO	2	##--	VAriable Operation	Performs operation $ on WWWW using XXXX. Valid values of $ are listed in help file.	0	0	1	4	4	4	4
 <VAJ	4	###e	VAriable Jump	Compare XXXX to WWWW using method YYYY, if true jump to ZZZZ. YYYY is listed in the help file.	0	0	1	4	4	4	4
 <RND	3	###-	RaNdoM	Puts random # between WWWW (min) and XXXX (max) into variable YYYY.	0	0	1	4	4	4	4
-<IMG	1	#---	tIMaGe	will set TimgFILE.bmp over the screen. The "tag" for the file name must be exactly 4 characters. Important note in help file!	0	0	1	4	4	4	4
+<IMG	1	#---	tIMaGe	will set TimgFILE.bmp over the screen. The "tag" for the file name must be exactly 4 characters. Important note in help file	0	0	1	4	4	4	4
 <PHY	2	##--	PHYsics define	Change physics variables. List in help file. BE SURE TO DEFINE WHEN STARTING YOUR GAME BEFORE PLAYER IS ABLE TO MOVE!	0	0	1	4	4	4	4
