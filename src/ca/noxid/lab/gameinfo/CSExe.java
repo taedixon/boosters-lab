@@ -218,7 +218,7 @@ public class CSExe {
 				StrTools.msgBox(Messages.getString("CSExe.16")); //$NON-NLS-1$
 				continue;
 			}
-			if (newVal < 0) {
+			if (newVal == 0) {
 				StrTools.msgBox(Messages.getString("CSExe.17")); //$NON-NLS-1$
 				continue;
 			}
