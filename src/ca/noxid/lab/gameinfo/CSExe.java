@@ -186,7 +186,6 @@ public class CSExe {
 					StrTools.msgBox(Messages.getString("CSExe.11") + segN + " " + Messages.getString("CSExe.12")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					peData.sections.remove(codeSectionID);
 					codeSectionID = -1;
-					modified = true;
 					break;
 				}
 			}
@@ -202,7 +201,6 @@ public class CSExe {
 			csmapSection.virtualSize += 0x4000;
 			peData.malloc(codeSection);
 			csmapSection.virtualSize -= 0x4000;
-			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.13") //$NON-NLS-1$
 					+ Integer.toHexString(codeSection.virtualAddrRelative + 0x400000).toUpperCase()
 					+ Messages.getString("CSExe.14")); //$NON-NLS-1$
