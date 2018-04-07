@@ -182,7 +182,7 @@ public class CSExe {
 				String segN = seg.decodeTag();
 				if (segN.equals(".rsrc") || segN.equals(".csmap"))
 					continue;
-				if (codeSection.virtualAddrRelative > seg.virtualAddrRelative) {
+				if (codeSection.virtualAddrRelative < seg.virtualAddrRelative) {
 					StrTools.msgBox(Messages.getString("CSExe.11") + segN + " " + Messages.getString("CSExe.12")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					peData.sections.remove(codeSectionID);
 					codeSectionID = -1;
@@ -192,15 +192,21 @@ public class CSExe {
 		}
 		if (codeSectionID == -1) {
 			byte[] data = new byte[0x100000];
+			if (codeSection != null) {
+				// attempt to copy as much data as possible from old section
+				ByteBuffer oldData = ByteBuffer.allocate(codeSection.virtualSize);
+				oldData.put(codeSection.rawData);
+				oldData.flip();
+				for (int i = 0; i < data.length; i++)
+					data[i] = oldData.get(i);
+			}
 			codeSection = new PEFile.Section();
 			codeSection.encodeTag(".excode");
 			codeSection.rawData = data;
 			codeSection.virtualSize = data.length;
 			codeSection.metaLinearize = false;
 			codeSection.characteristics = 0xE0000040;
-			csmapSection.virtualSize += 0x4000;
 			peData.malloc(codeSection);
-			csmapSection.virtualSize -= 0x4000;
 			StrTools.msgBox(Messages.getString("CSExe.13") //$NON-NLS-1$
 					+ Integer.toHexString(codeSection.virtualAddrRelative + 0x400000).toUpperCase()
 					+ Messages.getString("CSExe.14")); //$NON-NLS-1$
@@ -209,6 +215,10 @@ public class CSExe {
 		while (true) {
 			String valStr = JOptionPane.showInputDialog(Messages.getString("CSExe.15"), //$NON-NLS-1$
 					Integer.toHexString(newSize).toUpperCase());
+			if (valStr == null) {
+				StrTools.msgBox(Messages.getString("CSExe.23")); //$NON-NLS-1$
+				return;
+			}
 			Integer newVal = newSize;
 			try {
 				newVal = Integer.parseUnsignedInt(valStr, 16);
@@ -248,9 +258,7 @@ public class CSExe {
 						+ Messages.getString("CSExe.21")); //$NON-NLS-1$
 			codeSection.rawData = newData;
 			codeSection.virtualSize = newSize;
-			csmapSection.virtualSize += 0x4000;
 			peData.malloc(codeSection);
-			csmapSection.virtualSize -= 0x4000;
 			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.22") + Integer.toHexString(newSize).toUpperCase()); //$NON-NLS-1$
 			return;
@@ -274,7 +282,6 @@ public class CSExe {
 		patch(bytes, pos + csmapSection.virtualAddrRelative);
 	}
 
-	// Also used for initial injection
 	public void setMapdataSize(int nMaps) {
 		// csmap section no longer valid! get rid of it
 		peData.sections.remove(csmapSection);
@@ -317,7 +324,6 @@ public class CSExe {
 			// it's within this section
 			byte[] data = new byte[size];
 			d.get(data);
-			modified = true;
 			retVal = ByteBuffer.wrap(data);
 		}
 		return retVal;
