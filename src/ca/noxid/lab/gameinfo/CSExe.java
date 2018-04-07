@@ -183,7 +183,7 @@ public class CSExe {
 				if (segN.equals(".rsrc") || segN.equals(".csmap"))
 					continue;
 				if (codeSection.virtualAddrRelative > seg.virtualAddrRelative) {
-					StrTools.msgBox(Messages.getString("CSExe.11") + segN + Messages.getString("CSExe.12")); //$NON-NLS-1$ //$NON-NLS-2$
+					StrTools.msgBox(Messages.getString("CSExe.11") + segN + " " + Messages.getString("CSExe.12")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					peData.sections.remove(codeSectionID);
 					codeSectionID = -1;
 					modified = true;
@@ -204,11 +204,11 @@ public class CSExe {
 			csmapSection.virtualSize -= 0x4000;
 			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.13") //$NON-NLS-1$
-					+ Integer.toHexString(codeSection.virtualAddrRelative + 0x400000).toUpperCase() + Messages.getString("CSExe.14")); //$NON-NLS-1$
+					+ Integer.toHexString(codeSection.virtualAddrRelative + 0x400000).toUpperCase()
+					+ Messages.getString("CSExe.14")); //$NON-NLS-1$
 		}
 		int newSize = codeSection.virtualSize;
-		boolean gotNewSize = false;
-		while (!gotNewSize) {
+		while (true) {
 			String valStr = JOptionPane.showInputDialog(Messages.getString("CSExe.15"), //$NON-NLS-1$
 					Integer.toHexString(newSize).toUpperCase());
 			Integer newVal = newSize;
@@ -246,8 +246,8 @@ public class CSExe {
 				wastedBytes--;
 			}
 			if (wastedBytes != 0)
-				StrTools.msgBox(Messages.getString("CSExe.20") + Integer.toHexString(wastedBytes).toUpperCase()
-						+ Messages.getString("CSExe.21")); //$NON-NLS-1$ //$NON-NLS-2$
+				StrTools.msgBox(Messages.getString("CSExe.20") + Integer.toHexString(wastedBytes).toUpperCase() + " " //$NON-NLS-1$ //$NON-NLS-2$
+						+ Messages.getString("CSExe.21")); //$NON-NLS-1$
 			codeSection.rawData = newData;
 			codeSection.virtualSize = newSize;
 			csmapSection.virtualSize += 0x4000;
@@ -255,6 +255,7 @@ public class CSExe {
 			csmapSection.virtualSize -= 0x4000;
 			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.22") + Integer.toHexString(newSize).toUpperCase()); //$NON-NLS-1$
+			return;
 		}
 	}
 
