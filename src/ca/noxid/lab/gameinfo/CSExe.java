@@ -215,15 +215,15 @@ public class CSExe {
 			try {
 				newVal = Integer.parseUnsignedInt(valStr, 16);
 			} catch (NumberFormatException e) {
-				StrTools.msgBox("CSExe.16"); //$NON-NLS-1$
+				StrTools.msgBox(Messages.getString("CSExe.16")); //$NON-NLS-1$
 				continue;
 			}
 			if (newVal < 0) {
-				StrTools.msgBox("CSExe.17"); //$NON-NLS-1$
+				StrTools.msgBox(Messages.getString("CSExe.17")); //$NON-NLS-1$
 				continue;
 			}
 			if (newVal == newSize) {
-				StrTools.msgBox("CSExe.23"); //$NON-NLS-1$
+				StrTools.msgBox(Messages.getString("CSExe.23")); //$NON-NLS-1$
 				return;
 			}
 			newSize = newVal;
