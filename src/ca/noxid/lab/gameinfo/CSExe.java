@@ -186,6 +186,7 @@ public class CSExe {
 					StrTools.msgBox(Messages.getString("CSExe.11") + segN + Messages.getString("CSExe.12")); //$NON-NLS-1$ //$NON-NLS-2$
 					peData.sections.remove(codeSectionID);
 					codeSectionID = -1;
+					modified = true;
 					break;
 				}
 			}
@@ -198,11 +199,63 @@ public class CSExe {
 			codeSection.virtualSize = data.length;
 			codeSection.metaLinearize = false;
 			codeSection.characteristics = 0xE0000040;
-			csmapSection.virtualSize += 200;
+			csmapSection.virtualSize += 0x4000;
 			peData.malloc(codeSection);
-			csmapSection.virtualSize -= 200;
+			csmapSection.virtualSize -= 0x4000;
+			modified = true;
+			StrTools.msgBox(Messages.getString("CSExe.13") //$NON-NLS-1$
+					+ Integer.toHexString(codeSection.virtualAddrRelative + 0x400000).toUpperCase() + Messages.getString("CSExe.14")); //$NON-NLS-1$
 		}
-		// TODO resize dialog
+		int newSize = codeSection.virtualSize;
+		boolean gotNewSize = false;
+		while (!gotNewSize) {
+			String valStr = JOptionPane.showInputDialog(Messages.getString("CSExe.15"), //$NON-NLS-1$
+					Integer.toHexString(newSize).toUpperCase());
+			Integer newVal = newSize;
+			try {
+				newVal = Integer.parseUnsignedInt(valStr, 16);
+			} catch (NumberFormatException e) {
+				StrTools.msgBox("CSExe.16"); //$NON-NLS-1$
+				continue;
+			}
+			if (newVal < 0) {
+				StrTools.msgBox("CSExe.17"); //$NON-NLS-1$
+				continue;
+			}
+			if (newVal == newSize) {
+				StrTools.msgBox("CSExe.23"); //$NON-NLS-1$
+				return;
+			}
+			newSize = newVal;
+			System.out.println("current size: 0x" + Integer.toHexString(codeSection.virtualSize).toUpperCase());
+			System.out.println("wanted new size: 0x" + Integer.toHexString(newSize).toUpperCase());
+			if (newSize < codeSection.virtualSize) {
+				int confirm = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.18"),
+						Messages.getString("CSExe.19"), JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+				if (confirm != JOptionPane.YES_OPTION)
+					return;
+			}
+			peData.sections.remove(codeSection);
+			ByteBuffer data = ByteBuffer.allocate(codeSection.virtualSize);
+			data.put(codeSection.rawData);
+			data.flip();
+			byte[] newData = new byte[newSize];
+			int wastedBytes = data.remaining();
+			for (int i = 0; i < newData.length; i++) {
+				newData[i] = data.get(i);
+				wastedBytes--;
+			}
+			if (wastedBytes != 0)
+				StrTools.msgBox(Messages.getString("CSExe.20") + Integer.toHexString(wastedBytes).toUpperCase()
+						+ Messages.getString("CSExe.21")); //$NON-NLS-1$ //$NON-NLS-2$
+			codeSection.rawData = newData;
+			codeSection.virtualSize = newSize;
+			csmapSection.virtualSize += 0x4000;
+			peData.malloc(codeSection);
+			csmapSection.virtualSize -= 0x4000;
+			modified = true;
+			StrTools.msgBox(Messages.getString("CSExe.22") + Integer.toHexString(newSize).toUpperCase()); //$NON-NLS-1$
+		}
 	}
 
 	// Gets a ByteBuffer for passing to Mapdata
