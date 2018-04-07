@@ -7,15 +7,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
 import com.carrotlord.string.StrTools;
 
 import ca.noxid.lab.Messages;
-import ca.noxid.lab.gameinfo.GameInfo.MOD_TYPE;
-import ca.noxid.lab.mapdata.Mapdata;
 
 /*
  * //**** offsets into .text section **** -0x001000
@@ -172,6 +169,40 @@ public class CSExe {
 		peData.malloc(s);
 		updateMapdataRVA(s.virtualAddrRelative);
 		return s;
+	}
+
+	public void updateExcode() throws IOException {
+		if (csmapSection == null)
+			throw new IOException("\".csmap\" section not found!");
+		int codeSectionID = peData.getSectionIndexByTag(".excode");
+		PEFile.Section codeSection = null;
+		if (codeSectionID != -1) {
+			codeSection = peData.sections.get(codeSectionID);
+			for (PEFile.Section seg : peData.sections) {
+				String segN = seg.decodeTag();
+				if (segN.equals(".rsrc") || segN.equals(".csmap"))
+					continue;
+				if (codeSection.virtualAddrRelative > seg.virtualAddrRelative) {
+					StrTools.msgBox(Messages.getString("CSExe.11") + segN + Messages.getString("CSExe.12")); //$NON-NLS-1$ //$NON-NLS-2$
+					peData.sections.remove(codeSectionID);
+					codeSectionID = -1;
+					break;
+				}
+			}
+		}
+		if (codeSectionID == -1) {
+			byte[] data = new byte[0x100000];
+			codeSection = new PEFile.Section();
+			codeSection.encodeTag(".excode");
+			codeSection.rawData = data;
+			codeSection.virtualSize = data.length;
+			codeSection.metaLinearize = false;
+			codeSection.characteristics = 0xE0000040;
+			csmapSection.virtualSize += 200;
+			peData.malloc(codeSection);
+			csmapSection.virtualSize -= 200;
+		}
+		// TODO resize dialog
 	}
 
 	// Gets a ByteBuffer for passing to Mapdata
