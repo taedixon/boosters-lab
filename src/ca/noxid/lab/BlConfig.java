@@ -5,11 +5,10 @@ import com.carrotlord.string.StrTools;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption.*;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import static java.nio.file.StandardCopyOption.*;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class BlConfig {
 	private static final String CONFIGNAME = "bl.ini";
@@ -121,8 +120,8 @@ public class BlConfig {
 		}
 	}
 
-	public BlConfig(File configFile, GameInfo.MOD_TYPE type) {
-		this.configFile = solveLegacyDirectory(configFile);
+	public BlConfig(File configFolder, GameInfo.MOD_TYPE type) {
+		configFile = solveLegacyDirectory(configFile);
 		if (type == GameInfo.MOD_TYPE.MOD_CS) {
 			tileSize = 16;
 		}
