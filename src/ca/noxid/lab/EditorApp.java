@@ -1924,7 +1924,10 @@ public class EditorApp extends JFrame implements ActionListener {
 
 		} catch (OutOfMemoryError err) {
 			StrTools.msgBox(Messages.getString("EditorApp.136")); //$NON-NLS-1$
-		}
+		} /*catch (Exception ex) {
+			ex.printStackTrace();
+			StrTools.msgBox("Failed to add map tab:\n" + ex);
+		}*/
 	}
 
 	private void addMapTab(File mapfile) {
