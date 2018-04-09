@@ -212,8 +212,9 @@ public class CSExe {
 		}
 		int newSize = codeSection.virtualSize;
 		while (true) {
-			String valStr = JOptionPane.showInputDialog(Messages.getString("CSExe.15"), //$NON-NLS-1$
-					Integer.toHexString(newSize).toUpperCase());
+			String valStr = JOptionPane.showInputDialog(Messages.getString("CSExe.24") //$NON-NLS-1$
+					+ Integer.toHexString(codeSection.virtualAddrRelative + 0x400000).toUpperCase()
+					+ Messages.getString("CSExe.15"), Integer.toHexString(newSize).toUpperCase()); //$NON-NLS-1$
 			if (valStr == null) {
 				StrTools.msgBox(Messages.getString("CSExe.23")); //$NON-NLS-1$
 				return;
