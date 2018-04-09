@@ -90,8 +90,6 @@ public class GameInfo {
 		categoryMap = new HashMap<>();
 		if (base.toString().endsWith(".exe")) { //$NON-NLS-1$
 			dataDir = new File(base.getParent() + "/data"); //$NON-NLS-1$
-			File configFile = new File(dataDir + "/bl.ini"); //$NON-NLS-1$
-			gameConfig = new BlConfig(configFile, type);
 			if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
 				type = MOD_TYPE.MOD_GUXT;
                 // I don't actually think this ever worked properly, since it's going to certainly damage the EXE in modern versions.
@@ -100,7 +98,7 @@ public class GameInfo {
 			} else {
 				type = MOD_TYPE.MOD_CS;
 				try {
-                    executable = new CSExe(base, gameConfig.getEncoding()); //can fix swdata
+                    executable = new CSExe(base); //can fix swdata
                     getExeData(executable);
                 } catch (Exception ioe) {
 				    ioe.printStackTrace();
@@ -128,10 +126,7 @@ public class GameInfo {
 			dataDir = base.getParentFile().getParentFile();
 			imageExtension = CSPLUS_IMG_EXT; //$NON-NLS-1$
 		}
-		if (gameConfig == null) {
-			File configFile = new File(dataDir + "/bl.ini"); //$NON-NLS-1$
-			gameConfig = new BlConfig(configFile, type);
-		}
+		gameConfig = new BlConfig(dataDir, type);
 		fillMapdata(base);
 		mycharFile = new File(dataDir + "/MyChar" + imageExtension); //$NON-NLS-1$
 		mycharFile = ResourceManager.checkBase(mycharFile);

@@ -88,8 +88,7 @@ public class CSExe {
 	private static final int pMapdata = 0x20C2F; // address of the pointer to map data
 	private static final int mapdataLoc = 0x937B0; // address of the original mapdata
 
-	@SuppressWarnings("unused")
-	CSExe(File inFile, String charEncoding) throws IOException {
+	CSExe(File inFile) throws IOException {
 		location = inFile;
 		lastModify = location.lastModified();
 		// File tblFile;

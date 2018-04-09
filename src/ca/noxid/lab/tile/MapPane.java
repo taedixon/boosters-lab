@@ -412,7 +412,6 @@ public class MapPane extends BgPanel {
 	}
 
 	protected void drawTileTypes(Graphics2D g) {
-		boolean[] visArray = parent.getVisibleLayers();
 		int mapX = dataHolder.getMapX();
 		int mapY = dataHolder.getMapY();
 
@@ -446,20 +445,15 @@ public class MapPane extends BgPanel {
 				int tileType;
 				int tile1 = dataHolder.getTile(j, i, 1);
 				int tile2 = dataHolder.getTile(j, i, 2);
-				int tileLayer = 1;
 				if (EditorApp.EDITOR_MODE == 0) {
 					if (tile1 != 0) {
 						tileType = dataHolder.calcPxa(tile1);
 					} else {
 						tileType = dataHolder.calcPxa(tile2);
-						tileLayer = 2;
 					}
 				} else {
 					tileType = dataHolder.calcPxa(tile2);
-					tileLayer = 2;
 				}
-				if (!visArray[tileLayer])
-					continue;
 				if (legend != null) {
 					//if (tileType < 0) System.out.println("type-" + tileType + ", ");
 					sourceX = (tileType % 0x10) * 16;
