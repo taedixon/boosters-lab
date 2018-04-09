@@ -567,12 +567,12 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		return retVal;
 	}
 
-	public static void initDefines(GameInfo exe) {
+	public static void initDefines(File dataDir) {
 		//HashMap<String, String> retVal = new HashMap<String, String>();
 		//load defines.txt
 		def1 = new Vector<>();
 		def2 = new Vector<>();
-		File defFile = new File(exe.getDataDirectory() + File.separator + "tsc_def.txt"); //$NON-NLS-1$
+		File defFile = new File(dataDir + File.separator + "tsc_def.txt"); //$NON-NLS-1$
 		try {
 			if (!defFile.exists()) {
 				defFile.createNewFile();

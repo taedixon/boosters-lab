@@ -2185,7 +2185,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		categoryList.setListData(exeData.getEntityCategories());
 		subcatList.setListData(exeData.getEntitySubcat(Messages.getString("EditorApp.154"))); //$NON-NLS-1$
 		((NpcTblEditor) npcTblWindow).populate(exeData);
-		TscPane.initDefines(exeData);
+		TscPane.initDefines(exeData.getDataDirectory());
 		for (AbstractButton b : buttonsToEnableOnProjectLoad) {
 			b.setEnabled(true);
 		}
