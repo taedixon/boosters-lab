@@ -1009,10 +1009,10 @@ public class EditorApp extends JFrame implements ActionListener {
 							export.exportTo(fc.getSelectedFile());
 						} catch (IOException e) {
 							e.printStackTrace();
-							StrTools.msgBox("Failed to copy files for some reason idk");
+							StrTools.msgBox(Messages.getString("EditorApp.165")); //$NON-NLS-1$
 							return;
 						}
-						StrTools.msgBox("Copy completed");
+						StrTools.msgBox(Messages.getString("EditorApp.166")); //$NON-NLS-1$
 						break;
 					default:
 						break;
