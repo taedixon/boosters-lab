@@ -170,6 +170,11 @@ public class CSExe {
 		return s;
 	}
 
+	/*
+	 * -=- DO NOT USE! -=-
+	 * Causes the EXE to stop working when mapdata is resized by a large amount.
+	 */
+	@Deprecated
 	public void updateExcode() throws IOException {
 		if (csmapSection == null)
 			throw new IOException("\".csmap\" section not found!");

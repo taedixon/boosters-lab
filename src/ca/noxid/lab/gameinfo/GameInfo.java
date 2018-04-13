@@ -125,6 +125,10 @@ public class GameInfo {
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile().getParentFile();
 			imageExtension = CSPLUS_IMG_EXT; //$NON-NLS-1$
+		} else if (base.toString().endsWith(".csmap")) { //$NON-NLS-1$
+			type = MOD_TYPE.MOD_CS;
+			dataDir = base.getParentFile().getParentFile();
+			imageExtension = ".bmp"; //$NON-NLS-1$
 		}
 		gameConfig = new BlConfig(dataDir, type);
 		fillMapdata(base);
@@ -792,10 +796,22 @@ public class GameInfo {
 		
 		if (type == MOD_TYPE.MOD_CS) //$NON-NLS-1$
 		{
-            // If we got here, then executable had to initialize successfully or become null.
             if (executable == null) {
-                StrTools.msgBox(Messages.getString("GameInfo.47")); //$NON-NLS-1$
+            	if (f.getName().endsWith("csmap")) {
+            		//CS Recompilation, external mapdata file
+            		int mapdataSize = (int) inChan.size();
+            		ByteBuffer data = ByteBuffer.allocate(mapdataSize);
+            		data.order(ByteOrder.LITTLE_ENDIAN);
+            		inChan.read(data);
+            		data.flip();
+            		int mapdataCount = mapdataSize / 200;
+            		for (int i = 0; i < mapdataCount; i++)
+            			mapdataStore.add(new Mapdata(i, data, type, encoding));
+            	} else
+            		//standard CS mod, executable failed to initialize
+            		StrTools.msgBox(Messages.getString("GameInfo.47")); //$NON-NLS-1$
             } else {
+            	//standard CS mod
                 ByteBuffer bb = executable.loadMaps();
                 for (int i = 0; i < executable.getMapdataSize(); i++)
                     mapdataStore.add(new Mapdata(i, bb, type, encoding));

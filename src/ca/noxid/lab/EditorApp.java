@@ -1025,11 +1025,9 @@ public class EditorApp extends JFrame implements ActionListener {
 		this.buttonsToEnableOnProjectLoad.addElement(menuItem);
 		fileMenu.add(menuItem);
 		fileMenu.add(menuItem);
+		/*
 		menuItem = new JMenuItem(new AbstractAction() {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 8626085285993575830L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1050,6 +1048,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnExeLoad.add(menuItem);
 		fileMenu.add(menuItem);
+		*/
 
 		return fileMenu;
 	}
@@ -2055,10 +2054,10 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("FileMenu_Load")) { //$NON-NLS-1$
 			airhorn();
-			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm"); //$NON-NLS-5$ //$NON-NLS-2$
+			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm", "csmap"); //$NON-NLS-5$ //$NON-NLS-2$
 																													// //$NON-NLS-3$
 																													// //$NON-NLS-4$
-																													// //$NON-NLS-5$
+																													// //$NON-NLS-5$ //$NON-NLS-6$
 			fc.setFileFilter(filter);
 
 			fc.setCurrentDirectory(lastDir);
