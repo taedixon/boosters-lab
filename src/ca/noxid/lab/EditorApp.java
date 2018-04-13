@@ -1025,9 +1025,11 @@ public class EditorApp extends JFrame implements ActionListener {
 		this.buttonsToEnableOnProjectLoad.addElement(menuItem);
 		fileMenu.add(menuItem);
 		fileMenu.add(menuItem);
-		/*
 		menuItem = new JMenuItem(new AbstractAction() {
-			private static final long serialVersionUID = 1L;
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -6692081319209085736L;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1035,7 +1037,6 @@ public class EditorApp extends JFrame implements ActionListener {
 					try {
 						exeData.getExe().updateExcode();
 					} catch (IOException e1) {
-						System.err.println("oh no .excode fail");
 						e1.printStackTrace();
 						StrTools.msgBox(Messages.getString("EditorApp.162")); //$NON-NLS-1$
 					}
@@ -1048,7 +1049,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnExeLoad.add(menuItem);
 		fileMenu.add(menuItem);
-		*/
 
 		return fileMenu;
 	}

@@ -138,7 +138,7 @@ public class CSExe {
 				PEFile.Section removeMe = peData.sections.get(oldMapSection);
 				csmapSection = universalMapDataPortMechanism(true);
 				peData.sections.remove(removeMe);
-				StrTools.msgBox(Messages.getString("CSExe.25"));
+				StrTools.msgBox(Messages.getString("CSExe.25")); //$NON-NLS-1$
 				commit();
 			}
 		} else
@@ -188,11 +188,6 @@ public class CSExe {
 		return s;
 	}
 
-	/*
-	 * -=- DO NOT USE! -=-
-	 * Causes the EXE to stop working when mapdata is resized by a large amount.
-	 */
-	@Deprecated
 	public void updateExcode() throws IOException {
 		if (csmapSection == null)
 			throw new IOException("\".blmap\" section not found!");
