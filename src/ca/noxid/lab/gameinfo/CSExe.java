@@ -87,6 +87,8 @@ public class CSExe {
 
 	private static final int pMapdata = 0x20C2F; // address of the pointer to map data
 	private static final int mapdataLoc = 0x937B0; // address of the original mapdata
+	private static final int mapdataSize = 0x32004; // size of mapdata segment, enough for 1024 maps
+													// (+4 bytes for the map count)
 
 	CSExe(File inFile) throws IOException {
 		location = inFile;
@@ -109,30 +111,38 @@ public class CSExe {
 
 		peData = new PEFile(bb, 0x1000);
 
-		int mapSection = peData.getSectionIndexByTag(".csmap");
-
+		int mapSection = peData.getSectionIndexByTag(".blmap");
+		
 		if (mapSection == -1) {
-			int sueSection = peData.getSectionIndexByTag(".swdata");
-			if ((sueSection != -1) && (sueSection == (peData.sections.size() - 1))) {
-				// Sue's Workshop has interfered. Fix this.
-				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), //$NON-NLS-1$
-						Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
-				if (response != JOptionPane.YES_OPTION) {
-					// ;.;
-					System.exit(4);
+			int oldMapSection = peData.getSectionIndexByTag(".csmap");
+			if (oldMapSection == -1) {
+				int sueSection = peData.getSectionIndexByTag(".swdata");
+				if ((sueSection != -1) && (sueSection == (peData.sections.size() - 1))) {
+					// Sue's Workshop has interfered. Fix this.
+					int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), //$NON-NLS-1$
+							Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+					if (response != JOptionPane.YES_OPTION) {
+						// ;.;
+						System.exit(4);
+					}
+					PEFile.Section removeMe = peData.sections.get(sueSection);
+					csmapSection = universalMapDataPortMechanism(true);
+					peData.sections.remove(removeMe);
+					// oh shit
+					StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
+					commit();
+				} else {
+					csmapSection = universalMapDataPortMechanism(false);
 				}
-				PEFile.Section removeMe = peData.sections.get(sueSection);
+			} else {
+				PEFile.Section removeMe = peData.sections.get(oldMapSection);
 				csmapSection = universalMapDataPortMechanism(true);
 				peData.sections.remove(removeMe);
-				// oh shit
-				StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
+				StrTools.msgBox(Messages.getString("CSExe.25"));
 				commit();
-			} else {
-				csmapSection = universalMapDataPortMechanism(false);
 			}
-		} else {
+		} else
 			csmapSection = peData.sections.get(mapSection);
-		}
 
 		// check (C)Pixel
 		ByteBuffer pBuf = read(0x08C4D8, 1);
@@ -143,8 +153,8 @@ public class CSExe {
 		}
 	}
 
-	// The map porting mechanism. Creates .csmap, but does not set as such.
-	// DO NOT call if a .csmap already exists!
+	// The map porting mechanism. Creates .blmap, but does not set as such.
+	// DO NOT call if a .blmap already exists!
 	private PEFile.Section universalMapDataPortMechanism(boolean allAvailableMaps) throws IOException {
 		if (csmapSection != null)
 			throw new IOException(
@@ -157,10 +167,18 @@ public class CSExe {
 		int areaMapCount = area / 200;
 		if ((areaMapCount < mapCount) || allAvailableMaps)
 			mapCount = areaMapCount;
-		byte[] data = new byte[mapCount * 200];
-		bb.get(data);
+		byte[] data = new byte[mapdataSize];
+		ByteBuffer countBuf = ByteBuffer.allocate(4);
+		countBuf.order(ByteOrder.LITTLE_ENDIAN);
+		countBuf.putInt(0, mapCount);
+		countBuf.get(data, 0, 4);
+		int len = data.length - 4;
+		int bbR = bb.remaining();
+		if (bbR < len)
+			len = bbR;
+		bb.get(data, 4, bbR);
 		PEFile.Section s = new PEFile.Section();
-		s.encodeTag(".csmap");
+		s.encodeTag(".blmap");
 		s.rawData = data;
 		s.virtualSize = data.length;
 		s.metaLinearize = false;
@@ -177,14 +195,14 @@ public class CSExe {
 	@Deprecated
 	public void updateExcode() throws IOException {
 		if (csmapSection == null)
-			throw new IOException("\".csmap\" section not found!");
+			throw new IOException("\".blmap\" section not found!");
 		int codeSectionID = peData.getSectionIndexByTag(".excode");
 		PEFile.Section codeSection = null;
 		if (codeSectionID != -1) {
 			codeSection = peData.sections.get(codeSectionID);
 			for (PEFile.Section seg : peData.sections) {
 				String segN = seg.decodeTag();
-				if (segN.equals(".rsrc") || segN.equals(".csmap"))
+				if (segN.equals(".rsrc") || segN.equals(".blmap"))
 					continue;
 				if (codeSection.virtualAddrRelative < seg.virtualAddrRelative) {
 					StrTools.msgBox(Messages.getString("CSExe.11") + segN + " " + Messages.getString("CSExe.12")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -272,8 +290,8 @@ public class CSExe {
 
 	// Gets a ByteBuffer for passing to Mapdata
 	public ByteBuffer loadMaps() {
-		byte[] dataCopy = new byte[getMapdataSize() * 200];
-		System.arraycopy(csmapSection.rawData, 0, dataCopy, 0, dataCopy.length);
+		byte[] dataCopy = new byte[mapdataSize - 4];
+		System.arraycopy(csmapSection.rawData, 4, dataCopy, 0, dataCopy.length);
 		ByteBuffer bb = ByteBuffer.wrap(dataCopy);
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		return bb;
@@ -281,27 +299,41 @@ public class CSExe {
 
 	// Takes a Mapdata-output ByteBuffer and puts it in the executable
 	public void saveMap(ByteBuffer bytes, int mapNum) {
-		int pos = mapNum * 200;
+		int pos = 4 + mapNum * 200;
 		if (csmapSection.rawData.length <= (pos + 199))
 			setMapdataSize(mapNum + 1);
 		patch(bytes, pos + csmapSection.virtualAddrRelative);
 	}
 
 	public void setMapdataSize(int nMaps) {
+		ByteBuffer sizeBuf = ByteBuffer.allocate(4);
+		sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
+		sizeBuf.putInt(nMaps);
+		sizeBuf.get(csmapSection.rawData, 0, 4);
+		// old code that resizes the semgent
+		/*
 		// csmap section no longer valid! get rid of it
 		peData.sections.remove(csmapSection);
-		byte[] sectionData = new byte[nMaps * 200];
+		byte[] sectionData = new byte[nMaps * 200 + 4];
 		System.arraycopy(csmapSection.rawData, 0, sectionData, 0,
 				Math.min(csmapSection.rawData.length, sectionData.length));
+		ByteBuffer sizeBuf = ByteBuffer.allocate(4);
+		sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
+		sizeBuf.putInt(nMaps);
+		sizeBuf.get(sectionData, 0, 4);
 		csmapSection.virtualSize = sectionData.length;
 		csmapSection.rawData = sectionData;
 		// reinstall csmap section now we've fixed it
 		peData.malloc(csmapSection);
 		updateMapdataRVA(csmapSection.virtualAddrRelative);
+		*/
 	}
 
 	public int getMapdataSize() {
-		return csmapSection.rawData.length / 200;
+		ByteBuffer sizeBuf = ByteBuffer.allocate(4);
+		sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
+		sizeBuf.put(csmapSection.rawData, 0, 4);
+		return sizeBuf.getInt(0);
 	}
 
 	public void patch(ByteBuffer data, int offset) {
@@ -336,7 +368,7 @@ public class CSExe {
 
 	// The newPos given is an RVA
 	private void updateMapdataRVA(int newPos) {
-		newPos += 0x400000;
+		newPos += 0x400004;
 		ByteBuffer buf = ByteBuffer.allocate(4);
 		buf.order(ByteOrder.LITTLE_ENDIAN);
 		buf.putInt(0, newPos);
