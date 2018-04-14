@@ -123,10 +123,10 @@ public class EditorApp extends JFrame implements ActionListener {
 	public static int NUM_LAYER;
 	public static final int PHYSICAL_LAYER = 5;
 	public static final int GRADIENT_LAYER = 4;
-	private final static String[] LAYER_NAMES = { Messages.getString("EditorApp.25"),
-			Messages.getString("EditorApp.26"), Messages.getString("EditorApp.27"), Messages.getString("EditorApp.28"),
-			"Gradient", Messages.getString("EditorApp.29"), }; //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-																// //$NON-NLS-5$
+	private final static String[] LAYER_NAMES = { Messages.getString("EditorApp.25"), //$NON-NLS-1$
+			Messages.getString("EditorApp.26"), Messages.getString("EditorApp.27"), Messages.getString("EditorApp.28"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			"Gradient", Messages.getString("EditorApp.29"), }; //$NON-NLS-1$ //$NON-NLS-2$
+
 	private boolean[] visibleLayers; // array of which layers should be shown
 	private int activeLayer; // current layer to draw to
 	private final static String[] TILEOP_DRAWMODES = { Messages.getString("EditorApp.30"),
@@ -1217,7 +1217,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					return;
 				}
 				JFileChooser fc = new JFileChooser();
-				fc.setFileFilter(new FileNameExtensionFilter(Messages.getString("EditorApp.64"), "tsc")); //$NON-NLS-2$
+				fc.setFileFilter(new FileNameExtensionFilter(Messages.getString("EditorApp.64"), "tsc")); //$NON-NLS-1$ //$NON-NLS-2$
 				if (exeData != null) {
 					fc.setCurrentDirectory(exeData.getDataDirectory());
 				}
