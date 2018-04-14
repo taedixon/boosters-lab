@@ -351,6 +351,10 @@ public class CSExe {
 			modified = true;
 		}
 	}
+	
+	private String int2Hex(int i) {
+		return "0x" + Integer.toHexString(i).toUpperCase();
+	}
 
 	public ByteBuffer read(int imgStrOffset1, int size) {
 		ByteBuffer retVal = null;
@@ -366,6 +370,8 @@ public class CSExe {
 			d.get(data);
 			retVal = ByteBuffer.wrap(data);
 		}
+		if (retVal == null)
+			System.err.println("READ FAIL! OFF=" + int2Hex(imgStrOffset1) + ",SZE=" + int2Hex(size));
 		return retVal;
 	}
 
