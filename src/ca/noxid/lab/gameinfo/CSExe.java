@@ -86,7 +86,7 @@ public class CSExe {
 	}
 
 	private static final int pMapdata = 0x20C2F; // address of the pointer to map data
-	private static final int mapdataLoc = 0x937B0; // address of the original mapdata
+	//private static final int mapdataLoc = 0x937B0; // address of the original mapdata
 	public static final int MAX_MAPS = 1024; // maximum number of maps
 	private static final int mapdataSize = 4 + MAX_MAPS * 200; // size of mapdata segment, enough for MAX_MAPS maps
 																// (+4 bytes for the map count)
@@ -168,7 +168,7 @@ public class CSExe {
 		int areaMapCount = area / 200;
 		if ((areaMapCount < mapCount) || allAvailableMaps)
 			mapCount = areaMapCount;
-		byte[] data = new byte[mapdataSize];
+		byte[] data = new byte[mapdataSize + 4];
 		ByteBuffer countBuf = ByteBuffer.allocate(4);
 		countBuf.order(ByteOrder.LITTLE_ENDIAN);
 		countBuf.putInt(0, mapCount);
@@ -182,7 +182,7 @@ public class CSExe {
 		s.encodeTag(".blmap");
 		s.rawData = data;
 		s.virtualSize = data.length;
-		s.metaLinearize = false;
+		s.metaLinearize = true;
 		s.characteristics = 0xE0000040;
 		peData.malloc(s);
 		updateMapdataRVA(s.virtualAddrRelative);
@@ -210,16 +210,8 @@ public class CSExe {
 		}
 		if (codeSectionID == -1) {
 			byte[] data = new byte[0x100000];
-			if (codeSection != null) {
-				// attempt to copy as much data as possible from old section
-				ByteBuffer oldData = ByteBuffer.allocate(codeSection.virtualSize);
-				oldData.put(codeSection.rawData);
-				oldData.flip();
-				int len = oldData.remaining();
-				if (len > data.length)
-					len = data.length;
-				oldData.get(data, 0, len);
-			}
+			if (codeSection != null)
+				copySection(codeSection, data);
 			codeSection = new PEFile.Section();
 			codeSection.encodeTag(".excode");
 			codeSection.rawData = data;
@@ -267,18 +259,26 @@ public class CSExe {
 					return;
 			}
 			peData.sections.remove(codeSection);
-			ByteBuffer data = ByteBuffer.allocate(codeSection.virtualSize);
-			data.put(codeSection.rawData);
-			data.flip();
-			byte[] newData = new byte[newSize];
-			data.get(newData);
-			codeSection.rawData = newData;
-			codeSection.virtualSize = newSize;
+			byte[] data = new byte[newSize];
+			copySection(codeSection, data);
+			codeSection.rawData = data;
+			codeSection.virtualSize = data.length;
 			peData.malloc(codeSection);
 			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.22") + Integer.toHexString(newSize).toUpperCase()); //$NON-NLS-1$
 			return;
 		}
+	}
+	
+	private void copySection(PEFile.Section section, byte[] data) {
+		// attempt to copy as much data as possible from old section
+		ByteBuffer oldData = ByteBuffer.allocate(section.virtualSize);
+		oldData.put(section.rawData);
+		oldData.flip();
+		int len = oldData.remaining();
+		if (len > data.length)
+			len = data.length;
+		oldData.get(data, 0, len);
 	}
 
 	// Gets a ByteBuffer for passing to Mapdata
@@ -311,6 +311,7 @@ public class CSExe {
 		ByteBuffer sizeBuf = ByteBuffer.allocate(4);
 		sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
 		sizeBuf.putInt(nMaps);
+		sizeBuf.flip();
 		sizeBuf.get(csmapSection.rawData, 0, 4);
 		// old code that resizes the semgent
 		/*
