@@ -87,8 +87,9 @@ public class CSExe {
 
 	private static final int pMapdata = 0x20C2F; // address of the pointer to map data
 	private static final int mapdataLoc = 0x937B0; // address of the original mapdata
-	private static final int mapdataSize = 0x32004; // size of mapdata segment, enough for 1024 maps
-													// (+4 bytes for the map count)
+	public static final int MAX_MAPS = 1024; // maximum number of maps
+	private static final int mapdataSize = 4 + MAX_MAPS * 200; // size of mapdata segment, enough for MAX_MAPS maps
+																// (+4 bytes for the map count)
 
 	CSExe(File inFile) throws IOException {
 		location = inFile;
@@ -112,7 +113,7 @@ public class CSExe {
 		peData = new PEFile(bb, 0x1000);
 
 		int mapSection = peData.getSectionIndexByTag(".blmap");
-		
+
 		if (mapSection == -1) {
 			int oldMapSection = peData.getSectionIndexByTag(".csmap");
 			if (oldMapSection == -1) {
@@ -214,8 +215,10 @@ public class CSExe {
 				ByteBuffer oldData = ByteBuffer.allocate(codeSection.virtualSize);
 				oldData.put(codeSection.rawData);
 				oldData.flip();
-				for (int i = 0; i < data.length; i++)
-					data[i] = oldData.get(i);
+				int len = oldData.remaining();
+				if (len > data.length)
+					len = data.length;
+				oldData.get(data, 0, len);
 			}
 			codeSection = new PEFile.Section();
 			codeSection.encodeTag(".excode");
@@ -256,7 +259,9 @@ public class CSExe {
 			System.out.println("current size: 0x" + Integer.toHexString(codeSection.virtualSize).toUpperCase());
 			System.out.println("wanted new size: 0x" + Integer.toHexString(newSize).toUpperCase());
 			if (newSize < codeSection.virtualSize) {
-				int confirm = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.18"),
+				int confirm = JOptionPane.showConfirmDialog(null,
+						String.format(Messages.getString("CSExe.18"),
+								Integer.toHexString(codeSection.virtualSize - newSize)),
 						Messages.getString("CSExe.19"), JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 				if (confirm != JOptionPane.YES_OPTION)
 					return;
@@ -266,14 +271,7 @@ public class CSExe {
 			data.put(codeSection.rawData);
 			data.flip();
 			byte[] newData = new byte[newSize];
-			int wastedBytes = data.remaining();
-			for (int i = 0; i < newData.length; i++) {
-				newData[i] = data.get(i);
-				wastedBytes--;
-			}
-			if (wastedBytes != 0)
-				StrTools.msgBox(Messages.getString("CSExe.20") + Integer.toHexString(wastedBytes).toUpperCase() + " " //$NON-NLS-1$ //$NON-NLS-2$
-						+ Messages.getString("CSExe.21")); //$NON-NLS-1$
+			data.get(newData);
 			codeSection.rawData = newData;
 			codeSection.virtualSize = newSize;
 			peData.malloc(codeSection);
@@ -294,13 +292,22 @@ public class CSExe {
 
 	// Takes a Mapdata-output ByteBuffer and puts it in the executable
 	public void saveMap(ByteBuffer bytes, int mapNum) {
+		if (mapNum > MAX_MAPS)
+			throw new RuntimeException("New map number is larger than MAX_MAPS (" + MAX_MAPS + ")!");
+		int nMaps = getMapdataSize();
+		if (nMaps < mapNum)
+			setMapdataSize(mapNum + 1);
 		int pos = 4 + mapNum * 200;
+		/*
 		if (csmapSection.rawData.length <= (pos + 199))
 			setMapdataSize(mapNum + 1);
+		*/
 		patch(bytes, pos + csmapSection.virtualAddrRelative);
 	}
 
 	public void setMapdataSize(int nMaps) {
+		if (nMaps > MAX_MAPS)
+			throw new RuntimeException("New map number is larger than MAX_MAPS (" + MAX_MAPS + ")!");
 		ByteBuffer sizeBuf = ByteBuffer.allocate(4);
 		sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
 		sizeBuf.putInt(nMaps);

@@ -2022,6 +2022,15 @@ public class EditorApp extends JFrame implements ActionListener {
 			if (exeData == null) {
 				return;
 			}
+			if (exeData.type == GameInfo.MOD_TYPE.MOD_CS && exeData.getExe() != null) {
+				// standard CS exe
+				// make sure we don't go over the max map amount
+				if (exeData.getMapdata().length >= CSExe.MAX_MAPS) {
+					StrTools.msgBox(String.format(Messages.getString("EditorApp.167"), //$NON-NLS-1$
+							Integer.toUnsignedString(CSExe.MAX_MAPS)));
+					return;
+				}
+			}
 			Mapdata d = exeData.addMap();
 			new MapdataDialog(this, d.getMapnum(), exeData, iMan.getImg(ResourceManager.rsrcBgBlue)); // $NON-NLS-1$
 			mapList.setListData(exeData.getMapNames());
@@ -2033,6 +2042,15 @@ public class EditorApp extends JFrame implements ActionListener {
 			// don't do if we ain't loaded
 			if (exeData == null) {
 				return;
+			}
+			if (exeData.type == GameInfo.MOD_TYPE.MOD_CS && exeData.getExe() != null) {
+				// standard CS exe
+				// make sure we don't go over the max map amount
+				if (exeData.getMapdata().length >= CSExe.MAX_MAPS) {
+					StrTools.msgBox(String.format(Messages.getString("EditorApp.167"), //$NON-NLS-1$
+							Integer.toUnsignedString(CSExe.MAX_MAPS)));
+					return;
+				}
 			}
 			exeData.duplicateMap(selectedMap);
 			mapList.setListData(exeData.getMapNames());
@@ -2054,10 +2072,11 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("FileMenu_Load")) { //$NON-NLS-1$
 			airhorn();
-			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm", "csmap"); //$NON-NLS-5$ //$NON-NLS-2$
-																													// //$NON-NLS-3$
-																													// //$NON-NLS-4$
-																													// //$NON-NLS-5$ //$NON-NLS-6$
+			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm", //$NON-NLS-2$ //$NON-NLS-5$
+					"csmap");
+			// //$NON-NLS-3$
+			// //$NON-NLS-4$
+			// //$NON-NLS-5$ //$NON-NLS-6$
 			fc.setFileFilter(filter);
 
 			fc.setCurrentDirectory(lastDir);
