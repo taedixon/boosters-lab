@@ -125,7 +125,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	public static final int GRADIENT_LAYER = 4;
 	private final static String[] LAYER_NAMES = { Messages.getString("EditorApp.25"),
 			Messages.getString("EditorApp.26"), Messages.getString("EditorApp.27"), Messages.getString("EditorApp.28"),
-			"Gradient", Messages.getString("EditorApp.29"), }; //$NON-NLS-2$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			"Gradient", Messages.getString("EditorApp.29"), }; //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 																// //$NON-NLS-5$
 	private boolean[] visibleLayers; // array of which layers should be shown
 	private int activeLayer; // current layer to draw to
@@ -1217,7 +1217,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					return;
 				}
 				JFileChooser fc = new JFileChooser();
-				fc.setFileFilter(new FileNameExtensionFilter(Messages.getString("EditorApp.64"), "tsc")); //$NON-NLS-2$ //$NON-NLS-2$
+				fc.setFileFilter(new FileNameExtensionFilter(Messages.getString("EditorApp.64"), "tsc")); //$NON-NLS-2$
 				if (exeData != null) {
 					fc.setCurrentDirectory(exeData.getDataDirectory());
 				}
@@ -1926,7 +1926,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		} /*catch (Exception ex) {
 			ex.printStackTrace();
 			StrTools.msgBox("Failed to add map tab:\n" + ex);
-		}*/
+			}*/
 	}
 
 	private void addMapTab(File mapfile) {
@@ -2072,11 +2072,8 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("FileMenu_Load")) { //$NON-NLS-1$
 			airhorn();
-			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm", //$NON-NLS-2$ //$NON-NLS-5$
-					"csmap");
-			// //$NON-NLS-3$
-			// //$NON-NLS-4$
-			// //$NON-NLS-5$ //$NON-NLS-6$
+			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+					"csmap"); //$NON-NLS-1$
 			fc.setFileFilter(filter);
 
 			fc.setCurrentDirectory(lastDir);
