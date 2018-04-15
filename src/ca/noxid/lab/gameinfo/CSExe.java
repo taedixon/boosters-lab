@@ -227,7 +227,7 @@ public class CSExe {
 			codeSection.encodeTag(".excode");
 			codeSection.rawData = data;
 			codeSection.virtualSize = data.length;
-			codeSection.metaLinearize = false;
+			codeSection.metaLinearize = true;
 			codeSection.characteristics = 0xE0000040;
 			peData.malloc(codeSection);
 			StrTools.msgBox(Messages.getString("CSExe.13") //$NON-NLS-1$
