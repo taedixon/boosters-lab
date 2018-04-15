@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
@@ -154,6 +156,8 @@ public class CSExe {
 		} else
 			csmapSection = peData.sections.get(mapSection);
 
+		checkSectionAlignment();
+
 		// check (C)Pixel
 		ByteBuffer pBuf = read(0x08C4D8, 1);
 		if (pBuf.get(0) != 0) {
@@ -237,7 +241,7 @@ public class CSExe {
 					+ Messages.getString("CSExe.15"), Integer.toHexString(newSize).toUpperCase()); //$NON-NLS-1$
 			if (valStr == null) {
 				StrTools.msgBox(Messages.getString("CSExe.23")); //$NON-NLS-1$
-				return;
+				break;
 			}
 			Integer newVal = newSize;
 			try {
@@ -252,7 +256,7 @@ public class CSExe {
 			}
 			if (newVal == newSize) {
 				StrTools.msgBox(Messages.getString("CSExe.23")); //$NON-NLS-1$
-				return;
+				break;
 			}
 			newSize = newVal;
 			System.out.println("current size: 0x" + Integer.toHexString(codeSection.virtualSize).toUpperCase());
@@ -263,7 +267,7 @@ public class CSExe {
 								Integer.toHexString(codeSection.virtualSize - newSize)),
 						Messages.getString("CSExe.19"), JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 				if (confirm != JOptionPane.YES_OPTION)
-					return;
+					break;
 			}
 			peData.sections.remove(codeSection);
 			byte[] data = new byte[newSize];
@@ -273,10 +277,11 @@ public class CSExe {
 			peData.malloc(codeSection);
 			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.22") + Integer.toHexString(newSize).toUpperCase()); //$NON-NLS-1$
-			return;
+			break;
 		}
+		checkSectionAlignment();
 	}
-	
+
 	private void copySection(PEFile.Section section, byte[] data) {
 		// attempt to copy as much data as possible from old section
 		ByteBuffer oldData = ByteBuffer.allocate(section.virtualSize);
@@ -286,6 +291,38 @@ public class CSExe {
 		if (len > data.length)
 			len = data.length;
 		oldData.get(data, 0, len);
+	}
+	
+	private static final Comparator<PEFile.Section> sectionSorter = new Comparator<PEFile.Section>() {
+
+		@Override
+		public int compare(PEFile.Section o1, PEFile.Section o2) {
+			int rva1 = PEFile.uCompare(o1.virtualAddrRelative);
+			int rva2 = PEFile.uCompare(o2.virtualAddrRelative);
+			if (rva1 < rva2)
+				return -1;
+			if (rva1 > rva2)
+				return 1;
+			return 0;
+		}
+		
+	};
+
+	private void checkSectionAlignment() {
+		// alignment check
+		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
+		int lastAddress = 0;
+		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
+		sectionsSorted.sort(sectionSorter);
+		for (PEFile.Section s : peData.sections) {
+			if (lastAddress != 0) {
+				if (s.virtualAddrRelative != lastAddress) {
+					StrTools.msgBox(Messages.getString("CSExe.26"));
+					break;
+				}
+			}
+			lastAddress = PEFile.alignForward(s.virtualAddrRelative + s.virtualSize, sectionAlignment);
+		}
 	}
 
 	// Gets a ByteBuffer for passing to Mapdata
@@ -358,7 +395,7 @@ public class CSExe {
 			modified = true;
 		}
 	}
-	
+
 	private String int2Hex(int i) {
 		return "0x" + Integer.toHexString(i).toUpperCase();
 	}

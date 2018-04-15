@@ -173,7 +173,7 @@ public class PEFile {
 		return true;
 	}
 
-	private int alignForward(int virtualAddrRelative, int fileAlignment) {
+	public static int alignForward(int virtualAddrRelative, int fileAlignment) {
 		int mod = virtualAddrRelative % fileAlignment;
 		if (mod != 0)
 			virtualAddrRelative += fileAlignment - mod;
