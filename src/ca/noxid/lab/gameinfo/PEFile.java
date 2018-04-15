@@ -232,7 +232,7 @@ public class PEFile {
 		for (Section s : sections) {
 			if (uCompare(rva) >= uCompare(s.virtualAddrRelative)) {
 				int rel = rva - s.virtualAddrRelative;
-				if (uCompare(rel) < Math.min(uCompare(s.rawData.length), uCompare(s.virtualSize))) {
+				if (uCompare(rel) < Math.max(uCompare(s.rawData.length), uCompare(s.virtualSize))) {
 					ByteBuffer bb = ByteBuffer.wrap(s.rawData);
 					bb.order(ByteOrder.LITTLE_ENDIAN);
 					bb.position(rel);
