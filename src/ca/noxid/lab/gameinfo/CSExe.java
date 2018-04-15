@@ -129,16 +129,25 @@ public class CSExe {
 					PEFile.Section removeMe = peData.sections.get(sueSection);
 					csmapSection = universalMapDataPortMechanism(true);
 					peData.sections.remove(removeMe);
+					peData.malloc(csmapSection);
+					updateMapdataRVA(csmapSection.virtualAddrRelative);
 					// oh shit
 					StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
 					commit();
 				} else {
+					// good ol vanilla CS
 					csmapSection = universalMapDataPortMechanism(false);
+					peData.malloc(csmapSection);
+					updateMapdataRVA(csmapSection.virtualAddrRelative);
+					commit();
 				}
 			} else {
+				// Cave Editor/old Booster's Lab
 				PEFile.Section removeMe = peData.sections.get(oldMapSection);
 				csmapSection = universalMapDataPortMechanism(true);
 				peData.sections.remove(removeMe);
+				peData.malloc(csmapSection);
+				updateMapdataRVA(csmapSection.virtualAddrRelative);
 				StrTools.msgBox(Messages.getString("CSExe.25")); //$NON-NLS-1$
 				commit();
 			}
@@ -182,10 +191,8 @@ public class CSExe {
 		s.encodeTag(".blmap");
 		s.rawData = data;
 		s.virtualSize = data.length;
-		s.metaLinearize = true;
+		s.metaLinearize = false;
 		s.characteristics = 0xE0000040;
-		peData.malloc(s);
-		updateMapdataRVA(s.virtualAddrRelative);
 		return s;
 	}
 
