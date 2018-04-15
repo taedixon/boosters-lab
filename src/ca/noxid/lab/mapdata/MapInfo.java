@@ -921,7 +921,7 @@ public class MapInfo implements Changeable {
 	public int getTile(int x, int y, int layer) {
 		int rVal = 0;
 		try {
-			if (EditorApp.EDITOR_MODE == 0 || layer == -1) {
+			if (EditorApp.EDITOR_MODE == 0 && layer == -1) {
 				rVal = map[1][y][x];
 	            rVal += map[2][y][x];
 	            //rVal &= 0xFF;
@@ -936,7 +936,7 @@ public class MapInfo implements Changeable {
 
 	public void putTile(int x, int y, int newData, int layer) {
 		if (x >= 0 && y >= 0 && x < mapX && y < mapY) {
-			if (EditorApp.EDITOR_MODE == 0 || layer == -1) {
+			if (EditorApp.EDITOR_MODE == 0 && layer == -1) {
 				if (calcPxa(newData) < 0x20) {
 					map[1][y][x] = newData;
 					map[2][y][x] = 0;

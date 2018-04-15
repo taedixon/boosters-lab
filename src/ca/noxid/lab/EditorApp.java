@@ -219,7 +219,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		// blazed
 		if (!new File("nofun").exists()) {
 			Calendar cal = Calendar.getInstance();
-			if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
+			if (new File("swerryday").exists() || cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
 				blazed = true;
 		}
 
@@ -339,8 +339,8 @@ public class EditorApp extends JFrame implements ActionListener {
 		showTileWindow = prefs.getBoolean(PREF_HELPER, false);
 		showScriptWindow = prefs.getBoolean(PREF_SCRIPT, true);
 		showEntityWindow = prefs.getBoolean(PREF_ENTITY, false);
-		showSpritesheetWindow = prefs.getBoolean(PREF_SPRITESHEETWINDOW, false);
-		// showScriptWindow = false;
+		// showSpritesheetWindow = prefs.getBoolean(PREF_SPRITESHEETWINDOW, false);
+		showSpritesheetWindow = false;
 		notesText = prefs.get(PREF_NOTES, Messages.getString("EditorApp.49")); //$NON-NLS-1$
 		showingCommands = prefs.getBoolean(PREF_COM, true);
 
@@ -1231,6 +1231,8 @@ public class EditorApp extends JFrame implements ActionListener {
 		menuItem.setText(Messages.getString("EditorApp.66")); //$NON-NLS-1$
 		ops.add(menuItem);
 
+		// Spritesheet Organizer
+		/*
 		menuItem = new JMenuItem(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1241,6 +1243,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		});
 		menuItem.setText("toggle sprite thing");
 		ops.add(menuItem);
+		*/
 
 		menuItem = new JMenuItem(new AbstractAction() {
 			@Override

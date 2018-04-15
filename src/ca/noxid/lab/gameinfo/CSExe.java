@@ -88,7 +88,8 @@ public class CSExe {
 	}
 
 	private static final int pMapdata = 0x20C2F; // address of the pointer to map data
-	//private static final int mapdataLoc = 0x937B0; // address of the original mapdata
+	// private static final int mapdataLoc = 0x937B0; // address of the original
+	// mapdata
 	public static final int MAX_MAPS = 1024; // maximum number of maps
 	private static final int mapdataSize = 4 + MAX_MAPS * 200; // size of mapdata segment, enough for MAX_MAPS maps
 																// (+4 bytes for the map count)
@@ -230,6 +231,7 @@ public class CSExe {
 			codeSection.metaLinearize = true;
 			codeSection.characteristics = 0xE0000040;
 			peData.malloc(codeSection);
+			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.13") //$NON-NLS-1$
 					+ Integer.toHexString(codeSection.virtualAddrRelative + 0x400000).toUpperCase()
 					+ Messages.getString("CSExe.14")); //$NON-NLS-1$
@@ -262,10 +264,9 @@ public class CSExe {
 			System.out.println("current size: 0x" + Integer.toHexString(codeSection.virtualSize).toUpperCase());
 			System.out.println("wanted new size: 0x" + Integer.toHexString(newSize).toUpperCase());
 			if (newSize < codeSection.virtualSize) {
-				int confirm = JOptionPane.showConfirmDialog(null,
-						String.format(Messages.getString("CSExe.18"),
-								Integer.toHexString(codeSection.virtualSize - newSize)),
-						Messages.getString("CSExe.19"), JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+				int confirm = JOptionPane.showConfirmDialog(null, String.format(Messages.getString("CSExe.18"), //$NON-NLS-1$
+						Integer.toHexString(codeSection.virtualSize - newSize)), Messages.getString("CSExe.19"), //$NON-NLS-1$
+						JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
 				if (confirm != JOptionPane.YES_OPTION)
 					break;
 			}
@@ -292,7 +293,7 @@ public class CSExe {
 			len = data.length;
 		oldData.get(data, 0, len);
 	}
-	
+
 	private static final Comparator<PEFile.Section> sectionSorter = new Comparator<PEFile.Section>() {
 
 		@Override
@@ -305,7 +306,7 @@ public class CSExe {
 				return 1;
 			return 0;
 		}
-		
+
 	};
 
 	private void checkSectionAlignment() {

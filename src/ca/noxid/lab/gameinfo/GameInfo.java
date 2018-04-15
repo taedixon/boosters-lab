@@ -1220,8 +1220,12 @@ public class GameInfo {
 		BufferedWriter output;
 		output = new BufferedWriter(new FileWriter("FlagListing.txt")); //$NON-NLS-1$
 		//this is the wicked setup I've got going for
-		LinkedList<Integer> fList = new LinkedList<>();
-		HashMap<Integer, Vector<String>> locTable = new HashMap<>();
+		LinkedList<Integer> flList = new LinkedList<>();
+		HashMap<Integer, Vector<String>> flLocTable = new HashMap<>();
+		LinkedList<Integer> skList = new LinkedList<>();
+		HashMap<Integer, Vector<String>> skLocTable = new HashMap<>();
+		LinkedList<Integer> mpList = new LinkedList<>();
+		HashMap<Integer, Vector<String>> mpLocTable = new HashMap<>();
 		for (Mapdata d : mapdataStore)
 		{
 			String subDir = "/Stage/"; //$NON-NLS-1$
@@ -1239,37 +1243,76 @@ public class GameInfo {
 				if (t.getDescription().equals("eveNum")) //$NON-NLS-1$
 				{
 					currentEvent = StrTools.ascii2Num_CS(t.getContents().substring(1));
-				} else if (t.getContents().equals("<FL+") || t.getContents().equals("<FL-") || t.getContents().equals("<FLJ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					String tag = t.getContents();
-					if ((t = tLex.getNextToken()) != null)
-					{
-						int flagNum = StrTools.ascii2Num_CS(t.getContents());
-						Vector<String> locList;
-						if (fList.contains(flagNum))
-						{
-							locList = locTable.get(flagNum);
-						} else {
-							locList = new Vector<>();
-							locTable.put(flagNum, locList);
-							fList.add(flagNum);
-						}
-						locList.add("\t " + tag + " " + sourceFile.getName() + " event #" + currentEvent + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					} else {//if there is a next token
-						break;
+					continue;
+				}
+				LinkedList<Integer> fList = null;
+				HashMap<Integer, Vector<String>> fTable = null;
+				if (t.getContents().equals("<FL+") || t.getContents().equals("<FL-") || t.getContents().equals("<FLJ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					fList = flList;
+					fTable = flLocTable;
+				} else if (t.getContents().equals("<SK+") || t.getContents().equals("<SK-") || t.getContents().equals("<SKJ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					fList = skList;
+					fTable = skLocTable;
+				} else if (t.getContents().equals("<MP+") || t.getContents().equals("<MPJ")) { //$NON-NLS-1$ //$NON-NLS-2
+					fList = mpList;
+					fTable = mpLocTable;
+				} else
+					continue;
+				String tag = t.getContents();
+				if ((t = tLex.getNextToken()) != null)
+				{
+					int flagNum = StrTools.ascii2Num_CS(t.getContents());
+					Vector<String> locList;
+					if (fList.contains(flagNum)) {
+						locList = fTable.get(flagNum);
+					} else {
+						locList = new Vector<>();
+						fTable.put(flagNum, locList);
+						fList.add(flagNum);
 					}
-				} //elseif token was flag+ or flag-
+					locList.add("\t " + tag + " " + sourceFile.getName() + " event #" + currentEvent + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				} else {//if there is a next token
+					break;
+				}
 			} //while we have more tokens
 		}//for each file
 		//sort the flag list
-		int[] fArray = new int[fList.size()];
-		for (int i = 0; i < fList.size(); i++)
+		int[] flArray = new int[flList.size()];
+		for (int i = 0; i < flList.size(); i++)
 		{
-			fArray[i] = fList.get(i);
+			flArray[i] = flList.get(i);
 		}
-		java.util.Arrays.sort(fArray);
-		for (int aFArray : fArray) {
-			output.write(Messages.getString("GameInfo.1") + aFArray + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-			Vector<String> locList = locTable.get(aFArray);
+		int[] skArray = new int[skList.size()];
+		for (int i = 0; i < skList.size(); i++)
+		{
+			skArray[i] = skList.get(i);
+		}
+		int[] mpArray = new int[mpList.size()];
+		for (int i = 0; i < mpList.size(); i++)
+		{
+			mpArray[i] = mpList.get(i);
+		}
+		java.util.Arrays.sort(flArray);
+		java.util.Arrays.sort(skArray);
+		java.util.Arrays.sort(mpArray);
+		final String lineSep = System.lineSeparator();
+		for (int aFArray : flArray) {
+			output.write(Messages.getString("GameInfo.1") + aFArray + lineSep); //$NON-NLS-1$ //$NON-NLS-2$
+			Vector<String> locList = flLocTable.get(aFArray);
+			for (String aLocList : locList) {
+				output.write(aLocList);
+			}
+		}
+		for (int aFArray : skArray) {
+			output.write(Messages.getString("GameInfo.3") + aFArray + lineSep); //$NON-NLS-1$ //$NON-NLS-2$
+			Vector<String> locList = skLocTable.get(aFArray);
+			for (String aLocList : locList) {
+				output.write(aLocList);
+			}
+		}
+		for (int aFArray : mpArray) {
+			output.write(Messages.getString("GameInfo.4") + aFArray + lineSep); //$NON-NLS-1$ //$NON-NLS-2$
+			Vector<String> locList = mpLocTable.get(aFArray);
 			for (String aLocList : locList) {
 				output.write(aLocList);
 			}
