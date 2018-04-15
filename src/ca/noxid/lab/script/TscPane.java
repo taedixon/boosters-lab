@@ -45,6 +45,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	private static Vector<TscCommand> commandInf = getCommands();
 	private static List<String> musicList = getMusicList();
 	private static List<String> sfxList = getSfxList();
+	private static List<String> equipList = getEquipList();
 	private static Vector<String> def1 = new Vector<>();
 	private static Vector<String> def2 = new Vector<>();
 	private final JTextArea comLabel = new JTextArea(Messages.getString("TscPane.9"), 2, 18); //$NON-NLS-1$
@@ -336,6 +337,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		put('A', "Ammo");
 		put('d', "Direction");
 		put('e', "Event");
+		put('E', "Equip");
 		put('f', "Face");
 		put('F', "Flag");
 		put('g', "Graphic");
@@ -488,6 +490,22 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			} catch (Exception ignored) {
 				jp.add(new JLabel(argNum + ""));
 			}
+			break;
+		case 'E': //equip
+			if (equipList == null) {
+				jp.add(new JLabel(argNum + ""));
+				break;
+			}
+			String eq = "";
+			for (int i = 0; i < 16; i++)
+				if ((argNum & (1 << i)) != 0)
+					eq += equipList.get(i) + " + ";
+			if (eq.isEmpty())
+				eq = "None";
+			else
+				eq = eq.substring(0, eq.length() - 3);
+			jp.add(new JLabel(eq));
+			break;
 		}
 		commandListExtras.add(jp);
 	}
@@ -1192,6 +1210,22 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			sc.close();
 		} catch (FileNotFoundException err) {
 			StrTools.msgBox("Could not find sfxList.txt");
+		}
+
+		return rv;
+	}
+	
+	private static ArrayList<String> getEquipList() {
+		ArrayList<String> rv = new ArrayList<>();
+		try {
+			Scanner sc = new Scanner(new File("equipList.txt"));
+			while (sc.hasNext()) {
+				String sfxName = sc.nextLine();
+				rv.add(sfxName);
+			}
+			sc.close();
+		} catch (FileNotFoundException err) {
+			StrTools.msgBox("Could not find equipList.txt");
 		}
 
 		return rv;

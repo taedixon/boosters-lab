@@ -12,6 +12,7 @@ a	arms
 A	ammo
 d	direction
 e	event
+E	equip
 f	face
 F	flag
 g	graphic
@@ -57,8 +58,8 @@ NOTE: If you add a command, make sure to increase the number next to BL_TSC by 1
 <DNP	1	N---	Delete NPc	Remove all entities W.	0	0	1	4	4	4	4
 <ECJ	2	#e--	Event Check Jump	Jump to event X if any entities W exist.	0	0	1	4	4	4	4
 <END	0	----	END	End the current scripted event.	1	0	1	4	4	4	4
-<EQ+	1	#---	EQuip +	Equip item W.	0	0	1	4	4	4	4
-<EQ-	1	#---	EQuip -	Dequip item W.	0	0	1	4	4	4	4
+<EQ+	1	E---	EQuip +	Equip item W.	0	0	1	4	4	4	4
+<EQ-	1	E---	EQuip -	Dequip item W.	0	0	1	4	4	4	4
 <ESC	0	----	ESCape	Quit to title screen.	1	0	1	4	4	4	4
 <EVE	1	e---	EVEnt	Go to event W.	1	0	1	4	4	4	4
 <FAC	1	f---	FACe	Show face W in the message box.	0	0	1	4	4	4	4
