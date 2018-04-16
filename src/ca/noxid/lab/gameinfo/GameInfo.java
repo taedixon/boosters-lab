@@ -20,9 +20,10 @@ import java.util.*;
 
 
 public class GameInfo {
-	//Map list variabls
+	//Map list variables
 	private Vector<Mapdata> mapdataStore;
 	private Vector<Mapdata> tempMapdata = new Vector<>();
+	private File base;
 	private String imageExtension;
 	private File dataDir;
 	private BlConfig gameConfig;
@@ -84,8 +85,12 @@ public class GameInfo {
 	
 	public static final String[] sfxNames = loadSfxNames();
 
+	public File getBase() {
+		return base;
+	}
 	
 	public GameInfo(File base) throws IOException {
+		this.base = base;
 		mapdataStore = new Vector<>();
 		categoryMap = new HashMap<>();
 		if (base.toString().endsWith(".exe")) { //$NON-NLS-1$
@@ -797,19 +802,8 @@ public class GameInfo {
 		if (type == MOD_TYPE.MOD_CS) //$NON-NLS-1$
 		{
             if (executable == null) {
-            	if (f.getName().endsWith("csmap")) {
-            		//CS Recompilation, external mapdata file
-            		int mapdataSize = (int) inChan.size();
-            		ByteBuffer data = ByteBuffer.allocate(mapdataSize);
-            		data.order(ByteOrder.LITTLE_ENDIAN);
-            		inChan.read(data);
-            		data.flip();
-            		int mapdataCount = mapdataSize / 200;
-            		for (int i = 0; i < mapdataCount; i++)
-            			mapdataStore.add(new Mapdata(i, data, type, encoding));
-            	} else
-            		//standard CS mod, executable failed to initialize
-            		StrTools.msgBox(Messages.getString("GameInfo.47")); //$NON-NLS-1$
+        		//standard CS mod, executable failed to initialize
+        		StrTools.msgBox(Messages.getString("GameInfo.47")); //$NON-NLS-1$
             } else {
             	//standard CS mod
                 ByteBuffer bb = executable.loadMaps();

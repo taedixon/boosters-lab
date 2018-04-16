@@ -291,7 +291,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	 *
 	 * @return false if save was aborted
 	 */
-	protected boolean saveAll(boolean shouldClose) {
+	public boolean saveAll(boolean shouldClose) {
 		// try to save all tabs
 		if (shouldClose) {
 			while (mapTabs.getTabCount() != 0) {
@@ -909,7 +909,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new BlIniDialog(EditorApp.this, exeData.getConfig(), iMan.getImg(ResourceManager.rsrcBgWhite2));
+				new BlIniDialog(EditorApp.this, iMan.getImg(ResourceManager.rsrcBgWhite2));
 			}
 
 		});
@@ -2075,8 +2075,11 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("FileMenu_Load")) { //$NON-NLS-1$
 			airhorn();
-			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-					"csmap"); //$NON-NLS-1$
+			if (exeData != null)
+				if (!saveAll(true))
+					return;
+
+			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			fc.setFileFilter(filter);
 
 			fc.setCurrentDirectory(lastDir);
@@ -2097,6 +2100,9 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("FileMenu_New")) { //$NON-NLS-1$
 			airhorn();
+			if (exeData != null)
+				if (!saveAll(true))
+					return;
 			// purge existing memory
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			StrTools.msgBox(Messages.getString("EditorApp.132") + //$NON-NLS-1$
@@ -2126,6 +2132,9 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("FileMenu_Last")) { //$NON-NLS-1$
 			airhorn();
+			if (exeData != null)
+				if (!saveAll(true))
+					return;
 			try {
 				if (lastDir.exists()) {
 					loadFile(lastDir);
@@ -2195,7 +2204,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		mapList.removeAll();
 	}
 
-	private void loadFile(File selected) throws IOException {
+	public void loadFile(File selected) throws IOException {
 		purgeData(); // clean up any old tabs
 		exeData = new GameInfo(selected);
 		exeData.loadImages(iMan);
