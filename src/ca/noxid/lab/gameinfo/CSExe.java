@@ -357,7 +357,7 @@ public class CSExe {
 		if (mapNum > MAX_MAPS)
 			throw new RuntimeException("New map number is larger than MAX_MAPS (" + MAX_MAPS + ")!");
 		int nMaps = getMapdataSize();
-		if (nMaps > mapNum)
+		if (nMaps < mapNum + 1)
 			setMapdataSize(mapNum + 1);
 		int pos = 4 + mapNum * 200;
 		/*
