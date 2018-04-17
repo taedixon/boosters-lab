@@ -197,7 +197,7 @@ public class CSExe {
 		s.rawData = data;
 		s.virtualSize = data.length;
 		s.metaLinearize = false;
-		s.characteristics = 0xE0000040;
+		s.characteristics = 0x40000040;
 		return s;
 	}
 
@@ -331,10 +331,9 @@ public class CSExe {
 						flrNumTag = "0" + flrNumTag; //$NON-NLS-1$
 					PEFile.Section filler = new PEFile.Section();
 					filler.encodeTag(".flr" + flrNumTag); //$NON-NLS-1$
-					int fillSize = s.virtualAddrRelative - lastAddress;
-					filler.rawData = new byte[fillSize];
 					filler.virtualAddrRelative = lastAddress;
-					filler.virtualSize = fillSize;
+					filler.virtualSize = s.virtualAddrRelative - lastAddress;
+					filler.characteristics = 0x00000080;
 					peData.malloc(filler);
 					modified = true;
 				}
@@ -358,7 +357,7 @@ public class CSExe {
 		if (mapNum > MAX_MAPS)
 			throw new RuntimeException("New map number is larger than MAX_MAPS (" + MAX_MAPS + ")!");
 		int nMaps = getMapdataSize();
-		if (nMaps < mapNum)
+		if (nMaps > mapNum)
 			setMapdataSize(mapNum + 1);
 		int pos = 4 + mapNum * 200;
 		/*
