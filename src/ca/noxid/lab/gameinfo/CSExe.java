@@ -313,15 +313,21 @@ public class CSExe {
 		// alignment check
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
 		int lastAddress = 0;
+		String lastSeg = null;
 		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
 		sectionsSorted.sort(sectionSorter);
 		for (PEFile.Section s : peData.sections) {
-			if (lastAddress != 0) {
+			if (lastSeg != null) {
 				if (s.virtualAddrRelative != lastAddress) {
-					StrTools.msgBox(Messages.getString("CSExe.26"));
-					break;
+					String curSeg = s.decodeTag();
+					s.virtualAddrRelative = lastAddress;
+					if (curSeg.equals(".blmap"))
+						updateMapdataRVA(s.virtualAddrRelative);
+					modified = true;
+					StrTools.msgBox(String.format(Messages.getString("CSExe.26"), lastSeg, curSeg));
 				}
 			}
+			lastSeg = s.decodeTag();
 			lastAddress = PEFile.alignForward(s.virtualAddrRelative + s.virtualSize, sectionAlignment);
 		}
 	}
