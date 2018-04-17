@@ -312,16 +312,34 @@ public class CSExe {
 	private void checkSectionAlignment() {
 		// alignment check
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
+		int flrNum = 0;
 		int lastAddress = 0;
+		String lastSeg = null;
 		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
 		sectionsSorted.sort(sectionSorter);
-		for (PEFile.Section s : peData.sections) {
+		for (PEFile.Section s : sectionsSorted) {
+			String curSeg = s.decodeTag();
 			if (lastAddress != 0) {
 				if (s.virtualAddrRelative != lastAddress) {
-					StrTools.msgBox(Messages.getString("CSExe.26"));
-					break;
+					int confirm = JOptionPane.showConfirmDialog(null, String.format(Messages.getString("CSExe.26"), //$NON-NLS-1$
+							lastSeg, curSeg), Messages.getString("CSExe.19"), //$NON-NLS-1$
+							JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
+					if (confirm != JOptionPane.YES_OPTION)
+						continue;
+					String flrNumTag = Integer.toHexString(flrNum++).toUpperCase();
+					if (flrNumTag.length() == 1)
+						flrNumTag = "0" + flrNumTag; //$NON-NLS-1$
+					PEFile.Section filler = new PEFile.Section();
+					filler.encodeTag(".flr" + flrNumTag); //$NON-NLS-1$
+					int fillSize = s.virtualAddrRelative - lastAddress;
+					filler.rawData = new byte[fillSize];
+					filler.virtualAddrRelative = lastAddress;
+					filler.virtualSize = fillSize;
+					peData.malloc(filler);
+					modified = true;
 				}
 			}
+			lastSeg = curSeg;
 			lastAddress = PEFile.alignForward(s.virtualAddrRelative + s.virtualSize, sectionAlignment);
 		}
 	}
