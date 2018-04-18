@@ -197,7 +197,7 @@ public class CSExe {
 		s.rawData = data;
 		s.virtualSize = data.length;
 		s.metaLinearize = false;
-		s.characteristics = 0x40000040;
+		s.characteristics = PEFile.SECCHR_INITIALIZED_DATA | PEFile.SECCHR_READ;
 		return s;
 	}
 
@@ -223,13 +223,13 @@ public class CSExe {
 		if (codeSectionID == -1) {
 			byte[] data = new byte[0x100000];
 			if (codeSection != null)
-				copySection(codeSection, data);
+				copySectionTo(codeSection, data);
 			codeSection = new PEFile.Section();
 			codeSection.encodeTag(".excode");
 			codeSection.rawData = data;
 			codeSection.virtualSize = data.length;
 			codeSection.metaLinearize = true;
-			codeSection.characteristics = 0xE0000040;
+			codeSection.characteristics = PEFile.SECCHR_CODE | PEFile.SECCHR_INITIALIZED_DATA | PEFile.SECCHR_EXECUTE | PEFile.SECCHR_READ | PEFile.SECCHR_WRITE;
 			peData.malloc(codeSection);
 			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.13") //$NON-NLS-1$
@@ -272,7 +272,7 @@ public class CSExe {
 			}
 			peData.sections.remove(codeSection);
 			byte[] data = new byte[newSize];
-			copySection(codeSection, data);
+			copySectionTo(codeSection, data);
 			codeSection.rawData = data;
 			codeSection.virtualSize = data.length;
 			peData.malloc(codeSection);
@@ -283,7 +283,7 @@ public class CSExe {
 		checkSectionAlignment();
 	}
 
-	private void copySection(PEFile.Section section, byte[] data) {
+	private void copySectionTo(PEFile.Section section, byte[] data) {
 		// attempt to copy as much data as possible from old section
 		ByteBuffer oldData = ByteBuffer.allocate(section.virtualSize);
 		oldData.put(section.rawData);
@@ -294,7 +294,7 @@ public class CSExe {
 		oldData.get(data, 0, len);
 	}
 
-	private static final Comparator<PEFile.Section> sectionSorter = new Comparator<PEFile.Section>() {
+	private static final Comparator<PEFile.Section> sortByRVA = new Comparator<PEFile.Section>() {
 
 		@Override
 		public int compare(PEFile.Section o1, PEFile.Section o2) {
@@ -312,11 +312,31 @@ public class CSExe {
 	private void checkSectionAlignment() {
 		// alignment check
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
+		// sort the sections so we go by RVA
+		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
+		sectionsSorted.sort(sortByRVA);
 		int flrNum = 0;
+		// first romp through sections to make sure new filler sections
+		// don't collide with other filler sections
+		for (PEFile.Section s : sectionsSorted) {
+			String seg = s.decodeTag();
+			if (!seg.startsWith(".flr"))
+				continue;
+			if (seg.length() < 6)
+				continue;
+			String segNum = seg.substring(4);
+			if (seg.length() != 2)
+				continue;
+			int segNum2 = Integer.parseUnsignedInt(segNum, 16);
+			if (flrNum < segNum2)
+				flrNum = segNum2;
+		}
 		int lastAddress = 0;
 		String lastSeg = null;
-		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
-		sectionsSorted.sort(sectionSorter);
+		// second romp, this time it's personal
+		// if a section's RVA does not equal lastAddress, that means there's a gap in the virtual layout
+		// for some reason Windows 10 and apparently *only* Windows 10 hates virtual layout gaps
+		// so we plug the gaps up using uninitialized filler sections (.flrXX)
 		for (PEFile.Section s : sectionsSorted) {
 			String curSeg = s.decodeTag();
 			if (lastAddress != 0) {
@@ -333,7 +353,7 @@ public class CSExe {
 					filler.encodeTag(".flr" + flrNumTag); //$NON-NLS-1$
 					filler.virtualAddrRelative = lastAddress;
 					filler.virtualSize = s.virtualAddrRelative - lastAddress;
-					filler.characteristics = 0x00000080;
+					filler.characteristics = PEFile.SECCHR_UNINITIALIZED_DATA;
 					peData.malloc(filler);
 					modified = true;
 				}
@@ -360,10 +380,6 @@ public class CSExe {
 		if (nMaps < mapNum + 1)
 			setMapdataSize(mapNum + 1);
 		int pos = 4 + mapNum * 200;
-		/*
-		if (csmapSection.rawData.length <= (pos + 199))
-			setMapdataSize(mapNum + 1);
-		*/
 		patch(bytes, pos + csmapSection.virtualAddrRelative);
 	}
 
@@ -375,23 +391,6 @@ public class CSExe {
 		sizeBuf.putInt(nMaps);
 		sizeBuf.flip();
 		sizeBuf.get(csmapSection.rawData, 0, 4);
-		// old code that resizes the semgent
-		/*
-		// csmap section no longer valid! get rid of it
-		peData.sections.remove(csmapSection);
-		byte[] sectionData = new byte[nMaps * 200 + 4];
-		System.arraycopy(csmapSection.rawData, 0, sectionData, 0,
-				Math.min(csmapSection.rawData.length, sectionData.length));
-		ByteBuffer sizeBuf = ByteBuffer.allocate(4);
-		sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
-		sizeBuf.putInt(nMaps);
-		sizeBuf.get(sectionData, 0, 4);
-		csmapSection.virtualSize = sectionData.length;
-		csmapSection.rawData = sectionData;
-		// reinstall csmap section now we've fixed it
-		peData.malloc(csmapSection);
-		updateMapdataRVA(csmapSection.virtualAddrRelative);
-		*/
 	}
 
 	public int getMapdataSize() {
@@ -439,28 +438,29 @@ public class CSExe {
 
 	// The newPos given is an RVA
 	private void updateMapdataRVA(int newPos) {
+		// +4 because the int at the start of mapdata
 		newPos += 0x400004;
 		ByteBuffer buf = ByteBuffer.allocate(4);
 		buf.order(ByteOrder.LITTLE_ENDIAN);
 		buf.putInt(0, newPos);
 		patch(buf, pMapdata);
-		patch(buf, 0x020C73);
+		patch(buf, pMapdata + 0x44);
 		buf.putInt(0, newPos + 0x20);
-		patch(buf, 0x020CB5);
-		patch(buf, 0x020CF6);
-		patch(buf, 0x020D38);
+		patch(buf, pMapdata + 0x86);
+		patch(buf, pMapdata + 0xC7);
+		patch(buf, pMapdata + 0x109);
 		buf.putInt(0, newPos + 0x44);
-		patch(buf, 0x020D7A);
+		patch(buf, pMapdata + 0x14B);
 		buf.putInt(0, newPos + 0x40);
-		patch(buf, 0x020D9E);
+		patch(buf, pMapdata + 0x16F);
 		buf.putInt(0, newPos + 0x64);
-		patch(buf, 0x020DD9);
+		patch(buf, pMapdata + 0x1AA);
 		buf.putInt(0, newPos + 0x84);
-		patch(buf, 0x020E1C);
+		patch(buf, pMapdata + 0x1ED);
 		buf.putInt(0, newPos + 0xA4);
-		patch(buf, 0x020EA8);
+		patch(buf, pMapdata + 0x279);
 		buf.putInt(0, newPos + 0xA5);
-		patch(buf, 0x020E6A);
+		patch(buf, pMapdata + 0x23B);
 	}
 
 	public void commit() {

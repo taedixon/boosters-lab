@@ -30,6 +30,13 @@ import java.util.LinkedList;
  * but we do NOT have to fail in this case so long as that is kept in mind.
  */
 public class PEFile {
+	public static final int SECCHR_CODE = 0x20;
+	public static final int SECCHR_INITIALIZED_DATA = 0x40;
+	public static final int SECCHR_UNINITIALIZED_DATA = 0x80;
+	public static final int SECCHR_EXECUTE = 0x20000000;
+	public static final int SECCHR_READ = 0x40000000;
+	public static final int SECCHR_WRITE = 0x80000000;
+	
 	// NOTE: The section headers in this are not to be trusted.
 	// They get rewritten on write().
 	// Also note, this implicitly defines the expectedTex.

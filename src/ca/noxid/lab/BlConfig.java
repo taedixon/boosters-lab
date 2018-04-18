@@ -121,7 +121,7 @@ public class BlConfig {
 	}
 
 	public BlConfig(File configFolder, GameInfo.MOD_TYPE type) {
-		configFile = solveLegacyDirectory(configFile);
+		configFile = solveLegacyDirectory(configFolder);
 		if (type == GameInfo.MOD_TYPE.MOD_CS) {
 			tileSize = 16;
 		}
