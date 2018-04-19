@@ -321,7 +321,7 @@ public class CSExe {
 			String seg = s.decodeTag();
 			if (!seg.startsWith(".flr"))
 				continue;
-			if (seg.length() < 6)
+			if (seg.length() < 8)
 				continue;
 			String segNum = seg.substring(4);
 			if (seg.length() != 2)
