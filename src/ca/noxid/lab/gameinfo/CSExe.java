@@ -157,7 +157,7 @@ public class CSExe {
 		} else
 			csmapSection = peData.sections.get(mapSection);
 
-		checkSectionAlignment();
+		fixVirtualLayoutGaps();
 
 		// check (C)Pixel
 		ByteBuffer pBuf = read(0x08C4D8, 1);
@@ -280,7 +280,7 @@ public class CSExe {
 			StrTools.msgBox(Messages.getString("CSExe.22") + Integer.toHexString(newSize).toUpperCase()); //$NON-NLS-1$
 			break;
 		}
-		checkSectionAlignment();
+		fixVirtualLayoutGaps();
 	}
 
 	private void copySectionTo(PEFile.Section section, byte[] data) {
@@ -309,8 +309,7 @@ public class CSExe {
 
 	};
 
-	private void checkSectionAlignment() {
-		// alignment check
+	private void fixVirtualLayoutGaps() {
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
 		// sort the sections so we go by RVA
 		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
@@ -327,7 +326,14 @@ public class CSExe {
 			String segNum = seg.substring(4);
 			if (seg.length() != 2)
 				continue;
-			int segNum2 = Integer.parseUnsignedInt(segNum, 16);
+			int segNum2 = 0;
+			try {
+			segNum2 = Integer.parseUnsignedInt(segNum, 16);
+			} catch (NumberFormatException e) {
+				// last 4 characters are not a valid hex number
+				// not a filler segment, outta here!
+				continue;
+			}
 			if (flrNum < segNum2)
 				flrNum = segNum2;
 		}
@@ -347,8 +353,9 @@ public class CSExe {
 					if (confirm != JOptionPane.YES_OPTION)
 						continue;
 					String flrNumTag = Integer.toHexString(flrNum++).toUpperCase();
-					if (flrNumTag.length() == 1)
+					while (flrNumTag.length() < 4)
 						flrNumTag = "0" + flrNumTag; //$NON-NLS-1$
+					flrNumTag = flrNumTag.substring(0, 4);
 					PEFile.Section filler = new PEFile.Section();
 					filler.encodeTag(".flr" + flrNumTag); //$NON-NLS-1$
 					filler.virtualAddrRelative = lastAddress;
