@@ -219,7 +219,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		// blazed
 		if (!new File("nofun").exists()) {
 			Calendar cal = Calendar.getInstance();
-			if (new File("swerryday").exists() || cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
+			if (new File("weed").exists() || cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
 				blazed = true;
 		}
 
