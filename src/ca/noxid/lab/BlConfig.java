@@ -178,7 +178,6 @@ public class BlConfig {
 			}
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			StrTools.msgBox("Error writing to " + configFile + " !");
 		}
@@ -193,6 +192,9 @@ public class BlConfig {
 	private File solveLegacyDirectory(File dataDir) {
 		File canonicalFile = new File(dataDir, ".boostlab/" + CONFIGNAME);
 		if (canonicalFile.exists()) {
+			if (canonicalFile.isDirectory())
+				// you what
+				canonicalFile.delete();
 			return canonicalFile;
 		}
 		// the new-style project directory may not exist. If it doesn't, create it.
