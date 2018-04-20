@@ -182,6 +182,7 @@ public class CSExe {
 	public void updateExcode() throws IOException {
 		if (csmapSection == null)
 			throw new IOException("\".csmap\" section not found!");
+		removeFillerSections();
 		int codeSectionID = peData.getSectionIndexByTag(".excode");
 		PEFile.Section codeSection = null;
 		if (codeSectionID != -1) {
@@ -307,6 +308,14 @@ public class CSExe {
 		}
 		return false;
 	}
+	
+	private void removeFillerSections() {
+		LinkedList<PEFile.Section> sectionsCopy = new LinkedList<PEFile.Section>(peData.sections);
+		for (PEFile.Section s : sectionsCopy) {
+			if (isFillerSection(s))
+				peData.sections.remove(s);
+		}
+	}
 
 	private void fixVirtualLayoutGaps() {
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
@@ -404,11 +413,7 @@ public class CSExe {
 	
 	public void prepareToDeleteMaps() {
 		// remove all filler sections
-		LinkedList<PEFile.Section> sectionsCopy = new LinkedList<PEFile.Section>(peData.sections);
-		for (PEFile.Section s : sectionsCopy) {
-			if (isFillerSection(s))
-				peData.sections.remove(s);
-		}
+		removeFillerSections();
 	}
 
 	public void setMapdataSize(int nMaps) {
