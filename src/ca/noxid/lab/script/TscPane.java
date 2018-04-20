@@ -1044,9 +1044,10 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	}
 
 	private void highlightDoc(StyledDocument doc, int first, int last) {
-		if (last < first) {
+		if (first < 0)
+			first = 0;
+		if (last < first)
 			last = Integer.MAX_VALUE;
-		}
 		TscLexer lexer = new TscLexer();
 		try {
 			lexer.reset(new StringReader(doc.getText(0, doc.getLength())), first, -1, 0);
@@ -1263,9 +1264,9 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				break;
 			}
 		}
-
+		sc.close();
 		//colour it
-		highlightDoc((StyledDocument) area.getDocument(), startLine - 1, startLine + 1);
+		highlightDoc((StyledDocument) area.getDocument(), startLine - 50, startLine + 50);
 		markChanged();
 	}
 
@@ -1296,9 +1297,9 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					break;
 				}
 			}
-
+			sc.close();
 			//colour it
-			highlightDoc(this.getStyledDocument(), startLine - 1, startLine + 1);
+			highlightDoc(this.getStyledDocument(), startLine - 50, startLine + 50);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

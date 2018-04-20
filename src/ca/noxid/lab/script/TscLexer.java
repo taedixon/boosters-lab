@@ -129,10 +129,11 @@ public class TscLexer {
 					}
 				}
 				nextToken = new TscToken(TscPane.STYLE_NUM, tokenStr, lineNum, character, character + c.paramLen[paramNum]);
-				if (lastToken.getContents().equals("<FAC") && //$NON-NLS-1$
-						tokenStr.equals("0000")) //$NON-NLS-1$
-				{
-					isFace = false;
+				if (lastToken.getContents().equals("<FAC")) { //$NON-NLS-1$
+					if (tokenStr.equals("0000")) //$NON-NLS-1$
+						isFace = false;
+					else
+						isFace = true;
 				}
 				character += c.paramLen[paramNum];
 				strPos += c.paramLen[paramNum];
@@ -171,27 +172,20 @@ public class TscLexer {
 				cmd = tokenStr;
 				paramNum = 0;
 				if (cmdMap.containsKey(cmd)) {
-					argsRemaining = cmdMap.get(cmd).numParam;
-				} else {
-					argsRemaining = 0;
-				}
-				if (cmd.equals("<FAC")) //$NON-NLS-1$
-				{
-					isFace = true;
-				}
-				if (cmdMap.containsKey(cmd)) {
 					TscCommand cmdDef = cmdMap.get(cmd);
+					argsRemaining = cmdDef.numParam;
 					if (cmdDef.endsEvent)
 						wasEnded = true;
 					if (cmdDef.clearsMsg) {
 						charCount = 0;
 						overLimit = false;
 					}
+				} else {
+					argsRemaining = 0;
 				}
 				nextToken = new TscToken(TscPane.STYLE_TAG, tokenStr, lineNum, character, character + 4);
 				character += 4;
 				strPos += 4;
-
 			} else if (nextChar == '/' && line.length() > strPos + 1
 					&& line.charAt(strPos + 1) == '/') { // comment
 				tokenStr = line.substring(strPos);
