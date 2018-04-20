@@ -1064,6 +1064,11 @@ public class GameInfo {
 			return arg1.startsWith(gameConfig.getBackgroundPrefix()) && arg1.endsWith(imageExtension);
 		}		
 	}
+	
+	public void prepareToDeleteMaps() {
+		if (executable != null)
+			executable.prepareToDeleteMaps();
+	}
 
 	/**
 	 * p
@@ -1079,6 +1084,11 @@ public class GameInfo {
 				executable.setMapdataSize(mapdataStore.size());
 			}
 		}
+	}
+	
+	public void doneDeletingMaps() {
+		if (executable != null)
+			executable.doneDeletingMaps();
 	}
 	
 	private void revalidateMapNumbers(EditorApp parent) {

@@ -90,9 +90,6 @@ public class CSExe {
 	private static final int pMapdata = 0x20C2F; // address of the pointer to map data
 	// private static final int mapdataLoc = 0x937B0; // address of the original
 	// mapdata
-	public static final int MAX_MAPS = 1024; // maximum number of maps
-	private static final int mapdataSize = 4 + MAX_MAPS * 200; // size of mapdata segment, enough for MAX_MAPS maps
-																// (+4 bytes for the map count)
 
 	CSExe(File inFile) throws IOException {
 		location = inFile;
@@ -115,46 +112,35 @@ public class CSExe {
 
 		peData = new PEFile(bb, 0x1000);
 
-		int mapSection = peData.getSectionIndexByTag(".blmap");
+		int mapSection = peData.getSectionIndexByTag(".csmap");
 
 		if (mapSection == -1) {
-			int oldMapSection = peData.getSectionIndexByTag(".csmap");
-			if (oldMapSection == -1) {
-				int sueSection = peData.getSectionIndexByTag(".swdata");
-				if ((sueSection != -1) && (sueSection == (peData.sections.size() - 1))) {
-					// Sue's Workshop has interfered. Fix this.
-					int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), //$NON-NLS-1$
-							Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
-					if (response != JOptionPane.YES_OPTION) {
-						// ;.;
-						System.exit(4);
-					}
-					PEFile.Section removeMe = peData.sections.get(sueSection);
-					csmapSection = universalMapDataPortMechanism(true);
-					peData.sections.remove(removeMe);
-					peData.malloc(csmapSection);
-					updateMapdataRVA(csmapSection.virtualAddrRelative);
-					// oh shit
-					StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
-					commit();
-				} else {
-					// good ol vanilla CS
-					csmapSection = universalMapDataPortMechanism(false);
-					peData.malloc(csmapSection);
-					updateMapdataRVA(csmapSection.virtualAddrRelative);
-					commit();
+			int sueSection = peData.getSectionIndexByTag(".swdata");
+			if ((sueSection != -1) && (sueSection == (peData.sections.size() - 1))) {
+				// Sue's Workshop has interfered. Fix this.
+				int response = JOptionPane.showConfirmDialog(null, Messages.getString("CSExe.5"), //$NON-NLS-1$
+						Messages.getString("CSExe.8"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+				if (response != JOptionPane.YES_OPTION) {
+					// ;.;
+					System.exit(4);
 				}
-			} else {
-				// Cave Editor/old Booster's Lab
-				PEFile.Section removeMe = peData.sections.get(oldMapSection);
+				PEFile.Section removeMe = peData.sections.get(sueSection);
 				csmapSection = universalMapDataPortMechanism(true);
 				peData.sections.remove(removeMe);
 				peData.malloc(csmapSection);
 				updateMapdataRVA(csmapSection.virtualAddrRelative);
-				StrTools.msgBox(Messages.getString("CSExe.25")); //$NON-NLS-1$
+				// oh shit
+				StrTools.msgBox(Messages.getString("CSExe.1")); //$NON-NLS-1$
+				commit();
+			} else {
+				// good ol vanilla CS
+				csmapSection = universalMapDataPortMechanism(false);
+				peData.malloc(csmapSection);
+				updateMapdataRVA(csmapSection.virtualAddrRelative);
 				commit();
 			}
 		} else
+			// .csmap already exists, just grab it
 			csmapSection = peData.sections.get(mapSection);
 
 		fixVirtualLayoutGaps();
@@ -168,8 +154,8 @@ public class CSExe {
 		}
 	}
 
-	// The map porting mechanism. Creates .blmap, but does not set as such.
-	// DO NOT call if a .blmap already exists!
+	// The map porting mechanism. Creates .csmap, but does not set as such.
+	// DO NOT call if a .csmap already exists!
 	private PEFile.Section universalMapDataPortMechanism(boolean allAvailableMaps) throws IOException {
 		if (csmapSection != null)
 			throw new IOException(
@@ -182,18 +168,10 @@ public class CSExe {
 		int areaMapCount = area / 200;
 		if ((areaMapCount < mapCount) || allAvailableMaps)
 			mapCount = areaMapCount;
-		byte[] data = new byte[mapdataSize + 4];
-		ByteBuffer countBuf = ByteBuffer.allocate(4);
-		countBuf.order(ByteOrder.LITTLE_ENDIAN);
-		countBuf.putInt(0, mapCount);
-		countBuf.get(data, 0, 4);
-		int len = data.length - 4;
-		int bbR = bb.remaining();
-		if (bbR < len)
-			len = bbR;
-		bb.get(data, 4, bbR);
+		byte[] data = new byte[mapCount * 200];
+		bb.get(data);
 		PEFile.Section s = new PEFile.Section();
-		s.encodeTag(".blmap");
+		s.encodeTag(".csmap");
 		s.rawData = data;
 		s.virtualSize = data.length;
 		s.metaLinearize = false;
@@ -203,14 +181,14 @@ public class CSExe {
 
 	public void updateExcode() throws IOException {
 		if (csmapSection == null)
-			throw new IOException("\".blmap\" section not found!");
+			throw new IOException("\".csmap\" section not found!");
 		int codeSectionID = peData.getSectionIndexByTag(".excode");
 		PEFile.Section codeSection = null;
 		if (codeSectionID != -1) {
 			codeSection = peData.sections.get(codeSectionID);
 			for (PEFile.Section seg : peData.sections) {
 				String segN = seg.decodeTag();
-				if (segN.equals(".rsrc") || segN.equals(".blmap"))
+				if (segN.equals(".rsrc") || segN.equals(".csmap"))
 					continue;
 				if (codeSection.virtualAddrRelative < seg.virtualAddrRelative) {
 					StrTools.msgBox(Messages.getString("CSExe.11") + segN + " " + Messages.getString("CSExe.12")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -229,7 +207,8 @@ public class CSExe {
 			codeSection.rawData = data;
 			codeSection.virtualSize = data.length;
 			codeSection.metaLinearize = true;
-			codeSection.characteristics = PEFile.SECCHR_CODE | PEFile.SECCHR_INITIALIZED_DATA | PEFile.SECCHR_EXECUTE | PEFile.SECCHR_READ | PEFile.SECCHR_WRITE;
+			codeSection.characteristics = PEFile.SECCHR_CODE | PEFile.SECCHR_INITIALIZED_DATA | PEFile.SECCHR_EXECUTE
+					| PEFile.SECCHR_READ | PEFile.SECCHR_WRITE;
 			peData.malloc(codeSection);
 			modified = true;
 			StrTools.msgBox(Messages.getString("CSExe.13") //$NON-NLS-1$
@@ -308,6 +287,26 @@ public class CSExe {
 		}
 
 	};
+	
+	private String getFillerSectionTag(int flrNum) {
+		String flrNumTag = Integer.toHexString(flrNum).toUpperCase();
+		while (flrNumTag.length() < 4)
+			flrNumTag = "0" + flrNumTag; //$NON-NLS-1$
+		return flrNumTag;
+	}
+	
+	private boolean isFillerSection(PEFile.Section s) {
+		String sTag = s.decodeTag();
+		if (sTag.length() == 8 && sTag.startsWith(".flr")) {
+			try {
+				Integer.parseUnsignedInt(sTag.substring(4), 16);
+			} catch (NumberFormatException e) {
+				return false;
+			}
+			return (s.characteristics & PEFile.SECCHR_UNINITIALIZED_DATA) != 0;
+		}
+		return false;
+	}
 
 	private void fixVirtualLayoutGaps() {
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
@@ -328,7 +327,7 @@ public class CSExe {
 				continue;
 			int segNum2 = 0;
 			try {
-			segNum2 = Integer.parseUnsignedInt(segNum, 16);
+				segNum2 = Integer.parseUnsignedInt(segNum, 16);
 			} catch (NumberFormatException e) {
 				// last 4 characters are not a valid hex number
 				// not a filler segment, outta here!
@@ -340,8 +339,10 @@ public class CSExe {
 		int lastAddress = 0;
 		String lastSeg = null;
 		// second romp, this time it's personal
-		// if a section's RVA does not equal lastAddress, that means there's a gap in the virtual layout
-		// for some reason Windows 10 and apparently *only* Windows 10 hates virtual layout gaps
+		// if a section's RVA does not equal lastAddress, that means there's a gap in
+		// the virtual layout
+		// for some reason Windows 10 and apparently *only* Windows 10 hates virtual
+		// layout gaps
 		// so we plug the gaps up using uninitialized filler sections (.flrXX)
 		for (PEFile.Section s : sectionsSorted) {
 			String curSeg = s.decodeTag();
@@ -350,17 +351,31 @@ public class CSExe {
 					int confirm = JOptionPane.showConfirmDialog(null, String.format(Messages.getString("CSExe.26"), //$NON-NLS-1$
 							lastSeg, curSeg), Messages.getString("CSExe.19"), //$NON-NLS-1$
 							JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
-					if (confirm != JOptionPane.YES_OPTION)
+					if (confirm != JOptionPane.YES_OPTION) {
+						lastSeg = curSeg;
+						lastAddress = PEFile.alignForward(s.virtualAddrRelative + s.virtualSize, sectionAlignment);
 						continue;
-					String flrNumTag = Integer.toHexString(flrNum++).toUpperCase();
-					while (flrNumTag.length() < 4)
-						flrNumTag = "0" + flrNumTag; //$NON-NLS-1$
-					flrNumTag = flrNumTag.substring(0, 4);
-					PEFile.Section filler = new PEFile.Section();
-					filler.encodeTag(".flr" + flrNumTag); //$NON-NLS-1$
-					filler.virtualAddrRelative = lastAddress;
-					filler.virtualSize = s.virtualAddrRelative - lastAddress;
-					filler.characteristics = PEFile.SECCHR_UNINITIALIZED_DATA;
+					}
+					// check if there's already a filler section here
+					PEFile.Section filler = null;
+					String flrNumTag = getFillerSectionTag(flrNum);
+					int fillerID = peData.getSectionIndexByTag(flrNumTag);
+					if (fillerID != -1)
+						filler = peData.sections.get(fillerID);
+					if (filler != null && isFillerSection(filler)) {
+						// resize old filler section
+						peData.sections.remove(filler);
+						filler.virtualSize = s.virtualAddrRelative - lastAddress;
+					} else {
+						// create new filler section
+						flrNumTag = getFillerSectionTag(flrNum++);
+						flrNumTag = flrNumTag.substring(0, 4);
+						filler = new PEFile.Section();
+						filler.encodeTag(".flr" + flrNumTag); //$NON-NLS-1$
+						filler.virtualAddrRelative = lastAddress;
+						filler.virtualSize = s.virtualAddrRelative - lastAddress;
+						filler.characteristics = PEFile.SECCHR_UNINITIALIZED_DATA | PEFile.SECCHR_READ | PEFile.SECCHR_WRITE;
+					}
 					peData.malloc(filler);
 					modified = true;
 				}
@@ -372,8 +387,8 @@ public class CSExe {
 
 	// Gets a ByteBuffer for passing to Mapdata
 	public ByteBuffer loadMaps() {
-		byte[] dataCopy = new byte[mapdataSize - 4];
-		System.arraycopy(csmapSection.rawData, 4, dataCopy, 0, dataCopy.length);
+		byte[] dataCopy = new byte[getMapdataSize() * 200];
+		System.arraycopy(csmapSection.rawData, 0, dataCopy, 0, dataCopy.length);
 		ByteBuffer bb = ByteBuffer.wrap(dataCopy);
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		return bb;
@@ -381,30 +396,41 @@ public class CSExe {
 
 	// Takes a Mapdata-output ByteBuffer and puts it in the executable
 	public void saveMap(ByteBuffer bytes, int mapNum) {
-		if (mapNum > MAX_MAPS)
-			throw new RuntimeException("New map number is larger than MAX_MAPS (" + MAX_MAPS + ")!");
-		int nMaps = getMapdataSize();
-		if (nMaps < mapNum + 1)
+		int pos = mapNum * 200;
+		if (csmapSection.rawData.length <= (pos + 199))
 			setMapdataSize(mapNum + 1);
-		int pos = 4 + mapNum * 200;
 		patch(bytes, pos + csmapSection.virtualAddrRelative);
+	}
+	
+	public void prepareToDeleteMaps() {
+		// remove all filler sections
+		LinkedList<PEFile.Section> sectionsCopy = new LinkedList<PEFile.Section>(peData.sections);
+		for (PEFile.Section s : sectionsCopy) {
+			if (isFillerSection(s))
+				peData.sections.remove(s);
+		}
 	}
 
 	public void setMapdataSize(int nMaps) {
-		if (nMaps > MAX_MAPS)
-			throw new RuntimeException("New map number is larger than MAX_MAPS (" + MAX_MAPS + ")!");
-		ByteBuffer sizeBuf = ByteBuffer.allocate(4);
-		sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
-		sizeBuf.putInt(nMaps);
-		sizeBuf.flip();
-		sizeBuf.get(csmapSection.rawData, 0, 4);
+		// csmap section no longer valid! get rid of it
+		peData.sections.remove(csmapSection);
+		byte[] sectionData = new byte[nMaps * 200];
+		System.arraycopy(csmapSection.rawData, 0, sectionData, 0,
+				Math.min(csmapSection.rawData.length, sectionData.length));
+		csmapSection.virtualSize = sectionData.length;
+		csmapSection.rawData = sectionData;
+		// reinstall csmap section now we've fixed it
+		peData.malloc(csmapSection);
+		updateMapdataRVA(csmapSection.virtualAddrRelative);
+	}
+	
+	public void doneDeletingMaps() {
+		// reinstall filler sections
+		fixVirtualLayoutGaps();
 	}
 
 	public int getMapdataSize() {
-		ByteBuffer sizeBuf = ByteBuffer.allocate(4);
-		sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
-		sizeBuf.put(csmapSection.rawData, 0, 4);
-		return sizeBuf.getInt(0);
+		return csmapSection.rawData.length / 200;
 	}
 
 	public void patch(ByteBuffer data, int offset) {
@@ -446,7 +472,7 @@ public class CSExe {
 	// The newPos given is an RVA
 	private void updateMapdataRVA(int newPos) {
 		// +4 because the int at the start of mapdata
-		newPos += 0x400004;
+		newPos += 0x400000;
 		ByteBuffer buf = ByteBuffer.allocate(4);
 		buf.order(ByteOrder.LITTLE_ENDIAN);
 		buf.putInt(0, newPos);

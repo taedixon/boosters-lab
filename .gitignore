@@ -45,3 +45,4 @@ bin/
 *.DS_Store
 *.patch
 log.*
+nofun

@@ -2025,15 +2025,6 @@ public class EditorApp extends JFrame implements ActionListener {
 			if (exeData == null) {
 				return;
 			}
-			if (exeData.type == GameInfo.MOD_TYPE.MOD_CS && exeData.getExe() != null) {
-				// standard CS exe
-				// make sure we don't go over the max map amount
-				if (exeData.getMapdata().length >= CSExe.MAX_MAPS) {
-					StrTools.msgBox(String.format(Messages.getString("EditorApp.167"), //$NON-NLS-1$
-							Integer.toUnsignedString(CSExe.MAX_MAPS)));
-					return;
-				}
-			}
 			Mapdata d = exeData.addMap();
 			new MapdataDialog(this, d.getMapnum(), exeData, iMan.getImg(ResourceManager.rsrcBgBlue)); // $NON-NLS-1$
 			mapList.setListData(exeData.getMapNames());
@@ -2045,15 +2036,6 @@ public class EditorApp extends JFrame implements ActionListener {
 			// don't do if we ain't loaded
 			if (exeData == null) {
 				return;
-			}
-			if (exeData.type == GameInfo.MOD_TYPE.MOD_CS && exeData.getExe() != null) {
-				// standard CS exe
-				// make sure we don't go over the max map amount
-				if (exeData.getMapdata().length >= CSExe.MAX_MAPS) {
-					StrTools.msgBox(String.format(Messages.getString("EditorApp.167"), //$NON-NLS-1$
-							Integer.toUnsignedString(CSExe.MAX_MAPS)));
-					return;
-				}
 			}
 			exeData.duplicateMap(selectedMap);
 			mapList.setListData(exeData.getMapNames());
@@ -2183,6 +2165,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			indices[i] = Integer.parseInt(mapstrs.get(i).split("\\s+")[0]);
 		}
 		java.util.Arrays.sort(indices);
+		exeData.prepareToDeleteMaps();
 		// remove top-down so as not to disturb the natural order.
 		for (int i = indices.length - 1; i >= 0; i--) {
 			Mapdata d = exeData.getMapdata(indices[i]);
@@ -2193,6 +2176,7 @@ public class EditorApp extends JFrame implements ActionListener {
 				exeData.deleteMap(indices[i], this);
 			}
 		}
+		exeData.doneDeletingMaps();
 		mapList.setListData(exeData.getMapNames());
 	}
 
