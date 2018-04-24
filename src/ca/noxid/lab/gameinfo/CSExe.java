@@ -241,8 +241,6 @@ public class CSExe {
 				break;
 			}
 			newSize = newVal;
-			System.out.println("current size: 0x" + Integer.toHexString(codeSection.virtualSize).toUpperCase());
-			System.out.println("wanted new size: 0x" + Integer.toHexString(newSize).toUpperCase());
 			if (newSize < codeSection.virtualSize) {
 				int confirm = JOptionPane.showConfirmDialog(null, String.format(Messages.getString("CSExe.18"), //$NON-NLS-1$
 						Integer.toHexString(codeSection.virtualSize - newSize)), Messages.getString("CSExe.19"), //$NON-NLS-1$
@@ -293,7 +291,9 @@ public class CSExe {
 		String flrNumTag = Integer.toHexString(flrNum).toUpperCase();
 		while (flrNumTag.length() < 4)
 			flrNumTag = "0" + flrNumTag; //$NON-NLS-1$
-		return flrNumTag;
+		if (flrNumTag.length() > 4)
+			flrNumTag = flrNumTag.substring(0, 4);
+		return ".flr" + flrNumTag; //$NON-NLS-1$
 	}
 	
 	private boolean isFillerSection(PEFile.Section s) {
@@ -310,41 +310,48 @@ public class CSExe {
 	}
 	
 	private void removeFillerSections() {
-		LinkedList<PEFile.Section> sectionsCopy = new LinkedList<PEFile.Section>(peData.sections);
-		for (PEFile.Section s : sectionsCopy) {
+		LinkedList<PEFile.Section> secsToRem = new LinkedList<PEFile.Section>();
+		for (PEFile.Section s : peData.sections) {
 			if (isFillerSection(s))
-				peData.sections.remove(s);
+				secsToRem.add(s);
 		}
+		peData.sections.removeAll(secsToRem);
+	}
+	
+	private void mallocFiller(int num, int addr, int size) {
+		PEFile.Section filler = new PEFile.Section();
+		filler.encodeTag(getFillerSectionTag(num));
+		filler.virtualAddrRelative = addr;
+		filler.virtualSize = size;
+		filler.characteristics = PEFile.SECCHR_UNINITIALIZED_DATA | PEFile.SECCHR_READ | PEFile.SECCHR_WRITE;
+		peData.malloc(filler);
+		modified = true;
 	}
 
+	// NOTE: I recommend invoking removeFillerSections before this
 	private void fixVirtualLayoutGaps() {
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
 		// sort the sections so we go by RVA
 		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
 		sectionsSorted.sort(sortByRVA);
+		// first romp to get first free filler section number
 		int flrNum = 0;
-		// first romp through sections to make sure new filler sections
-		// don't collide with other filler sections
 		for (PEFile.Section s : sectionsSorted) {
-			String seg = s.decodeTag();
-			if (!seg.startsWith(".flr"))
+			if (!isFillerSection(s))
 				continue;
-			if (seg.length() < 8)
-				continue;
-			String segNum = seg.substring(4);
-			if (seg.length() != 2)
-				continue;
-			int segNum2 = 0;
+			String segNumStr = s.decodeTag().substring(4);
+			int segNum = 0;
 			try {
-				segNum2 = Integer.parseUnsignedInt(segNum, 16);
+				segNum = Integer.parseUnsignedInt(segNumStr, 16);
 			} catch (NumberFormatException e) {
 				// last 4 characters are not a valid hex number
 				// not a filler segment, outta here!
 				continue;
 			}
-			if (flrNum < segNum2)
-				flrNum = segNum2;
+			if (flrNum < segNum)
+				flrNum = segNum;
 		}
+		flrNum++;
 		int lastAddress = 0;
 		String lastSeg = null;
 		// second romp, this time it's personal
@@ -352,7 +359,7 @@ public class CSExe {
 		// the virtual layout
 		// for some reason Windows 10 and apparently *only* Windows 10 hates virtual
 		// layout gaps
-		// so we plug the gaps up using uninitialized filler sections (.flrXX)
+		// so we plug the gaps up using uninitialized filler sections (.flrXXXX)
 		for (PEFile.Section s : sectionsSorted) {
 			String curSeg = s.decodeTag();
 			if (lastAddress != 0) {
@@ -365,28 +372,8 @@ public class CSExe {
 						lastAddress = PEFile.alignForward(s.virtualAddrRelative + s.virtualSize, sectionAlignment);
 						continue;
 					}
-					// check if there's already a filler section here
-					PEFile.Section filler = null;
-					String flrNumTag = getFillerSectionTag(flrNum);
-					int fillerID = peData.getSectionIndexByTag(flrNumTag);
-					if (fillerID != -1)
-						filler = peData.sections.get(fillerID);
-					if (filler != null && isFillerSection(filler)) {
-						// resize old filler section
-						peData.sections.remove(filler);
-						filler.virtualSize = s.virtualAddrRelative - lastAddress;
-					} else {
-						// create new filler section
-						flrNumTag = getFillerSectionTag(flrNum++);
-						flrNumTag = flrNumTag.substring(0, 4);
-						filler = new PEFile.Section();
-						filler.encodeTag(".flr" + flrNumTag); //$NON-NLS-1$
-						filler.virtualAddrRelative = lastAddress;
-						filler.virtualSize = s.virtualAddrRelative - lastAddress;
-						filler.characteristics = PEFile.SECCHR_UNINITIALIZED_DATA | PEFile.SECCHR_READ | PEFile.SECCHR_WRITE;
-					}
-					peData.malloc(filler);
-					modified = true;
+					// create new filler section
+					mallocFiller(flrNum++, lastAddress, s.virtualAddrRelative - lastAddress);
 				}
 			}
 			lastSeg = curSeg;
@@ -426,12 +413,13 @@ public class CSExe {
 		csmapSection.rawData = sectionData;
 		// reinstall csmap section now we've fixed it
 		peData.malloc(csmapSection);
-		updateMapdataRVA(csmapSection.virtualAddrRelative);
 	}
 	
 	public void doneDeletingMaps() {
 		// reinstall filler sections
 		fixVirtualLayoutGaps();
+		// update mapdata RVA
+		updateMapdataRVA(csmapSection.virtualAddrRelative);
 	}
 
 	public int getMapdataSize() {
