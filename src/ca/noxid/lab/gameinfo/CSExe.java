@@ -464,7 +464,6 @@ public class CSExe {
 
 	// The newPos given is an RVA
 	private void updateMapdataRVA(int newPos) {
-		// +4 because the int at the start of mapdata
 		newPos += 0x400000;
 		ByteBuffer buf = ByteBuffer.allocate(4);
 		buf.order(ByteOrder.LITTLE_ENDIAN);
@@ -508,7 +507,7 @@ public class CSExe {
 		if (outloc == location) {
 			// backup existing file
 			try {
-				File backuploc = new File(location + ".blbkp");
+				File backuploc = new File(location + ".blbkp"); //$NON-NLS-1$
 				FileInputStream iStream = new FileInputStream(location);
 				FileChannel cInput = iStream.getChannel();
 				oStream = new FileOutputStream(backuploc);
