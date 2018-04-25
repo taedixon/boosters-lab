@@ -28,6 +28,8 @@ import java.util.LinkedList;
  * If this is not the case, then Xin probably started cannibalizing it and we
  * should just pretend it's not a resource section,
  * but we do NOT have to fail in this case so long as that is kept in mind.
+ * 
+ * @author 20kdc
  */
 public class PEFile {
 	public static final int SECCHR_CODE = 0x20;
