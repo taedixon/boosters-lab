@@ -45,6 +45,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	private static Vector<TscCommand> commandInf = getCommands();
 	private static List<String> musicList = getMusicList();
 	private static List<String> sfxList = getSfxList();
+	private static List<String> equipList = getEquipList();
 	private static Vector<String> def1 = new Vector<>();
 	private static Vector<String> def2 = new Vector<>();
 	private final JTextArea comLabel = new JTextArea(Messages.getString("TscPane.9"), 2, 18); //$NON-NLS-1$
@@ -310,17 +311,20 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			return;
 		}
 
-		if (selCom.numParam <= 0) {
-			return;
+		int commandSize = 4;
+		for (int i = 0; i < selCom.numParam; i++) {
+			commandSize += selCom.paramLen[i];
+			if (selCom.paramSep && i < selCom.numParam - 1)
+				commandSize++;
 		}
-		int commandSize = selCom.paramLen + selCom.numParam * (selCom.paramSep ? selCom.paramLen + 1 : selCom.paramLen) - 1;
-		if (selCom.numParam < 2) commandSize -= 1;
-		if (cmd.length() > commandSize) {
+		int paramStart = 4;
+		if (cmd.length() >= commandSize) {
 			for (int i = 0; i < selCom.numParam; i++) {
-				int paramInt = selCom.paramLen;
+				int paramLen = selCom.paramLen[i];
+				String arg = cmd.substring(paramStart, paramStart + paramLen);
+				paramStart += paramLen;
 				if (selCom.paramSep)
-					paramInt++;
-				String arg = cmd.substring(4 + i * paramInt, 4 + selCom.paramLen + i * paramInt);
+					paramStart++;
 				addCommandExtra(selCom.CE_param[i], arg);
 			}
 		}
@@ -333,6 +337,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		put('A', "Ammo");
 		put('d', "Direction");
 		put('e', "Event");
+		put('E', "Equip");
 		put('f', "Face");
 		put('F', "Flag");
 		put('g', "Graphic");
@@ -485,6 +490,22 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 			} catch (Exception ignored) {
 				jp.add(new JLabel(argNum + ""));
 			}
+			break;
+		case 'E': //equip
+			if (equipList == null) {
+				jp.add(new JLabel(argNum + ""));
+				break;
+			}
+			String eq = "";
+			for (int i = 0; i < 16; i++)
+				if ((argNum & (1 << i)) != 0)
+					eq += equipList.get(i) + " + ";
+			if (eq.isEmpty())
+				eq = "None";
+			else
+				eq = eq.substring(0, eq.length() - 3);
+			jp.add(new JLabel(eq));
+			break;
 		}
 		commandListExtras.add(jp);
 	}
@@ -1023,9 +1044,10 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 	}
 
 	private void highlightDoc(StyledDocument doc, int first, int last) {
-		if (last < first) {
+		if (first < 0)
+			first = 0;
+		if (last < first)
 			last = Integer.MAX_VALUE;
-		}
 		TscLexer lexer = new TscLexer();
 		try {
 			lexer.reset(new StringReader(doc.getText(0, doc.getLength())), first, -1, 0);
@@ -1099,7 +1121,6 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				//read the CE parameters
 				newCommand.CE_param = new char[4];
 				tokenizer.nextToken();
-				//System.out.println(tokenizer.sval);
 				tokenizer.sval.getChars(0, 4, newCommand.CE_param, 0);
 				//read short name
 				tokenizer.nextToken();
@@ -1108,20 +1129,23 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				tokenizer.nextToken();
 				newCommand.description = tokenizer.sval;
 				if (advanced) {
-					//read end event
 					tokenizer.parseNumbers();
+					//read end event
 					tokenizer.nextToken();
 					newCommand.endsEvent = tokenizer.nval > 0;
 					// read clear msgbox
-					tokenizer.parseNumbers();
 					tokenizer.nextToken();
 					newCommand.clearsMsg = tokenizer.nval > 0;
 					// read parameter seperator
 					tokenizer.nextToken();
 					newCommand.paramSep = tokenizer.nval > 0;
 					// read parameter length
-					tokenizer.nextToken();
-					newCommand.paramLen = (int) tokenizer.nval;
+					int[] paramLen = new int[4];
+					for (int j = 0; j < paramLen.length; j++) {
+						tokenizer.nextToken();
+						paramLen[j] = (int) tokenizer.nval;
+					}
+					newCommand.paramLen = paramLen;
 				} else {
 					if (newCommand.commandCode.equals("<END") ||  //$NON-NLS-1$
 							newCommand.commandCode.equals("<TRA") ||  //$NON-NLS-1$
@@ -1140,7 +1164,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 						newCommand.clearsMsg = true;
 					}
 					newCommand.paramSep = true;
-					newCommand.paramLen = 4;
+					newCommand.paramLen = new int[] {4, 4, 4, 4};
 				}
 				tokenizer.resetSyntax();
 				tokenizer.whitespaceChars(0, 0x20);
@@ -1191,6 +1215,22 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 
 		return rv;
 	}
+	
+	private static ArrayList<String> getEquipList() {
+		ArrayList<String> rv = new ArrayList<>();
+		try {
+			Scanner sc = new Scanner(new File("equipList.txt"));
+			while (sc.hasNext()) {
+				String sfxName = sc.nextLine();
+				rv.add(sfxName);
+			}
+			sc.close();
+		} catch (FileNotFoundException err) {
+			StrTools.msgBox("Could not find equipList.txt");
+		}
+
+		return rv;
+	}
 
 	protected void textBoxKeyReleased(KeyEvent evt) {
 		JTextPane area = (JTextPane) evt.getSource();
@@ -1224,9 +1264,9 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 				break;
 			}
 		}
-
+		sc.close();
 		//colour it
-		highlightDoc((StyledDocument) area.getDocument(), startLine - 1, startLine + 1);
+		highlightDoc((StyledDocument) area.getDocument(), startLine - 50, startLine + 50);
 		markChanged();
 	}
 
@@ -1257,9 +1297,9 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					break;
 				}
 			}
-
+			sc.close();
 			//colour it
-			highlightDoc(this.getStyledDocument(), startLine - 1, startLine + 1);
+			highlightDoc(this.getStyledDocument(), startLine - 50, startLine + 50);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -1282,7 +1322,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					}
 					String comStr = selCom.commandCode;
 					for (int i = 0; i < selCom.numParam; i++) {
-						for (int j = 0; j < selCom.paramLen; j++) {
+						for (int j = 0; j < selCom.paramLen[i]; j++) {
 							if (i < selCom.numParam) {
 								comStr += (char) ('W' + i);
 							} else {
@@ -1313,7 +1353,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 					String comStr = Messages.getString(
 							"TscPane.43") + selCom.name + "\n" + selCom.commandCode; //$NON-NLS-1$ //$NON-NLS-2$
 					for (int i = 0; i < selCom.numParam; i++) {
-						for (int j = 0; j < selCom.paramLen; j++) {
+						for (int j = 0; j < selCom.paramLen[i]; j++) {
 							if (i < selCom.numParam) {
 								comStr += (char) ('W' + i);
 							} else {

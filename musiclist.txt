@@ -8,13 +8,13 @@
 0007 Eyes of Flame
 0008 Gestation
 0009 Mimiga Town
-0010 Get Item
+0010 Get Item!
 0011 Balrog's Theme
 0012 Cemetary
 0013 Plant
 0014 Pulse
-0015 Boss Fanfare
-0016 Get Life
+0015 Victory!
+0016 Get Life Capsule!
 0017 Tyrant
 0018 Run!
 0019 Jenka 1

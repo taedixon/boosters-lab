@@ -129,11 +129,11 @@ public class MapPane extends BgPanel {
 		redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.Event.CTRL_MASK));
 		JMenuItem secret_undoItem;
 		secret_undoItem = new JMenuItem(undo);
-		secret_undoItem.setText(Messages.getString("MapPane.3")); //$NON-NLS-1$
+		secret_undoItem.setText(Messages.getString("MapPane.1")); //$NON-NLS-1$
 		secret_undoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.Event.CTRL_MASK));
 		JMenuItem secret_redoItem;
 		secret_redoItem = new JMenuItem(redo);
-		secret_redoItem.setText(Messages.getString("MapPane.4")); //$NON-NLS-1$
+		secret_redoItem.setText(Messages.getString("MapPane.2")); //$NON-NLS-1$
 		secret_redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.Event.CTRL_MASK));
 		@SuppressWarnings("serial")
 		JMenuItem shiftItem = new JMenuItem(new AbstractAction() {
@@ -488,7 +488,7 @@ public class MapPane extends BgPanel {
 		if (r != null) {
 			startX = r.x - r.x % bgw;
 			if (startX < 0) startX = 0;
-			startY = r.y - r.y % bgw;
+			startY = r.y - r.y % bgh;
 			if (startY < 0) startY = 0;
 			endX = startX + r.width + bgw;
 			if (endX < 2) endX = 2;
@@ -836,9 +836,9 @@ public class MapPane extends BgPanel {
 						new TilescriptAction(cursorX, cursorY, tilePen.get(0, 0),
 								parent.getActiveLayer()));
 				popup_tilescript.setText(Messages.getString(
-						"MapPane.15") + cursorX + "," + cursorY + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						"MapPane.11") + cursorX + "," + cursorY + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				popup_tra.setAction(new TraScriptAction(cursorX, cursorY, dataHolder.getMapNumber()));
-				popup_tra.setText(Messages.getString("MapPane.18")); //$NON-NLS-1$
+				popup_tra.setText(Messages.getString("MapPane.14")); //$NON-NLS-1$
 				popup.show(eve.getComponent(), eve.getX(), eve.getY());
 				return;
 			}

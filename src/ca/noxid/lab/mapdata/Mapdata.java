@@ -9,6 +9,8 @@ import java.beans.PropertyChangeSupport;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+
+import com.carrotlord.string.StrTools;
 /*
 typedef struct {
 	   char tileset[32];
@@ -147,6 +149,98 @@ public class Mapdata implements Changeable {
 	public int getMapnum() {return mapNum;}
 	
 	private boolean changed = false;
+	
+	public Mapdata(int num, ByteBuffer buf, MOD_TYPE format, String charEncoding) {
+		mapNum = num;
+		switch (format) {
+		case MOD_CS: // from exe
+			/*
+			typedef struct {
+				   char tileset[32];
+				   char filename[32];
+				   char scrollType[4];
+				   char bgName[32];
+				   char npc1[32];
+				   char npc2[32];
+				   char bossNum;
+				   char mapName[35];
+				}nMapData;
+				*/
+			byte[] buffer = new byte[0x23];
+			buf.get(buffer, 0, 0x20);
+			tilesetName = StrTools.CString(buffer, charEncoding);
+			buf.get(buffer, 0, 0x20);
+			fileName = StrTools.CString(buffer, charEncoding);
+			scrollType = buf.getInt() & 0xFF;						
+			buf.get(buffer, 0, 0x20);
+			bgName = StrTools.CString(buffer, charEncoding);
+			buf.get(buffer, 0, 0x20);
+			npcSet1 = StrTools.CString(buffer, charEncoding);
+			buf.get(buffer, 0, 0x20);
+			npcSet2 = StrTools.CString(buffer, charEncoding);
+			bossNum = buf.get();
+			buf.get(buffer, 0, 0x23);
+			mapName = StrTools.CString(buffer, charEncoding);
+			break;
+		case MOD_CS_PLUS: // from stage.tbl
+			/*
+			typedef struct {
+				   char tileset[32];
+				   char filename[32];
+				   char scrollType[4];
+				   char bgName[32];
+				   char npc1[32];
+				   char npc2[32];
+				   char bossNum;
+				   char jpName[32];
+				   char mapName[32];
+				}nMapData;
+				*/
+			byte[] buf32 = new byte[32];
+			buf.get(buf32);
+			tilesetName = StrTools.CString(buf32, charEncoding);
+			buf.get(buf32);
+			fileName = StrTools.CString(buf32, charEncoding);
+			scrollType = buf.getInt();
+			buf.get(buf32);
+			bgName = StrTools.CString(buf32, charEncoding);
+			buf.get(buf32);
+			npcSet1 = StrTools.CString(buf32, charEncoding);
+			buf.get(buf32);
+			npcSet2 = StrTools.CString(buf32, charEncoding);
+			bossNum = buf.get();
+			buf.get(buf32);
+			jpName = buf32.clone();
+			buf.get(buf32);
+			mapName = StrTools.CString(buf32, charEncoding);
+			break;
+		case MOD_MR:
+		case MOD_KS:
+			// from bin
+			byte[] buf16 = new byte[16];
+			byte[] nameBuf = new byte[34];
+			buf.get(buf16);
+			tilesetName = StrTools.CString(buf16, charEncoding);
+			buf.get(buf16);
+			fileName = StrTools.CString(buf16, charEncoding);
+			scrollType = buf.get();
+			buf.get(buf16);
+			bgName = StrTools.CString(buf16, charEncoding);
+			buf.get(buf16);
+			npcSet1 = StrTools.CString(buf16, charEncoding);
+			buf.get(buf16);
+			npcSet2 = StrTools.CString(buf16, charEncoding);
+			bossNum = buf.get();
+			buf.get(nameBuf);
+			mapName = StrTools.CString(nameBuf, charEncoding);
+			break;
+		case MOD_GUXT:
+		case DUMMY:
+		default:
+			// unknown/unused
+			break;
+		}
+	}
 	
 	public Mapdata(int num) {
 		tilesetName = "0"; //$NON-NLS-1$

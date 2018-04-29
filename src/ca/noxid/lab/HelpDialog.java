@@ -1,6 +1,7 @@
 package ca.noxid.lab;
 
 import ca.noxid.lab.rsrc.ResourceManager;
+
 import com.carrotlord.string.StrTools;
 
 import javax.swing.*;
@@ -150,25 +151,39 @@ public class HelpDialog extends JFrame implements TreeSelectionListener, Hyperli
 			return;
 		}
 
+		HelpSubject book = null;
 		try {
 			Object nodeInfo = node.getUserObject();
+			System.out.println(nodeInfo);
 			if (node.isLeaf()) {
-				HelpSubject book = (HelpSubject) nodeInfo;
+				book = (HelpSubject) nodeInfo;
 				//System.out.println(book.location);
+				File f = new File(book.location.getFile());
+				if (!f.exists())
+					throw new FileNotFoundException(f.getAbsolutePath());
 				display.setPage(book.location);
 			}
 		} catch (IOException err) {
 			err.printStackTrace();
+			URL link = null;
+			if (book != null)
+				link = book.location;
+			StrTools.msgBox(Messages.getString("HelpDialog.3") + link); //$NON-NLS-1$
 		}
 	}
 
 	public void hyperlinkUpdate(HyperlinkEvent event) {
 		if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 			try {
-				display.setPage(event.getURL());
+				URL link = event.getURL();
+				File f = new File(link.getFile());
+				if (!f.exists())
+					throw new FileNotFoundException(f.getAbsolutePath());
+				display.setPage(link);
 				display.setCursor(null);
 			} catch (IOException ioe) {
-				// Some warning to user
+				ioe.printStackTrace();
+				StrTools.msgBox(Messages.getString("HelpDialog.3") + event.getURL()); //$NON-NLS-1$
 			}
 		}
 	}

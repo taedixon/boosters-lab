@@ -20,13 +20,14 @@ import java.util.*;
 
 
 public class GameInfo {
-	//Map list variabls
+	//Map list variables
 	private Vector<Mapdata> mapdataStore;
 	private Vector<Mapdata> tempMapdata = new Vector<>();
+	private File base;
 	private String imageExtension;
 	private File dataDir;
 	private BlConfig gameConfig;
-	private static final String CSPLUS_IMG_EXT = ".png";
+	private static final String CSPLUS_IMG_EXT = ".bmp";
 	private static final boolean GIRS_SPECIAL_MAP_SORT = false;
 	
 	private static final String entityInfo_head = "//num	short1	short2	long rect desc category\r\n" +
@@ -84,21 +85,32 @@ public class GameInfo {
 	
 	public static final String[] sfxNames = loadSfxNames();
 
+	public File getBase() {
+		return base;
+	}
 	
 	public GameInfo(File base) throws IOException {
+		this.base = base;
 		mapdataStore = new Vector<>();
 		categoryMap = new HashMap<>();
 		if (base.toString().endsWith(".exe")) { //$NON-NLS-1$
 			dataDir = new File(base.getParent() + "/data"); //$NON-NLS-1$
-			
 			if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
 				type = MOD_TYPE.MOD_GUXT;
-				executable = new GuxtExe(base);
+                // I don't actually think this ever worked properly, since it's going to certainly damage the EXE in modern versions.
+                // Better to have executable be null in this case.
+				// executable = new GuxtExe(base, gameConfig.getEncoding());
 			} else {
 				type = MOD_TYPE.MOD_CS;
-				executable = new CSExe(base); //can fix swdata
-				getExeData(executable);
-			}			
+				try {
+                    executable = new CSExe(base); //can fix swdata
+                    getExeData(executable);
+                } catch (Exception ioe) {
+				    ioe.printStackTrace();
+                    StrTools.msgBox(Messages.getString("GameInfo.95")); //$NON-NLS-1$
+                    // executable may be null.
+                }
+			}
 		} else if (base.toString().endsWith(".tbl")){ //$NON-NLS-1$
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile();
@@ -118,6 +130,10 @@ public class GameInfo {
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile().getParentFile();
 			imageExtension = CSPLUS_IMG_EXT; //$NON-NLS-1$
+		} else if (base.toString().endsWith(".csmap")) { //$NON-NLS-1$
+			type = MOD_TYPE.MOD_CS;
+			dataDir = base.getParentFile().getParentFile();
+			imageExtension = ".bmp"; //$NON-NLS-1$
 		}
 		gameConfig = new BlConfig(dataDir, type);
 		fillMapdata(base);
@@ -783,201 +799,19 @@ public class GameInfo {
 		inStream = new FileInputStream(f);
 		inChan = inStream.getChannel();
 		
-		if (f.getName().endsWith(".exe")) //$NON-NLS-1$
+		if (type == MOD_TYPE.MOD_CS) //$NON-NLS-1$
 		{
-			type = MOD_TYPE.MOD_CS;
-			//the hard part
-			ByteBuffer uBuf = ByteBuffer.allocate(2);
-			uBuf.order(ByteOrder.LITTLE_ENDIAN);
-			//find how many sections
-			inChan.position(0x116);
-			inChan.read(uBuf);
-			uBuf.flip();
-			int numSection = uBuf.getShort();
-			//read each segment
-			//find the .csmap or .swdata segment
-			int mapSec = -1;
-			String[] secHeaders = new String[numSection];
-			for (int i = 0; i < numSection; i++)
-			{
-				uBuf = ByteBuffer.allocate(8);
-				inChan.position(0x208 + 0x28 * i);
-				inChan.read(uBuf);
-				uBuf.flip();
-				String segStr = new String(uBuf.array());
-				
-				if (segStr.contains(".csmap")) //$NON-NLS-1$
-					mapSec = i;
-				else if (segStr.contains(".swdata")) //$NON-NLS-1$
-					mapSec = i;
-				secHeaders[i] = segStr;
-			}
-			
-			if (mapSec == -1) //virgin executable
-			{
-				int numMaps = 95;
-				inChan.position(0x937B0); //seek to start of mapdatas
-				for (int i = 0; i < numMaps; i++)
-				{
-					Mapdata newMap = new Mapdata(i);
-					//for each map
-					uBuf = ByteBuffer.allocate(200);
-					uBuf.order(ByteOrder.LITTLE_ENDIAN);
-					inChan.read(uBuf);
-					uBuf.flip();
-					/*
-					typedef struct {
-						   char tileset[32];
-						   char filename[32];
-						   char scrollType[4];
-						   char bgName[32];
-						   char npc1[32];
-						   char npc2[32];
-						   char bossNum;
-						   char mapName[35];
-						}nMapData;
-						*/
-					byte[] buffer = new byte[0x23];
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setTileset(StrTools.CString(buffer, encoding));
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setFile(StrTools.CString(buffer, encoding));
-					newMap.setScroll(uBuf.getInt() & 0xFF);						
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setBG(StrTools.CString(buffer, encoding));
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setNPC1(StrTools.CString(buffer, encoding));
-					uBuf.get(buffer, 0, 0x20);
-					newMap.setNPC2(StrTools.CString(buffer, encoding));
-					newMap.setBoss(uBuf.get());
-					uBuf.get(buffer, 0, 0x23);
-					newMap.setMapname(StrTools.CString(buffer, encoding));
-					newMap.markUnchanged();
-					mapdataStore.add(newMap);	
-				} //for each map
-			} else { //exe has been edited probably
-				if (secHeaders[mapSec].contains(".csmap")) //$NON-NLS-1$
-				{
-					uBuf = ByteBuffer.allocate(4);
-					uBuf.order(ByteOrder.LITTLE_ENDIAN);
-					inChan.position(0x208 + 0x28*mapSec + 0x10); //read the PE header
-					inChan.read(uBuf);
-					uBuf.flip();
-					int numMaps = uBuf.getInt() / 200;
-					uBuf.flip();
-					inChan.read(uBuf);
-					uBuf.flip();
-					int pData = uBuf.getInt();
-					
-					inChan.position(pData);//seek to start of CS map data
-					for (int i = 0; i < numMaps; i++)
-					{
-						//for each map
-						Mapdata newMap = new Mapdata(i);
-						uBuf = ByteBuffer.allocate(200);
-						uBuf.order(ByteOrder.LITTLE_ENDIAN);
-						inChan.read(uBuf);
-						uBuf.flip();
-						/*
-						typedef struct {
-							   char tileset[32];
-							   char filename[32];
-							   char scrollType[4];
-							   char bgName[32];
-							   char npc1[32];
-							   char npc2[32];
-							   char bossNum;
-							   char mapName[35];
-							}nMapData;
-							*/
-						byte[] buffer = new byte[0x23];
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setTileset(StrTools.CString(buffer, encoding));
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setFile(StrTools.CString(buffer, encoding));
-						int argh = uBuf.getInt();
-						newMap.setScroll(argh & 0xFF);
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setBG(StrTools.CString(buffer, encoding));
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setNPC1(StrTools.CString(buffer, encoding));
-						uBuf.get(buffer, 0, 0x20);
-						newMap.setNPC2(StrTools.CString(buffer, encoding));
-						newMap.setBoss(uBuf.get());
-						uBuf.get(buffer, 0, 0x23);
-						newMap.setMapname(StrTools.CString(buffer, encoding));
-						newMap.markUnchanged();
-						mapdataStore.add(newMap);			
-					} //for each map
-				} else {
-					StrTools.msgBox("There is a swdata here and I don't like it"); //$NON-NLS-1$
-					/*sue's shit
-					 * should no longer be needed 
-					 *
-					//read up where yo' data is at
-					uBuf = ByteBuffer.allocate(4);
-					uBuf.order(ByteOrder.LITTLE_ENDIAN);
-					inChan.position(0x208 + 0x28*mapSec + 0x10);
-					inChan.read(uBuf);
-					uBuf.flip();
-					@SuppressWarnings("unused")
-					int numMaps = uBuf.getInt() / 200;
-					uBuf.flip();
-					inChan.read(uBuf);
-					uBuf.flip();
-					int pData = uBuf.getInt();
-					inChan.position(pData + 0x10);//seek to start of Sue's map data
-					int nMaps = 0;
-					while (true)
-					{
-						//for each map
-						uBuf = ByteBuffer.allocate(200);
-						inChan.read(uBuf);
-						uBuf.flip();
-						//check if it's the FFFFFFFFFFFFFFinal map
-						if (uBuf.getInt(0) == -1)
-							break;
-
-						Mapdata newMap = new Mapdata(nMaps);
-						/*
-						typedef struct {
-							   char tileset[32];
-							   char filename[32];
-							   char scrollType[4];
-							   char bgName[32];
-							   char npc1[32];
-							   char npc2[32];
-							   char bossNum;
-							   char mapName[35];
-							}nMapData;
-							//
-
-						byte[] buffer = new byte[0x23];
-						uBuf.get(buffer, 0, 0x20);
-						newMap.tilesetName = StrTools.CString(buffer);
-						uBuf.get(buffer, 0, 0x20);
-						newMap.fileName = StrTools.CString(buffer);
-						newMap.scrollType = uBuf.getInt() & 0xFF;						
-						uBuf.get(buffer, 0, 0x20);
-						newMap.bgName = StrTools.CString(buffer);
-						uBuf.get(buffer, 0, 0x20);
-						newMap.npcSet1 = StrTools.CString(buffer);
-						uBuf.get(buffer, 0, 0x20);
-						newMap.npcSet2 = StrTools.CString(buffer);
-						newMap.bossNum = uBuf.get();
-						uBuf.get(buffer, 0, 0x23);
-						newMap.mapName = StrTools.CString(buffer);
-						mapDataStore.add(newMap);	
-						
-						nMaps++;
-					} //for each map
-				*/
-				}
-			}
-			
+            if (executable == null) {
+        		//standard CS mod, executable failed to initialize
+        		StrTools.msgBox(Messages.getString("GameInfo.47")); //$NON-NLS-1$
+            } else {
+            	//standard CS mod
+                ByteBuffer bb = executable.loadMaps();
+                for (int i = 0; i < executable.getMapdataSize(); i++)
+                    mapdataStore.add(new Mapdata(i, bb, type, encoding));
+            }
 		} else if (f.getName().endsWith("tbl")) { //CS+ type //$NON-NLS-1$
-			type = MOD_TYPE.MOD_CS_PLUS;
-			//int maps array data
+            //int maps array data
 			int numMaps = (int) (f.length() / 229);
 			ByteBuffer dBuf = ByteBuffer.allocate(numMaps * 229);
 			dBuf.order(ByteOrder.LITTLE_ENDIAN);
@@ -985,44 +819,11 @@ public class GameInfo {
 			dBuf.flip();
 			
 			for (int i = 0; i < numMaps; i++) //for each map
-			{
-				/*
-				typedef struct {
-					   char tileset[32];
-					   char filename[32];
-					   char scrollType[4];
-					   char bgName[32];
-					   char npc1[32];
-					   char npc2[32];
-					   char bossNum;
-					   char jpName[32];
-					   char mapName[32];
-					}nMapData;
-					*/
-				Mapdata newMap = new Mapdata(i);
-				byte[] buf32 = new byte[32];
-				dBuf.get(buf32);
-				newMap.setTileset(StrTools.CString(buf32, encoding));
-				dBuf.get(buf32);
-				newMap.setFile(StrTools.CString(buf32, encoding));
-				newMap.setScroll(dBuf.getInt());
-				dBuf.get(buf32);
-				newMap.setBG(StrTools.CString(buf32, encoding));
-				dBuf.get(buf32);
-				newMap.setNPC1(StrTools.CString(buf32, encoding));
-				dBuf.get(buf32);
-				newMap.setNPC2(StrTools.CString(buf32, encoding));
-				newMap.setBoss(dBuf.get());
-				dBuf.get(buf32);
-				newMap.setJpName(buf32);
-				dBuf.get(buf32);
-				newMap.setMapname(StrTools.CString(buf32, encoding));
-				newMap.markUnchanged();
-				mapdataStore.add(newMap);
-			}
+				mapdataStore.add(new Mapdata(i, dBuf, type, encoding));
 			inChan.close();
 			inStream.close();
 		} else if (f.getName().endsWith(".bin")) { //$NON-NLS-1$
+            // Possibly GIR/Noxid's "MR" engine. Sorry if I broke this with my meddling. - 20kdc
 			/*
 			typedef struct {
 			    char tileset[16];
@@ -1045,27 +846,8 @@ public class GameInfo {
 			inChan.read(dBuf);
 			dBuf.flip();
 			//loop
-			byte[] buf16 = new byte[16];
-			byte[] nameBuf = new byte[34];
-			for (int i = 0; i < nMap; i++) {
-				Mapdata newMap = new Mapdata(i);
-				dBuf.get(buf16);
-				newMap.setTileset(StrTools.CString(buf16, encoding));
-				dBuf.get(buf16);
-				newMap.setFile(StrTools.CString(buf16, encoding));
-				newMap.setScroll(dBuf.get());
-				dBuf.get(buf16);
-				newMap.setBG(StrTools.CString(buf16, encoding));
-				dBuf.get(buf16);
-				newMap.setNPC1(StrTools.CString(buf16, encoding));
-				dBuf.get(buf16);
-				newMap.setNPC2(StrTools.CString(buf16, encoding));
-				newMap.setBoss(dBuf.get());
-				dBuf.get(nameBuf);
-				newMap.setMapname(StrTools.CString(nameBuf, encoding));
-				newMap.markUnchanged();
-				mapdataStore.add(newMap);
-			}
+			for (int i = 0; i < nMap; i++)
+				mapdataStore.add(new Mapdata(i, dBuf, type, encoding));
 		}
 	}
 	
@@ -1282,6 +1064,11 @@ public class GameInfo {
 			return arg1.startsWith(gameConfig.getBackgroundPrefix()) && arg1.endsWith(imageExtension);
 		}		
 	}
+	
+	public void prepareToDeleteMaps() {
+		if (executable != null)
+			executable.prepareToDeleteMaps();
+	}
 
 	/**
 	 * p
@@ -1297,6 +1084,11 @@ public class GameInfo {
 				executable.setMapdataSize(mapdataStore.size());
 			}
 		}
+	}
+	
+	public void doneDeletingMaps() {
+		if (executable != null)
+			executable.doneDeletingMaps();
 	}
 	
 	private void revalidateMapNumbers(EditorApp parent) {
@@ -1432,8 +1224,12 @@ public class GameInfo {
 		BufferedWriter output;
 		output = new BufferedWriter(new FileWriter("FlagListing.txt")); //$NON-NLS-1$
 		//this is the wicked setup I've got going for
-		LinkedList<Integer> fList = new LinkedList<>();
-		HashMap<Integer, Vector<String>> locTable = new HashMap<>();
+		LinkedList<Integer> flList = new LinkedList<>();
+		HashMap<Integer, Vector<String>> flLocTable = new HashMap<>();
+		LinkedList<Integer> skList = new LinkedList<>();
+		HashMap<Integer, Vector<String>> skLocTable = new HashMap<>();
+		LinkedList<Integer> mpList = new LinkedList<>();
+		HashMap<Integer, Vector<String>> mpLocTable = new HashMap<>();
 		for (Mapdata d : mapdataStore)
 		{
 			String subDir = "/Stage/"; //$NON-NLS-1$
@@ -1451,37 +1247,76 @@ public class GameInfo {
 				if (t.getDescription().equals("eveNum")) //$NON-NLS-1$
 				{
 					currentEvent = StrTools.ascii2Num_CS(t.getContents().substring(1));
-				} else if (t.getContents().equals("<FL+") || t.getContents().equals("<FL-") || t.getContents().equals("<FLJ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					String tag = t.getContents();
-					if ((t = tLex.getNextToken()) != null)
-					{
-						int flagNum = StrTools.ascii2Num_CS(t.getContents());
-						Vector<String> locList;
-						if (fList.contains(flagNum))
-						{
-							locList = locTable.get(flagNum);
-						} else {
-							locList = new Vector<>();
-							locTable.put(flagNum, locList);
-							fList.add(flagNum);
-						}
-						locList.add("\t " + tag + " " + sourceFile.getName() + " event #" + currentEvent + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					} else {//if there is a next token
-						break;
+					continue;
+				}
+				LinkedList<Integer> fList = null;
+				HashMap<Integer, Vector<String>> fTable = null;
+				if (t.getContents().equals("<FL+") || t.getContents().equals("<FL-") || t.getContents().equals("<FLJ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					fList = flList;
+					fTable = flLocTable;
+				} else if (t.getContents().equals("<SK+") || t.getContents().equals("<SK-") || t.getContents().equals("<SKJ")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					fList = skList;
+					fTable = skLocTable;
+				} else if (t.getContents().equals("<MP+") || t.getContents().equals("<MPJ")) { //$NON-NLS-1$ //$NON-NLS-2
+					fList = mpList;
+					fTable = mpLocTable;
+				} else
+					continue;
+				String tag = t.getContents();
+				if ((t = tLex.getNextToken()) != null)
+				{
+					int flagNum = StrTools.ascii2Num_CS(t.getContents());
+					Vector<String> locList;
+					if (fList.contains(flagNum)) {
+						locList = fTable.get(flagNum);
+					} else {
+						locList = new Vector<>();
+						fTable.put(flagNum, locList);
+						fList.add(flagNum);
 					}
-				} //elseif token was flag+ or flag-
+					locList.add("\t " + tag + " " + sourceFile.getName() + " event #" + currentEvent + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				} else {//if there is a next token
+					break;
+				}
 			} //while we have more tokens
 		}//for each file
 		//sort the flag list
-		int[] fArray = new int[fList.size()];
-		for (int i = 0; i < fList.size(); i++)
+		int[] flArray = new int[flList.size()];
+		for (int i = 0; i < flList.size(); i++)
 		{
-			fArray[i] = fList.get(i);
+			flArray[i] = flList.get(i);
 		}
-		java.util.Arrays.sort(fArray);
-		for (int aFArray : fArray) {
-			output.write(Messages.getString("GameInfo.1") + aFArray + "\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-			Vector<String> locList = locTable.get(aFArray);
+		int[] skArray = new int[skList.size()];
+		for (int i = 0; i < skList.size(); i++)
+		{
+			skArray[i] = skList.get(i);
+		}
+		int[] mpArray = new int[mpList.size()];
+		for (int i = 0; i < mpList.size(); i++)
+		{
+			mpArray[i] = mpList.get(i);
+		}
+		java.util.Arrays.sort(flArray);
+		java.util.Arrays.sort(skArray);
+		java.util.Arrays.sort(mpArray);
+		final String lineSep = System.lineSeparator();
+		for (int aFArray : flArray) {
+			output.write(Messages.getString("GameInfo.1") + aFArray + lineSep); //$NON-NLS-1$ //$NON-NLS-2$
+			Vector<String> locList = flLocTable.get(aFArray);
+			for (String aLocList : locList) {
+				output.write(aLocList);
+			}
+		}
+		for (int aFArray : skArray) {
+			output.write(Messages.getString("GameInfo.3") + aFArray + lineSep); //$NON-NLS-1$ //$NON-NLS-2$
+			Vector<String> locList = skLocTable.get(aFArray);
+			for (String aLocList : locList) {
+				output.write(aLocList);
+			}
+		}
+		for (int aFArray : mpArray) {
+			output.write(Messages.getString("GameInfo.4") + aFArray + lineSep); //$NON-NLS-1$ //$NON-NLS-2$
+			Vector<String> locList = mpLocTable.get(aFArray);
 			for (String aLocList : locList) {
 				output.write(aLocList);
 			}

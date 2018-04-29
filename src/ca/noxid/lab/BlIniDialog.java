@@ -1,19 +1,27 @@
 package ca.noxid.lab;
 
+import ca.noxid.lab.gameinfo.GameInfo;
 import ca.noxid.lab.rsrc.ResourceManager;
 import ca.noxid.uiComponents.BgPanel;
 import ca.noxid.uiComponents.FormattedUpdateTextField;
 import ca.noxid.uiComponents.UpdateTextField;
 
 import javax.swing.*;
+
+import com.carrotlord.string.StrTools;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class BlIniDialog extends JDialog {
 
 	private static final long serialVersionUID = 7586989452025851027L;
 	private static final java.text.NumberFormat nf =
 			FormattedUpdateTextField.getNumberOnlyFormat(1, 12);
+	private static final byte[] TEST_STRING = new byte[] { (byte) 'T', (byte) 'e', (byte) 's', (byte) 't' };
 	private JTextField lineResField = new FormattedUpdateTextField(nf);
 	private JTextField entityResField = new FormattedUpdateTextField(nf);
 	private JTextField tileSizeField = new FormattedUpdateTextField(nf);
@@ -28,15 +36,13 @@ public class BlIniDialog extends JDialog {
 
 	BlConfig config;
 
-	BlIniDialog(Frame aFrame, BlConfig conf, java.awt.image.BufferedImage bg) {
-		super(aFrame, true);
+	BlIniDialog(final EditorApp app, java.awt.image.BufferedImage bg) {
+		super(app, true);
+		final GameInfo info = app.getGameInfo();
 		if (EditorApp.blazed) {
 			this.setCursor(ResourceManager.cursor);
 		}
-		Point ep = aFrame.getLocationOnScreen();
-		ep.x += aFrame.getWidth() / 2;
-		ep.y += aFrame.getHeight() / 2;
-		config = conf;
+		config = info.getConfig();
 
 		lineResField.setText(Integer.toString(config.getLineRes()));
 		entityResField.setText(Integer.toString(config.getEntityRes()));
@@ -111,7 +117,18 @@ public class BlIniDialog extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				boolean reload = false;
+				final String origEncoding = config.getEncoding();
+				String encoding = encodingField.getText();
+				try {
+					new String(TEST_STRING, encoding);
+				} catch (UnsupportedEncodingException e1) {
+					JOptionPane.showMessageDialog(BlIniDialog.this, String.format(Messages.getString("BlIniDialog.0"), encoding), //$NON-NLS-1$
+							Messages.getString("BlIniDialog.1"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
+					return;
+				}
+				if (!origEncoding.equals(encoding))
+					reload = true;
 				String[] vals = {
 						lineResField.getText(),
 						entityResField.getText(),
@@ -129,6 +146,20 @@ public class BlIniDialog extends JDialog {
 				config.set(vals);
 				config.save();
 				BlIniDialog.this.dispose();
+				if (reload) {
+					StrTools.msgBox(Messages.getString("BlIniDialog.2")); //$NON-NLS-1$
+					// prompt for unsaved executable chanes
+					if (!app.saveAll(true)) {
+						StrTools.msgBox(Messages.getString("BlIniDialog.3")); //$NON-NLS-1$
+						return;
+					}
+					File base = info.getBase();
+					try {
+						app.loadFile(base);
+					} catch (IOException e1) {
+						System.err.println(Messages.getString("EditorApp.147") + base); //$NON-NLS-1$
+					}
+				}
 			}
 
 		});
@@ -152,9 +183,7 @@ public class BlIniDialog extends JDialog {
 		//pane.setPreferredSize(new Dimension(400, 400));
 		this.setContentPane(pane);
 		this.pack();
-		ep.x -= this.getWidth() / 2;
-		ep.y -= this.getHeight() / 2;
-		this.setLocation(ep);
+		this.setLocationRelativeTo(app);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
