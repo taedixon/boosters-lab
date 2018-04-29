@@ -36,9 +36,9 @@ public class BlIniDialog extends JDialog {
 
 	BlConfig config;
 
-	BlIniDialog(EditorApp app, java.awt.image.BufferedImage bg) {
+	BlIniDialog(final EditorApp app, java.awt.image.BufferedImage bg) {
 		super(app, true);
-		GameInfo info = app.getGameInfo();
+		final GameInfo info = app.getGameInfo();
 		if (EditorApp.blazed) {
 			this.setCursor(ResourceManager.cursor);
 		}

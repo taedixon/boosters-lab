@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
@@ -227,12 +228,12 @@ public class CSExe {
 			}
 			Integer newVal = newSize;
 			try {
-				newVal = Integer.parseUnsignedInt(valStr, 16);
+				newVal = Integer.parseInt(valStr, 16);
 			} catch (NumberFormatException e) {
 				StrTools.msgBox(Messages.getString("CSExe.16")); //$NON-NLS-1$
 				continue;
 			}
-			if (newVal == 0) {
+			if (newVal <= 0) {
 				StrTools.msgBox(Messages.getString("CSExe.17")); //$NON-NLS-1$
 				continue;
 			}
@@ -300,7 +301,7 @@ public class CSExe {
 		String sTag = s.decodeTag();
 		if (sTag.length() == 8 && sTag.startsWith(".flr")) {
 			try {
-				Integer.parseUnsignedInt(sTag.substring(4), 16);
+				Integer.parseInt(sTag.substring(4), 16);
 			} catch (NumberFormatException e) {
 				return false;
 			}
@@ -333,7 +334,7 @@ public class CSExe {
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
 		// sort the sections so we go by RVA
 		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
-		sectionsSorted.sort(sortByRVA);
+		Collections.sort(sectionsSorted, sortByRVA);
 		// first romp to get first free filler section number
 		int flrNum = 0;
 		for (PEFile.Section s : sectionsSorted) {
@@ -342,7 +343,7 @@ public class CSExe {
 			String segNumStr = s.decodeTag().substring(4);
 			int segNum = 0;
 			try {
-				segNum = Integer.parseUnsignedInt(segNumStr, 16);
+				segNum = Integer.parseInt(segNumStr, 16);
 			} catch (NumberFormatException e) {
 				// last 4 characters are not a valid hex number
 				// not a filler segment, outta here!
