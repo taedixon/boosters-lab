@@ -142,6 +142,7 @@ public class HackDialog extends JDialog implements TreeSelectionListener{
 		commitButton.setText("Commit!");
 		
 		this.pack();
+		this.setSize(640, 480);
 		this.setVisible(true);
 	}
 	
