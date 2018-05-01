@@ -136,32 +136,7 @@ public class MapInfo implements Changeable {
 	}
 
 	public MapInfo(GameInfo eDat, ResourceManager r, int mapNum) {
-		pcs = new PropertyChangeSupport(this);
-		isTemp = false;
-		mapNumber = mapNum;
-		iMan = r;
-		exeData = eDat;
-		Mapdata d = exeData.getMapdata(mapNum);
-		File directory = exeData.getDataDirectory();
-
-		loadImageResource(d, directory);
-
-		File pxa = new File(directory + "/Stage/" + d.getTileset() + ".pxa"); //$NON-NLS-1$ //$NON-NLS-2$
-		pxaFile = ResourceManager.checkBase(pxa);
-		if (EditorApp.EDITOR_MODE != 0) {
-			int tilesetW = iMan.getImgW(tileset) / getConfig().getTileSize();
-			int tilesetH = iMan.getImgH(tileset) / getConfig().getTileSize();
-			iMan.addPxa(pxaFile, tilesetW * tilesetH);
-		} else {
-			iMan.addPxa(pxaFile, 256);
-		}
-
-		loadMap(d);
-
-		// load the pxe
-		getEntities(d, directory);
-		undoMan = new UndoManager();
-		undoMan.setLimit(1000);
+		this(eDat, r, eDat.getMapdata(mapNum));
 	}
 
 	public MapInfo(GameInfo eDat, ResourceManager r, Mapdata d) {
@@ -1053,7 +1028,8 @@ public class MapInfo implements Changeable {
 			pxmFile = new File(exeData.getDataDirectory() + "/Stage/" + d.getFile() + ".pxm"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		File pxeFile = new File(exeData.getDataDirectory() + "/Stage/" + d.getFile() + ".pxe"); //$NON-NLS-1$ //$NON-NLS-2$
-		File pxaFile = new File(exeData.getDataDirectory() + "/Stage/" + d.getTileset() + ".pxa"); //$NON-NLS-1$ //$NON-NLS-2$
+		// we can just use our pxaFile field for this, since that's already corrected for CS+
+		//File pxaFile = new File(exeData.getDataDirectory() + "/Stage/" + d.getTileset() + ".pxa"); //$NON-NLS-1$ //$NON-NLS-2$
 		byte[] pxmTag = { 'P', 'X', 'M', 0x10 };
 		byte[] pxeTag = { 'P', 'X', 'E', 0 };
 		ByteBuffer headerBuf;
