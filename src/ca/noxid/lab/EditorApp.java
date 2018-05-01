@@ -1,6 +1,5 @@
 package ca.noxid.lab;
 
-
 import ca.noxid.lab.entity.EntityData;
 import ca.noxid.lab.entity.EntityPane;
 import ca.noxid.lab.entity.NpcTblEditor;
@@ -34,16 +33,14 @@ import java.util.*;
 import java.util.List;
 import java.util.logging.*;
 import java.util.prefs.Preferences;
-//import javax.swing.filechooser.FileNameExtensionFilter;
+// import javax.swing.filechooser.FileNameExtensionFilter;
 
-
-//@SuppressWarnings("rawtypes")
+// @SuppressWarnings("rawtypes")
 public class EditorApp extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -2975049719856443233L;
 
 	private static final boolean disable_logging = true;
 	public static boolean blazed = false;
-
 	//about dialog
 	private static final String VER_NUM = "0.5.1.0"; //$NON-NLS-1$
 	private static final String TITLE_STR = "Booster's Lab V" + VER_NUM;
@@ -53,19 +50,20 @@ public class EditorApp extends JFrame implements ActionListener {
 					Messages.getString("EditorApp.4") + //$NON-NLS-1$
 					Messages.getString("EditorApp.5"); //$NON-NLS-1$
 
+
 	public static int EDITOR_MODE = 0;
-		/*
-		 * 0 = regular CS
-		 * 1 = CS w/ layers
-		 * 2 = Moustache
-		 */
+	/*
+	 * 0 = regular CS
+	 * 1 = CS w/ layers
+	 * 2 = Moustache
+	 */
 
 	private static final Icon ABOUT_ICON = getAboutIcon();
 
-	//Property strings
-	//private static final String PREF_TILESIZE = "tilesize"; <16 or 32>
+	// Property strings
+	// private static final String PREF_TILESIZE = "tilesize"; <16 or 32>
 	private static final String PREF_DIR = "last_directory"; //$NON-NLS-1$
-	//private static final String PREF_LASTFILE = "last_proj";
+	// private static final String PREF_LASTFILE = "last_proj";
 	private static final String PREF_TILE_ZOOM = "tileset_zoom"; //$NON-NLS-1$
 	private static final String PREF_MAP_ZOOM = "map_zoom"; //$NON-NLS-1$
 	private static final String PREF_TILE_COL = "tileset_background_colour"; //$NON-NLS-1$
@@ -83,7 +81,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	public static final String PERSPECTIVE_MAPDATA = "Mapdata"; //$NON-NLS-1$
 	private static final int NUM_DRAWMODE = 5;
 
-	//globally accessible components
+	// globally accessible components
 	protected JPanel opsPanel;
 	protected JTabbedPane mapTabs;
 	protected JList<String> mapList;
@@ -107,13 +105,12 @@ public class EditorApp extends JFrame implements ActionListener {
 	private Vector<AbstractButton> buttonsToEnableOnProjectLoad = new Vector<>();
 	private Vector<AbstractButton> buttonsToEnableOnExeLoad = new Vector<>();
 
-	//Global variables
+	// Global variables
 	public static String activePerspective = PERSPECTIVE_TILE;
 	private static File lastDir = null;
 	private final int SCALE_OPTIONS = 5;
-	private final static String[] SCALE_NAMES = {
-			"0.25x", "0.5x", "1x", "2x", "4x"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	public static double mapScale = 1; //represents the scale to draw the map at
+	private final static String[] SCALE_NAMES = { "0.25x", "0.5x", "1x", "2x", "4x" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+	public static double mapScale = 1; // represents the scale to draw the map at
 	public static double tilesetScale = 1;
 	private Vector<TabOrganizer> componentVec = new Vector<>();
 	private boolean movingMapdata = false; // for right click map list -> move
@@ -128,26 +125,27 @@ public class EditorApp extends JFrame implements ActionListener {
 			Messages.getString("EditorApp.33"), Messages.getString(
 			"EditorApp.34")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	protected int drawMode; //The current draw mode
+
 	public static final int DRAWMODE_DRAW = 0;
 	public static final int DRAWMODE_FILL = 1;
 	public static final int DRAWMODE_REPLACE = 2;
 	public static final int DRAWMODE_RECT = 3;
 	public static final int DRAWMODE_COPY = 4;
 	private final int TILEOP_NUM_OTHER_OPT = 5;
-	private final static String[] TILEOP_OTHER_OPTS = {
-			Messages.getString("EditorApp.35"), Messages.getString("EditorApp.36"), Messages.getString("EditorApp.37"),
-			//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			Messages.getString("EditorApp.38"), Messages.getString("EditorApp.39")}; //$NON-NLS-1$ //$NON-NLS-2$
+	private final static String[] TILEOP_OTHER_OPTS = { Messages.getString("EditorApp.35"),
+			Messages.getString("EditorApp.36"), Messages.getString("EditorApp.37"),
+			// $NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			Messages.getString("EditorApp.38"), Messages.getString("EditorApp.39") }; //$NON-NLS-1$ //$NON-NLS-2$
 
 	private static final String ACTION_SAVE = "FileMenu_Save";
 
 	private static final String ACTION_SAVEALL = "FileMenu_SaveAll";
 	private boolean[] otherDrawOpts = new boolean[TILEOP_NUM_OTHER_OPT];
 
-	//script-related
+	// script-related
 	private boolean showingCommands;
 
-	//entities
+	// entities
 	private JList<String> categoryList;
 	private JList<String> subcatList;
 
@@ -190,17 +188,15 @@ public class EditorApp extends JFrame implements ActionListener {
 	 */
 	EditorApp() {
 
-		//blazed
+		// blazed
 		if (!new File("nofun").exists()) {
 			Calendar cal = Calendar.getInstance();
-			if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
+			if (new File("weed").exists() || cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.DAY_OF_MONTH) == 20)
 				blazed = true;
 		}
-
-		//setups
 		getPrefs();
 
-		//Build the window
+		// Build the window
 		this.setTitle(""); //$NON-NLS-1$
 		java.net.URL iconURL;
 		if (blazed) {
@@ -213,22 +209,22 @@ public class EditorApp extends JFrame implements ActionListener {
 		}
 		Image icon = Toolkit.getDefaultToolkit().createImage(iconURL);
 		this.setIconImage(icon);
-		//build the UI
+		// build the UI
 		JSplitPane topLevelPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		addComponentsToPane(topLevelPane);
 		setGlobalKeyBindings(topLevelPane);
 		this.setContentPane(topLevelPane);
 
-		//finalize
+		// finalize
 		this.setMinimumSize(new Dimension(700, 480));
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setVisible(true);
 		this.getGlassPane().setVisible(true);
-		//if [x] pressed
+		// if [x] pressed
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				setPrefs();
-				//prompt for unsaved executable chanes
+				// prompt for unsaved executable chanes
 				if (exeData != null) {
 					if (!saveAll(true)) {
 						return;
@@ -237,7 +233,7 @@ public class EditorApp extends JFrame implements ActionListener {
 				System.exit(0);
 			}
 		});
-		//setup the helper after the main frame so it knows how to position itself
+		// setup the helper after the main frame so it knows how to position itself
 		initHelperWindows();
 		/*
 		int response = JOptionPane.showConfirmDialog(this, "warning:\n" +
@@ -259,12 +255,12 @@ public class EditorApp extends JFrame implements ActionListener {
 	 *
 	 * @return false if save was aborted
 	 */
-	protected boolean saveAll(boolean shouldClose) {
-		//try to save all tabs
+	public boolean saveAll(boolean shouldClose) {
+		// try to save all tabs
 		if (shouldClose) {
 			while (mapTabs.getTabCount() != 0) {
 				if (!closeCurrentTab()) {
-					return false; //save was aborted
+					return false; // save was aborted
 				}
 			}
 		} else {
@@ -286,13 +282,12 @@ public class EditorApp extends JFrame implements ActionListener {
 		}
 		if (exeData.areUnsavedChanges()) {
 			int response = JOptionPane.showConfirmDialog(rootPane, Messages.getString("EditorApp.44") + //$NON-NLS-1$
-					Messages.getString("EditorApp.45"), Messages.getString("EditorApp.46"),
-					JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("EditorApp.45"), Messages.getString("EditorApp.46"), JOptionPane.YES_NO_OPTION); // $NON-NLS-1$
+																														// //$NON-NLS-2$
 			if (response == JOptionPane.YES_OPTION) {
 				exeData.commitChanges();
-			} else if (response == JOptionPane.CANCEL_OPTION ||
-					response == JOptionPane.CLOSED_OPTION) {
-				return false; //oops
+			} else if (response == JOptionPane.CANCEL_OPTION || response == JOptionPane.CLOSED_OPTION) {
+				return false; // oops
 			}
 		}
 		return true;
@@ -300,7 +295,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 	private void getPrefs() {
 		Preferences prefs = Preferences.userNodeForPackage(EditorApp.class);
-		//DEFAULT_TILE_SIZE = prefs.getInt(PREF_TILESIZE, 16);
+		// DEFAULT_TILE_SIZE = prefs.getInt(PREF_TILESIZE, 16);
 		lastDir = new File(prefs.get(PREF_DIR, System.getProperty("user.dir"))); //$NON-NLS-1$
 		EditorApp.tilesetScale = prefs.getDouble(PREF_TILE_ZOOM, 1.0);
 		EditorApp.mapScale = prefs.getDouble(PREF_MAP_ZOOM, 1.0);
@@ -308,8 +303,8 @@ public class EditorApp extends JFrame implements ActionListener {
 		showTileWindow = prefs.getBoolean(PREF_HELPER, false);
 		showScriptWindow = prefs.getBoolean(PREF_SCRIPT, true);
 		showEntityWindow = prefs.getBoolean(PREF_ENTITY, false);
-		showSpritesheetWindow = prefs.getBoolean(PREF_SPRITESHEETWINDOW, false);
-		//showScriptWindow = false;
+		// showSpritesheetWindow = prefs.getBoolean(PREF_SPRITESHEETWINDOW, false);
+		showSpritesheetWindow = false;
 		notesText = prefs.get(PREF_NOTES, Messages.getString("EditorApp.49")); //$NON-NLS-1$
 		showingCommands = prefs.getBoolean(PREF_COM, true);
 
@@ -344,7 +339,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			prefs.putInt(PREF_MISC, misc);
 		}
 
-		//write window sizes
+		// write window sizes
 		File rectFile = new File("editor.rect"); //$NON-NLS-1$
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(rectFile));
@@ -377,9 +372,8 @@ public class EditorApp extends JFrame implements ActionListener {
 
 	@SuppressWarnings("serial")
 	private void setGlobalKeyBindings(JComponent c) {
-		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
-						java.awt.event.KeyEvent.VK_EQUALS, java.awt.Event.CTRL_MASK),
-				"zoom in"); //$NON-NLS-1$
+		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, java.awt.Event.CTRL_MASK), "zoom in"); //$NON-NLS-1$
 		c.getActionMap().put("zoom in", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -387,9 +381,8 @@ public class EditorApp extends JFrame implements ActionListener {
 						mapZoomIn();
 					}
 				});
-		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
-						java.awt.event.KeyEvent.VK_MINUS, java.awt.Event.CTRL_MASK),
-				"zoom out"); //$NON-NLS-1$
+		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.Event.CTRL_MASK), "zoom out"); //$NON-NLS-1$
 		c.getActionMap().put("zoom out", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -397,10 +390,8 @@ public class EditorApp extends JFrame implements ActionListener {
 						mapZoomOut();
 					}
 				});
-		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
-						java.awt.event.KeyEvent.VK_EQUALS,
-						java.awt.Event.CTRL_MASK | java.awt.Event.SHIFT_MASK),
-				"zoom in tiles"); //$NON-NLS-1$
+		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS,
+				java.awt.Event.CTRL_MASK | java.awt.Event.SHIFT_MASK), "zoom in tiles"); //$NON-NLS-1$
 		c.getActionMap().put("zoom in tiles", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -409,10 +400,8 @@ public class EditorApp extends JFrame implements ActionListener {
 						refreshCurrentMap();
 					}
 				});
-		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
-						java.awt.event.KeyEvent.VK_MINUS,
-						java.awt.Event.CTRL_MASK | java.awt.Event.SHIFT_MASK),
-				"zoom out tiles"); //$NON-NLS-1$
+		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS,
+				java.awt.Event.CTRL_MASK | java.awt.Event.SHIFT_MASK), "zoom out tiles"); //$NON-NLS-1$
 		c.getActionMap().put("zoom out tiles", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -428,16 +417,16 @@ public class EditorApp extends JFrame implements ActionListener {
 		// rather than solve it properly i'm just gonna make this hack to avoid it.
 		File lfOverride = new File("love.txt");
 		if (!lfOverride.exists()) {
-			//make it look like a native application (Carrotlord)
+			// make it look like a native application (Carrotlord)
 			try {
-				UIManager.setLookAndFeel(
-						UIManager.getSystemLookAndFeelClassName());
-			} catch (InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException | IllegalAccessException exceptionInfo) {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException
+					| IllegalAccessException exceptionInfo) {
 				// Ignore this exception.
 			}
 		}
 
-		//add the menus
+		// add the menus
 		JMenuBar menuBar = new JMenuBar();
 
 		menuBar.add(buildFileMenu());
@@ -445,26 +434,27 @@ public class EditorApp extends JFrame implements ActionListener {
 		menuBar.add(buildActionMenu());
 		menuBar.add(buildHelpMenu());
 
-		//add the whole menu now
+		// add the whole menu now
 		this.setJMenuBar(menuBar);
 
-		//panel mania
-		JPanel mainPanel = new JPanel(); //This panel holds the tabs, and the opsBar
-		JPanel mapsPanel = new JPanel(); //This panel holds the list of maps
+		// panel mania
+		JPanel mainPanel = new JPanel(); // This panel holds the tabs, and the opsBar
+		JPanel mapsPanel = new JPanel(); // This panel holds the list of maps
 
-		//add the panels to the top level, ensuring the left panel gets any extra space
+		// add the panels to the top level, ensuring the left panel gets any extra space
 
 		pane.add(mapsPanel);
 		pane.add(mainPanel);
 
-		//setup the main panel
+		// setup the main panel
 		mainPanel.setLayout(new GridBagLayout());
 		mainPanel.setBackground(Color.decode("0x83A767")); //$NON-NLS-1$
 		GridBagConstraints c = new GridBagConstraints();
-		//using grid bag. For each component, create it,  set instance variables to the contstraints, add
-		//mainPanel.setMinimumSize(new Dimension(600, 400));
-		//JPanel opsPanel; -- is class variable
-		//setup the radio group
+		// using grid bag. For each component, create it, set instance variables to the
+		// contstraints, add
+		// mainPanel.setMinimumSize(new Dimension(600, 400));
+		// JPanel opsPanel; -- is class variable
+		// setup the radio group
 		JRadioButton radioTile = new JRadioButton(new PerspectiveAction(PERSPECTIVE_TILE));
 		radioTile.setText(Messages.getString("EditorApp.55")); //$NON-NLS-1$
 		radioTile.setSelected(true);
@@ -496,17 +486,17 @@ public class EditorApp extends JFrame implements ActionListener {
 		opsRadio.add(radioScript, c);
 		c.gridy++;
 		opsRadio.add(radioMapdata, c);
-		//constraints
+		// constraints
 		c.gridx = 0;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.CENTER;
 		c.weighty = 0;
 		c.weightx = 0;
 		c.fill = GridBagConstraints.BOTH;
-		//add
+		// add
 		mainPanel.add(opsRadio, c);
 
-		//constraints
+		// constraints
 		c.gridy = 0;
 		c.gridx = 2;
 		c.gridheight = 1;
@@ -516,36 +506,33 @@ public class EditorApp extends JFrame implements ActionListener {
 		c.weighty = 0;
 		mainPanel.add(buildOpsPanel(), c);
 
-		//setup the tabbed element
-		mapTabs = new SplashTabPane(iMan.getImg(ResourceManager.rsrcSplash1), //$NON-NLS-1$
-				iMan.getImg(ResourceManager.rsrcSplash2), //$NON-NLS-1$
-				iMan.getImg(ResourceManager.rsrcSplashMid)); //$NON-NLS-1$
+		// setup the tabbed element
+		mapTabs = new SplashTabPane(iMan.getImg(ResourceManager.rsrcSplash1), // $NON-NLS-1$
+				iMan.getImg(ResourceManager.rsrcSplash2), // $NON-NLS-1$
+				iMan.getImg(ResourceManager.rsrcSplashMid)); // $NON-NLS-1$
 		mapTabs.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent eve) {
-				if (showTileWindow && mapTabs.getSelectedIndex() != -1
-						&& activePerspective.equals(PERSPECTIVE_TILE)) {
-					//System.out.println("swapTile");
-					//add current tileset to helper
+				if (showTileWindow && mapTabs.getSelectedIndex() != -1 && activePerspective.equals(PERSPECTIVE_TILE)) {
+					// System.out.println("swapTile");
+					// add current tileset to helper
 					TabOrganizer inf = componentVec.get(mapTabs.getSelectedIndex());
 					MapPane mapPanel = inf.map;
 					JScrollPane tileScroll = new JScrollPane(mapPanel.getTilePane());
 					tileScroll.getVerticalScrollBar().setUnitIncrement(5);
-					JSplitPane tileSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-							mapPanel.getPreviewPane(),
+					JSplitPane tileSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapPanel.getPreviewPane(),
 							tileScroll);
 					tileSplit.setDividerLocation(100);
 					tilesetWindow.setContentPane(tileSplit);
 					tilesetWindow.validate();
 				} else if (showEntityWindow && mapTabs.getSelectedIndex() != -1
 						&& activePerspective.equals(PERSPECTIVE_ENTITY)) {
-					//System.out.println("swapEntity");
+					// System.out.println("swapEntity");
 					TabOrganizer inf = componentVec.get(mapTabs.getSelectedIndex());
 					JScrollPane listScroll = new JScrollPane(inf.getEntity().getEntityList());
 					JScrollPane editScroll = new JScrollPane(inf.getEntity().getEditPane());
-					JSplitPane windowSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-							editScroll, listScroll);
+					JSplitPane windowSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editScroll, listScroll);
 					windowSplit.setDividerLocation(120);
 					entityWindow.setContentPane(windowSplit);
 					entityWindow.validate();
@@ -554,21 +541,21 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 
 		});
-		//constraints
+		// constraints
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.weightx = 0;
 		c.weighty = 1.0;
-		//add
+		// add
 		mainPanel.add(mapTabs, c);
 
-		//setup the maps panel
+		// setup the maps panel
 		mapsPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		mapsPanel.setLayout(new BorderLayout(2, 2));
 		mapsPanel.add(new JLabel(Messages.getString("EditorApp.59")), BorderLayout.NORTH); //$NON-NLS-1$
-		mapList = new BgList<>(iMan.getImg(ResourceManager.rsrcBgWhite)); //$NON-NLS-1$
+		mapList = new BgList<>(iMan.getImg(ResourceManager.rsrcBgWhite)); // $NON-NLS-1$
 		//
 		buildMapsPopup();
 		mapList.addMouseListener(new MouseAdapter() {
@@ -615,8 +602,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			public void keyPressed(KeyEvent eve) {
 				if (exeData != null) {
 					if (eve.getKeyCode() == KeyEvent.VK_DELETE) {
-						int result = JOptionPane.showConfirmDialog(EditorApp.this,
-								Messages.getString("EditorApp.24"), //$NON-NLS-1$
+						int result = JOptionPane.showConfirmDialog(EditorApp.this, Messages.getString("EditorApp.24"), //$NON-NLS-1$
 								Messages.getString("EditorApp.40"), //$NON-NLS-1$
 								JOptionPane.YES_NO_OPTION);
 						if (result == JOptionPane.YES_OPTION) {
@@ -638,7 +624,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		mapList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		mapScroll.setPreferredSize(new Dimension(150, 400));
 		mapScroll.setMaximumSize(new Dimension(200, 9001));
-		//fix size horizontally
+		// fix size horizontally
 		mapsPanel.add(mapScroll, BorderLayout.CENTER);
 		notes = new JTextPane();
 		notes.setText(notesText);
@@ -649,7 +635,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	private void initHelperWindows() {
 		tilesetWindow = new JDialog(this);
 		tilesetWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		//if [x] pressed
+		// if [x] pressed
 		tilesetWindow.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				showTileWindow = false;
@@ -658,7 +644,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		});
 		tilesetWindow.setTitle(Messages.getString("EditorApp.60")); //$NON-NLS-1$
-		//helperWindow.setAlwaysOnTop(true);
+		// helperWindow.setAlwaysOnTop(true);
 		tilesetWindow.setSize(400, 200);
 		Point parentPos = this.getLocation();
 		parentPos.x += this.getWidth();
@@ -667,7 +653,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 		entityWindow = new JDialog(this);
 		entityWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		//if [x] pressed
+		// if [x] pressed
 		entityWindow.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				showEntityWindow = false;
@@ -682,13 +668,13 @@ public class EditorApp extends JFrame implements ActionListener {
 
 		scriptWindow = new JDialog(this);
 		scriptWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		//if [x] pressed
-		//if [x] pressed
+		// if [x] pressed
+		// if [x] pressed
 		scriptWindow.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				showScriptWindow = false;
 				((JDialog) e.getSource()).setVisible(false);
-				//switchPerspective(activePerspective);
+				// switchPerspective(activePerspective);
 			}
 		});
 		scriptWindow.setTitle(Messages.getString("EditorApp.62")); //$NON-NLS-1$
@@ -698,7 +684,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		scriptWindow.setVisible(showScriptWindow);
 		scriptTabs = new JTabbedPane();
 		scriptTabs.getActionMap().put("butts", new AbstractAction() {
-			//save
+			// save
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -710,7 +696,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 		});
 		scriptTabs.getActionMap().put("butts2", new AbstractAction() {
-			//save all
+			// save all
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -720,10 +706,10 @@ public class EditorApp extends JFrame implements ActionListener {
 				EditorApp.this.actionPerformed(action);
 			}
 		});
-		scriptTabs.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "butts");
-		scriptTabs.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(
-				KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), "butts2");
+		scriptTabs.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "butts");
+		scriptTabs.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK), "butts2");
 		scriptWindow.setName(Messages.getString("EditorApp.63")); //$NON-NLS-1$
 
 		java.net.URL helpLoc = null;
@@ -754,7 +740,7 @@ public class EditorApp extends JFrame implements ActionListener {
 //		spritesheetWindow.setVisible(showSpritesheetWindow);
 
 
-		//Attempt to remember last window sizes and positions
+		// Attempt to remember last window sizes and positions
 		File winFile = new File("editor.rect"); //$NON-NLS-1$
 		try {
 			Scanner sc = new Scanner(winFile);
@@ -772,9 +758,8 @@ public class EditorApp extends JFrame implements ActionListener {
 			spritesheetWindow.setSize(sc.nextInt(), sc.nextInt());
 			sc.close();
 		} catch (Exception e1) {
-			//do nothing
+			// do nothing
 		}
-
 
 		if (EditorApp.blazed) {
 			tilesetWindow.setCursor(ResourceManager.cursor);
@@ -793,44 +778,44 @@ public class EditorApp extends JFrame implements ActionListener {
 			menuItem = new JMenuItem(Messages.getString("EditorApp.67")); //$NON-NLS-1$
 			menuItem.setActionCommand("MapList_Edit"); //$NON-NLS-1$
 			menuItem.addActionListener(this);
-			//menuItem.setEnabled(false);
+			// menuItem.setEnabled(false);
 			mapPopup.add(menuItem);
 
 			menuItem = new JMenuItem(Messages.getString("EditorApp.69")); //$NON-NLS-1$
 			menuItem.setActionCommand("MapList_Delete"); //$NON-NLS-1$
 			menuItem.addActionListener(this);
-			//menuItem.setEnabled(false);
+			// menuItem.setEnabled(false);
 			mapPopup.add(menuItem);
 
 			menuItem = new JMenuItem(Messages.getString("EditorApp.71")); //$NON-NLS-1$
 			menuItem.setActionCommand("MapList_New"); //$NON-NLS-1$
 			menuItem.addActionListener(this);
-			//menuItem.setEnabled(false);
+			// menuItem.setEnabled(false);
 			mapPopup.add(menuItem);
 
 			menuItem = new JMenuItem(Messages.getString("EditorApp.73")); //$NON-NLS-1$
 			menuItem.setActionCommand("MapList_Open"); //$NON-NLS-1$
 			menuItem.addActionListener(this);
-			//menuItem.setEnabled(false);
+			// menuItem.setEnabled(false);
 			mapPopup.add(menuItem);
 
 			menuItem = new JMenuItem(Messages.getString("EditorApp.75")); //$NON-NLS-1$
 			menuItem.setActionCommand("MapList_Duplicate"); //$NON-NLS-1$
 			menuItem.addActionListener(this);
-			//menuItem.setEnabled(false);
+			// menuItem.setEnabled(false);
 			mapPopup.add(menuItem);
 
 			menuItem = new JMenuItem("Move Map"); //$NON-NLS-1$
 			menuItem.setActionCommand("MapList_Move"); //$NON-NLS-1$
 			menuItem.addActionListener(this);
-			//menuItem.setEnabled(false);
+			// menuItem.setEnabled(false);
 			mapPopup.add(menuItem);
 		}
 		mapMovePopup = new JPopupMenu();
 		menuItem = new JMenuItem("Move Map Here"); //$NON-NLS-1$
 		menuItem.setActionCommand("MapList_Move"); //$NON-NLS-1$
 		menuItem.addActionListener(this);
-		//menuItem.setEnabled(false);
+		// menuItem.setEnabled(false);
 		mapMovePopup.add(menuItem);
 
 		return mapPopup;
@@ -840,7 +825,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		JMenuItem menuItem;
 		JMenu opsMenu = new JMenu(Messages.getString("EditorApp.77")); //$NON-NLS-1$
 
-		//populate the operations menu
+		// populate the operations menu
 		JMenu tilesetScaleMenu = new JMenu(Messages.getString("EditorApp.78")); //$NON-NLS-1$
 		JMenu mapScaleMenu = new JMenu(Messages.getString("EditorApp.79")); //$NON-NLS-1$
 
@@ -870,8 +855,7 @@ public class EditorApp extends JFrame implements ActionListener {
 				TabOrganizer inf = componentVec.get(mapTabs.getSelectedIndex());
 				if (inf != null) {
 					MapPane map = inf.getMap();
-					Color newCol = JColorChooser
-							.showDialog(map, Messages.getString("EditorApp.82"), TilesetPane.bgCol); //$NON-NLS-1$
+					Color newCol = JColorChooser.showDialog(map, Messages.getString("EditorApp.82"), TilesetPane.bgCol); //$NON-NLS-1$
 					if (newCol != null) {
 						TilesetPane.bgCol = newCol;
 						Preferences prefs = Preferences.userNodeForPackage(EditorApp.class);
@@ -890,7 +874,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new BlIniDialog(EditorApp.this, exeData.getConfig(), iMan.getImg(ResourceManager.rsrcBgWhite2));
+				new BlIniDialog(EditorApp.this, iMan.getImg(ResourceManager.rsrcBgWhite2));
 			}
 
 		});
@@ -906,7 +890,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		JMenuItem menuItem;
 		JMenu fileMenu = new JMenu(Messages.getString("EditorApp.84")); //$NON-NLS-1$
 
-		//populate the file menu
+		// populate the file menu
 		menuItem = new JMenuItem(Messages.getString("EditorApp.85")); //$NON-NLS-1$
 		menuItem.setActionCommand("FileMenu_New"); //$NON-NLS-1$
 		menuItem.addActionListener(this);
@@ -925,14 +909,14 @@ public class EditorApp extends JFrame implements ActionListener {
 		}
 		fileMenu.add(menuItem);
 		menuItem = new JMenuItem(Messages.getString("EditorApp.91")); //$NON-NLS-1$
-		menuItem.setActionCommand(EditorApp.ACTION_SAVE); //$NON-NLS-1$
+		menuItem.setActionCommand(EditorApp.ACTION_SAVE); // $NON-NLS-1$
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnProjectLoad.add(menuItem);
 		fileMenu.add(menuItem);
 		menuItem = new JMenuItem(Messages.getString("EditorApp.93")); //$NON-NLS-1$
-		menuItem.setActionCommand(EditorApp.ACTION_SAVEALL); //$NON-NLS-1$
+		menuItem.setActionCommand(EditorApp.ACTION_SAVEALL); // $NON-NLS-1$
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setEnabled(false);
@@ -990,10 +974,10 @@ public class EditorApp extends JFrame implements ActionListener {
 							export.exportTo(fc.getSelectedFile());
 						} catch (IOException e) {
 							e.printStackTrace();
-							StrTools.msgBox("Failed to copy files for some reason idk");
+							StrTools.msgBox(Messages.getString("EditorApp.165")); //$NON-NLS-1$
 							return;
 						}
-						StrTools.msgBox("Copy completed");
+						StrTools.msgBox(Messages.getString("EditorApp.166")); //$NON-NLS-1$
 						break;
 					default:
 						break;
@@ -1001,9 +985,34 @@ public class EditorApp extends JFrame implements ActionListener {
 				}
 			}
 		});
-		menuItem.setText("Export mod");
+		menuItem.setText(Messages.getString("EditorApp.90")); //$NON-NLS-1$
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnProjectLoad.addElement(menuItem);
+		fileMenu.add(menuItem);
+		fileMenu.add(menuItem);
+		menuItem = new JMenuItem(new AbstractAction() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -6692081319209085736L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (exeData != null && exeData.canPatch()) {
+					try {
+						exeData.getExe().updateExcode();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						StrTools.msgBox(Messages.getString("EditorApp.162")); //$NON-NLS-1$
+					}
+				} else {
+					StrTools.msgBox(Messages.getString("EditorApp.163")); //$NON-NLS-1$
+				}
+			}
+		});
+		menuItem.setText(Messages.getString("EditorApp.164")); //$NON-NLS-1$
+		menuItem.setEnabled(false);
+		this.buttonsToEnableOnExeLoad.add(menuItem);
 		fileMenu.add(menuItem);
 
 		return fileMenu;
@@ -1014,7 +1023,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 		JMenuItem menuItem;
 		JMenu ops = new JMenu(Messages.getString("EditorApp.99")); //$NON-NLS-1$
-		//populate
+		// populate
 		menuItem = new JMenuItem(new AbstractAction() {
 			private static final long serialVersionUID = -5667436162643974389L;
 
@@ -1101,10 +1110,9 @@ public class EditorApp extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent eve) {
 				airhorn();
 				if (exeData != null && exeData.canPatch()) {
-					//TODO this I think ????
+					// TODO this I think ????
 					@SuppressWarnings("unused")
-					JDialog patcher = new HackDialog(EditorApp.this,
-							exeData.getExe(), iMan);
+					JDialog patcher = new HackDialog(EditorApp.this, exeData.getExe(), iMan);
 				} else {
 					StrTools.msgBox(Messages.getString("EditorApp.103")); //$NON-NLS-1$
 				}
@@ -1174,22 +1182,22 @@ public class EditorApp extends JFrame implements ActionListener {
 					return;
 				}
 				JFileChooser fc = new JFileChooser();
-				fc.setFileFilter(new FileNameExtensionFilter(Messages.getString("EditorApp.64"),
-						"tsc")); //$NON-NLS-1$ //$NON-NLS-2$
+				fc.setFileFilter(new FileNameExtensionFilter(Messages.getString("EditorApp.64"), "tsc")); //$NON-NLS-1$ //$NON-NLS-2$
 				if (exeData != null) {
 					fc.setCurrentDirectory(exeData.getDataDirectory());
 				}
 				int rval = fc.showOpenDialog(EditorApp.this);
 				if (rval == JFileChooser.APPROVE_OPTION) {
 					TscPane t = new TscPane(exeData, fc.getSelectedFile(), iMan);
-					new TscDialog(EditorApp.this,
-							fc.getSelectedFile().getName(), t);
+					new TscDialog(EditorApp.this, fc.getSelectedFile().getName(), t);
 				}
 			}
 		});
 		menuItem.setText(Messages.getString("EditorApp.66")); //$NON-NLS-1$
 		ops.add(menuItem);
 
+		// Spritesheet Organizer
+		/*
 		menuItem = new JMenuItem(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1200,7 +1208,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		});
 		menuItem.setText("toggle sprite thing");
 		ops.add(menuItem);
-
+		*/
 
 		menuItem = new JMenuItem(new AbstractAction() {
 			@Override
@@ -1225,7 +1233,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		JMenuItem menuItem;
 		JMenu help = new JMenu(Messages.getString("EditorApp.105")); //$NON-NLS-1$
 
-		//populate
+		// populate
 		menuItem = new JMenuItem(new AbstractAction() {
 			private static final long serialVersionUID = -6358071959738865808L;
 
@@ -1244,11 +1252,8 @@ public class EditorApp extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				airhorn();
-				JOptionPane.showMessageDialog((Component) e.getSource(),
-						ABOUT_STR,
-						Messages.getString("EditorApp.107"), //$NON-NLS-1$
-						JOptionPane.INFORMATION_MESSAGE,
-						ABOUT_ICON);
+				JOptionPane.showMessageDialog((Component) e.getSource(), ABOUT_STR, Messages.getString("EditorApp.107"), //$NON-NLS-1$
+						JOptionPane.INFORMATION_MESSAGE, ABOUT_ICON);
 			}
 		});
 		menuItem.setText(Messages.getString("EditorApp.108")); //$NON-NLS-1$
@@ -1257,11 +1262,11 @@ public class EditorApp extends JFrame implements ActionListener {
 		return help;
 	}
 
-	//setup the ops panel
+	// setup the ops panel
 	private JPanel buildOpsPanel() {
 		opsPanel = new JPanel(new CardLayout());
-		opsPanel.setBorder(BorderFactory.createBevelBorder(
-				BevelBorder.RAISED, Color.decode("0x7D9E63"), Color.decode("0x4F633E"))); //$NON-NLS-1$ //$NON-NLS-2$
+		opsPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.decode("0x7D9E63"), //$NON-NLS-1$
+				Color.decode("0x4F633E"))); //$NON-NLS-1$
 
 		opsPanel.add(buildTileOps(), PERSPECTIVE_TILE);
 
@@ -1274,17 +1279,17 @@ public class EditorApp extends JFrame implements ActionListener {
 		return opsPanel;
 	}
 
-	//Set up the "Entity" panel
+	// Set up the "Entity" panel
 	private JPanel buildEntityOps() {
-		//local vars for setting up ops panel
+		// local vars for setting up ops panel
 		JPanel tempPanel;
 		JLabel kittyLabel;
 		java.net.URL kittenURL;
 		ImageIcon catImg;
 		GridBagConstraints c = new GridBagConstraints();
-		//ButtonGroup group;
-		tempPanel = new BgPanel(new GridBagLayout(), iMan.getImg(ResourceManager.rsrcBackdrop)); //$NON-NLS-1$
-		//ActionListener oListen = new TileOpsListener();
+		// ButtonGroup group;
+		tempPanel = new BgPanel(new GridBagLayout(), iMan.getImg(ResourceManager.rsrcBackdrop)); // $NON-NLS-1$
+		// ActionListener oListen = new TileOpsListener();
 		c.anchor = GridBagConstraints.LINE_START;
 		if (blazed) {
 			kittenURL = EditorApp.class.getResource("rsrc/weed_EntityCat.gif"); //$NON-NLS-1$
@@ -1301,10 +1306,10 @@ public class EditorApp extends JFrame implements ActionListener {
 
 		c.weightx = 0.2;
 		c.gridx++;
-		//c.fill = GridBagConstraints.BOTH;
-		//categoryList = new JList(exeData.getEntityCategories());
-		categoryList = new BgList<>(iMan.getImg(ResourceManager.rsrcBgWhite)); //$NON-NLS-1$
-		subcatList = new BgList<>(iMan.getImg(ResourceManager.rsrcBgWhite)); //$NON-NLS-1$
+		// c.fill = GridBagConstraints.BOTH;
+		// categoryList = new JList(exeData.getEntityCategories());
+		categoryList = new BgList<>(iMan.getImg(ResourceManager.rsrcBgWhite)); // $NON-NLS-1$
+		subcatList = new BgList<>(iMan.getImg(ResourceManager.rsrcBgWhite)); // $NON-NLS-1$
 		categoryList.setPrototypeCellValue("Long Category"); //$NON-NLS-1$
 		subcatList.setPrototypeCellValue("Long Category Name"); //$NON-NLS-1$
 		JScrollPane catScroll = new JScrollPane(categoryList);
@@ -1313,8 +1318,8 @@ public class EditorApp extends JFrame implements ActionListener {
 			@Override
 			public void mouseClicked(MouseEvent eve) {
 				if (exeData != null && eve.getClickCount() == 2) {
-					subcatList.setListData(exeData.getEntitySubcat(
-							((JList<String>) eve.getSource()).getSelectedValue()));
+					subcatList
+							.setListData(exeData.getEntitySubcat(((JList<String>) eve.getSource()).getSelectedValue()));
 				}
 			}
 		});
@@ -1326,12 +1331,11 @@ public class EditorApp extends JFrame implements ActionListener {
 					if (selected != -1) {
 						TabOrganizer currentTab = componentVec.get(selected);
 						EntityPane ep = currentTab.getEntity();
-						Vector<EntityData> eVec =
-								exeData.getEntityList(categoryList.getSelectedValue(),
-										subcatList.getSelectedValue());
+						Vector<EntityData> eVec = exeData.getEntityList(categoryList.getSelectedValue(),
+								subcatList.getSelectedValue());
 						ep.getEntityList().setListData(eVec);
-					}//if there is a selected tab
-				}//if doubleclick
+					} // if there is a selected tab
+				} // if doubleclick
 			}
 		});
 
@@ -1339,13 +1343,13 @@ public class EditorApp extends JFrame implements ActionListener {
 		tempPanel.add(catScroll, c);
 
 		c.gridx++;
-		//subcatList = new JList(exeData.getEntitySubcat("All"));
+		// subcatList = new JList(exeData.getEntitySubcat("All"));
 		JScrollPane subcatScroll = new JScrollPane(subcatList);
 		subcatScroll.setMinimumSize(new Dimension(120, 120));
 		subcatScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		tempPanel.add(subcatScroll, c);
 
-		//npc.tbl editor button
+		// npc.tbl editor button
 		npcTblWindow = new NpcTblEditor(this);
 		c.gridx++;
 		c.weightx = 0.2;
@@ -1367,29 +1371,27 @@ public class EditorApp extends JFrame implements ActionListener {
 		npcTblButton.setOpaque(false);
 		tempPanel.add(npcTblButton, c);
 
-
-		//buffer space
+		// buffer space
 		c.gridx++;
 		c.gridy = 0;
 		c.gridheight = GridBagConstraints.REMAINDER;
 		c.weightx = 0.8;
 		tempPanel.add(new JLabel(), c);
 
-
 		return tempPanel;
 	}
 
-	//Set up the "Script" panel
+	// Set up the "Script" panel
 	private JPanel buildScriptOps() {
-		//local vars for setting up ops panel
+		// local vars for setting up ops panel
 		JPanel tempPanel;
 		JLabel kittyLabel;
 		java.net.URL kittenURL;
 		ImageIcon catImg;
 		GridBagConstraints c = new GridBagConstraints();
-		//ButtonGroup group;
-		tempPanel = new BgPanel(new GridBagLayout(), iMan.getImg(ResourceManager.rsrcBackdrop)); //$NON-NLS-1$
-		//ActionListener oListen = new TileOpsListener();
+		// ButtonGroup group;
+		tempPanel = new BgPanel(new GridBagLayout(), iMan.getImg(ResourceManager.rsrcBackdrop)); // $NON-NLS-1$
+		// ActionListener oListen = new TileOpsListener();
 		c.anchor = GridBagConstraints.LINE_START;
 		if (blazed) {
 			kittenURL = EditorApp.class.getResource("rsrc/weed_ScriptCat.gif"); //$NON-NLS-1$
@@ -1425,7 +1427,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent eve) {
-				//rebuild script pane
+				// rebuild script pane
 				airhorn();
 				if (TscPane.getComPanel() != null) {
 					JPanel p = new JPanel(new BorderLayout());
@@ -1447,7 +1449,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent eve) {
-				//rebuild script pane
+				// rebuild script pane
 				airhorn();
 				JPanel p = new JPanel(new BorderLayout());
 				p.add(new JScrollPane(TscPane.getDefPanel()), BorderLayout.WEST);
@@ -1477,17 +1479,17 @@ public class EditorApp extends JFrame implements ActionListener {
 		return tempPanel;
 	}
 
-	//Set up the "Mapdata" panel
+	// Set up the "Mapdata" panel
 	private JPanel buildMapdataOps() {
-		//local vars for setting up ops panel
+		// local vars for setting up ops panel
 		JPanel tempPanel;
 		JLabel kittyLabel;
 		java.net.URL kittenURL;
 		ImageIcon catImg;
 		GridBagConstraints c = new GridBagConstraints();
-		//ButtonGroup group;
-		tempPanel = new BgPanel(new GridBagLayout(), iMan.getImg(ResourceManager.rsrcBackdrop)); //$NON-NLS-1$
-		//ActionListener oListen = new TileOpsListener();
+		// ButtonGroup group;
+		tempPanel = new BgPanel(new GridBagLayout(), iMan.getImg(ResourceManager.rsrcBackdrop)); // $NON-NLS-1$
+		// ActionListener oListen = new TileOpsListener();
 		c.anchor = GridBagConstraints.LINE_START;
 		if (blazed) {
 			kittenURL = EditorApp.class.getResource("rsrc/weed_MapdataCat.gif"); //$NON-NLS-1$
@@ -1505,9 +1507,9 @@ public class EditorApp extends JFrame implements ActionListener {
 		return tempPanel;
 	}
 
-	//Set up the "Tile" operations panel
+	// Set up the "Tile" operations panel
 	private JPanel buildTileOps() {
-		//local vars for setting up ops panel
+		// local vars for setting up ops panel
 		JPanel tempPanel;
 		JLabel kittyLabel;
 		JRadioButton radio;
@@ -1516,9 +1518,9 @@ public class EditorApp extends JFrame implements ActionListener {
 		ImageIcon catImg;
 		GridBagConstraints c = new GridBagConstraints();
 		ButtonGroup group;
-		tempPanel = new BgPanel(new GridBagLayout(), iMan.getImg(ResourceManager.rsrcBackdrop)); //$NON-NLS-1$
+		tempPanel = new BgPanel(new GridBagLayout(), iMan.getImg(ResourceManager.rsrcBackdrop)); // $NON-NLS-1$
 		c.anchor = GridBagConstraints.LINE_START;
-		//needs cats
+		// needs cats
 		if (blazed) {
 			kittenURL = EditorApp.class.getResource("rsrc/weed_TileCat.gif"); //$NON-NLS-1$
 		} else {
@@ -1532,15 +1534,13 @@ public class EditorApp extends JFrame implements ActionListener {
 		c.weightx = 0;
 		tempPanel.add(kittyLabel, c);
 		//add a set of radio buttons for draw actions
+
 		group = new ButtonGroup();
 		c.gridx = 1;
 		c.gridheight = 1;
 		c.gridy = 0;
 		tempPanel.add(new JLabel(Messages.getString("EditorApp.126")), c); //$NON-NLS-1$
-		int[] mnemonicArray = {
-				KeyEvent.VK_D, KeyEvent.VK_F, KeyEvent.VK_R, KeyEvent.VK_E,
-				KeyEvent.VK_C,
-		};
+		int[] mnemonicArray = { KeyEvent.VK_D, KeyEvent.VK_F, KeyEvent.VK_R, KeyEvent.VK_E, KeyEvent.VK_C, };
 		for (int i = 0; i < NUM_DRAWMODE; i++) {
 			radio = new JRadioButton(new DrawmodeAction(i));
 			radio.setText(TILEOP_DRAWMODES[i]);
@@ -1555,6 +1555,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		}
 		//add a set of checkboxes for other options
 		c.gridx = 2;
+
 		c.gridy = 0;
 		tempPanel.add(new JLabel(Messages.getString("EditorApp.127")), c); //$NON-NLS-1$
 		for (int i = 0; i < TILEOP_NUM_OTHER_OPT; i++) {
@@ -1566,7 +1567,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			tempPanel.add(check, c);
 		}
 
-		//add a slider for gradient layer alpha
+		// add a slider for gradient layer alpha
 		if (EDITOR_MODE == 2) {
 			c.gridx = 5;
 			c.gridy = 0;
@@ -1605,7 +1606,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			tempPanel.add(alphaSlider, c);
 		}
 
-		//buffer space
+		// buffer space
 		c.gridx++;
 		c.gridy = 0;
 		c.gridheight = GridBagConstraints.REMAINDER;
@@ -1620,7 +1621,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		MapInfo data;
 		MapPane map;
 		EntityPane entity;
-		//subject to change
+		// subject to change
 		TscPane TSC;
 		MapdataPane mapdata;
 		TscBuilder tscBuilder;
@@ -1658,20 +1659,16 @@ public class EditorApp extends JFrame implements ActionListener {
 			TSC.addPropertyChangeListener(this);
 			mapdata = d;
 			mapdata.addPropertyChangeListener(this);
-			tscBuilder = new TscBuilder(iMan.getImg(ResourceManager.rsrcBgBlue)); //$NON-NLS-1$
+			tscBuilder = new TscBuilder(iMan.getImg(ResourceManager.rsrcBgBlue)); // $NON-NLS-1$
 		}
 
 		public boolean isModified() {
-			return data.isModified() |
-					TSC.isModified() |
-					mapdata.isModified();
+			return data.isModified() | TSC.isModified() | mapdata.isModified();
 		}
 
 		public void markUnchanged() {
 			if (starred) {
-				if (!data.isModified() &&
-						!TSC.isModified() &&
-						!mapdata.isModified()) {
+				if (!data.isModified() && !TSC.isModified() && !mapdata.isModified()) {
 					starred = false;
 					int myIndex = componentVec.indexOf(this);
 					String currentTitle = mapTabs.getTitleAt(myIndex);
@@ -1702,7 +1699,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			} catch (Exception err) {
 				err.printStackTrace();
 			}
-			//entity.save();
+			// entity.save();
 			if (!data.isTemp) {
 				try {
 					exeData.saveMapData(data.getMapNumber());
@@ -1719,11 +1716,10 @@ public class EditorApp extends JFrame implements ActionListener {
 		 * @return JOptionPane.<choice>
 		 */
 		public int promptSave() {
-			String tabTitle = Messages.getString("EditorApp.155")  //$NON-NLS-1$
-					+ mapTabs.getTitleAt(mapTabs.getSelectedIndex()); //$NON-NLS-1$
-			return JOptionPane.showConfirmDialog(EditorApp.this,
-					Messages.getString("EditorApp.156") + //$NON-NLS-1$
-							Messages.getString("EditorApp.157"),  //$NON-NLS-1$
+			String tabTitle = Messages.getString("EditorApp.155") //$NON-NLS-1$
+					+ mapTabs.getTitleAt(mapTabs.getSelectedIndex()); // $NON-NLS-1$
+			return JOptionPane.showConfirmDialog(EditorApp.this, Messages.getString("EditorApp.156") + //$NON-NLS-1$
+					Messages.getString("EditorApp.157"), //$NON-NLS-1$
 					tabTitle, JOptionPane.YES_NO_CANCEL_OPTION);
 		}
 
@@ -1732,9 +1728,9 @@ public class EditorApp extends JFrame implements ActionListener {
 			if (eve.getPropertyName() == Mapdata.P_NAME && !data.isTemp) {
 				String name = (String) eve.getNewValue();
 				mapTabs.setToolTipTextAt(mapTabs.getSelectedIndex(), name);
-				//attempt to update the list
+				// attempt to update the list
 				mapList.setListData(exeData.getMapNames());
-				//attempt to update the TSC majig
+				// attempt to update the TSC majig
 				String targetName = mapTabs.getTitleAt(mapTabs.getSelectedIndex());
 				for (int i = 0; i < scriptTabs.getComponentCount(); i++) {
 					String tabName = scriptTabs.getTitleAt(i);
@@ -1745,35 +1741,35 @@ public class EditorApp extends JFrame implements ActionListener {
 				}
 			} else if (eve.getPropertyName() == Mapdata.P_TILE) {
 				String n = (String) eve.getNewValue();
-				File tileFile = new File(exeData.getDataDirectory() + "/Stage/Prt" +  //$NON-NLS-1$
+				File tileFile = new File(exeData.getDataDirectory() + "/Stage/Prt" + //$NON-NLS-1$
 						n + exeData.getImgExtension());
-				File pxaFile = new File(exeData.getDataDirectory() + "/Stage/" +  //$NON-NLS-1$
+				File pxaFile = new File(exeData.getDataDirectory() + "/Stage/" + //$NON-NLS-1$
 						n + ".pxa"); //$NON-NLS-1$
 				data.setTileset(pxaFile, tileFile);
 				((TilesetPane) this.getMap().getTilePane()).setTileBounds();
 			} else if (eve.getPropertyName() == Mapdata.P_NPC1) {
-				File npcFile = new File(exeData.getDataDirectory() + "/Npc/Npc" +  //$NON-NLS-1$
+				File npcFile = new File(exeData.getDataDirectory() + "/Npc/Npc" + //$NON-NLS-1$
 						eve.getNewValue() + exeData.getImgExtension());
 				data.setNpc1Img(npcFile);
 			} else if (eve.getPropertyName() == Mapdata.P_NPC2) {
-				File npcFile = new File(exeData.getDataDirectory() + "/Npc/Npc" +  //$NON-NLS-1$
+				File npcFile = new File(exeData.getDataDirectory() + "/Npc/Npc" + //$NON-NLS-1$
 						eve.getNewValue() + exeData.getImgExtension());
 				data.setNpc2Img(npcFile);
 			} else if (eve.getPropertyName() == Mapdata.P_BGIMG) {
-				File bgFile = new File(exeData.getDataDirectory() + File.separator +
-						eve.getNewValue() + exeData.getImgExtension());
+				File bgFile = new File(
+						exeData.getDataDirectory() + File.separator + eve.getNewValue() + exeData.getImgExtension());
 				data.setBgImg(bgFile);
 			} else if (eve.getPropertyName() == Mapdata.P_FILE && !data.isTemp) {
 				if (eve.getOldValue() != null) {
 					this.save();
 				}
 				closeCurrentTab();
-				//this must be done prematurely
-				//Mapdata d = exeData.getMapdata(data.getMapNumber());
-				//d.setFile((String) eve.getNewValue());
-				//attempt to update the list
+				// this must be done prematurely
+				// Mapdata d = exeData.getMapdata(data.getMapNumber());
+				// d.setFile((String) eve.getNewValue());
+				// attempt to update the list
 				mapList.setListData(exeData.getMapNames());
-				//close the current tab because shenanigans
+				// close the current tab because shenanigans
 			} else if (eve.getPropertyName() == Changeable.PROPERTY_EDITED) {
 				if ((Boolean) eve.getNewValue()) {
 					markChanged();
@@ -1798,14 +1794,14 @@ public class EditorApp extends JFrame implements ActionListener {
 		}
 	}
 
-	//method adds a new map tab to the thing
+	// method adds a new map tab to the thing
 	private void addMapTab(int selectionNum) {
-		//check to see if we are even set up yet
+		// check to see if we are even set up yet
 		if (exeData == null) {
 			return;
 		}
 		try {
-			//check to see if it exists already
+			// check to see if it exists already
 			for (int i = 0; i < mapTabs.getComponentCount(); i++) {
 				String tabName = mapTabs.getTitleAt(i);
 				if (tabName.endsWith("*")) {
@@ -1814,38 +1810,35 @@ public class EditorApp extends JFrame implements ActionListener {
 				if (tabName.equals(exeData.getShortName(selectionNum))
 						|| tabName.equals(exeData.getLongName(selectionNum))) {
 					mapTabs.setSelectedIndex(i);
-					//scriptTabs.setSelectedIndex(i);
+					// scriptTabs.setSelectedIndex(i);
 					return;
 				}
 			}
 
-			//set up the data holder
+			// set up the data holder
 			MapInfo data = new MapInfo(exeData, iMan, selectionNum);
-			//set up the map pane
+			// set up the map pane
 			MapPane mapPanel = new MapPane(this, data);
 			EntityPane entityPanel = new EntityPane(this, data);
 			TscPane txt = new TscPane(exeData, selectionNum, this, iMan);
 
-			//set up the mapdata pane
-			MapdataPane mapdatPanel = new MapdataPane(
-					exeData, selectionNum, iMan.getImg(ResourceManager.rsrcBgBlue), true); //$NON-NLS-1$
+			// set up the mapdata pane
+			MapdataPane mapdatPanel = new MapdataPane(exeData, selectionNum, iMan.getImg(ResourceManager.rsrcBgBlue),
+					true); // $NON-NLS-1$
 
-			//add bits to holder
+			// add bits to holder
 			TabOrganizer holder = new TabOrganizer(mapPanel, entityPanel, txt, mapdatPanel, data);
-			//componentVec.setSize(mapTabs.getTabCount() + 2); //not needed?
+			// componentVec.setSize(mapTabs.getTabCount() + 2); //not needed?
 			componentVec.add(mapTabs.getTabCount(), holder);
 
-			//finalize
-			//layout.show(tabPanel, activePerspective);
+			// finalize
+			// layout.show(tabPanel, activePerspective);
 			Component contents = buildTabContents(holder);
-			mapTabs.insertTab(exeData.getShortName(selectionNum),
-					null,
-					contents,
-					exeData.getLongName(selectionNum),
+			mapTabs.insertTab(exeData.getShortName(selectionNum), null, contents, exeData.getLongName(selectionNum),
 					mapTabs.getComponentCount());
 			mapTabs.setSelectedComponent(contents);
 			if (scriptWindow.getName().equals(Messages.getString("EditorApp.2"))) { //$NON-NLS-1$
-				//needs to be initialized
+				// needs to be initialized
 				if (showingCommands) {
 					scriptWindow.add(TscPane.getComPanel(), BorderLayout.WEST);
 				} else {
@@ -1856,20 +1849,20 @@ public class EditorApp extends JFrame implements ActionListener {
 				scriptWindow.setName("scriptWindow"); //$NON-NLS-1$
 			}
 			JScrollPane textScroll = new JScrollPane(txt);
-			scriptTabs.insertTab(exeData.getShortName(selectionNum),
-					null,
-					textScroll,
-					exeData.getLongName(selectionNum),
-					scriptTabs.getComponentCount());
+			scriptTabs.insertTab(exeData.getShortName(selectionNum), null, textScroll,
+					exeData.getLongName(selectionNum), scriptTabs.getComponentCount());
 			scriptTabs.setSelectedComponent(textScroll);
 
 		} catch (OutOfMemoryError err) {
 			StrTools.msgBox(Messages.getString("EditorApp.136")); //$NON-NLS-1$
-		}
+		} /*catch (Exception ex) {
+			ex.printStackTrace();
+			StrTools.msgBox("Failed to add map tab:\n" + ex);
+			}*/
 	}
 
 	private void addMapTab(File mapfile) {
-		//this is a terrible idea
+		// this is a terrible idea
 		if (exeData == null) {
 			try {
 				exeData = new GameInfo(mapfile);
@@ -1880,8 +1873,7 @@ public class EditorApp extends JFrame implements ActionListener {
 				e.printStackTrace();
 			}
 		}
-		MapdataDialog diag = new MapdataDialog(
-				this, mapfile, exeData, iMan.getImg(ResourceManager.rsrcBgBlue)); //$NON-NLS-1$
+		MapdataDialog diag = new MapdataDialog(this, mapfile, exeData, iMan.getImg(ResourceManager.rsrcBgBlue)); // $NON-NLS-1$
 		Mapdata mapdat = diag.getMapdata();
 
 		MapInfo data = new MapInfo(exeData, iMan, mapdat);
@@ -1890,26 +1882,21 @@ public class EditorApp extends JFrame implements ActionListener {
 		EntityPane entityPanel = new EntityPane(this, data);
 		TscPane txt = new TscPane(exeData, mapdat, this, iMan);
 
-		//set up the mapdata pane
-		MapdataPane mapdatPanel = new MapdataPane(
-				exeData, mapdat, iMan.getImg(ResourceManager.rsrcBgBlue), true); //$NON-NLS-1$
+		// set up the mapdata pane
+		MapdataPane mapdatPanel = new MapdataPane(exeData, mapdat, iMan.getImg(ResourceManager.rsrcBgBlue), true); // $NON-NLS-1$
 
-		//add bits to holder
+		// add bits to holder
 		TabOrganizer holder = new TabOrganizer(mapPanel, entityPanel, txt, mapdatPanel, data);
-		//componentVec.setSize(mapTabs.getTabCount() + 2); //not needed?
+		// componentVec.setSize(mapTabs.getTabCount() + 2); //not needed?
 		componentVec.add(mapTabs.getTabCount(), holder);
 
-		//finalize
-		//layout.show(tabPanel, activePerspective);
+		// finalize
+		// layout.show(tabPanel, activePerspective);
 		Component contents = buildTabContents(holder);
-		mapTabs.insertTab(mapdat.getFile(),
-				null,
-				contents,
-				mapdat.getMapname(),
-				mapTabs.getComponentCount());
+		mapTabs.insertTab(mapdat.getFile(), null, contents, mapdat.getMapname(), mapTabs.getComponentCount());
 		mapTabs.setSelectedComponent(contents);
 		if (scriptWindow.getName().equals(Messages.getString("EditorApp.2"))) { //$NON-NLS-1$
-			//needs to be initialized
+			// needs to be initialized
 			if (showingCommands) {
 				scriptWindow.add(TscPane.getComPanel(), BorderLayout.WEST);
 			} else {
@@ -1920,17 +1907,13 @@ public class EditorApp extends JFrame implements ActionListener {
 			scriptWindow.setName("scriptWindow"); //$NON-NLS-1$
 		}
 		JScrollPane textScroll = new JScrollPane(txt);
-		scriptTabs.insertTab(mapdat.getFile(),
-				null,
-				textScroll,
-				mapdat.getMapname(),
-				scriptTabs.getComponentCount());
+		scriptTabs.insertTab(mapdat.getFile(), null, textScroll, mapdat.getMapname(), scriptTabs.getComponentCount());
 		scriptTabs.setSelectedComponent(textScroll);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//radio buttons for card layout
+		// radio buttons for card layout
 		FileNameExtensionFilter filter;
 		int selectedMap = -1;
 		String selectedMapStr = mapList.getSelectedValue();
@@ -1941,44 +1924,45 @@ public class EditorApp extends JFrame implements ActionListener {
 		int retVal;
 		if (e.getActionCommand().equals("MapList_Edit")) { //$NON-NLS-1$
 			airhorn();
-			//don't do if we ain't loaded
+			// don't do if we ain't loaded
 			if (exeData == null) {
 				return;
 			}
 			Mapdata d = exeData.getMapdata(selectedMap);
-			//check tabs
+			// check tabs
 			boolean success = removeTab(d);
-			//update
+			// update
 			if (success) {
-				new MapdataDialog(this, d.getMapnum(), exeData, iMan.getImg(ResourceManager.rsrcBgBlue)); //$NON-NLS-1$
+				new MapdataDialog(this, d.getMapnum(), exeData, iMan.getImg(ResourceManager.rsrcBgBlue)); // $NON-NLS-1$
 				mapList.setListData(exeData.getMapNames());
 			}
 		} else if (e.getActionCommand().equals("MapList_Delete")) { //$NON-NLS-1$
 			airhorn();
-			//don't do if we ain't loaded
+			// don't do if we ain't loaded
 			if (exeData == null) {
 				return;
 			}
-			int choice = JOptionPane.showConfirmDialog(this, Messages.getString("EditorApp.24"), Messages.getString("EditorApp.40"), JOptionPane.YES_NO_OPTION);
+			int choice = JOptionPane.showConfirmDialog(this, Messages.getString("EditorApp.24"),
+					Messages.getString("EditorApp.40"), JOptionPane.YES_NO_OPTION);
 			if (choice != JOptionPane.YES_OPTION) {
 				return;
 			}
 			deleteSelectedMaps();
 		} else if (e.getActionCommand().equals("MapList_New")) { //$NON-NLS-1$
 			airhorn();
-			//don't do if we ain't loaded
+			// don't do if we ain't loaded
 			if (exeData == null) {
 				return;
 			}
 			Mapdata d = exeData.addMap();
-			new MapdataDialog(this, d.getMapnum(), exeData, iMan.getImg(ResourceManager.rsrcBgBlue)); //$NON-NLS-1$
+			new MapdataDialog(this, d.getMapnum(), exeData, iMan.getImg(ResourceManager.rsrcBgBlue)); // $NON-NLS-1$
 			mapList.setListData(exeData.getMapNames());
 		} else if (e.getActionCommand().equals("MapList_Open")) { //$NON-NLS-1$
 			airhorn();
 			this.addMapTab(selectedMap);
 		} else if (e.getActionCommand().equals("MapList_Duplicate")) { //$NON-NLS-1$
 			airhorn();
-			//don't do if we ain't loaded
+			// don't do if we ain't loaded
 			if (exeData == null) {
 				return;
 			}
@@ -2002,8 +1986,11 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("FileMenu_Load")) { //$NON-NLS-1$
 			airhorn();
-			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl",
-					"pxm"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			if (exeData != null)
+				if (!saveAll(true))
+					return;
+
+			filter = new FileNameExtensionFilter(Messages.getString("EditorApp.143"), "bin", "exe", "tbl", "pxm"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			fc.setFileFilter(filter);
 
 			fc.setCurrentDirectory(lastDir);
@@ -2018,14 +2005,16 @@ public class EditorApp extends JFrame implements ActionListener {
 						loadFile(selected);
 						lastDir = selected;
 					} catch (IOException e1) {
-						System.err.println(
-								Messages.getString("EditorApp.147") + fc.getSelectedFile().getName()); //$NON-NLS-1$
+						System.err.println(Messages.getString("EditorApp.147") + fc.getSelectedFile().getName()); //$NON-NLS-1$
 					}
 				}
 			}
 		} else if (e.getActionCommand().equals("FileMenu_New")) { //$NON-NLS-1$
 			airhorn();
-			//purge existing memory
+			if (exeData != null)
+				if (!saveAll(true))
+					return;
+			// purge existing memory
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			StrTools.msgBox(Messages.getString("EditorApp.132") + //$NON-NLS-1$
 					Messages.getString("EditorApp.133")); //$NON-NLS-1$
@@ -2034,13 +2023,12 @@ public class EditorApp extends JFrame implements ActionListener {
 				try {
 					File dir = fc.getSelectedFile();
 					if (!dir.exists()) {
-						//noinspection ResultOfMethodCallIgnored
+						// noinspection ResultOfMethodCallIgnored
 						dir.mkdirs();
-				}
+					}
 					File tblFile = new File(dir + "/dsmap.bin"); //$NON-NLS-1$
 					if (tblFile.exists()) {
-						int response = JOptionPane.showConfirmDialog(this,
-								Messages.getString("EditorApp.135"), //$NON-NLS-1$
+						int response = JOptionPane.showConfirmDialog(this, Messages.getString("EditorApp.135"), //$NON-NLS-1$
 								Messages.getString("EditorApp.137"), //$NON-NLS-1$
 								JOptionPane.YES_NO_OPTION);
 						if (response != JOptionPane.YES_OPTION) {
@@ -2055,6 +2043,9 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("FileMenu_Last")) { //$NON-NLS-1$
 			airhorn();
+			if (exeData != null)
+				if (!saveAll(true))
+					return;
 			try {
 				if (lastDir.exists()) {
 					loadFile(lastDir);
@@ -2065,14 +2056,14 @@ public class EditorApp extends JFrame implements ActionListener {
 				err.printStackTrace();
 			}
 
-		} else if (e.getActionCommand().equals(EditorApp.ACTION_SAVE)) { //$NON-NLS-1$
+		} else if (e.getActionCommand().equals(EditorApp.ACTION_SAVE)) { // $NON-NLS-1$
 			airhorn();
 			if (mapTabs.getComponentCount() <= 0) {
 				return;
 			}
 			TabOrganizer inf = componentVec.get(mapTabs.getSelectedIndex());
 			inf.save();
-		} else if (e.getActionCommand().equals(EditorApp.ACTION_SAVEALL)) { //$NON-NLS-1$
+		} else if (e.getActionCommand().equals(EditorApp.ACTION_SAVEALL)) { // $NON-NLS-1$
 			airhorn();
 
 			for (TabOrganizer i : componentVec) {
@@ -2103,16 +2094,18 @@ public class EditorApp extends JFrame implements ActionListener {
 			indices[i] = Integer.parseInt(mapstrs.get(i).split("\\s+")[0]);
 		}
 		java.util.Arrays.sort(indices);
-		//remove top-down so as not to disturb the natural order.
+		exeData.prepareToDeleteMaps();
+		// remove top-down so as not to disturb the natural order.
 		for (int i = indices.length - 1; i >= 0; i--) {
 			Mapdata d = exeData.getMapdata(indices[i]);
-			//check tabs
+			// check tabs
 			boolean success = removeTab(d);
-			//remove
+			// remove
 			if (success) {
 				exeData.deleteMap(indices[i], this);
 			}
 		}
+		exeData.doneDeletingMaps();
 		mapList.setListData(exeData.getMapNames());
 	}
 
@@ -2124,15 +2117,15 @@ public class EditorApp extends JFrame implements ActionListener {
 		mapList.removeAll();
 	}
 
-	private void loadFile(File selected) throws IOException {
-		purgeData(); //clean up any old tabs
+	public void loadFile(File selected) throws IOException {
+		purgeData(); // clean up any old tabs
 		exeData = new GameInfo(selected);
 		exeData.loadImages(iMan);
 		mapList.setListData(exeData.getMapNames());
 		categoryList.setListData(exeData.getEntityCategories());
 		subcatList.setListData(exeData.getEntitySubcat(Messages.getString("EditorApp.154"))); //$NON-NLS-1$
 		((NpcTblEditor) npcTblWindow).populate(exeData);
-		TscPane.initDefines(exeData);
+		TscPane.initDefines(exeData.getDataDirectory());
 		for (AbstractButton b : buttonsToEnableOnProjectLoad) {
 			b.setEnabled(true);
 		}
@@ -2184,19 +2177,19 @@ public class EditorApp extends JFrame implements ActionListener {
 		activePerspective = perspective;
 		switch (perspective) {
 		case PERSPECTIVE_TILE: {
-			//airhorn();
+			// airhorn();
 			tilesetWindow.setVisible(showTileWindow);
 			entityWindow.setVisible(false);
 			CardLayout layout = (CardLayout) opsPanel.getLayout();
 			layout.show(opsPanel, PERSPECTIVE_TILE);
-			//update the tabs
+			// update the tabs
 			for (int i = 0; i < mapTabs.getComponentCount(); i++) {
-				//for each tab
-				//JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
+				// for each tab
+				// JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
 				TabOrganizer inf = componentVec.get(i);
-				//currentPanel.removeAll();
+				// currentPanel.removeAll();
 				mapTabs.setComponentAt(i, buildTabContents(inf));
-				//currentPanel.revalidate();
+				// currentPanel.revalidate();
 			}
 			refreshCurrentMap();
 			break;
@@ -2207,14 +2200,14 @@ public class EditorApp extends JFrame implements ActionListener {
 			CardLayout layout = (CardLayout) opsPanel.getLayout();
 			layout.show(opsPanel, PERSPECTIVE_ENTITY);
 
-			//update the tabs
+			// update the tabs
 			for (int i = 0; i < mapTabs.getComponentCount(); i++) {
-				//for each tab
-				//JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
+				// for each tab
+				// JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
 				TabOrganizer inf = componentVec.get(i);
-				//currentPanel.removeAll();
+				// currentPanel.removeAll();
 				mapTabs.setComponentAt(i, buildTabContents(inf));
-				//currentPanel.revalidate();
+				// currentPanel.revalidate();
 			}
 			refreshCurrentMap();
 			break;
@@ -2226,14 +2219,14 @@ public class EditorApp extends JFrame implements ActionListener {
 			showScriptWindow = true;
 			CardLayout layout = (CardLayout) opsPanel.getLayout();
 			layout.show(opsPanel, PERSPECTIVE_TSC);
-			//update the tabs
+			// update the tabs
 			for (int i = 0; i < mapTabs.getComponentCount(); i++) {
-				//for each tab
-				//JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
+				// for each tab
+				// JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
 				TabOrganizer inf = componentVec.get(i);
-				//currentPanel.removeAll();
+				// currentPanel.removeAll();
 				mapTabs.setComponentAt(i, buildTabContents(inf));
-				//currentPanel.revalidate();
+				// currentPanel.revalidate();
 			}
 			mapTabs.repaint();
 			break;
@@ -2243,19 +2236,19 @@ public class EditorApp extends JFrame implements ActionListener {
 			entityWindow.setVisible(false);
 			CardLayout layout = (CardLayout) opsPanel.getLayout();
 			layout.show(opsPanel, PERSPECTIVE_MAPDATA);
-			//update the tabs
+			// update the tabs
 			for (int i = 0; i < mapTabs.getComponentCount(); i++) {
-				//for each tab
+				// for each tab
 				/*
 				JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
 				layout = (CardLayout)currentPanel.getLayout();
 				layout.show(currentPanel, PERSPECTIVE_MAPDATA);
 				*/
-				//JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
+				// JPanel currentPanel = (JPanel)mapTabs.getComponent(i);
 				TabOrganizer inf = componentVec.get(i);
-				//currentPanel.removeAll();
+				// currentPanel.removeAll();
 				mapTabs.setComponentAt(i, buildTabContents(inf));
-				//currentPanel.revalidate();
+				// currentPanel.revalidate();
 			}
 			mapTabs.repaint();
 			break;
@@ -2300,20 +2293,21 @@ public class EditorApp extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * @param d - the mapdata of the tab to remove. Used to get title.
+	 * @param d
+	 *            - the mapdata of the tab to remove. Used to get title.
 	 * @return success of removal
 	 */
 	private boolean removeTab(Mapdata d) {
 		for (int i = 0; i < mapTabs.getComponentCount(); i++) {
 			String title = mapTabs.getTitleAt(i);
 			String titlestar = title.substring(0, title.length() - 1);
-			if (title.equals(d.getFile()) || title.equals(d.getMapname()) ||
-					titlestar.equals(d.getFile()) || titlestar.equals(d.getMapname())) {
+			if (title.equals(d.getFile()) || title.equals(d.getMapname()) || titlestar.equals(d.getFile())
+					|| titlestar.equals(d.getMapname())) {
 				TabOrganizer tab = componentVec.get(i);
 				if (tab.isModified()) {
 					int r = JOptionPane.showConfirmDialog(this, Messages.getString("EditorApp.158") + //$NON-NLS-1$
 							Messages.getString("EditorApp.159"), Messages.getString("EditorApp.160"),
-							JOptionPane.YES_NO_CANCEL_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+							JOptionPane.YES_NO_CANCEL_OPTION); // $NON-NLS-1$ //$NON-NLS-2$
 					switch (r) {
 					case JOptionPane.YES_OPTION:
 						tab.save();
@@ -2359,38 +2353,36 @@ public class EditorApp extends JFrame implements ActionListener {
 			JScrollPane tileScroll = new JScrollPane(mapPanel.getTilePane());
 			tileScroll.getVerticalScrollBar().setUnitIncrement(5);
 			if (showTileWindow) {
-				//only if this is the active tab
+				// only if this is the active tab
 				if (componentVec.indexOf(inf) == mapTabs.getSelectedIndex()) {
-					JSplitPane tileSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-							mapPanel.getPreviewPane(),
+					JSplitPane tileSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mapPanel.getPreviewPane(),
 							tileScroll);
 					tileSplit.setDividerLocation(100);
-					//System.out.println(mapPanel);
+					// System.out.println(mapPanel);
 					tilesetWindow.setContentPane(tileSplit);
 					tilesetWindow.validate();
 				}
 				return layerMapPanel;
 			} else {
-				JSplitPane tileSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-						tileScroll,
+				JSplitPane tileSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tileScroll,
 						mapPanel.getPreviewPane());
 				tileSplit.setDividerLocation(350);
 				JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 						tileSplit,
 						layerMapPanel);
+
 				mainSplit.setDividerLocation(100);
 				return mainSplit;
-			} //if not showing helper window
+			} // if not showing helper window
 		case PERSPECTIVE_ENTITY:
 			if (showEntityWindow) {
-				//only if this is the active tab
+				// only if this is the active tab
 				mapScroll = new JScrollPane(inf.getEntity());
 				mapScroll.getVerticalScrollBar().setUnitIncrement(10);
 				if (componentVec.indexOf(inf) == mapTabs.getSelectedIndex()) {
 					JScrollPane listScroll = new JScrollPane(inf.getEntity().getEntityList());
 					JScrollPane editScroll = new JScrollPane(inf.getEntity().getEditPane());
-					JSplitPane windowSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-							editScroll, listScroll);
+					JSplitPane windowSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editScroll, listScroll);
 					windowSplit.setDividerLocation(120);
 					entityWindow.setContentPane(windowSplit);
 					entityWindow.validate();
@@ -2415,11 +2407,9 @@ public class EditorApp extends JFrame implements ActionListener {
 				jp.add(entityDockButton, BorderLayout.PAGE_START);
 				jp.add(listScroll, BorderLayout.CENTER);
 
-				JSplitPane miniSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-						editScroll, jp);
+				JSplitPane miniSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editScroll, jp);
 				miniSplit.setDividerLocation(120);
-				JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-						miniSplit, mapScroll);
+				JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, miniSplit, mapScroll);
 				split.setDividerLocation(160);
 				return split;
 			}
@@ -2428,21 +2418,20 @@ public class EditorApp extends JFrame implements ActionListener {
 		case PERSPECTIVE_MAPDATA:
 			return inf.mapdata;
 		default:
-			//bad action
+			// bad action
 			return new JLabel(Messages.getString("EditorApp.161")); //$NON-NLS-1$
 
 		}
 	}
 
 	private void refreshCurrentMap() {
-		if (componentVec.size() > 0
-				&& mapTabs.getSelectedIndex() >= 0) {
+		if (componentVec.size() > 0 && mapTabs.getSelectedIndex() >= 0) {
 			TabOrganizer inf = componentVec.get(mapTabs.getSelectedIndex());
 			if (inf != null) {
 				inf.getMap().repaint();
 			}
-			//maybe not needed...?
-			//inf.getEntity().redraw();
+			// maybe not needed...?
+			// inf.getEntity().redraw();
 			mapTabs.repaint();
 		}
 	}
@@ -2514,7 +2503,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					modified = true;
 					contents = contents.replaceAll(oldTRA, newTRA);
 				}
-			}// for each mapnum
+			} // for each mapnum
 			if (modified) {
 				for (int i = 0; i < oldNums.size(); i++) {
 					String oldTRA = String.format("<TRA<<%04d", newNums.get(i)); //$NON-NLS-1$
@@ -2522,10 +2511,10 @@ public class EditorApp extends JFrame implements ActionListener {
 					if (contents.contains(oldTRA)) {
 						contents = contents.replaceAll(oldTRA, newTRA);
 					}
-				}// for each mapnum
+				} // for each mapnum
 				pane.setText(contents);
 			}
-		}// for each pane
+		} // for each pane
 	}
 
 	public static void airhorn() {
@@ -2542,7 +2531,7 @@ public class EditorApp extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 
-		//parse args
+		// parse args
 		for (String s : args) {
 			if (s.startsWith("MODE=")) {
 				String val = s.split("=", 2)[1];
@@ -2554,9 +2543,9 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		}
 
-		//https://blogs.oracle.com/nickstephen/entry/java_redirecting_system_out_and
+		// https://blogs.oracle.com/nickstephen/entry/java_redirecting_system_out_and
 		// initialize logging to go to rolling log file
-		//noinspection PointlessBooleanExpression,ConstantConditions
+		// noinspection PointlessBooleanExpression,ConstantConditions
 		if (!disable_logging) {
 			LogManager logManager = LogManager.getLogManager();
 			logManager.reset();
@@ -2590,4 +2579,3 @@ public class EditorApp extends JFrame implements ActionListener {
 		});
 	}
 }
-

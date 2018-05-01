@@ -59,7 +59,7 @@
 #52	BRobt	sit	BlueRobot(sit) 	512:400:544:432	Blue robot (sitting) 	CE:Misc Character:Other Tileset:Regu ;
 #53	CRASH	 	Unknown(crash) 	0:0:0:0	<CRASH> 	CE:Crash ;
 #54	Enemy	SkulS	SkullStep 	64:160:128:204	Enemy - Skullstep 	CE:SandZone Tileset:Sand Enemy:Ground ;
-#55	Kazum	 	Cairn 	384:384:416:432	Kazuma 	CE:Characters Character:Human Tileset:Regu ;
+#55	Kazum	 	Kazuma 	384:384:416:432	Kazuma 	CE:Characters Character:Human Tileset:Regu ;
 #56	Enemy	BtlHB	BeetleHorizBrown 	0:284:32:316	Enemy - Beetle (horiz, brown) 	CE:SandZone Tileset:Sand Enemy:Air ;
 #57	Enemy	Crow	Crow 	192:160:256:224	Enemy - Crow 	CE:SandZone Tileset:Sand Enemy:Air ;
 #58	Enemy	Basu1	Basu(1) 	384:0:432:48	Enemy - Basu (1) 	CE:Egg1 Tileset:Eggs1 Enemy:Air ;
@@ -356,7 +356,7 @@
 #349	Statu	 	Statue	64:200:128:288	Statue	CE:Statue ;
 #350	Enemy	ButRA	Enemy - Bute (archer, red) 	98:324:140:364	Enemy - Bute (archer, red) 	CE:Ballos ;
 #351	Statu	shoot	Statue (can shoot) 	0:0:0:0	Statue (can shoot) 	CE:Statue ;
-#352	King	sword	King (sword) 	448:64:476:96	King (sword) 	CE:Characters ;
+#352	Cred	NPC	Credits NPCs 	448:64:476:96	Credits NPCs 	CE:Characters ;
 #353	Enemy	ButRS	Enemy - Bute (sword, red) 	396:316:432:352	Enemy - Bute (sword, red) 	CE:Ballos ;
 #354	Invis	Trap	Invisible deathtrap wall 	0:0:0:0	Invisible deathtrap wall 	CE:Unsure ;
 #355	CRASH	SOME	<CRASH> (Sometimes) 	0:0:0:0	<CRASH> (Sometimes) 	CE:Crash ;

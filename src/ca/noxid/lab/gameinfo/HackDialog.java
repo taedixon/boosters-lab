@@ -2,6 +2,7 @@
 package ca.noxid.lab.gameinfo;
 
 import ca.noxid.lab.EditorApp;
+import ca.noxid.lab.Messages;
 import ca.noxid.lab.rsrc.ResourceManager;
 import ca.noxid.uiComponents.BgPanel;
 import com.carrotlord.string.StrTools;
@@ -44,10 +45,13 @@ public class HackDialog extends JDialog implements TreeSelectionListener{
 		private static final String FIELDTYPE_FLAG = "flags";
 		private static final String FIELDTYPE_INFO = "info";
 		private static final String FIELDTYPE_CHECK = "check";
+		private static final String FIELDTYPE_IMAGE = "image";
 	private static final String ATTR_NAME = "name";
 	private static final String ATTR_TITLE = "title";
 	private static final String ATTR_COL = "col";
 	private static final String ATTR_VALUE = "value";
+	private static final String ATTR_DEFVALUE = "defvalue";
+	private static final String ATTR_SRC = "src";
 	
 	private static final String NODE_PANEL = "panel";
 	private static final String NODE_FIELD = "field";
@@ -82,7 +86,7 @@ public class HackDialog extends JDialog implements TreeSelectionListener{
 			this.setCursor(ResourceManager.cursor);
 		this.iMan = iMan;
 		this.setLocation(aFrame.getLocation());
-		this.setTitle("Hackinator");
+		this.setTitle(Messages.getString("EditorApp.110"));
 		
 		this.exe = exe;
 		hackPanel = new BgPanel(iMan.getImg(ResourceManager.rsrcBgBlue));
@@ -359,6 +363,17 @@ public class HackDialog extends JDialog implements TreeSelectionListener{
 				    rv.addAttribute(ATTR_NAME, s.getNodeValue());
 			    }
 			    break;
+		    case FIELDTYPE_IMAGE:
+		    	ImageIcon img = null;
+		    	if ((s = atts.getNamedItem(ATTR_SRC)) != null) {
+		    		File src = new File(s.getNodeValue());
+		    		if (src.exists()) {
+		    			img = new ImageIcon(Toolkit.getDefaultToolkit().getImage(src.getAbsolutePath()));
+		    		}
+		    	}
+		    	
+		    	rv = new PluggableLabel(img);
+		    	break;
 		    }
 
 		    assert rv != null;
@@ -368,6 +383,8 @@ public class HackDialog extends JDialog implements TreeSelectionListener{
     		}
     		if ((s = atts.getNamedItem(ATTR_POP_FROM_EXE)) != null) {
     			rv.addAttribute(ATTR_POP_FROM_EXE, s.getNodeValue());
+    		} else if ((s = atts.getNamedItem(ATTR_DEFVALUE)) != null) {
+    			rv.addAttribute(ATTR_VALUE, s.getNodeValue());
     		}
         }
     	
@@ -536,6 +553,14 @@ public class HackDialog extends JDialog implements TreeSelectionListener{
 		 * 
 		 */
 		private static final long serialVersionUID = -6896681669212669152L;
+		
+		public PluggableLabel(Icon icon) {
+			this.setIcon(icon);
+		}
+		
+		public PluggableLabel() {
+			this(null);
+		}
 
 		@Override
 		public int getOffset() {
@@ -549,7 +574,8 @@ public class HackDialog extends JDialog implements TreeSelectionListener{
 
 		@Override
 		public void addText(String txt) {
-			this.setText(txt);
+			if (this.getIcon() == null)
+				this.setText(txt);
 		}
 
 		@Override

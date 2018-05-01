@@ -31,9 +31,17 @@ public class MapInfo implements Changeable {
 	private static final int MAX_TILES_X = 9001;
 	private static final int MAX_TILES_Y = 9001;
 	private int mapX;
-	public int getMapX() {return mapX;}
+
+	public int getMapX() {
+		return mapX;
+	}
+
 	private int mapY;
-	public int getMapY() {return mapY;}
+
+	public int getMapY() {
+		return mapY;
+	}
+
 	private int mapNumber;
 	public int getMapNumber() {return mapNumber;}
 	protected List<TileLayer> map;
@@ -50,15 +58,22 @@ public class MapInfo implements Changeable {
 		}
 		return rv;
 	}
+
 	private List<MapPoly> polygons = new LinkedList<>();
-	public List<MapPoly> getPolys() { return polygons;}
-	
+
+	public List<MapPoly> getPolys() {
+		return polygons;
+	}
+
 	private PropertyChangeSupport pcs;
 
 	private LinkedList<PxeEntry> pxeList;
-	public Iterator<PxeEntry> getPxeIterator() {return pxeList.iterator();}
 
-	//UNDO/redo
+	public Iterator<PxeEntry> getPxeIterator() {
+		return pxeList.iterator();
+	}
+
+	// UNDO/redo
 	private UndoManager undoMan;
 
 	// Retrieve these values from the ImageManager
@@ -68,24 +83,42 @@ public class MapInfo implements Changeable {
 		return iMan.getImg(getTileset());
 	}
 	private File bgImage;
-	public File getBG() {return bgImage;}
-	private File npcImage1;
-	public File getNpc1() {return npcImage1;}
-	private File npcImage2;
-	public File getNpc2() {return npcImage2;}
-	private File pxaFile;
-	public File getPxa() {return pxaFile;}
 
-	//changeable
+	public File getBG() {
+		return bgImage;
+	}
+
+	private File npcImage1;
+
+	public File getNpc1() {
+		return npcImage1;
+	}
+
+	private File npcImage2;
+
+	public File getNpc2() {
+		return npcImage2;
+	}
+
+	private File pxaFile;
+
+	public File getPxa() {
+		return pxaFile;
+	}
+
+	// changeable
 	private boolean changed = false;
-	
+
 	public final boolean isTemp;
-	
+
 	private ResourceManager iMan;
 	private GameInfo exeData;
+
 	// convenience method
-	public BlConfig getConfig() {return exeData.getConfig();}
-	
+	public BlConfig getConfig() {
+		return exeData.getConfig();
+	}
+
 	public MapInfo(GameInfo eDat, ResourceManager r, int mapNum) {
 		pcs = new PropertyChangeSupport(this);
 		isTemp = false;
@@ -102,19 +135,19 @@ public class MapInfo implements Changeable {
 		if (EditorApp.EDITOR_MODE != 0) {
 			int tilesetW = iMan.getImgW(tileset) / getConfig().getTileSize();
 			int tilesetH = iMan.getImgH(tileset) / getConfig().getTileSize();
-			iMan.addPxa(pxaFile, tilesetW*tilesetH);
+			iMan.addPxa(pxaFile, tilesetW * tilesetH);
 		} else {
 			iMan.addPxa(pxaFile, 256);
 		}
-		
+
 		loadMap(d);
-		
-		//load the pxe
+
+		// load the pxe
 		getEntities(d, directory);
 		undoMan = new UndoManager();
 		undoMan.setLimit(1000);
 	}
-	
+
 	public MapInfo(GameInfo eDat, ResourceManager r, Mapdata d) {
 		pcs = new PropertyChangeSupport(this);
 		isTemp = true;
@@ -130,32 +163,32 @@ public class MapInfo implements Changeable {
 		if (EditorApp.EDITOR_MODE != 0) {
 			int tilesetW = iMan.getImgW(tileset) / getConfig().getTileSize();
 			int tilesetH = iMan.getImgH(tileset) / getConfig().getTileSize();
-			iMan.addPxa(pxaFile, tilesetW*tilesetH);
+			iMan.addPxa(pxaFile, tilesetW * tilesetH);
 		} else {
 			iMan.addPxa(pxaFile, 256);
 		}
-		
+
 		loadMap(d);
-		
-		//load the pxe
+
+		// load the pxe
 		getEntities(d, directory);
 		undoMan = new UndoManager();
 		undoMan.setLimit(1000);
 	}
-	
+
 	private void loadImageResource(Mapdata d, File directory) {
-		//load each image resource
-			tileset = new File(directory + "/Stage/Prt" + d.getTileset() + exeData.getImgExtension()); //$NON-NLS-1$
-			iMan.addImage(tileset, 1);
-		
-			bgImage = new File(directory + "/" + d.getBG() + exeData.getImgExtension()); //$NON-NLS-1$
-			iMan.addImage(bgImage, 0);
-			npcImage1 = new File(directory + "/Npc/Npc" + d.getNPC1() + exeData.getImgExtension()); //$NON-NLS-1$
-			iMan.addImage(npcImage1, 1);
-			npcImage2 = new File(directory + "/Npc/Npc" + d.getNPC2() + exeData.getImgExtension()); //$NON-NLS-1$
-			iMan.addImage(npcImage2, 1);
+		// load each image resource
+		tileset = new File(directory + "/Stage/Prt" + d.getTileset() + exeData.getImgExtension()); //$NON-NLS-1$
+		iMan.addImage(tileset, 1);
+
+		bgImage = new File(directory + "/" + d.getBG() + exeData.getImgExtension()); //$NON-NLS-1$
+		iMan.addImage(bgImage, 0);
+		npcImage1 = new File(directory + "/Npc/Npc" + d.getNPC1() + exeData.getImgExtension()); //$NON-NLS-1$
+		iMan.addImage(npcImage1, 1);
+		npcImage2 = new File(directory + "/Npc/Npc" + d.getNPC2() + exeData.getImgExtension()); //$NON-NLS-1$
+		iMan.addImage(npcImage2, 1);
 	}
-	
+
 	protected void loadMap(Mapdata d) {
 		File directory = exeData.getDataDirectory();
 		try {
@@ -166,7 +199,7 @@ public class MapInfo implements Changeable {
 				currentFile = new File(directory + "/Stage/" + d.getFile() + ".pxm"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			currentFile = ResourceManager.checkBase(currentFile);
-			
+
 			if (!currentFile.exists())
 				writeDummyPxm(currentFile);
 
@@ -180,36 +213,36 @@ public class MapInfo implements Changeable {
 
 		} catch (IOException e) {
 			StrTools.msgBox(Messages.getString("MapInfo.10") + directory + "/Stage/" + d.getFile() //$NON-NLS-1$ //$NON-NLS-2$
-					+ ".pxm");			 //$NON-NLS-1$
+					+ ".pxm"); //$NON-NLS-1$
 			mapX = 21;
 			mapY = 16;
 			map = new ArrayList<>();
 			map.add(new TileLayer("Error", mapX, mapY, getConfig(), getTilesetImage()));
 		}
 	}
-	
+
 	private void writeDummyPxm(File currentFile) throws IOException {
 		FileOutputStream out = new FileOutputStream(currentFile);
 		FileChannel chan = out.getChannel();
-		byte[] pxmTag = {'P', 'X', 'M', 0x10};
+		byte[] pxmTag = { 'P', 'X', 'M', 0x10 };
 		ByteBuffer mapBuf;
 		switch (EditorApp.EDITOR_MODE) {
-		default: //default
-			mapBuf = ByteBuffer.allocate(21*16 + 4);
+		default: // default
+			mapBuf = ByteBuffer.allocate(21 * 16 + 4);
 			mapBuf.order(ByteOrder.LITTLE_ENDIAN);
 			mapBuf.putShort(0, (short) 21);
 			mapBuf.putShort(2, (short) 16);
 			break;
-		case 1: //cs+ / ks
+		case 1: // cs+ / ks
 			pxmTag[3] = 0x20;
-			mapBuf = ByteBuffer.allocate(21*16*4 + 4);
+			mapBuf = ByteBuffer.allocate(21 * 16 * 4 + 4);
 			mapBuf.order(ByteOrder.LITTLE_ENDIAN);
 			mapBuf.putShort(0, (short) 21);
 			mapBuf.putShort(2, (short) 16);
 			break;
-		case 2: //mr
+		case 2: // mr
 			pxmTag[3] = 0x30;
-			mapBuf = ByteBuffer.allocate(21*16*4 + 8);
+			mapBuf = ByteBuffer.allocate(21 * 16 * 4 + 8);
 			mapBuf.order(ByteOrder.LITTLE_ENDIAN);
 			mapBuf.putShort(0, (short) 21);
 			mapBuf.putShort(2, (short) 16);
@@ -220,9 +253,9 @@ public class MapInfo implements Changeable {
 		out.close();
 	}
 
-	//load pxe file
+	// load pxe file
 	private void getEntities(Mapdata d, File directory) {
-		
+
 		pxeList = new LinkedList<>();
 		try {
 			File currentFile = new File(directory + "/Stage/" + d.getFile() + ".pxe"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -231,19 +264,19 @@ public class MapInfo implements Changeable {
 			FileChannel inChan = inStream.getChannel();
 			ByteBuffer hBuf = ByteBuffer.allocate(6);
 			hBuf.order(ByteOrder.LITTLE_ENDIAN);
-			
+
 			inChan.read(hBuf);
 			hBuf.flip();
 			int nEnt;
 			ByteBuffer eBuf;
 			switch (hBuf.get(3)) {
-			case 0: //original pxe
+			case 0: // original pxe
 				nEnt = hBuf.getShort(4);
 				eBuf = ByteBuffer.allocate(nEnt * 12 + 2);
 				eBuf.order(ByteOrder.LITTLE_ENDIAN);
 				inChan.read(eBuf);
 				eBuf.flip();
-				eBuf.getShort(); //discard this value
+				eBuf.getShort(); // discard this value
 				for (int i = 0; i < nEnt; i++) {
 					int pxeX = eBuf.getShort();
 					int pxeY = eBuf.getShort();
@@ -251,13 +284,12 @@ public class MapInfo implements Changeable {
 					int pxeEvent = eBuf.getShort();
 					int pxeType = eBuf.getShort();
 					int pxeFlags = eBuf.getShort() & 0xFFFF;
-					PxeEntry p = new PxeEntry(pxeX, pxeY, pxeFlagID, pxeEvent, 
-							pxeType, pxeFlags, 1);
+					PxeEntry p = new PxeEntry(pxeX, pxeY, pxeFlagID, pxeEvent, pxeType, pxeFlags, 1);
 					p.filePos = i;
 					pxeList.add(p);
 				}
 				break;
-			case 0x10: //kss pxe
+			case 0x10: // kss pxe
 				nEnt = hBuf.getShort(4);
 				eBuf = ByteBuffer.allocate(nEnt * 13);
 				eBuf.order(ByteOrder.LITTLE_ENDIAN);
@@ -271,8 +303,7 @@ public class MapInfo implements Changeable {
 					int pxeType = eBuf.getShort();
 					int pxeFlags = eBuf.getShort();
 					byte pxeLayer = eBuf.get();
-					PxeEntry p = new PxeEntry(pxeX, pxeY, pxeFlagID, pxeEvent, 
-							pxeType, pxeFlags, pxeLayer);
+					PxeEntry p = new PxeEntry(pxeX, pxeY, pxeFlagID, pxeEvent, pxeType, pxeFlags, pxeLayer);
 					p.filePos = i;
 					pxeList.add(p);
 				}
@@ -288,47 +319,92 @@ public class MapInfo implements Changeable {
 		} catch (IOException e) {
 			System.err.println(Messages.getString("MapInfo.16") + directory + "/Stage/" + d.getFile()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-	}   
-	
-	//yes.
+	}
+
+	// yes.
 	public EntityData getEntityInfo(int eNum) {
 		return exeData.getEntityInfo(eNum);
 	}
 
 	public class PxeEntry implements Comparable<PxeEntry>, Cloneable {
 		private short xTile;
-		public int getX() {return xTile;}
+
+		public int getX() {
+			return xTile;
+		}
+
 		private short yTile;
-		public int getY() {return yTile;}
+
+		public int getY() {
+			return yTile;
+		}
+
 		private short flagID;
-		public int getFlagID() {return flagID;}
-		public void setFlagID(int id) {flagID = (short)id; markChanged();}
+
+		public int getFlagID() {
+			return flagID;
+		}
+
+		public void setFlagID(int id) {
+			flagID = (short) id;
+			markChanged();
+		}
+
 		private short eventNum;
-		public int getEvent() {return eventNum;}
-		public void setEvent(int num) {eventNum = (short)num; markChanged();}
+
+		public int getEvent() {
+			return eventNum;
+		}
+
+		public void setEvent(int num) {
+			eventNum = (short) num;
+			markChanged();
+		}
+
 		private short entityType;
-		public int getType() {return entityType;}
-		//set method below
+
+		public int getType() {
+			return entityType;
+		}
+
+		// set method below
 		private short flags;
-		public int getFlags() {return flags;}
-		public void setFlags(int num) {flags = (short)num; markChanged();}
+
+		public int getFlags() {
+			return flags;
+		}
+
+		public void setFlags(int num) {
+			flags = (short) num;
+			markChanged();
+		}
+
 		private byte layer;
 		private int filePos;
-		public int getOrder() {return filePos;}
-		public void setOrder(int num) {filePos = num; markChanged();}
-		
+
+		public int getOrder() {
+			return filePos;
+		}
+
+		public void setOrder(int num) {
+			filePos = num;
+			markChanged();
+		}
+
 		public static final int DRAW_SPRITE = 1;
 		public static final int DRAW_BOX = 2;
 		public static final int DRAW_NAME = 4;
 		public static final int DRAW_ALL = 7;
 		public static final int DRAW_SELECTED = 8;
-		
-		//TODO this is bad
+
+		// TODO this is bad
 		private EntityData inf;
-		public EntityData getInfo() {return inf;}
-		
-		PxeEntry(int pxeX, int pxeY, int pxeFlagID, int pxeEvent, 
-				int pxeType, int pxeFlags, int pxeLayer) {
+
+		public EntityData getInfo() {
+			return inf;
+		}
+
+		PxeEntry(int pxeX, int pxeY, int pxeFlagID, int pxeEvent, int pxeType, int pxeFlags, int pxeLayer) {
 			xTile = (short) pxeX;
 			yTile = (short) pxeY;
 			flagID = (short) pxeFlagID;
@@ -337,111 +413,109 @@ public class MapInfo implements Changeable {
 			flags = (short) pxeFlags;
 			layer = (byte) pxeLayer;
 			filePos = -1;
-			
+
 			inf = exeData.getEntityInfo(entityType);
 			if (inf == null) {
-				StrTools.msgBox("Warning! There is an entity on your map" +
-						" with an ID that does not exist in the entity table <"
-						+entityType+">");
+				StrTools.msgBox("Warning! There is an entity on your map"
+						+ " with an ID that does not exist in the entity table <" + entityType + ">");
 			}
 		}
-		
+
 		public PxeEntry clone() {
-			return new PxeEntry(this.xTile, this.yTile,
-					this.flagID, this.eventNum, this.entityType, this.flags,
+			return new PxeEntry(this.xTile, this.yTile, this.flagID, this.eventNum, this.entityType, this.flags,
 					this.layer);
 		}
+
 		public void draw(Graphics2D g2d, int flags) {
-			
+
 			int scale = (int) (exeData.getConfig().getEntityRes() * EditorApp.mapScale);
-			int tileScale = (int)(exeData.getConfig().getTileSize() * EditorApp.mapScale);
+			int tileScale = (int) (exeData.getConfig().getTileSize() * EditorApp.mapScale);
 			int rectX = xTile * scale;
 			int rectY = yTile * scale;
 			if (((flags & DRAW_SPRITE) != 0) && (inf != null)) {
-					Rectangle frameRect = inf.getFramerect();
-					BufferedImage srcImg;
-					int tilesetNum = inf.getTileset();
-					if (tilesetNum == 0x15)
-						srcImg = iMan.getImg(npcImage1);
-					else if (tilesetNum == 0x16)
-						srcImg = iMan.getImg(npcImage2);
-					else if (tilesetNum == 0x14) //npc sym
-						srcImg = iMan.getImg(exeData.getNpcSym());
-					else if (tilesetNum == 0x17) //npc regu
-						srcImg = iMan.getImg(exeData.getNpcRegu());
-					else if (tilesetNum == 0x2) //map tileset
-						srcImg = iMan.getImg(tileset);
-					else if (tilesetNum == 0x10) //npc myChar
-						srcImg = iMan.getImg(exeData.getMyCharFile());
-					else
-						srcImg = null;
-					
-					if (srcImg != null) {
-						//TODO make an entityInfo.txt that has the right frames... or maybe not
-						int srcX = frameRect.x;
-						int srcY = frameRect.y;
-						int srcX2 = frameRect.width;
-						int srcY2 = frameRect.height;
-						if (exeData.getConfig().getTileSize() == 16) {
-							srcX /= 2;
-							srcY /= 2;
-							srcX2 /= 2;
-							srcY2 /= 2;
-						}
-						Rectangle dest = getDrawArea();
-						g2d.drawImage(srcImg, dest.x, dest.y, 
-								dest.x + dest.width, dest.y + dest.height, 
-								srcX, srcY, srcX2, srcY2, null);
+				Rectangle frameRect = inf.getFramerect();
+				BufferedImage srcImg;
+				int tilesetNum = inf.getTileset();
+				if (tilesetNum == 0x15)
+					srcImg = iMan.getImg(npcImage1);
+				else if (tilesetNum == 0x16)
+					srcImg = iMan.getImg(npcImage2);
+				else if (tilesetNum == 0x14) // npc sym
+					srcImg = iMan.getImg(exeData.getNpcSym());
+				else if (tilesetNum == 0x17) // npc regu
+					srcImg = iMan.getImg(exeData.getNpcRegu());
+				else if (tilesetNum == 0x2) // map tileset
+					srcImg = iMan.getImg(tileset);
+				else if (tilesetNum == 0x10) // npc myChar
+					srcImg = iMan.getImg(exeData.getMyCharFile());
+				else
+					srcImg = null;
+
+				if (srcImg != null) {
+					// TODO make an entityInfo.txt that has the right frames... or maybe not
+					int srcX = frameRect.x;
+					int srcY = frameRect.y;
+					int srcX2 = frameRect.width;
+					int srcY2 = frameRect.height;
+					if (exeData.getConfig().getTileSize() == 16) {
+						srcX /= 2;
+						srcY /= 2;
+						srcX2 /= 2;
+						srcY2 /= 2;
 					}
-			} //draw sprite
-			
+					Rectangle dest = getDrawArea();
+					g2d.drawImage(srcImg, dest.x, dest.y, dest.x + dest.width, dest.y + dest.height, srcX, srcY, srcX2,
+							srcY2, null);
+				}
+			} // draw sprite
+
 			if ((flags & DRAW_BOX) != 0) {
-				Graphics2D gBox = (Graphics2D)g2d.create();
+				Graphics2D gBox = (Graphics2D) g2d.create();
 				if ((flags & DRAW_SELECTED) != 0) {
 					gBox.setColor(Color.cyan);
 				} else {
 					gBox.setColor(Color.green);
 				}
 
-				gBox.drawRect(rectX + 1, rectY + 1, tileScale-2, tileScale-2);
+				gBox.drawRect(rectX + 1, rectY + 1, tileScale - 2, tileScale - 2);
 				if (tileScale >= 32) {
-					gBox.drawRect(rectX + 2, rectY + 2, scale - 4, scale - 4);						
+					gBox.drawRect(rectX + 2, rectY + 2, scale - 4, scale - 4);
 				}
-				
+
 				if ((flags & DRAW_SELECTED) != 0) {
-					//'sprite frame' rect
+					// 'sprite frame' rect
 					gBox.setColor(Color.yellow);
 					Rectangle area = getDrawArea();
 					gBox.drawRect(area.x, area.y, area.width, area.height);
-					//sprite hitbox rect
+					// sprite hitbox rect
 					gBox.setColor(Color.red);
 					area = getHitArea();
 					gBox.drawRect(area.x, area.y, area.width, area.height);
 				}
-				
-			}//draw box
-			
+
+			} // draw box
+
 			if ((flags & DRAW_NAME) != 0) {
-				Graphics2D gTxtWhi = (Graphics2D)g2d.create();
-				Graphics2D gTxtBlk = (Graphics2D)g2d.create();
-				gTxtWhi.setFont(new Font("Small Fonts", Font.PLAIN, tileScale/3)); //$NON-NLS-1$
+				Graphics2D gTxtWhi = (Graphics2D) g2d.create();
+				Graphics2D gTxtBlk = (Graphics2D) g2d.create();
+				gTxtWhi.setFont(new Font("Small Fonts", Font.PLAIN, tileScale / 3)); //$NON-NLS-1$
 				gTxtWhi.setColor(Color.white);
-				gTxtBlk.setFont(new Font("Small Fonts", Font.PLAIN, tileScale/3)); //$NON-NLS-1$
+				gTxtBlk.setFont(new Font("Small Fonts", Font.PLAIN, tileScale / 3)); //$NON-NLS-1$
 				gTxtBlk.setColor(Color.DARK_GRAY);
 				if (inf != null) {
-					gTxtBlk.drawString(inf.getShort1(), rectX+4, rectY + tileScale/3 + 1);
-					gTxtBlk.drawString(inf.getShort2(), rectX+4, rectY + 2*tileScale/3 + 1);
-					gTxtWhi.drawString(inf.getShort1(), rectX+3, rectY + tileScale/3);
-					gTxtWhi.drawString(inf.getShort2(), rectX+3, rectY + 2*tileScale/3);
+					gTxtBlk.drawString(inf.getShort1(), rectX + 4, rectY + tileScale / 3 + 1);
+					gTxtBlk.drawString(inf.getShort2(), rectX + 4, rectY + 2 * tileScale / 3 + 1);
+					gTxtWhi.drawString(inf.getShort1(), rectX + 3, rectY + tileScale / 3);
+					gTxtWhi.drawString(inf.getShort2(), rectX + 3, rectY + 2 * tileScale / 3);
 				}
-			}//draw name
+			} // draw name
 		}
 
 		public ByteBuffer toBuf() {
 			int size = 12;
-			//! comment out for Tyrone's builds
-			//if (EditorApp.EDITOR_MODE >= 1)
-				//size++;
+			// ! comment out for Tyrone's builds
+			// if (EditorApp.EDITOR_MODE >= 1)
+			// size++;
 			ByteBuffer retVal = ByteBuffer.allocate(size);
 			retVal.order(ByteOrder.LITTLE_ENDIAN);
 			retVal.putShort(xTile);
@@ -450,8 +524,8 @@ public class MapInfo implements Changeable {
 			retVal.putShort(eventNum);
 			retVal.putShort(entityType);
 			retVal.putShort(flags);
-			//if (EditorApp.EDITOR_MODE >= 1)
-				//retVal.put(layer);
+			// if (EditorApp.EDITOR_MODE >= 1)
+			// retVal.put(layer);
 			retVal.flip();
 			return retVal;
 		}
@@ -461,7 +535,7 @@ public class MapInfo implements Changeable {
 			Integer fp = filePos;
 			return fp.compareTo(other.filePos);
 		}
-		
+
 		public Rectangle getDrawArea() {
 			int sc = exeData.getConfig().getTileSize();
 			int res = exeData.getConfig().getEntityRes();
@@ -474,7 +548,7 @@ public class MapInfo implements Changeable {
 			if (inf != null) {
 				offset = inf.getDisplay();
 			} else {
-				offset = new Rectangle(16,16,16,16);
+				offset = new Rectangle(16, 16, 16, 16);
 			}
 			int offL = offset.x;
 			int offU = offset.y;
@@ -484,25 +558,25 @@ public class MapInfo implements Changeable {
 			destW *= mapsc;
 			int destH = offD + offU;
 			destH *= mapsc;
-			offU -= sc/2;
-			offL -= sc/2;
+			offU -= sc / 2;
+			offL -= sc / 2;
 			int destX = xTile * res - offL;
 			destX *= mapsc;
 			int destY = yTile * res - offU;
 			destY *= mapsc;
-			
-			Rectangle area =  new Rectangle(destX, destY, destW, destH);
-			area.add(new Rectangle((int)(xTile*res*mapsc), (int)(yTile*res*mapsc), 
-					(int)(big*mapsc + 2), (int)(big*mapsc + 2)));			
+
+			Rectangle area = new Rectangle(destX, destY, destW, destH);
+			area.add(new Rectangle((int) (xTile * res * mapsc), (int) (yTile * res * mapsc), (int) (big * mapsc + 2),
+					(int) (big * mapsc + 2)));
 			return area;
 		}
-		
+
 		private Rectangle getHitArea() {
 			int sc = exeData.getConfig().getTileSize();
 			int res = exeData.getConfig().getEntityRes();
 			Rectangle offset;
 			if (inf == null) {
-				offset = new Rectangle(8,8,8,8);
+				offset = new Rectangle(8, 8, 8, 8);
 			} else {
 				offset = inf.getHit();
 			}
@@ -520,16 +594,16 @@ public class MapInfo implements Changeable {
 			destW *= EditorApp.mapScale;
 			int destH = offD + offU;
 			destH *= EditorApp.mapScale;
-			offU -= sc/2;
-			offL -= sc/2;
+			offU -= sc / 2;
+			offL -= sc / 2;
 			int destX = xTile * res - offL;
 			destX *= EditorApp.mapScale;
 			int destY = yTile * res - offU;
 			destY *= EditorApp.mapScale;
-			
+
 			return new Rectangle(destX, destY, destW, destH);
 		}
-		
+
 		public void shift(int x, int y) {
 			xTile += x;
 			yTile += y;
@@ -540,7 +614,7 @@ public class MapInfo implements Changeable {
 			inf = exeData.getEntityInfo(id);
 		}
 	}
-		
+
 	@Override
 	public boolean isModified() {
 		return changed;
@@ -582,48 +656,50 @@ public class MapInfo implements Changeable {
 		//mark changes with a significant edit
 		undoMan.addEdit(new ResizeEdit(oldSz, newSz));
 	}	
-	
+
 	public void shiftMap(int dx, int dy, int options) {
 
 		undoMan.addEdit(new MapEdit(0, 0, null, null, 0));
-		//apply shift
+		// apply shift
 		int w = mapX;
 		int h = mapY;
 		Iterator<PxeEntry> pxeIt = pxeList.iterator();
 		if ((options & ShiftDialog.OPTION_ENTITY) != 0) {
 			while (pxeIt.hasNext()) {
-				
+
 				PxeEntry entity = pxeIt.next();
 				if ((options & ShiftDialog.OPTION_WRAP) != 0) {
-					int newX = (entity.xTile + dx)%w;
-					int newY = (entity.yTile + dy)%h;
-					
-					if (newX < 0) newX += w;
-					if (newY < 0) newY += h;
-					
+					int newX = (entity.xTile + dx) % w;
+					int newY = (entity.yTile + dy) % h;
+
+					if (newX < 0)
+						newX += w;
+					if (newY < 0)
+						newY += h;
+
 					Point delta = new Point(newX - entity.xTile, newY - entity.yTile);
 					entity.xTile += delta.x;
 					entity.yTile += delta.y;
 					EntityEdit edit = new EntityEdit(EntityEdit.EDIT_MOVE, entity, delta);
 					edit.setSignificant(false);
 					undoMan.addEdit(edit);
-					
+
 				} else {
 					Point lastPos = new Point(entity.xTile, entity.yTile);
-					if (entity.xTile+dx < 0) {
+					if (entity.xTile + dx < 0) {
 						entity.xTile = 0;
 					} else {
-						if (entity.xTile+dx >= w)
-							entity.xTile = (short) (w-1);
+						if (entity.xTile + dx >= w)
+							entity.xTile = (short) (w - 1);
 						else
 							entity.xTile += dx;
 					}
-	
+
 					if (entity.yTile < 0) {
 						entity.yTile = 0;
 					} else {
-						if (entity.yTile+dy >= h)
-							entity.yTile = (short) (h-1);
+						if (entity.yTile + dy >= h)
+							entity.yTile = (short) (h - 1);
 						else
 							entity.yTile += dy;
 					}
@@ -632,9 +708,9 @@ public class MapInfo implements Changeable {
 					edit.setSignificant(false);
 					undoMan.addEdit(edit);
 				}
-			}//for each entity
+			} // for each entity
 		}
-		
+
 		if ((options & ShiftDialog.OPTION_TILE) != 0) {
 			for (TileLayer layer : map) {
 				SignifUndoableEdit edit = layer.shiftLayer(dx, dy, options);
@@ -643,7 +719,7 @@ public class MapInfo implements Changeable {
 			}
 
 		}
-		
+
 		if ((options & ShiftDialog.OPTION_LINE) != 0) {
 			int shiftX = dx * getConfig().getLineRes();
 			int shiftY = dy * getConfig().getLineRes();
@@ -655,8 +731,8 @@ public class MapInfo implements Changeable {
 				l.setLine(lp1.getX(), lp1.getY(), lp2.getX(), lp2.getY());
 			}
 		}
-		//mark edits with a significant edit
-		//I don't know why but this is the only thing that works I sware
+		// mark edits with a significant edit
+		// I don't know why but this is the only thing that works I sware
 		undoMan.addEdit(new MapEdit(0, 0, null, null, 0));
 	}
 	
@@ -678,7 +754,7 @@ public class MapInfo implements Changeable {
 
 	public void putTile(int x, int y, int newData, int layer) {
 		if (x >= 0 && y >= 0 && x < mapX && y < mapY) {
-			if (EditorApp.EDITOR_MODE == 0) {
+			if (EditorApp.EDITOR_MODE == 0 && layer == -1) {
 				if (calcPxa(newData) < 0x20) {
 					map.get(0).setTile(x, y, newData);
 					map.get(1).setTile(x, y, 0);
@@ -775,14 +851,12 @@ public class MapInfo implements Changeable {
 		try {
 			rval = pxaData[tileNum];
 		} catch (ArrayIndexOutOfBoundsException err) {
-			//StrTools.msgBox(Messages.getString("MapInfo.23") + tileNum + " " + pxaData.length); //$NON-NLS-1$
-			//err.printStackTrace();
-			System.out.println("pxa len: " + pxaData.length);
-			System.out.println("tile " + tileNum);
+			err.printStackTrace();
+			// StrTools.msgBox(Messages.getString("MapInfo.23") + tileNum + " " + pxaData.length); //$NON-NLS-1$
 		}
 		return rval & 0xFF;
 	}
-	
+
 	public void save() {
 		Mapdata d;
 		if (!isTemp)
@@ -797,26 +871,25 @@ public class MapInfo implements Changeable {
 		}
 		File pxeFile = new File(exeData.getDataDirectory() + "/Stage/" + d.getFile() + ".pxe"); //$NON-NLS-1$ //$NON-NLS-2$
 		File pxaFile = new File(exeData.getDataDirectory() + "/Stage/" + d.getTileset() + ".pxa"); //$NON-NLS-1$ //$NON-NLS-2$
-		byte[] pxmTag = {'P', 'X', 'M', 0x10};
-		byte[] pxeTag = {'P', 'X', 'E', 0};
+		byte[] pxmTag = { 'P', 'X', 'M', 0x10 };
+		byte[] pxeTag = { 'P', 'X', 'E', 0 };
 		ByteBuffer headerBuf;
 		ByteBuffer mapBuf;
-		
-		//save the map
+
+		// save the map
 		try {
 			FileOutputStream out = new FileOutputStream(pxmFile);
 			FileChannel pxmChannel = out.getChannel();
 			switch (EditorApp.EDITOR_MODE) {
-			case 0: //standard CS editor
+			case 0: // standard CS editor
 				headerBuf = ByteBuffer.wrap(pxmTag);
 				pxmChannel.write(headerBuf);
-				mapBuf = ByteBuffer.allocate(mapX*mapY + 4);
+				mapBuf = ByteBuffer.allocate(mapX * mapY + 4);
 				mapBuf.order(ByteOrder.LITTLE_ENDIAN);
 				mapBuf.putShort((short) mapX);
 				mapBuf.putShort((short) mapY);
 				for (int y = 0; y < mapY; y++)
-					for (int x = 0; x < mapX; x++)
-					{
+					for (int x = 0; x < mapX; x++) {
 						mapBuf.put((byte) getTile(x, y, -1));
 					}
 				break;
@@ -841,22 +914,21 @@ public class MapInfo implements Changeable {
 						}
 				}
 				break;
-			case 2: //MR
+			case 2: // MR
 				pxmTag[3] = 0x33;
 				headerBuf = ByteBuffer.wrap(pxmTag);
 				pxmChannel.write(headerBuf);
-				ByteBuffer preBuf = ByteBuffer.allocate(mapX*mapY*5*2 + 4);
+				ByteBuffer preBuf = ByteBuffer.allocate(mapX * mapY * 5 * 2 + 4);
 				preBuf.order(ByteOrder.LITTLE_ENDIAN);
 				preBuf.putShort((short) mapX);
 				preBuf.putShort((short) mapY);
 				for (int layer = 0; layer < 5; layer++)
 					for (int y = 0; y < mapY; y++)
-						for (int x = 0; x < mapX; x++)
-						{
+						for (int x = 0; x < mapX; x++) {
 							preBuf.putShort((short) getTile(x, y, layer));
 						}
 				preBuf.flip();
-				//save lines
+				// save lines
 				LinkedList<LineSeg> processed = new LinkedList<>();
 				for (LineSeg i : nodeVec) {
 					if (i.getP2() != null && !processed.contains(i)) {
@@ -875,20 +947,20 @@ public class MapInfo implements Changeable {
 					lineBuf.putInt(i.getType());
 				}
 				lineBuf.flip();
-				//save polygons
+				// save polygons
 				LinkedList<MapPoly> savablePolys = new LinkedList<>();
 				int polySize = 8;
 				for (MapPoly p : polygons) {
 					if (p.getPoints().size() > 2) {
 						savablePolys.add(p);
-						polySize += 6 + p.getPoints().size()*8;
+						polySize += 6 + p.getPoints().size() * 8;
 					}
 				}
 				ByteBuffer polyBuf = ByteBuffer.allocate(lineBuf.capacity() + polySize);
 				polyBuf.order(ByteOrder.LITTLE_ENDIAN);
 				polyBuf.put(lineBuf);
 				polyBuf.putInt(savablePolys.size());
-				polyBuf.putInt(polySize-8);
+				polyBuf.putInt(polySize - 8);
 				for (MapPoly p : savablePolys) {
 					polyBuf.putShort(p.getType());
 					polyBuf.putShort(p.getEvent());
@@ -919,10 +991,10 @@ public class MapInfo implements Changeable {
 			StrTools.msgBox("Error saving .pxm file. (check read-only?)");
 			err.printStackTrace();
 		}
-		
-		//save the entities
+
+		// save the entities
 		try {
-			//sort by order
+			// sort by order
 			Collections.sort(pxeList);
 			FileOutputStream out = new FileOutputStream(pxeFile);
 			FileChannel pxeChannel = out.getChannel();
@@ -931,7 +1003,7 @@ public class MapInfo implements Changeable {
 			ByteBuffer dumbBuf = ByteBuffer.allocate(4);
 			dumbBuf.order(ByteOrder.LITTLE_ENDIAN);
 			dumbBuf.putShort((short) pxeList.size());
-			dumbBuf.putShort((short)0);
+			dumbBuf.putShort((short) 0);
 			dumbBuf.flip();
 			pxeChannel.write(dumbBuf);
 			Collections.sort(pxeList);
@@ -944,9 +1016,9 @@ public class MapInfo implements Changeable {
 			StrTools.msgBox("Error saving .pxe file. (check read-only?)");
 			e.printStackTrace();
 		}
-		
-		//save the pxa
-		if (EditorApp.EDITOR_MODE != 2) 
+
+		// save the pxa
+		if (EditorApp.EDITOR_MODE != 2)
 			iMan.savePxa(pxaFile);
 		markUnchanged();
 	}
@@ -958,14 +1030,20 @@ public class MapInfo implements Changeable {
 		int[][] newData;
 		int xOrigin;
 		int yOrigin;
-		
+
 		/**
 		 * An undoable edit that applies to a square section of tiles
-		 * @param x X pos of the block to replace
-		 * @param y Y pos of the block to replace
-		 * @param oldDat The data being replaced (for undo purposes)
-		 * @param newDat The data replacing (for redo purposes)
-		 * @param l The layer this applies to
+		 * 
+		 * @param x
+		 *            X pos of the block to replace
+		 * @param y
+		 *            Y pos of the block to replace
+		 * @param oldDat
+		 *            The data being replaced (for undo purposes)
+		 * @param newDat
+		 *            The data replacing (for redo purposes)
+		 * @param l
+		 *            The layer this applies to
 		 */
 		public MapEdit(int x, int y, int[][] oldDat, int[][] newDat, int l) {
 			layer = l;
@@ -992,7 +1070,7 @@ public class MapInfo implements Changeable {
 					putTile(xOrigin + dx, yOrigin + dy, newData[dy][dx], layer);
 				}
 			}
-			//redrawTiles(xOrigin, yOrigin, xOrigin + w, yOrigin + h);
+			// redrawTiles(xOrigin, yOrigin, xOrigin + w, yOrigin + h);
 		}
 
 		@Override
@@ -1006,8 +1084,8 @@ public class MapInfo implements Changeable {
 					putTile(xOrigin + dx, yOrigin + dy, oldData[dy][dx], layer);
 				}
 			}
-			//redrawTiles(xOrigin, yOrigin, xOrigin + w, yOrigin + h);
-		}	
+			// redrawTiles(xOrigin, yOrigin, xOrigin + w, yOrigin + h);
+		}
 	}
 	
 	class ResizeEdit extends SignifUndoableEdit {
@@ -1025,13 +1103,13 @@ public class MapInfo implements Changeable {
 		public boolean canRedo() {
 			return true;
 		}
-		
+
 		public void redo() {
 			mapY = newSize.y;
 			mapX = newSize.x;
 			//repaint();
 		}
-		
+
 		public void undo() {
 			mapY = oldSize.y;
 			mapX = oldSize.x;
@@ -1051,22 +1129,26 @@ public class MapInfo implements Changeable {
 		Object params;
 
 		private static final long serialVersionUID = -371877823331946549L;
-		
+
 		/**
 		 * An edit that applies to a PxeEntry
-		 * @param editType An enumerated type that specifies what kind of edit
-		 * @param entry1 The entity that was edited
-		 * @param parameter A parameter, depends on the type of edit.
 		 * 
-		 * For editType == EDIT_MOVE, parameter is a point
-		 * that specifies the x and y distance moved
+		 * @param editType
+		 *            An enumerated type that specifies what kind of edit
+		 * @param entry1
+		 *            The entity that was edited
+		 * @param parameter
+		 *            A parameter, depends on the type of edit.
 		 * 
-		 * For editType == EDIT_PLACE, parameter should be null (ignored)
+		 *            For editType == EDIT_MOVE, parameter is a point
+		 *            that specifies the x and y distance moved
 		 * 
-		 * For editType == EDIT_REMOVE, parameter should also be null
+		 *            For editType == EDIT_PLACE, parameter should be null (ignored)
 		 * 
-		 * For editType == EDIT_MODIFY, parameter is a PxeEntry that
-		 * represents the previous state of the entity.
+		 *            For editType == EDIT_REMOVE, parameter should also be null
+		 * 
+		 *            For editType == EDIT_MODIFY, parameter is a PxeEntry that
+		 *            represents the previous state of the entity.
 		 */
 		public EntityEdit(int editType, PxeEntry entry1, Object parameter) {
 			entry = entry1;
@@ -1079,12 +1161,12 @@ public class MapInfo implements Changeable {
 		public boolean canRedo() {
 			return true;
 		}
-		
+
 		@Override
 		public void undo() {
 			switch (changeType) {
 			case EDIT_MOVE:
-				Point delta = (Point)params;
+				Point delta = (Point) params;
 				entry.xTile -= delta.x;
 				entry.yTile -= delta.y;
 				break;
@@ -1101,12 +1183,12 @@ public class MapInfo implements Changeable {
 				break;
 			}
 		}
-		
+
 		@Override
 		public void redo() {
 			switch (changeType) {
 			case EDIT_MOVE:
-				Point delta = (Point)params;
+				Point delta = (Point) params;
 				entry.xTile += delta.x;
 				entry.yTile += delta.y;
 				break;
@@ -1131,8 +1213,8 @@ public class MapInfo implements Changeable {
 			EditorApp.airhorn();
 		}
 	}
-	
-	public void doRedo(){
+
+	public void doRedo() {
 		if (undoMan.canRedo()) {
 			undoMan.redo();
 			EditorApp.airhorn();
@@ -1146,7 +1228,7 @@ public class MapInfo implements Changeable {
 		if (EditorApp.EDITOR_MODE != 0) {
 			int tilesetW = iMan.getImgW(tileset) / getConfig().getTileSize();
 			int tilesetH = iMan.getImgH(tileset) / getConfig().getTileSize();
-			iMan.addPxa(pxaFile, tilesetW*tilesetH);
+			iMan.addPxa(pxaFile, tilesetW * tilesetH);
 		} else {
 			iMan.addPxa(pxaFile, 256);
 		}
@@ -1166,7 +1248,7 @@ public class MapInfo implements Changeable {
 		bgImage = bgFile;
 		iMan.addImage(bgFile, 1);
 	}
-	
+
 	public void addEdit(UndoableEdit e) {
 		if (!e.isSignificant() && !undoMan.canUndo())
 			undoMan.addEdit(new MapEdit(0, 0, null, null, 0));
@@ -1180,11 +1262,11 @@ public class MapInfo implements Changeable {
 			edit.setSignificant(false);
 			addEdit(edit);
 		}
-		addEdit(new MapEdit(0, 0, null, null, 0));//significant
+		addEdit(new MapEdit(0, 0, null, null, 0));// significant
 		pxeList.removeAll(selectionList);
 		this.markChanged();
 	}
-	
+
 	/**
 	 * 
 	 * @param x
@@ -1196,7 +1278,7 @@ public class MapInfo implements Changeable {
 		PxeEntry ent = new PxeEntry(x, y, 0, 0, id, 0, 0);
 		return addEntity(ent);
 	}
-	
+
 	public PxeEntry addEntity(PxeEntry ent) {
 		int max = 0;
 		for (PxeEntry e : pxeList) {
@@ -1222,6 +1304,7 @@ public class MapInfo implements Changeable {
 	public void addNode(LineSeg newP) {
 		nodeVec.add(newP);
 	}
+
 	public void clearEntities() {
 		pxeList.clear();
 		markChanged();

@@ -9,5 +9,5 @@ public class TscCommand {
 	public boolean endsEvent;
 	public boolean clearsMsg;
 	public boolean paramSep;
-	public int paramLen;
+	public int paramLen[];
 }
