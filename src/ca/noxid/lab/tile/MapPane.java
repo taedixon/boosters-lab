@@ -425,11 +425,11 @@ public class MapPane extends BgPanel {
 		List<TileLayer> map = dataHolder.getMap();
 		for (int i = 0; i < map.size(); i++) {
 			TileLayer layer = map.get(i);
-			if (isSoloLayerView != null && isSoloLayerView.isSelected() && activeLayer != i) {
+			if (isSoloLayerView && activeLayer != i) {
 				continue;
 			}
 			Graphics2D layerGfx = (Graphics2D) g2d.create();
-			if (isFadeUnfocusedLayers!= null && isFadeUnfocusedLayers.isSelected() && activeLayer != i) {
+			if (isFadeUnfocusedLayers && activeLayer != i) {
 				AlphaComposite composite = AlphaComposite.SrcOver.derive(0.5f);
 				layerGfx.setComposite(composite);
 			}
