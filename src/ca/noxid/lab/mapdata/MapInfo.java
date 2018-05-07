@@ -136,12 +136,16 @@ public class MapInfo implements Changeable {
 	}
 
 	public MapInfo(GameInfo eDat, ResourceManager r, int mapNum) {
-		this(eDat, r, eDat.getMapdata(mapNum));
+		this(eDat, r, eDat.getMapdata(mapNum), false);
 	}
 
 	public MapInfo(GameInfo eDat, ResourceManager r, Mapdata d) {
+		this(eDat, r, d, true);
+	}
+	
+	private MapInfo(GameInfo eDat, ResourceManager r, Mapdata d, boolean temp) {
 		pcs = new PropertyChangeSupport(this);
-		isTemp = true;
+		isTemp = temp;
 		mapNumber = d.getMapnum();
 		iMan = r;
 		exeData = eDat;
@@ -989,18 +993,25 @@ public class MapInfo implements Changeable {
 	}
 
 	public void putTile(int x, int y, int newData, int layer) {
+		int oldData = -1;
 		if (x >= 0 && y >= 0 && x < mapX && y < mapY) {
 			if (EditorApp.EDITOR_MODE == 0 && layer == -1) {
 				if (calcPxa(newData) < 0x20) {
+					oldData = map[1][y][x];
 					map[1][y][x] = newData;
 					map[2][y][x] = 0;
 				} else {
+					oldData = map[2][y][x];
 					map[1][y][x] = 0;
 					map[2][y][x] = newData;
 				}
-			} else
+			} else {
+				oldData = map[layer][y][x];
 				map[layer][y][x] = newData;
+			}
 		}
+		if (oldData != -1 && oldData != newData)
+			markChanged();
 	}
 
 	public int calcPxa(int tileNum) {
@@ -1399,6 +1410,7 @@ public class MapInfo implements Changeable {
 	public void doUndo() {
 		if (undoMan.canUndo()) {
 			undoMan.undo();
+			markChanged();
 			EditorApp.airhorn();
 		}
 	}
@@ -1406,6 +1418,7 @@ public class MapInfo implements Changeable {
 	public void doRedo() {
 		if (undoMan.canRedo()) {
 			undoMan.redo();
+			markChanged();
 			EditorApp.airhorn();
 		}
 	}
