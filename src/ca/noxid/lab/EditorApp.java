@@ -168,15 +168,13 @@ public class EditorApp extends JFrame implements ActionListener {
 	}
 
 	public int getActiveLayer() {
+		if (EDITOR_MODE == 0)
+			return -1;
 		return activeLayer;
 	}
 
 	public void setActiveLayer(int layer) {
 		if (layer != activeLayer) {
-			if (activeLayer == PHYSICAL_LAYER) {
-				activeLayer = layer;
-				switchPerspective(activePerspective);
-			}
 			activeLayer = layer;
 			if (activeLayer == PHYSICAL_LAYER) {
 				switchPerspective(activePerspective);

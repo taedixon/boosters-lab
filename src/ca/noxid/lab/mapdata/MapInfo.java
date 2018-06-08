@@ -993,10 +993,11 @@ public class MapInfo implements Changeable {
 	}
 
 	public void putTile(int x, int y, int newData, int layer) {
+		System.out.println("Putting tile " + newData + " at x:" + x + ",y:" + y + ",layer:" + layer);
 		int oldData = -1;
 		if (x >= 0 && y >= 0 && x < mapX && y < mapY) {
 			if (EditorApp.EDITOR_MODE == 0 && layer == -1) {
-				if (calcPxa(newData) < 0x20) {
+				if (calcPxa(newData) < 0x40) {
 					oldData = map[1][y][x];
 					map[1][y][x] = newData;
 					map[2][y][x] = 0;
