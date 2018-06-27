@@ -269,7 +269,7 @@ public class ResourceManager {
 			outChan.write(pxaBuf);
 			outChan.close();
 			out.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			StrTools.msgBox(Messages.getString("ResourceManager.13") + srcFile //$NON-NLS-1$
 					+ Messages.getString("ResourceManager.14")); //$NON-NLS-1$
 			e.printStackTrace();

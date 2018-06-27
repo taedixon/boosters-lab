@@ -30,7 +30,7 @@ public class TilesetPane extends JPanel {
 			Messages.getString("TilesetPane.0"), Messages.getString("TilesetPane.0"),
 			Messages.getString("TilesetPane.0"), Messages.getString("TilesetPane.0"),
 			Messages.getString("TilesetPane.0"), Messages.getString("TilesetPane.0"),
-			Messages.getString("TilesetPane.0"), Messages.getString("TilesetPane.31"),
+			Messages.getString("TilesetPane.0"), Messages.getString("TilesetPane.0"),
 			//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$
 			Messages.getString("TilesetPane.33"), Messages.getString("TilesetPane.33"),
 			Messages.getString("TilesetPane.33"), Messages.getString("TilesetPane.33"),

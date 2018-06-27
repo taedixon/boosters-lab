@@ -168,15 +168,13 @@ public class EditorApp extends JFrame implements ActionListener {
 	}
 
 	public int getActiveLayer() {
+		if (EDITOR_MODE == 0)
+			return -1;
 		return activeLayer;
 	}
 
 	public void setActiveLayer(int layer) {
 		if (layer != activeLayer) {
-			if (activeLayer == PHYSICAL_LAYER) {
-				activeLayer = layer;
-				switchPerspective(activePerspective);
-			}
 			activeLayer = layer;
 			if (activeLayer == PHYSICAL_LAYER) {
 				switchPerspective(activePerspective);
@@ -1256,10 +1254,24 @@ public class EditorApp extends JFrame implements ActionListener {
 				}
 			}
 		});
-		menuItem.setText("Check files");
+		menuItem.setText(Messages.getString("EditorApp.167"));
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnProjectLoad.add(menuItem);
 		ops.add(menuItem);
+		
+		// OOB Flag Dialog
+		// TODO Fix this
+		/*
+		menuItem = new JMenuItem(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				airhorn();
+				new OOBFlagDialog(EditorApp.this, iMan);
+			}
+		});
+		menuItem.setText(Messages.getString("EditorApp.168"));
+		ops.add(menuItem);
+		*/
 
 		return ops;
 	}
