@@ -37,6 +37,8 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 	
 	private EntitySettings editPane;
 	public JPanel getEditPane() {return editPane;}
+
+	private JMenuItem popup_addEntity;
 	
 	public EntityPane(EditorApp p, MapInfo data) {
 		super(p);
@@ -104,11 +106,15 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 		JMenuItem undoItem;
 		undoItem = new JMenuItem(undo);
 		undoItem.setText(Messages.getString("EntityPane.0")); //$NON-NLS-1$
-		undoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.Event.CTRL_MASK));
+		undoItem.setAccelerator(KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_Z,
+				java.awt.event.InputEvent.CTRL_DOWN_MASK));
 		JMenuItem redoItem;
 		redoItem = new JMenuItem(redo);
 		redoItem.setText(Messages.getString("EntityPane.1")); //$NON-NLS-1$
-		redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.Event.CTRL_MASK));
+		redoItem.setAccelerator(KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_Y,
+				java.awt.event.InputEvent.CTRL_DOWN_MASK));
 		JMenuItem deleteItem = new JMenuItem();
 		deleteItem.setAction(new AbstractAction() {
 
@@ -122,17 +128,27 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 		JMenuItem secret_undoItem;
 		secret_undoItem = new JMenuItem(undo);
 		secret_undoItem.setText(Messages.getString("EntityPane.2")); //$NON-NLS-1$
-		secret_undoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.Event.CTRL_MASK));
+		secret_undoItem.setAccelerator(KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_Z,
+				java.awt.event.InputEvent.CTRL_DOWN_MASK));
 		JMenuItem secret_redoItem;
 		secret_redoItem = new JMenuItem(redo);
 		secret_redoItem.setText(Messages.getString("EntityPane.3")); //$NON-NLS-1$
-		secret_redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.Event.CTRL_MASK));
+		secret_redoItem.setAccelerator(KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_Y,
+				java.awt.event.InputEvent.CTRL_DOWN_MASK));
 		JPopupMenu fakePopup = new JPopupMenu();
 		fakePopup.add(secret_undoItem);
 		fakePopup.add(secret_redoItem);
 		
 		popup.add(undoItem);
 		popup.add(redoItem);
+
+		popup_addEntity = new JMenuItem(Messages.getString("EntityPane.9"));
+		popup.add(popup_addEntity);
+
+		popup.addSeparator();
+
 		popup.add(deleteItem);
 		JMenuItem clearall = new JMenuItem(new javax.swing.AbstractAction() {
 			private static final long serialVersionUID = -1148394342964407843L;
@@ -144,7 +160,7 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 				EntityPane.this.repaint();
 			}
 		});
-		clearall.setText("Remove all entities");
+		clearall.setText(Messages.getString("EntityPane.8"));
 		popup.add(clearall);
 		this.add(fakePopup);
 		this.add(popup);
@@ -289,16 +305,16 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 		@Override
 		public void mousePressed(MouseEvent eve) {
 			//log current position
+			int scale = (int) (dataHolder.getConfig().getEntityRes() * EditorApp.mapScale);
+			anchorTile = new Point(eve.getX() / scale, eve.getY() / scale);
 			if (eve.isPopupTrigger()) {
 				//popup
-				popup.show(eve.getComponent(), eve.getX(), eve.getY());
+				setupPopupMenu(eve);
 				return;
 			}
 			origin = eve.getPoint();
 			//System.out.println("press");
 			requestFocus(); //for keys?????????? ??
-			int scale = (int) (dataHolder.getConfig().getEntityRes() * EditorApp.mapScale);
-			anchorTile = new Point(eve.getX() / scale, eve.getY() / scale);
 			currentTile = new Point(anchorTile);
 			allowDrag = false;
 			for (PxeEntry e : selectionList) {
@@ -322,7 +338,7 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 		public void mouseReleased(MouseEvent eve) {
 			if (eve.isPopupTrigger()) {
 				//popup
-				popup.show(eve.getComponent(), eve.getX(), eve.getY());
+				setupPopupMenu(eve);
 				return;
 			}
 			if (allowDrag && (!anchorTile.equals(currentTile))) {//if entities have been dragged
@@ -419,6 +435,25 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 				EntityPane.this.mouseLoc = myLoc;
 			}
 		}
+
+		private void setupPopupMenu(MouseEvent eve) {
+			EntityData selectedNpc = entityDisplay.getSelectedValue();
+			if (selectedNpc != null) {
+				popup_addEntity.setEnabled(true);
+				popup_addEntity.setAction(new AbstractAction() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						addNpcAtPoint(anchorTile.x, anchorTile.y);
+					}
+				});
+				popup_addEntity.setText(
+						Messages.getString("EntityPane.10")
+								.replace("@@@", selectedNpc.getName()));
+			} else {
+				popup_addEntity.setEnabled(false);
+			}
+			popup.show(eve.getComponent(), eve.getX(), eve.getY());
+		}
 	}
 	
 	class EntityKeyAdapter extends KeyAdapter{
@@ -440,7 +475,6 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 							new DataFlavor(PxeEntry.class, "java/serializable/pxeEntry"));
 					Integer dx = null;
 					Integer dy = null;
-					//int scale = (int) (dataHolder.getConfig().getEntityRes() * EditorApp.mapScale);
 					for (PxeEntry p: content) {
 						if (dx == null) {
 							dx = mouseLoc.x - p.getX();
@@ -459,14 +493,10 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 					e.printStackTrace();
 				}
 			} else if (eve.getKeyCode() == KeyEvent.VK_I) {
-				if (mouseLoc == null) return;
-				int entID = 0;
-				if (entityDisplay.getSelectedValue() != null) {
-					entID = entityDisplay.getSelectedValue().getID();
+				if (mouseLoc == null) {
+					return;
 				}
-				PxeEntry newEnt = dataHolder.addEntity(mouseLoc.x, mouseLoc.y,
-						entID);
-				repaint(newEnt.getDrawArea());
+				addNpcAtPoint(mouseLoc.x, mouseLoc.y);
 			} else if (eve.getKeyCode() == KeyEvent.VK_A && eve.isControlDown()) {
 				selectionList.clear();
 				Iterator<PxeEntry> pxeIt = dataHolder.getPxeIterator();
@@ -478,6 +508,15 @@ public class EntityPane extends MapPane implements ListSelectionListener, Clipbo
 				
 			}
 		}
+	}
+
+	private void addNpcAtPoint(int x, int y) {
+		int entID = 0;
+		if (entityDisplay.getSelectedValue() != null) {
+			entID = entityDisplay.getSelectedValue().getID();
+		}
+		PxeEntry newEnt = dataHolder.addEntity(x, y, entID);
+		repaint(newEnt.getDrawArea());
 	}
 	
 	

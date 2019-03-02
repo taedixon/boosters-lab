@@ -520,29 +520,6 @@ public class MapPane extends BgPanel {
 		}
 	}
 	
-	/* no longer necessary
-	public void setTileset(File pxa, File img) {
-		iMan.addImage(img, 1);
-		iMan.addPxa(pxa);
-		tileset = img;
-		tilePane.setTileset(pxa, img);
-		preview.setTileset(img);
-	}
-	
-	public void setNpc1Img(File f) {
-		iMan.addImage(f, 1);
-		this.npcImage1 = f;
-	}
-	public void setNpc2Img(File f) {
-		iMan.addImage(f, 1);
-		this.npcImage2 = f;
-	}
-	public void setBgImg(File f) {
-		iMan.addImage(f, 0);
-		this.bgImage = f;
-	}	
-	*/
-
 	class TileBuffer {
 		int[][] data;
 		int dx;
@@ -597,7 +574,6 @@ public class MapPane extends BgPanel {
 			}
 		}
 	}
-
 
 	protected Rectangle fillPen(Rectangle cursor) {
 		int currentLayer = parent.getActiveLayer();
@@ -1391,7 +1367,9 @@ public class MapPane extends BgPanel {
 			}
 			repaint();
 		}
-	}	protected void drawCursor(Graphics2D g2d) {
+	}
+
+	protected void drawCursor(Graphics2D g2d) {
 		if (g2d == null) {
 			g2d = (Graphics2D) this.getGraphics();
 		}
@@ -1473,7 +1451,9 @@ public class MapPane extends BgPanel {
 				lastP = p;
 			}// if the point is not where it was
 		}
-	}	protected void moveCursor(Rectangle newCursor) {
+	}
+
+	protected void moveCursor(Rectangle newCursor) {
 		int sc = (int) (dataHolder.getConfig().getTileSize() * EditorApp.mapScale);
 		if (cursorLoc != null) {
 			this.repaint(cursorLoc.x * sc,
