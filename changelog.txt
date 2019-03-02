@@ -3,6 +3,7 @@ V0.5.1.0:
 - Removed spaces from some ID values in the html help docs
 - incorporates a bunch of asm-related and general fixes from Leo40
 - improvements to music/npc lists (I think)
+- built using Java 9 modules for distribution with custom JRE
 
 Changelog:
 V0.5.0.0:

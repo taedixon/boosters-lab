@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Booster's Lab.iml" filepath="$PROJECT_DIR$/Booster's Lab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/boostlab.iml" filepath="$PROJECT_DIR$/boostlab.iml" />
     </modules>
   </component>
 </project>
