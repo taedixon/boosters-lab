@@ -5,6 +5,8 @@
             This hack changes the attributes of the weapon fired by curly
             during the Hell segments.
         </field>
+	</panel>
+	<panel>
         <field type="label">
             Bullet Type ID (can mimic other weapons)
         </field>
