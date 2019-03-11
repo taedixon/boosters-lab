@@ -407,7 +407,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	@SuppressWarnings("serial")
 	private void setGlobalKeyBindings(JComponent c) {
 		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, java.awt.Event.CTRL_MASK), "zoom in"); //$NON-NLS-1$
+				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, InputEvent.CTRL_DOWN_MASK), "zoom in"); //$NON-NLS-1$
 		c.getActionMap().put("zoom in", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -416,7 +416,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					}
 				});
 		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.Event.CTRL_MASK), "zoom out"); //$NON-NLS-1$
+				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK), "zoom out"); //$NON-NLS-1$
 		c.getActionMap().put("zoom out", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -425,7 +425,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					}
 				});
 		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS,
-				java.awt.Event.CTRL_MASK | java.awt.Event.SHIFT_MASK), "zoom in tiles"); //$NON-NLS-1$
+				InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK), "zoom in tiles"); //$NON-NLS-1$
 		c.getActionMap().put("zoom in tiles", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -435,7 +435,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					}
 				});
 		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS,
-				java.awt.Event.CTRL_MASK | java.awt.Event.SHIFT_MASK), "zoom out tiles"); //$NON-NLS-1$
+				InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK), "zoom out tiles"); //$NON-NLS-1$
 		c.getActionMap().put("zoom out tiles", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
