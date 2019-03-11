@@ -47,3 +47,4 @@ bin/
 log.*
 nofun
 out_classic
+*.zip
