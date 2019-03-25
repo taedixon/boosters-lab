@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="release">
-    <output-path>$PROJECT_DIR$/out/</output-path>
+  <artifact type="jar" name="classic">
+    <output-path>$PROJECT_DIR$/out_classic/</output-path>
     <root id="archive" name="BoostLab.jar">
       <element id="module-output" name="boostlab" />
       <element id="directory" name="META-INF">

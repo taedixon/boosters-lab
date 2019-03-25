@@ -1,3 +1,15 @@
+V0.5.1.1:
+- Editor displays the correct version
+- Added curly weapons hack to "misc patches"
+- removed references to deprecated Event class
+
+V0.5.1.0:
+- Added "add NPC" option to entity panel context menu
+- Removed spaces from some ID values in the html help docs
+- incorporates a bunch of asm-related and general fixes from Leo40
+- improvements to music/npc lists (I think)
+- built using Java 9 modules for distribution with custom JRE
+
 Changelog:
 V0.5.0.0:
 - Open source oooOOooOOoo

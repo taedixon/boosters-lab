@@ -46,3 +46,6 @@ bin/
 *.patch
 log.*
 nofun
+out_classic
+*.zip
+

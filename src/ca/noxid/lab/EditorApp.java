@@ -42,13 +42,12 @@ public class EditorApp extends JFrame implements ActionListener {
 	private static final boolean disable_logging = true;
 	public static boolean blazed = false;
 	//about dialog
-	private static final String VER_NUM = "0.5.1.0"; //$NON-NLS-1$
+	private static final String VER_NUM = "0.5.2.0"; //$NON-NLS-1$
 	private static final String TITLE_STR = "Booster's Lab V" + VER_NUM;
-	private static final String ABOUT_STR =
-			Messages.getString("EditorApp.1") + VER_NUM + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$
-					"By Noxid - 16/08/2017\n" +  //$NON-NLS-1$
-					Messages.getString("EditorApp.4") + //$NON-NLS-1$
-					Messages.getString("EditorApp.5"); //$NON-NLS-1$
+	private static final String ABOUT_STR = Messages.getString("EditorApp.1") + VER_NUM + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
+			"By Noxid & Open Source Contributors - 10/03/2019\n" + //$NON-NLS-1$
+			Messages.getString("EditorApp.4") + //$NON-NLS-1$
+			Messages.getString("EditorApp.5"); //$NON-NLS-1$
 
 
 	public static int EDITOR_MODE = 0;
@@ -373,7 +372,7 @@ public class EditorApp extends JFrame implements ActionListener {
 	@SuppressWarnings("serial")
 	private void setGlobalKeyBindings(JComponent c) {
 		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, java.awt.Event.CTRL_MASK), "zoom in"); //$NON-NLS-1$
+				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, InputEvent.CTRL_DOWN_MASK), "zoom in"); //$NON-NLS-1$
 		c.getActionMap().put("zoom in", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -382,7 +381,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					}
 				});
 		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.Event.CTRL_MASK), "zoom out"); //$NON-NLS-1$
+				.put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK), "zoom out"); //$NON-NLS-1$
 		c.getActionMap().put("zoom out", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -391,7 +390,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					}
 				});
 		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS,
-				java.awt.Event.CTRL_MASK | java.awt.Event.SHIFT_MASK), "zoom in tiles"); //$NON-NLS-1$
+				InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK), "zoom in tiles"); //$NON-NLS-1$
 		c.getActionMap().put("zoom in tiles", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -401,7 +400,7 @@ public class EditorApp extends JFrame implements ActionListener {
 					}
 				});
 		c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS,
-				java.awt.Event.CTRL_MASK | java.awt.Event.SHIFT_MASK), "zoom out tiles"); //$NON-NLS-1$
+				InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK), "zoom out tiles"); //$NON-NLS-1$
 		c.getActionMap().put("zoom out tiles", //$NON-NLS-1$
 				new AbstractAction() {
 					@Override
@@ -633,7 +632,10 @@ public class EditorApp extends JFrame implements ActionListener {
 	}
 
 	private void initHelperWindows() {
-		tilesetWindow = new JDialog(this);
+		tilesetWindow = new JDialog(
+				this,
+				Messages.getString("EditorApp.60"),
+				Dialog.ModalityType.APPLICATION_MODAL);
 		tilesetWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// if [x] pressed
 		tilesetWindow.addWindowListener(new WindowAdapter() {
@@ -643,7 +645,6 @@ public class EditorApp extends JFrame implements ActionListener {
 				switchPerspective(activePerspective);
 			}
 		});
-		tilesetWindow.setTitle(Messages.getString("EditorApp.60")); //$NON-NLS-1$
 		// helperWindow.setAlwaysOnTop(true);
 		tilesetWindow.setSize(400, 200);
 		Point parentPos = this.getLocation();
@@ -651,7 +652,10 @@ public class EditorApp extends JFrame implements ActionListener {
 		tilesetWindow.setLocation(parentPos);
 		tilesetWindow.setVisible(showTileWindow);
 
-		entityWindow = new JDialog(this);
+		entityWindow = new JDialog(
+				this,
+				Messages.getString("EditorApp.61"),
+				Dialog.ModalityType.APPLICATION_MODAL);
 		entityWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// if [x] pressed
 		entityWindow.addWindowListener(new WindowAdapter() {
@@ -661,12 +665,15 @@ public class EditorApp extends JFrame implements ActionListener {
 				switchPerspective(activePerspective);
 			}
 		});
-		entityWindow.setTitle(Messages.getString("EditorApp.61")); //$NON-NLS-1$
 		entityWindow.setSize(200, 500);
 		entityWindow.setLocation(parentPos);
 		entityWindow.setVisible(false);
 
-		scriptWindow = new JDialog(this);
+
+		scriptWindow = new JDialog(
+				this,
+				Messages.getString("EditorApp.62"),
+				Dialog.ModalityType.APPLICATION_MODAL);
 		scriptWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// if [x] pressed
 		// if [x] pressed
@@ -677,7 +684,6 @@ public class EditorApp extends JFrame implements ActionListener {
 				// switchPerspective(activePerspective);
 			}
 		});
-		scriptWindow.setTitle(Messages.getString("EditorApp.62")); //$NON-NLS-1$
 		scriptWindow.setSize(400, 400);
 		parentPos.y += tilesetWindow.getHeight();
 		scriptWindow.setLocation(parentPos);
@@ -1221,10 +1227,24 @@ public class EditorApp extends JFrame implements ActionListener {
 				}
 			}
 		});
-		menuItem.setText("Check files");
+		menuItem.setText(Messages.getString("EditorApp.167"));
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnProjectLoad.add(menuItem);
 		ops.add(menuItem);
+		
+		// OOB Flag Dialog
+		// TODO Fix this
+		/*
+		menuItem = new JMenuItem(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				airhorn();
+				new OOBFlagDialog(EditorApp.this, iMan);
+			}
+		});
+		menuItem.setText(Messages.getString("EditorApp.168"));
+		ops.add(menuItem);
+		*/
 
 		return ops;
 	}

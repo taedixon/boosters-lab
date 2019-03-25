@@ -581,7 +581,6 @@ public class MapPane extends BgPanel {
 			p.draw(g);
 		}
 	}
-
 	class TileBuffer {
 		int[][] data;
 		int dx;
@@ -636,7 +635,6 @@ public class MapPane extends BgPanel {
 			}
 		}
 	}
-
 
 	protected Rectangle fillPen(Rectangle cursor) {
 		int currentLayer = activeLayer;
@@ -1545,7 +1543,9 @@ public class MapPane extends BgPanel {
 				lastP = p;
 			}// if the point is not where it was
 		}
-	}	protected void moveCursor(Rectangle newCursor) {
+	}
+
+	protected void moveCursor(Rectangle newCursor) {
 		int sc = (int) (dataHolder.getConfig().getTileSize() * EditorApp.mapScale);
 		if (cursorLoc != null) {
 			this.repaint(cursorLoc.x * sc,

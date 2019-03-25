@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hack name="Curly's Nemesis Hack">
+    <panel>
+        <field type="info">
+            This hack changes the attributes of the weapon fired by curly
+            during the Hell segments.
+        </field>
+	</panel>
+	<panel>
+        <field type="label">
+            Bullet Type ID (can mimic other weapons)
+        </field>
+        <field type="text" offset="0x46762e" size="1"/>
+
+        <field  type="label">
+            Bullet Type ID to use for onscreen limit test
+        </field>
+        <field type="text" offset="0x4675f4" size="1"/>
+
+        <field type="label">
+            Number of Bullets Allowed Onscreen
+        </field>
+        <field type="text" offset="0x4675ff" size="1"/>
+
+        <field type="label" col = "1">
+            ID of Sound Effect to play
+        </field>
+        <field type="text" offset="0x467660" size="1"/>
+
+        <field type="label">
+            Automatic Fire (1 shot per frame, kinda broken)
+        </field>
+
+        <field type="check" name="Autofire (Try with L1 Polar Star bullet for reasonable results)">
+            <checked>
+                <field type="data" offset="0x467603">
+                    10 E2 49 00
+                </field>
+            </checked>
+            <unchecked>
+                <field type="data" offset="0x467603">
+                    14 E2 49 00
+                </field>
+            </unchecked>
+        </field>
+    </panel>
+</hack>
