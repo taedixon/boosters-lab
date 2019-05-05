@@ -18,13 +18,13 @@ import java.util.List;
 /**
  * Created by Noxid on 17-Aug-17.
  */
-public class PxmLoader {
-	public final byte pxmVersion;
+public class PxmLoader implements TileLoader {
+	public byte pxmVersion;
 	private List<TileLayer> layers;
 	private List<MapPoly> polygons;
 	private List<LineSeg> lines;
-	private final BufferedImage tileset;
-	private final MapInfo mapInfo;
+	private BufferedImage tileset;
+	private MapInfo mapInfo;
 
 	public int width, height;
 
@@ -36,7 +36,11 @@ public class PxmLoader {
 	        "Gradient"
 	};
 
-	public PxmLoader(File pxmFile, MapInfo mapInfo) throws IOException {
+	public PxmLoader() {
+
+	}
+
+	public void loadMap(File pxmFile, MapInfo mapInfo) throws IOException {
 		this.mapInfo = mapInfo;
 		this.tileset = mapInfo.getTilesetImage();
 
@@ -60,32 +64,32 @@ public class PxmLoader {
 		}
 		pxmVersion = hBuf.get();
 		switch (pxmVersion) {
-		case 0x10:
-			loadMapClassic(inChan);
-			break;
-		case 0x20:
-			loadMapKss(inChan);
-			break;
-		case 0x21:
-			loadMapKssWide(inChan);
-			break;
-		case 0x22:
-			loadMapMultiLayer(inChan);
-			break;
-		case 0x30:
-			loadMapMR(inChan);
-			break;
-		case 0x31:
-			loadMapTess(inChan);
-			break;
-		case 0x32:
-			loadMapTessPoly(inChan);
-			break;
-		case 0x33:
-			loadMapTessGradient(inChan);
-			break;
-		default:
-			//throw a fit
+			case 0x10:
+				loadMapClassic(inChan);
+				break;
+			case 0x20:
+				loadMapKss(inChan);
+				break;
+			case 0x21:
+				loadMapKssWide(inChan);
+				break;
+			case 0x22:
+				loadMapMultiLayer(inChan);
+				break;
+			case 0x30:
+				loadMapMR(inChan);
+				break;
+			case 0x31:
+				loadMapTess(inChan);
+				break;
+			case 0x32:
+				loadMapTessPoly(inChan);
+				break;
+			case 0x33:
+				loadMapTessGradient(inChan);
+				break;
+			default:
+				//throw a fit
 		}
 		inChan.close();
 		inStream.close();
@@ -321,14 +325,17 @@ public class PxmLoader {
 		}
 	}
 
+	@Override
 	public List<TileLayer> getLayers() {
 		return layers;
 	}
 
+	@Override
 	public List<LineSeg> getLines() {
 		return lines;
 	}
 
+	@Override
 	public List<MapPoly> getPolygons() {
 		return polygons;
 	}

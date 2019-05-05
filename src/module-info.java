@@ -3,4 +3,5 @@ module boostlab {
 	requires java.logging;
 	requires java.prefs;
 	requires java.scripting;
+	requires json;
 }

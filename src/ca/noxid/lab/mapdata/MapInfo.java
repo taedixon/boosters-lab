@@ -182,7 +182,9 @@ public class MapInfo implements Changeable {
 			if (!currentFile.exists())
 				writeDummyPxm(currentFile);
 
-			PxmLoader loader = new PxmLoader(currentFile, this);
+			PxmLoader loader = new PxmLoader();
+
+			loader.loadMap(currentFile, this);
 			
 			map = loader.getLayers();
 			nodeVec = loader.getLines();
@@ -197,6 +199,21 @@ public class MapInfo implements Changeable {
 			mapY = 16;
 			map = new ArrayList<>();
 			map.add(new TileLayer("Error", mapX, mapY, getConfig(), getTilesetImage()));
+		}
+	}
+
+	public void importTiledJson(File tileFile) {
+		TiledLoader loader = new TiledLoader();
+		try {
+			loader.loadMap(tileFile, this);
+			map = loader.getLayers();
+			nodeVec = loader.getLines();
+			polygons = loader.getPolygons();
+			mapX = loader.width;
+			mapY = loader.height;
+			this.markChanged();
+		} catch (IOException e) {
+			StrTools.msgBox("Failed to import the tiled filed. Make sure you export as JSON");
 		}
 	}
 

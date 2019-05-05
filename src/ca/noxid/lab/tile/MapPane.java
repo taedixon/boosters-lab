@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
@@ -140,19 +141,19 @@ public class MapPane extends BgPanel {
 		JMenuItem undoItem;
 		undoItem = new JMenuItem(undo);
 		undoItem.setText(Messages.getString("MapPane.1")); //$NON-NLS-1$
-		undoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.Event.CTRL_MASK));
+		undoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
 		JMenuItem redoItem;
 		redoItem = new JMenuItem(redo);
 		redoItem.setText(Messages.getString("MapPane.2")); //$NON-NLS-1$
-		redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.Event.CTRL_MASK));
+		redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
 		JMenuItem secret_undoItem;
 		secret_undoItem = new JMenuItem(undo);
 		secret_undoItem.setText(Messages.getString("MapPane.1")); //$NON-NLS-1$
-		secret_undoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.Event.CTRL_MASK));
+		secret_undoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
 		JMenuItem secret_redoItem;
 		secret_redoItem = new JMenuItem(redo);
 		secret_redoItem.setText(Messages.getString("MapPane.2")); //$NON-NLS-1$
-		secret_redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.Event.CTRL_MASK));
+		secret_redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
 		@SuppressWarnings("serial")
 		JMenuItem shiftItem = new JMenuItem(new AbstractAction() {
 
@@ -581,6 +582,8 @@ public class MapPane extends BgPanel {
 			p.draw(g);
 		}
 	}
+
+
 	class TileBuffer {
 		int[][] data;
 		int dx;
@@ -1560,6 +1563,11 @@ public class MapPane extends BgPanel {
 					cursorLoc.width * sc,
 					cursorLoc.height * sc);
 		}
+	}
+
+	public void importTiledJson(File tileFile) {
+		dataHolder.importTiledJson(tileFile);
+		this.reloadLayerList();
 	}
 
 	private class MapUndo extends AbstractAction {

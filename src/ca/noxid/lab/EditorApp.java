@@ -635,7 +635,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		tilesetWindow = new JDialog(
 				this,
 				Messages.getString("EditorApp.60"),
-				Dialog.ModalityType.APPLICATION_MODAL);
+				Dialog.ModalityType.MODELESS);
 		tilesetWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// if [x] pressed
 		tilesetWindow.addWindowListener(new WindowAdapter() {
@@ -655,7 +655,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		entityWindow = new JDialog(
 				this,
 				Messages.getString("EditorApp.61"),
-				Dialog.ModalityType.APPLICATION_MODAL);
+				Dialog.ModalityType.MODELESS);
 		entityWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// if [x] pressed
 		entityWindow.addWindowListener(new WindowAdapter() {
@@ -673,7 +673,7 @@ public class EditorApp extends JFrame implements ActionListener {
 		scriptWindow = new JDialog(
 				this,
 				Messages.getString("EditorApp.62"),
-				Dialog.ModalityType.APPLICATION_MODAL);
+				Dialog.ModalityType.MODELESS);
 		scriptWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// if [x] pressed
 		// if [x] pressed
@@ -690,16 +690,12 @@ public class EditorApp extends JFrame implements ActionListener {
 		scriptWindow.setVisible(showScriptWindow);
 		scriptTabs = new JTabbedPane();
 		scriptTabs.getActionMap().put("butts", new AbstractAction() {
-			// save
-			private static final long serialVersionUID = 1L;
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("butts indeed");
 				ActionEvent action = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, EditorApp.ACTION_SAVE);
 				EditorApp.this.actionPerformed(action);
 			}
-
 		});
 		scriptTabs.getActionMap().put("butts2", new AbstractAction() {
 			// save all
@@ -1138,7 +1134,8 @@ public class EditorApp extends JFrame implements ActionListener {
 				if (exeData != null) {
 					switch (exeData.type) {
 					case MOD_CS:
-						if (saveAll(false)) {
+					case MOD_KS:
+							if (saveAll(false)) {
 							exeData.execute();
 						}
 						break;
@@ -1157,12 +1154,7 @@ public class EditorApp extends JFrame implements ActionListener {
 							}
 						}
 						break;
-					case MOD_KS:
-						if (saveAll(false)) {
-							exeData.execute();
-						}
-						break;
-					case MOD_MR:
+						case MOD_MR:
 						StrTools.msgBox(Messages.getString("EditorApp.51")); //$NON-NLS-1$
 						break;
 					default:
@@ -1587,9 +1579,26 @@ public class EditorApp extends JFrame implements ActionListener {
 			tempPanel.add(check, c);
 		}
 
+		if (EDITOR_MODE > 0) {
+			c.gridx++;
+			c.gridy = 0;
+			c.gridheight = GridBagConstraints.REMAINDER;
+			JPanel wrap = new JPanel(new BorderLayout());
+			wrap.setOpaque(false);
+			JButton importButton = new JButton(new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					EditorApp.this.onImportTiledButton();
+				}
+			});
+			importButton.setText("Import from Tiled");
+			wrap.add(importButton, BorderLayout.CENTER);
+			tempPanel.add(wrap, c);
+		}
+
 		// add a slider for gradient layer alpha
 		if (EDITOR_MODE == 2) {
-			c.gridx = 5;
+			c.gridx++;
 			c.gridy = 0;
 			tempPanel.add(new JLabel("Alpha:"), c);
 			c.gridy++;
@@ -2153,6 +2162,24 @@ public class EditorApp extends JFrame implements ActionListener {
 			for (AbstractButton b : buttonsToEnableOnExeLoad) {
 				b.setEnabled(true);
 			}
+		}
+	}
+
+	private void onImportTiledButton() {
+		int selectedTab = mapTabs.getSelectedIndex();
+		if (selectedTab >= 0) {
+			int promptResult = JOptionPane.showConfirmDialog(this, Messages.getString("EditorApp.169"), "CONFIRM IMPORT", JOptionPane.YES_NO_OPTION);
+			if (promptResult == JOptionPane.YES_OPTION) {
+				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(lastDir);
+				if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+					File toLoad = fc.getSelectedFile();
+					TabOrganizer tab = componentVec.get(selectedTab);
+					tab.getMap().importTiledJson(toLoad);
+				}
+			}
+		} else {
+			StrTools.msgBox("Must use on an existing map");
 		}
 	}
 
