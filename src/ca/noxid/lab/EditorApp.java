@@ -1579,7 +1579,9 @@ public class EditorApp extends JFrame implements ActionListener {
 			tempPanel.add(check, c);
 		}
 
+		System.out.println("Hey can we add the import");
 		if (EDITOR_MODE > 0) {
+			System.out.println("yeah");
 			c.gridx++;
 			c.gridy = 0;
 			c.gridheight = GridBagConstraints.REMAINDER;

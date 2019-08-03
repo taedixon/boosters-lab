@@ -6,6 +6,7 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/MANIFEST.MF" />
       </element>
+      <element id="extracted-dir" path="$PROJECT_DIR$/json-20180130.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
