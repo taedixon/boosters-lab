@@ -14,6 +14,7 @@ import ca.noxid.lab.script.TscBuilder;
 import ca.noxid.lab.script.TscDialog;
 import ca.noxid.lab.script.TscPane;
 import ca.noxid.lab.tile.MapPane;
+import ca.noxid.lab.tile.TiledExport;
 import ca.noxid.lab.tile.TilesetPane;
 import ca.noxid.uiComponents.*;
 import com.carrotlord.string.StrTools;
@@ -29,6 +30,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
 import java.util.logging.*;
@@ -1587,6 +1589,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			c.gridheight = GridBagConstraints.REMAINDER;
 			JPanel wrap = new JPanel(new BorderLayout());
 			wrap.setOpaque(false);
+
 			JButton importButton = new JButton(new AbstractAction() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -1594,7 +1597,15 @@ public class EditorApp extends JFrame implements ActionListener {
 				}
 			});
 			importButton.setText("Import from Tiled");
-			wrap.add(importButton, BorderLayout.CENTER);
+			wrap.add(importButton, BorderLayout.NORTH);
+			JButton exportButton = new JButton(new AbstractAction() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					EditorApp.this.onExportTiledButton();
+				}
+			});
+			exportButton.setText("Export to Tiled");
+			wrap.add(exportButton, BorderLayout.SOUTH);
 			tempPanel.add(wrap, c);
 		}
 
@@ -2179,6 +2190,25 @@ public class EditorApp extends JFrame implements ActionListener {
 					TabOrganizer tab = componentVec.get(selectedTab);
 					tab.getMap().importTiledJson(toLoad);
 				}
+			}
+		} else {
+			StrTools.msgBox("Must use on an existing map");
+		}
+	}
+
+	private void onExportTiledButton() {
+		int selectedTab = mapTabs.getSelectedIndex();
+		if (selectedTab >= 0) {
+			TiledExport exporter = new TiledExport();
+			TabOrganizer tab = componentVec.get(selectedTab);
+			String xml = exporter.getTiledXml(tab.data);
+			File location = new File(getGameInfo().getDataDirectory(),
+					"/Stage/" + tab.mapdata.getMapdata().getFile() + ".tmx");
+			try {
+				Files.write(location.toPath(), xml.getBytes());
+				StrTools.msgBox("Wrote to " + location);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		} else {
 			StrTools.msgBox("Must use on an existing map");
