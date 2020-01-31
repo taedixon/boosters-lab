@@ -39,24 +39,24 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 	private static final ByteBuffer BB = ByteBuffer.allocate(Long.BYTES);
 
 	private static final String[] sizes = {
-			Messages.getString("OOBFlagDialog.0"),
-			Messages.getString("OOBFlagDialog.1"),
-			Messages.getString("OOBFlagDialog.2"),
-			Messages.getString("OOBFlagDialog.3")
+		Messages.getString("OOBFlagDialog.0"),
+		Messages.getString("OOBFlagDialog.1"),
+		Messages.getString("OOBFlagDialog.2"),
+		Messages.getString("OOBFlagDialog.3")
 	};
 
 	private static final long[] maxValues = {
-			0xFF,
-			0xFFFF,
-			0xFFFFFFFF,
-			0xFFFFFFFFFFFFFFFFL
+		0xFF,
+		0xFFFF,
+		0xFFFFFFFF,
+		0xFFFFFFFFFFFFFFFFL
 	};
 
 	private static final int[] bitCounts = {
-			Byte.SIZE,
-			Short.SIZE,
-			Integer.SIZE,
-			Long.SIZE
+		Byte.SIZE,
+		Short.SIZE,
+		Integer.SIZE,
+		Long.SIZE
 	};
 
 	public OOBFlagDialog(Frame parent, ResourceManager iMan) {
