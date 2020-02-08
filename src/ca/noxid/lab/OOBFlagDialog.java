@@ -32,31 +32,31 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 	private static final ByteBuffer BB = ByteBuffer.allocate(Long.BYTES);
 
 	private static final String[] sizes = {
-		Messages.getString("OOBFlagDialog.0"),
-		Messages.getString("OOBFlagDialog.1"),
-		Messages.getString("OOBFlagDialog.2"),
-		Messages.getString("OOBFlagDialog.3")
+			Messages.getString("OOBFlagDialog.0"),
+			Messages.getString("OOBFlagDialog.1"),
+			Messages.getString("OOBFlagDialog.2"),
+			Messages.getString("OOBFlagDialog.3")
 	};
 
 	private static final long[][] limitsUnsigned = {
-        { 0, 0xFF },
-        { 0, 0xFFFF },
-        { 0, 0xFFFFFFFF },
-        { 0, 0xFFFFFFFFFFFFFFFFL }
+			{ 0, 0xFF },
+			{ 0, 0xFFFF },
+			{ 0, 0xFFFFFFFF },
+			{ 0, 0xFFFFFFFFFFFFFFFFL }
 	};
 
 	private static final long[][] limitsSigned = {
-        { Byte.MIN_VALUE, Byte.MAX_VALUE },
-        { Short.MIN_VALUE, Short.MAX_VALUE },
-        { Integer.MIN_VALUE, Integer.MAX_VALUE },
-        { Long.MIN_VALUE, Long.MAX_VALUE }
-    };
+			{ Byte.MIN_VALUE, Byte.MAX_VALUE },
+			{ Short.MIN_VALUE, Short.MAX_VALUE },
+			{ Integer.MIN_VALUE, Integer.MAX_VALUE },
+			{ Long.MIN_VALUE, Long.MAX_VALUE }
+	};
 
 	private static final int[] bitCounts = {
-		Byte.SIZE,
-		Short.SIZE,
-		Integer.SIZE,
-		Long.SIZE
+			Byte.SIZE,
+			Short.SIZE,
+			Integer.SIZE,
+			Long.SIZE
 	};
 
 	public OOBFlagDialog(Frame parent, ResourceManager iMan) {
@@ -131,10 +131,10 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 		gbc.gridx++;
 		flagInPanel.add(flagValField, gbc);
 		gbc.gridy++;
-        flagInPanel.add(flagValSignedCheck, gbc);
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 1;
+		flagInPanel.add(flagValSignedCheck, gbc);
+		gbc.gridy++;
+		gbc.gridx = 0;
+		gbc.gridwidth = 1;
 		flagInPanel.add(new JLabel(Messages.getString("OOBFlagDialog.22")), gbc);
 		gbc.gridx++;
 		flagInPanel.add(flagSizeList, gbc);
@@ -160,8 +160,8 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 
 	@FunctionalInterface
 	public interface LongCompareFunction {
-	    int compare(long x, long y);
-    }
+		int compare(long x, long y);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -176,8 +176,7 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 				return;
 			}
 			outField.setText(num2TSCParam(in));
-		}
-		else if (flagGenBtn.equals(src)) {
+		} else if (flagGenBtn.equals(src)) {
 			int flag;
 			try {
 				flag = Integer.parseUnsignedInt(flagAddrField.getText(), 16);
@@ -193,19 +192,19 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 				return;
 			}
 			flag *= 8; // multiply by 8 to get actual flag ID
-            long[][] limits;
-            LongCompareFunction cmp;
+			long[][] limits;
+			LongCompareFunction cmp;
 			long val;
 			try {
-			    if (flagValSignedCheck.isSelected()) {
-			        limits = limitsSigned;
-			        cmp = Long::compare;
-			        val = Long.parseLong(flagValField.getText(), 16);
-                } else {
-			        limits = limitsUnsigned;
-			        cmp = Long::compareUnsigned;
-                    val = Long.parseUnsignedLong(flagValField.getText(), 16);
-                }
+				if (flagValSignedCheck.isSelected()) {
+					limits = limitsSigned;
+					cmp = Long::compare;
+					val = Long.parseLong(flagValField.getText(), 16);
+				} else {
+					limits = limitsUnsigned;
+					cmp = Long::compareUnsigned;
+					val = Long.parseUnsignedLong(flagValField.getText(), 16);
+				}
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(this, Messages.getString("OOBFlagDialog.50"),
 						Messages.getString("OOBFlagDialog.51"), JOptionPane.ERROR_MESSAGE);
@@ -247,6 +246,7 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 
 	/**
 	 * Converts a number into its equivalent TSC parameter, with support for negative and huge positive numbers.
+	 *
 	 * @param num number
 	 * @return number as TSC parameter
 	 * @author txin
