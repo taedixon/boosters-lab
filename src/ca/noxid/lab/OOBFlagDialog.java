@@ -24,6 +24,7 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 	private JTextField outField;
 
 	private JTextField flagAddrField, flagValField;
+	private JCheckBox flagValSignedCheck;
 	private JComboBox<String> flagSizeList;
 	private JTextArea flagOutArea;
 	private JButton flagGenBtn, flagCopyBtn;
@@ -37,12 +38,19 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 		Messages.getString("OOBFlagDialog.3")
 	};
 
-	private static final long[] maxValues = {
-		0xFF,
-		0xFFFF,
-		0xFFFFFFFF,
-		0xFFFFFFFFFFFFFFFFL
+	private static final long[][] limitsUnsigned = {
+        { 0, 0xFF },
+        { 0, 0xFFFF },
+        { 0, 0xFFFFFFFF },
+        { 0, 0xFFFFFFFFFFFFFFFFL }
 	};
+
+	private static final long[][] limitsSigned = {
+        { Byte.MIN_VALUE, Byte.MAX_VALUE },
+        { Short.MIN_VALUE, Short.MAX_VALUE },
+        { Integer.MIN_VALUE, Integer.MAX_VALUE },
+        { Long.MIN_VALUE, Long.MAX_VALUE }
+    };
 
 	private static final int[] bitCounts = {
 		Byte.SIZE,
@@ -74,6 +82,8 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 
 		flagAddrField = new JTextField("49DDA0"); //$NON-NLS-1$
 		flagValField = new JTextField("0");
+		flagValSignedCheck = new JCheckBox(Messages.getString("OOBFlagDialog.23"));
+		flagValSignedCheck.setOpaque(false);
 		flagSizeList = new JComboBox<>(sizes);
 		flagOutArea = new JTextArea();
 		flagOutArea.setEditable(false);
@@ -98,7 +108,7 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 
 		JPanel flagPanel = new JPanel();
 		flagPanel.setLayout(new BoxLayout(flagPanel, BoxLayout.Y_AXIS));
-		flagPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("OOBFlagDialog.90")));
+		flagPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("OOBFlagDialog.82")));
 		flagPanel.setOpaque(false);
 
 		JPanel flagInPanel = new JPanel();
@@ -121,7 +131,10 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 		gbc.gridx++;
 		flagInPanel.add(flagValField, gbc);
 		gbc.gridy++;
-		gbc.gridx = 0;
+        flagInPanel.add(flagValSignedCheck, gbc);
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
 		flagInPanel.add(new JLabel(Messages.getString("OOBFlagDialog.22")), gbc);
 		gbc.gridx++;
 		flagInPanel.add(flagSizeList, gbc);
@@ -145,6 +158,11 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 		setContentPane(c);
 	}
 
+	@FunctionalInterface
+	public interface LongCompareFunction {
+	    int compare(long x, long y);
+    }
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
@@ -162,13 +180,12 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 		else if (flagGenBtn.equals(src)) {
 			int flag;
 			try {
-				flag = Integer.parseInt(flagAddrField.getText(), 16);
+				flag = Integer.parseUnsignedInt(flagAddrField.getText(), 16);
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(null, Messages.getString("OOBFlagDialog.30"),
 						Messages.getString("OOBFlagDialog.31"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			flag &= 0xFFFFFFFFL;
 			flag -= 0x49DDA0;
 			if (flag > 0x288E || flag < -0x8AE) {
 				JOptionPane.showMessageDialog(this, Messages.getString("OOBFlagDialog.40"),
@@ -176,20 +193,26 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 				return;
 			}
 			flag *= 8; // multiply by 8 to get actual flag ID
+            long[][] limits;
+            LongCompareFunction cmp;
 			long val;
 			try {
-				val = Long.parseLong(flagValField.getText(), 16);
+			    if (flagValSignedCheck.isSelected()) {
+			        limits = limitsSigned;
+			        cmp = Long::compare;
+			        val = Long.parseLong(flagValField.getText(), 16);
+                } else {
+			        limits = limitsUnsigned;
+			        cmp = Long::compareUnsigned;
+                    val = Long.parseUnsignedLong(flagValField.getText(), 16);
+                }
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(this, Messages.getString("OOBFlagDialog.50"),
 						Messages.getString("OOBFlagDialog.51"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			// 0 - byte (8 bits, max 0xFF)
-			// 1 - word (16 bits, max 0xFFFF)
-			// 2 - dword (32 bits, max 0xFFFFFFFF)
-			// 3 - qword (64 bits, max 0xFFFFFFFFFFFFFFFF)
 			final int size = flagSizeList.getSelectedIndex();
-			if (Long.compareUnsigned(val, maxValues[size]) > 0) {
+			if (cmp.compare(val, limits[size][0]) < 0 || cmp.compare(val, limits[size][1]) > 0) {
 				JOptionPane.showMessageDialog(this, Messages.getString("OOBFlagDialog.60"),
 						Messages.getString("OOBFlagDialog.61"),
 						JOptionPane.ERROR_MESSAGE);
