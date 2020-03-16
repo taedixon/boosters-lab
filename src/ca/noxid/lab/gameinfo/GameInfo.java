@@ -921,26 +921,13 @@ public class GameInfo {
 			oStream.close();
 	}
 	
-	public void exportMapdataTbl() throws IOException {
+	public void exportMapdata(String outFilename, MOD_TYPE format) throws IOException {
 		String encoding = gameConfig.getEncoding();
-		File outFile = new File(dataDir + "/stage.tbl"); //$NON-NLS-1$
+		File outFile = new File(dataDir + "/" + outFilename); //$NON-NLS-1$
 		FileOutputStream oStream = new FileOutputStream(outFile);
 		FileChannel chan = oStream.getChannel();
 		for (Mapdata m : mapdataStore) {
-			ByteBuffer dBuf = m.toBuf(MOD_TYPE.MOD_CS_PLUS, encoding);
-			chan.write(dBuf);
-		}
-		chan.close();
-		oStream.close();
-	}
-
-	public void exportMapdataBin() throws IOException {
-		String encoding = gameConfig.getEncoding();
-		File outFile = new File(dataDir + "/csmap.bin"); //$NON-NLS-1$
-		FileOutputStream oStream = new FileOutputStream(outFile);
-		FileChannel chan = oStream.getChannel();
-		for (Mapdata m : mapdataStore) {
-			ByteBuffer dBuf = m.toBuf(MOD_TYPE.MOD_CS, encoding);
+			ByteBuffer dBuf = m.toBuf(format, encoding);
 			chan.write(dBuf);
 		}
 		chan.close();

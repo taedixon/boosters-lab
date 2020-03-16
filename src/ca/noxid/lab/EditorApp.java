@@ -968,7 +968,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				if (exeData != null && exeData.canPatch()) {
 					try {
-						exeData.exportMapdataTbl();
+						exeData.exportMapdata("stage.tbl", GameInfo.MOD_TYPE.MOD_CS_PLUS);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(EditorApp.this,
@@ -994,7 +994,7 @@ public class EditorApp extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				if (exeData != null && exeData.canPatch()) {
 					try {
-						exeData.exportMapdataBin();
+						exeData.exportMapdata("csmap.bin", GameInfo.MOD_TYPE.MOD_CS);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(EditorApp.this,
@@ -1009,6 +1009,32 @@ public class EditorApp extends JFrame implements ActionListener {
 			}
 		});
 		menuItem.setText(Messages.getString("EditorApp.171")); //$NON-NLS-1$
+		exportMenu.add(menuItem);
+		menuItem = new JMenuItem(new AbstractAction() {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 8626085285993575830L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (exeData != null && exeData.canPatch()) {
+					try {
+						exeData.exportMapdata("mrmap.bin", GameInfo.MOD_TYPE.MOD_MR);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(EditorApp.this,
+								Messages.getString("EditorApp.174"),
+								Messages.getString("EditorApp.172"),
+								JOptionPane.ERROR_MESSAGE);
+					}
+					StrTools.msgBox(Messages.getString("EditorApp.176")); //$NON-NLS-1$
+				} else {
+					StrTools.msgBox(Messages.getString("EditorApp.96")); //$NON-NLS-1$
+				}
+			}
+		});
+		menuItem.setText(Messages.getString("EditorApp.175")); //$NON-NLS-1$
 		exportMenu.add(menuItem);
 		this.buttonsToEnableOnExeLoad.add(exportMenu);
 		fileMenu.add(exportMenu);
@@ -1059,31 +1085,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		menuItem.setText(Messages.getString("EditorApp.90")); //$NON-NLS-1$
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnProjectLoad.addElement(menuItem);
-		fileMenu.add(menuItem);
-		fileMenu.add(menuItem);
-		menuItem = new JMenuItem(new AbstractAction() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -6692081319209085736L;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (exeData != null && exeData.canPatch()) {
-					try {
-						exeData.getExe().updateExcode();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-						StrTools.msgBox(Messages.getString("EditorApp.162")); //$NON-NLS-1$
-					}
-				} else {
-					StrTools.msgBox(Messages.getString("EditorApp.163")); //$NON-NLS-1$
-				}
-			}
-		});
-		menuItem.setText(Messages.getString("EditorApp.164")); //$NON-NLS-1$
-		menuItem.setEnabled(false);
-		this.buttonsToEnableOnExeLoad.add(menuItem);
 		fileMenu.add(menuItem);
 
 		return fileMenu;
@@ -1191,6 +1192,31 @@ public class EditorApp extends JFrame implements ActionListener {
 		});
 		menuItem.setText(Messages.getString("EditorApp.110")); //$NON-NLS-1$
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+		menuItem.setEnabled(false);
+		this.buttonsToEnableOnExeLoad.add(menuItem);
+		ops.add(menuItem);
+
+		menuItem = new JMenuItem(new AbstractAction() {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = -6692081319209085736L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (exeData != null && exeData.canPatch()) {
+					try {
+						exeData.getExe().updateExcode();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						StrTools.msgBox(Messages.getString("EditorApp.162")); //$NON-NLS-1$
+					}
+				} else {
+					StrTools.msgBox(Messages.getString("EditorApp.163")); //$NON-NLS-1$
+				}
+			}
+		});
+		menuItem.setText(Messages.getString("EditorApp.164")); //$NON-NLS-1$
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnExeLoad.add(menuItem);
 		ops.add(menuItem);
