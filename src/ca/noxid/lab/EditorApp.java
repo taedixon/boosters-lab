@@ -1260,8 +1260,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		ops.add(menuItem);
 		
 		// OOB Flag Dialog
-		// TODO Fix this
-		/*
 		menuItem = new JMenuItem(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -1271,7 +1269,6 @@ public class EditorApp extends JFrame implements ActionListener {
 		});
 		menuItem.setText(Messages.getString("EditorApp.168"));
 		ops.add(menuItem);
-		*/
 
 		return ops;
 	}

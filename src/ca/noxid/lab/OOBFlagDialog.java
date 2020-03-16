@@ -1,24 +1,14 @@
 package ca.noxid.lab;
 
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import com.carrotlord.string.StrTools;
 
@@ -29,27 +19,44 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private JTextField addrField, valField;
-	private JComboBox<String> sizeList;
-	private JTextArea outArea;
-	private JButton genButton, copyButton;
+	private JTextField inField;
+	private JButton convertBtn;
+	private JTextField outField;
+
+	private JTextField flagAddrField, flagValField;
+	private JCheckBox flagValSignedCheck;
+	private JComboBox<String> flagSizeList;
+	private JTextArea flagOutArea;
+	private JButton flagGenBtn, flagCopyBtn;
+
+	private static final ByteBuffer BB = ByteBuffer.allocate(Long.BYTES);
 
 	private static final String[] sizes = {
-		"BYTE (8 bits)",
-		"WORD (16 bits)",
-		"DWORD (32 bits)"
+			Messages.getString("OOBFlagDialog.0"),
+			Messages.getString("OOBFlagDialog.1"),
+			Messages.getString("OOBFlagDialog.2"),
+			Messages.getString("OOBFlagDialog.3")
 	};
 
-	private static final long[] maxValues = {
-		0xFF,
-		0xFFFF,
-		0xFFFFFFFF & 0xFFFFFFFFL
+	private static final long[][] limitsUnsigned = {
+			{ 0, 0xFF },
+			{ 0, 0xFFFF },
+			{ 0, 0xFFFFFFFF },
+			{ 0, 0xFFFFFFFFFFFFFFFFL }
+	};
+
+	private static final long[][] limitsSigned = {
+			{ Byte.MIN_VALUE, Byte.MAX_VALUE },
+			{ Short.MIN_VALUE, Short.MAX_VALUE },
+			{ Integer.MIN_VALUE, Integer.MAX_VALUE },
+			{ Long.MIN_VALUE, Long.MAX_VALUE }
 	};
 
 	private static final int[] bitCounts = {
-		8,
-		16,
-		32
+			Byte.SIZE,
+			Short.SIZE,
+			Integer.SIZE,
+			Long.SIZE
 	};
 
 	public OOBFlagDialog(Frame parent, ResourceManager iMan) {
@@ -57,7 +64,7 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 		if (EditorApp.blazed)
 			setCursor(ResourceManager.cursor);
 		setLocation(parent.getLocation());
-		setTitle("OOB Flag Generator");
+		setTitle(Messages.getString("EditorApp.168"));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		addComponentsToPane(iMan.getImg(ResourceManager.rsrcBgBlue));
 		pack();
@@ -66,121 +73,218 @@ public class OOBFlagDialog extends JDialog implements ActionListener {
 	}
 
 	private void addComponentsToPane(java.awt.image.BufferedImage bgImage) {
-		addrField = new JTextField("49DDA0");
-		valField = new JTextField("0");
-		sizeList = new JComboBox<String>(sizes);
-		outArea = new JTextArea();
-		outArea.setEditable(false);
-		genButton = new JButton("Generate");
-		genButton.addActionListener(this);
-		genButton.setOpaque(false);
-		copyButton = new JButton("Copy to Clipboard");
-		copyButton.addActionListener(this);
-		copyButton.setOpaque(false);
+		inField = new JTextField();
+		convertBtn = new JButton("->"); //$NON-NLS-1$
+		convertBtn.addActionListener(this);
+		convertBtn.setOpaque(false);
+		outField = new JTextField();
+		outField.setEditable(false);
 
-		JPanel c = new JPanel();
+		flagAddrField = new JTextField("49DDA0"); //$NON-NLS-1$
+		flagValField = new JTextField("0");
+		flagValSignedCheck = new JCheckBox(Messages.getString("OOBFlagDialog.23"));
+		flagValSignedCheck.setOpaque(false);
+		flagSizeList = new JComboBox<>(sizes);
+		flagOutArea = new JTextArea();
+		flagOutArea.setEditable(false);
+		flagGenBtn = new JButton(Messages.getString("OOBFlagDialog.10"));
+		flagGenBtn.addActionListener(this);
+		flagGenBtn.setOpaque(false);
+		flagCopyBtn = new JButton(Messages.getString("OOBFlagDialog.11"));
+		flagCopyBtn.addActionListener(this);
+		flagCopyBtn.setOpaque(false);
+
+		BgPanel c = new BgPanel(bgImage);
 		c.setLayout(new BoxLayout(c, BoxLayout.Y_AXIS));
-		BgPanel fieldPanel = new BgPanel(bgImage);
-		fieldPanel.setLayout(new GridLayout(0, 2));
-		fieldPanel.add(new JLabel("OOB Flag Generator"));
-		fieldPanel.add(new JLabel(""));
-		fieldPanel.add(new JLabel("Address (hex):"));
-		fieldPanel.add(addrField);
-		fieldPanel.add(new JLabel("Value (hex):"));
-		fieldPanel.add(valField);
-		fieldPanel.add(new JLabel("Value Size:"));
-		fieldPanel.add(sizeList);
-		c.add(fieldPanel);
-		BgPanel outPanel = new BgPanel(bgImage);
-		JScrollPane outScroll = new JScrollPane(outArea);
+
+		JPanel convertPanel = new JPanel();
+		convertPanel.setLayout(new BoxLayout(convertPanel, BoxLayout.X_AXIS));
+		convertPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("OOBFlagDialog.81")));
+		convertPanel.setOpaque(false);
+		convertPanel.add(inField);
+		convertPanel.add(convertBtn);
+		convertPanel.add(outField);
+		c.add(convertPanel);
+
+		JPanel flagPanel = new JPanel();
+		flagPanel.setLayout(new BoxLayout(flagPanel, BoxLayout.Y_AXIS));
+		flagPanel.setBorder(BorderFactory.createTitledBorder(Messages.getString("OOBFlagDialog.82")));
+		flagPanel.setOpaque(false);
+
+		JPanel flagInPanel = new JPanel();
+		flagInPanel.setLayout(new GridBagLayout());
+		flagInPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 0, 4));
+		flagInPanel.setOpaque(false);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 1;
+		gbc.gridy++;
+		flagInPanel.add(new JLabel(Messages.getString("OOBFlagDialog.20")), gbc);
+		gbc.gridx++;
+		flagInPanel.add(flagAddrField, gbc);
+		gbc.gridy++;
+		gbc.gridx = 0;
+		flagInPanel.add(new JLabel(Messages.getString("OOBFlagDialog.21")), gbc);
+		gbc.gridx++;
+		flagInPanel.add(flagValField, gbc);
+		gbc.gridy++;
+		flagInPanel.add(flagValSignedCheck, gbc);
+		gbc.gridy++;
+		gbc.gridx = 0;
+		gbc.gridwidth = 1;
+		flagInPanel.add(new JLabel(Messages.getString("OOBFlagDialog.22")), gbc);
+		gbc.gridx++;
+		flagInPanel.add(flagSizeList, gbc);
+		flagPanel.add(flagInPanel);
+
+		JPanel flagOutPanel = new JPanel();
+		flagOutPanel.setOpaque(false);
+		JScrollPane outScroll = new JScrollPane(flagOutArea);
 		outScroll.setPreferredSize(new Dimension(400, 200));
-		outPanel.add(outScroll);
-		c.add(outPanel);
-		BgPanel btnPanel = new BgPanel(bgImage);
-		btnPanel.add(genButton);
-		btnPanel.add(copyButton);
-		c.add(btnPanel);
+		flagOutPanel.add(outScroll);
+		flagPanel.add(flagOutPanel);
+
+		JPanel flagBtnPanel = new JPanel();
+		flagBtnPanel.setOpaque(false);
+		flagBtnPanel.add(flagGenBtn);
+		flagBtnPanel.add(flagCopyBtn);
+		flagPanel.add(flagBtnPanel);
+
+		c.add(flagPanel);
+
 		setContentPane(c);
+	}
+
+	@FunctionalInterface
+	public interface LongCompareFunction {
+		int compare(long x, long y);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(genButton)) {
-			long flag = 0;
+		Object src = e.getSource();
+		if (convertBtn.equals(src)) {
+			int in;
 			try {
-				flag = Long.parseLong(addrField.getText(), 16);
+				in = Integer.parseInt(inField.getText());
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(null, "Whatever's in the address field, it's not a hexadecimal number!",
-						"Bad number format", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, Messages.getString("OOBFlagDialog.80"),
+						Messages.getString("OOBFlagDialog.31"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			flag &= 0xFFFFFFFFL;
+			outField.setText(num2TSCParam(in));
+		} else if (flagGenBtn.equals(src)) {
+			int flag;
+			try {
+				flag = Integer.parseUnsignedInt(flagAddrField.getText(), 16);
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(null, Messages.getString("OOBFlagDialog.30"),
+						Messages.getString("OOBFlagDialog.31"), JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			flag -= 0x49DDA0;
 			if (flag > 0x288E || flag < -0x8AE) {
-				JOptionPane.showMessageDialog(this, "Address is too far away from the flag array!",
-						"Address too far away", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, Messages.getString("OOBFlagDialog.40"),
+						Messages.getString("OOBFlagDialog.41"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			flag *= 8; // multiply by 8 to get actual flag ID
-			long val = 0;
+			long[][] limits;
+			LongCompareFunction cmp;
+			long val;
 			try {
-				val = Long.parseLong(valField.getText(), 16);
+				if (flagValSignedCheck.isSelected()) {
+					limits = limitsSigned;
+					cmp = Long::compare;
+					val = Long.parseLong(flagValField.getText(), 16);
+				} else {
+					limits = limitsUnsigned;
+					cmp = Long::compareUnsigned;
+					val = Long.parseUnsignedLong(flagValField.getText(), 16);
+				}
 			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(this, "Whatever's in the value field, it's not a hexadecimal number!",
-						"Bad number format", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, Messages.getString("OOBFlagDialog.50"),
+						Messages.getString("OOBFlagDialog.51"), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			val &= 0xFFFFFFFFL;
-			// 0 - byte (8 bits, max 0xFF)
-			// 1 - word (16 bits, max 0xFFFF)
-			// 2 - dword (32 bits, max 0xFFFFFFFF)
-			final int size = sizeList.getSelectedIndex();
-			if (val > maxValues[size]) {
-				JOptionPane.showMessageDialog(this, "The value is too large for the specified size!", "Value too large",
+			final int size = flagSizeList.getSelectedIndex();
+			if (cmp.compare(val, limits[size][0]) < 0 || cmp.compare(val, limits[size][1]) > 0) {
+				JOptionPane.showMessageDialog(this, Messages.getString("OOBFlagDialog.60"),
+						Messages.getString("OOBFlagDialog.61"),
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			// encode the value as a boolean array
+			// transform our value into little endian...
+			BB.clear();
+			BB.order(ByteOrder.nativeOrder());
+			BB.putLong(val);
+			BB.order(ByteOrder.LITTLE_ENDIAN);
+			BB.flip();
+			val = BB.getLong();
+			// ...and encode it as a boolean array
 			boolean[] valBin = new boolean[bitCounts[size]];
 			for (int i = 0; i < valBin.length; i++)
 				valBin[i] = (val & (1 << i)) != 0;
 			// make the commands
-			String out = "";
+			StringBuilder out = new StringBuilder();
 			for (int i = 0; i < valBin.length; i++) {
-				out += "<FL" + (valBin[i] ? "+" : "-");
-				out += num2TSCParam(flag++);
+				out.append("<FL").append(valBin[i] ? '+' : '-'); //$NON-NLS-1$
+				out.append(num2TSCParam(flag++));
 				if ((i + 1) % 8 == 0)
-					out += System.lineSeparator();
+					out.append('\n');
 			}
-			outArea.setText(out);
-			StrTools.msgBox("Successfully generated TSC.");
-		} else if (e.getSource().equals(copyButton)) {
+			flagOutArea.setText(out.toString());
+			StrTools.msgBox(Messages.getString("OOBFlagDialog.70"));
+		} else if (flagCopyBtn.equals(src)) {
 			Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-			cb.setContents(new StringSelection(outArea.getText()), null);
+			cb.setContents(new StringSelection(flagOutArea.getText()), null);
 		}
 	}
 
-	private String num2TSCParam(long num) {
-		String ret = "";
-		for (int i = 3; i > -1; i--) {
-			boolean addedChar = false;
-			for (char c = 0xFF; c > 0x1F; c--) {
-				if (num == 0)
-					break;
-				long val = (long) ((c - 0x30) * Math.pow(10, i));
-				if (val > num)
-					continue;
-				num -= val;
-				ret += c;
-				addedChar = true;
-				break;
-			}
-			if (!addedChar)
-				ret += "0";
+	/**
+	 * Converts a number into its equivalent TSC parameter, with support for negative and huge positive numbers.
+	 *
+	 * @param num number
+	 * @return number as TSC parameter
+	 * @author txin
+	 */
+	private String num2TSCParam(int num) {
+		int offset = (int) Math.floor(Math.max(0, -num + 999.9 / 1000));
+		num += offset * 1000;
+		StringBuilder output = new StringBuilder();
+		int a = 1;
+		for (int i = 0; i < 3; i++) {
+			int b = num / a;
+			char c = (char) (b % 10);
+			c += 48;
+			addCharToSB(c, output);
+			a *= 10;
 		}
-		if (num != 0)
-			return null;
-		return ret;
+		char c = (char) (num / 1000);
+		c += 48;
+		c -= offset;
+		addCharToSB(c, output);
+		output.reverse();
+		return output.toString();
+	}
+
+	private void addCharToSB(char c, StringBuilder sb) {
+		if (isPrintableChar(c))
+			sb.append(c);
+		else
+			sb.append(String.format("\\u%04X", (short) c)); //$NON-NLS-1$
+	}
+
+	// https://stackoverflow.com/a/418560
+	private boolean isPrintableChar(char c) {
+		Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+		return (!Character.isISOControl(c)) &&
+				c != java.awt.event.KeyEvent.CHAR_UNDEFINED &&
+				block != null &&
+				block != Character.UnicodeBlock.SPECIALS;
 	}
 
 }
