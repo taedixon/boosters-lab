@@ -921,33 +921,30 @@ public class GameInfo {
 			oStream.close();
 	}
 	
-	public void exportMapdata() {
+	public void exportMapdataTbl() throws IOException {
 		String encoding = gameConfig.getEncoding();
 		File outFile = new File(dataDir + "/stage.tbl"); //$NON-NLS-1$
-		File out2 = new File(dataDir + "/csmap.bin"); //$NON-NLS-1$
-		try {
-			FileOutputStream oStream = new FileOutputStream(outFile);
-			FileChannel chan = oStream.getChannel();
-			for (Mapdata m : mapdataStore) {
-				ByteBuffer dBuf = m.toBuf(MOD_TYPE.MOD_CS_PLUS, encoding);
-				chan.write(dBuf);
-			}
-			chan.close();
-			oStream.close();
-			
-			oStream = new FileOutputStream(out2);
-			chan = oStream.getChannel();
-			for (Mapdata m : mapdataStore) {
-				ByteBuffer dBuf = m.toBuf(MOD_TYPE.MOD_CS, encoding);
-				chan.write(dBuf);
-			}
-			chan.close();
-			oStream.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		FileOutputStream oStream = new FileOutputStream(outFile);
+		FileChannel chan = oStream.getChannel();
+		for (Mapdata m : mapdataStore) {
+			ByteBuffer dBuf = m.toBuf(MOD_TYPE.MOD_CS_PLUS, encoding);
+			chan.write(dBuf);
 		}
-		
+		chan.close();
+		oStream.close();
+	}
+
+	public void exportMapdataBin() throws IOException {
+		String encoding = gameConfig.getEncoding();
+		File outFile = new File(dataDir + "/csmap.bin"); //$NON-NLS-1$
+		FileOutputStream oStream = new FileOutputStream(outFile);
+		FileChannel chan = oStream.getChannel();
+		for (Mapdata m : mapdataStore) {
+			ByteBuffer dBuf = m.toBuf(MOD_TYPE.MOD_CS, encoding);
+			chan.write(dBuf);
+		}
+		chan.close();
+		oStream.close();
 	}
 	
 	public void commitChanges() {

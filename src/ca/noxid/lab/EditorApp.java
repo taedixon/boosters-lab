@@ -955,6 +955,9 @@ public class EditorApp extends JFrame implements ActionListener {
 		menuItem.setEnabled(false);
 		this.buttonsToEnableOnProjectLoad.add(menuItem);
 		fileMenu.add(menuItem);
+
+		JMenu exportMenu = new JMenu(Messages.getString("EditorApp.97"));
+		exportMenu.setEnabled(false);
 		menuItem = new JMenuItem(new AbstractAction() {
 			/**
 			 *
@@ -964,17 +967,52 @@ public class EditorApp extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (exeData != null && exeData.canPatch()) {
-					exeData.exportMapdata();
+					try {
+						exeData.exportMapdataTbl();
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(EditorApp.this,
+								Messages.getString("EditorApp.174"),
+								Messages.getString("EditorApp.172"),
+								JOptionPane.ERROR_MESSAGE);
+					}
 					StrTools.msgBox(Messages.getString("EditorApp.95")); //$NON-NLS-1$
 				} else {
 					StrTools.msgBox(Messages.getString("EditorApp.96")); //$NON-NLS-1$
 				}
 			}
 		});
-		menuItem.setText(Messages.getString("EditorApp.97")); //$NON-NLS-1$
-		menuItem.setEnabled(false);
-		this.buttonsToEnableOnExeLoad.add(menuItem);
-		fileMenu.add(menuItem);
+		menuItem.setText(Messages.getString("EditorApp.170")); //$NON-NLS-1$
+		exportMenu.add(menuItem);
+		menuItem = new JMenuItem(new AbstractAction() {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 8626085285993575830L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (exeData != null && exeData.canPatch()) {
+					try {
+						exeData.exportMapdataBin();
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(EditorApp.this,
+								Messages.getString("EditorApp.174"),
+								Messages.getString("EditorApp.172"),
+								JOptionPane.ERROR_MESSAGE);
+					}
+					StrTools.msgBox(Messages.getString("EditorApp.173")); //$NON-NLS-1$
+				} else {
+					StrTools.msgBox(Messages.getString("EditorApp.96")); //$NON-NLS-1$
+				}
+			}
+		});
+		menuItem.setText(Messages.getString("EditorApp.171")); //$NON-NLS-1$
+		exportMenu.add(menuItem);
+		this.buttonsToEnableOnExeLoad.add(exportMenu);
+		fileMenu.add(exportMenu);
+
 		menuItem = new JMenuItem(new AbstractAction() {
 			private static final long serialVersionUID = -2516642407926834624L;
 
