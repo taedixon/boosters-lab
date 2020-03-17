@@ -5,7 +5,7 @@ import com.carrotlord.string.StrTools;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -24,6 +24,7 @@ public class BlConfig {
 	private String backgroundPrefix = "bk";
 	private int gradientLayerAlpha = 50;
 	private String encoding = "UTF-8";
+	private String imageExtension = ".pbm";
 
 	private static final String[] fluff = {
 			" - Line resolution",
@@ -38,6 +39,7 @@ public class BlConfig {
 			" - Identifies file as a background",
 			" - Used for the alpha slider",
 			" - Character encoding",
+			" - Image extension",
 	};
 
 	private File configFile;
@@ -92,6 +94,14 @@ public class BlConfig {
 		gradientLayerAlpha = val;
 	}
 
+	public String getImageExtension() {
+		return imageExtension;
+	}
+
+	public void setImageExtension(String imageExtension) {
+		this.imageExtension = imageExtension;
+	}
+
 	public String getEncoding() {
 		return encoding;
 	}
@@ -104,7 +114,6 @@ public class BlConfig {
 			tilesetWidth = Integer.parseInt(vals[3]);
 			mapMinX = Integer.parseInt(vals[4]);
 			mapMinY = Integer.parseInt(vals[5]);
-
 		}
 		if (vals.length >= 10) {
 			useScriptSource = Boolean.parseBoolean(vals[6]);
@@ -118,6 +127,9 @@ public class BlConfig {
 		if (vals.length >= 12) {
 			encoding = vals[11];
 		}
+		if (vals.length >= 13) {
+			imageExtension = vals[12];
+		}
 	}
 
 	public BlConfig(File configFolder, GameInfo.MOD_TYPE type) {
@@ -126,43 +138,15 @@ public class BlConfig {
 			tileSize = 16;
 		}
 		if (configFile.exists()) {
-			Scanner sc = null;
-			try {
-				sc = new Scanner(configFile);
-				lineResolution = sc.nextInt();
-				sc.nextLine();
-				entityResolution = sc.nextInt();
-				sc.nextLine();
-				tileSize = sc.nextInt();
-				sc.nextLine();
-				tilesetWidth = sc.nextInt();
-				sc.nextLine();
-				mapMinX = sc.nextInt();
-				sc.nextLine();
-				mapMinY = sc.nextInt();
-				sc.nextLine();
-				useScriptSource = sc.nextBoolean();
-				sc.nextLine();
-				tilesetPrefix = sc.next();
-				sc.nextLine();
-				npcPrefix = sc.next();
-				sc.nextLine();
-				backgroundPrefix = sc.next();
-				sc.nextLine();
-				gradientLayerAlpha = sc.nextInt();
-				sc.nextLine();
-				encoding = sc.next();
-				sc.nextLine();
+			ArrayList<String> configValues = new ArrayList<>();
+			try (Scanner sc = new Scanner(configFile)) {
+				while (sc.hasNextLine())
+					configValues.add(sc.nextLine());
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (NoSuchElementException e) {
-				//yolo
-			} finally {
-				if (sc != null) {
-					sc.close();
-				}
 			}
+			set(configValues.toArray(new String[0]));
 		}
 	}
 
@@ -172,9 +156,10 @@ public class BlConfig {
 			Object[] vals = {
 					lineResolution, entityResolution, tileSize, tilesetWidth,
 					mapMinX, mapMinY, useScriptSource, tilesetPrefix, npcPrefix, backgroundPrefix,
-					gradientLayerAlpha, encoding};
+					gradientLayerAlpha, encoding, imageExtension
+			};
 			for (int i = 0; i < vals.length; i++) {
-				out.write(vals[i] + fluff[i] + "\r\n");
+				out.write(vals[i] + fluff[i] + System.lineSeparator());
 			}
 			out.close();
 		} catch (IOException e) {

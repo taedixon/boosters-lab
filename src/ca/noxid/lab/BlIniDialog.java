@@ -33,6 +33,7 @@ public class BlIniDialog extends JDialog {
 	private JTextField npcPrefixField = new UpdateTextField();
 	private JTextField bgPrefixField = new UpdateTextField();
 	private JTextField encodingField = new UpdateTextField();
+	private JTextField imageExtensionField = new UpdateTextField();
 
 	BlConfig config;
 
@@ -55,6 +56,7 @@ public class BlIniDialog extends JDialog {
 		npcPrefixField.setText(config.getNpcPrefix());
 		bgPrefixField.setText(config.getBackgroundPrefix());
 		encodingField.setText(config.getEncoding());
+		imageExtensionField.setText(config.getImageExtension());
 
 		JPanel pane = new BgPanel(bg);
 		pane.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
@@ -63,7 +65,7 @@ public class BlIniDialog extends JDialog {
 		pane.add(new JLabel("Line Resolution"));
 		pane.add(lineResField);
 		lineResField.setToolTipText("Used for the MR/RIP engine. Disregard if you are not GIR.");
-		lineResField.setColumns(12);
+		lineResField.setColumns(13);
 
 		pane.add(new JLabel("Entity Resolution"));
 		pane.add(entityResField);
@@ -88,10 +90,8 @@ public class BlIniDialog extends JDialog {
 		mapMinYField.setToolTipText("The smallest map height (in tiles) BL will allow you to make.");
 
 		JLabel checkLabel = new JLabel("Use ScriptSource files");
-		checkLabel.setToolTipText(
-				"Preserves comments, macros, etc in TSC files. Uncheck if you often use other TSC editors.");
 		scriptSourceField.setToolTipText(
-				"Preserves comments, macros, etc in TSC files. Uncheck if you often use other TSC editors.");
+				"Preserve comments, macros, etc in TSC files. Uncheck if you often use other TSC editors.");
 		pane.add(checkLabel);
 		pane.add(scriptSourceField);
 
@@ -109,10 +109,13 @@ public class BlIniDialog extends JDialog {
 
 		pane.add(new JLabel("Character Encoding"));
 		pane.add(encodingField);
-		bgPrefixField.setToolTipText("May need to be changed for foreign language mods.");
+		encodingField.setToolTipText("May need to be changed for foreign language mods.");
 
-		JButton b;
-		b = new JButton(new AbstractAction() {
+		pane.add(new JLabel("Image Format"));
+		pane.add(imageExtensionField);
+		imageExtensionField.setToolTipText("Used to load images. Does not affect the game itself.");
+
+		JButton b = new JButton(new AbstractAction() {
 			private static final long serialVersionUID = 7943594021298535346L;
 
 			@Override
@@ -142,6 +145,7 @@ public class BlIniDialog extends JDialog {
 						bgPrefixField.getText(),
 						"50",
 						encodingField.getText(),
+						imageExtensionField.getText(),
 				};
 				config.set(vals);
 				config.save();
