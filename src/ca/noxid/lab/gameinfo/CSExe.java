@@ -160,7 +160,8 @@ public class CSExe {
 	private PEFile.Section universalMapDataPortMechanism(boolean allAvailableMaps) throws IOException {
 		if (csmapSection != null)
 			throw new IOException(
-					"What kind of prank are you trying to pull, mister? *throws cake* This one is much better!");
+					"What kind of prank are you trying to pull, mister? *throws cake* This one is much better!"
+				  + "\n(tried to create .csmap when one already existed)");
 		int mapCount = 95;
 		int mapDataPtr = peData.setupRVAPoint(pMapdata).getInt() - 0x400000;
 		// System.out.println("Porting via : " + Integer.toHexString(mapDataPtr));
@@ -329,33 +330,24 @@ public class CSExe {
 		modified = true;
 	}
 
-	// NOTE: I recommend invoking removeFillerSections before this
+	// PEFile.alignForward, but with special handling for RVA == 0
+	// hopefully, this should fix empty .csmap nukage
+	private int alignForwardFiller(int virtualAddrRelative, int fileAlignment) {
+		int mod = virtualAddrRelative % fileAlignment;
+		if (virtualAddrRelative == 0 || mod != 0)
+			virtualAddrRelative += fileAlignment - mod;
+		return virtualAddrRelative;
+	}
+
 	private void fixVirtualLayoutGaps() {
+		removeFillerSections(); // remove any existing filler sections
 		final int sectionAlignment = peData.getOptionalHeaderInt(0x20);
 		// sort the sections so we go by RVA
-		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<PEFile.Section>(peData.sections);
-		Collections.sort(sectionsSorted, sortByRVA);
-		// first romp to get first free filler section number
+		LinkedList<PEFile.Section> sectionsSorted = new LinkedList<>(peData.sections);
+		sectionsSorted.sort(sortByRVA);
 		int flrNum = 0;
-		for (PEFile.Section s : sectionsSorted) {
-			if (!isFillerSection(s))
-				continue;
-			String segNumStr = s.decodeTag().substring(4);
-			int segNum = 0;
-			try {
-				segNum = Integer.parseInt(segNumStr, 16);
-			} catch (NumberFormatException e) {
-				// last 4 characters are not a valid hex number
-				// not a filler segment, outta here!
-				continue;
-			}
-			if (flrNum < segNum)
-				flrNum = segNum;
-		}
-		flrNum++;
 		int lastAddress = 0;
 		String lastSeg = null;
-		// second romp, this time it's personal
 		// if a section's RVA does not equal lastAddress, that means there's a gap in
 		// the virtual layout
 		// for some reason Windows 10 and apparently *only* Windows 10 hates virtual
@@ -370,7 +362,7 @@ public class CSExe {
 							JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION);
 					if (confirm != JOptionPane.YES_OPTION) {
 						lastSeg = curSeg;
-						lastAddress = PEFile.alignForward(s.virtualAddrRelative + s.virtualSize, sectionAlignment);
+						lastAddress = alignForwardFiller(s.virtualAddrRelative + s.virtualSize, sectionAlignment);
 						continue;
 					}
 					// create new filler section

@@ -96,7 +96,7 @@ public class GameInfo {
 		this.base = base;
 		mapdataStore = new Vector<>();
 		categoryMap = new HashMap<>();
-		boolean imgExtIsPng = false;
+		String defaultImageExt = ".pbm";
 		if (base.toString().endsWith(".exe")) { //$NON-NLS-1$
 			dataDir = new File(base.getParent() + "/data"); //$NON-NLS-1$
 			if (dataDir.list(new FileSuffixFilter("stprj")).length > 0) {
@@ -109,6 +109,7 @@ public class GameInfo {
 				try {
                     executable = new CSExe(base); //can fix swdata
                     getExeData(executable);
+                    defaultImageExt = ".bmp";
                 } catch (Exception ioe) {
 				    ioe.printStackTrace();
                     StrTools.msgBox(Messages.getString("GameInfo.95")); //$NON-NLS-1$
@@ -118,28 +119,31 @@ public class GameInfo {
 		} else if (base.toString().endsWith(".tbl")){ //$NON-NLS-1$
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile();
+            defaultImageExt = ".bmp";
 		} else if (base.toString().endsWith(".bin")) { //$NON-NLS-1$
 			if (base.getName().equals("mrmap.bin")) { //$NON-NLS-1$
 				//moustache
 				type = MOD_TYPE.MOD_MR;
 				dataDir = base.getParentFile();
-				imgExtIsPng = true;
+                defaultImageExt = ".png";
 			} else {
 				type = MOD_TYPE.MOD_KS;
 				dataDir = base.getParentFile();
-				imgExtIsPng = true;
+                defaultImageExt = ".png";
 			}
 		} else if (base.toString().endsWith(".pxm")) { //$NON-NLS-1$
 			type = MOD_TYPE.MOD_CS_PLUS;
 			dataDir = base.getParentFile().getParentFile();
+            defaultImageExt = ".bmp";
 		} else if (base.toString().endsWith(".csmap")) { //$NON-NLS-1$
 			type = MOD_TYPE.MOD_CS;
 			dataDir = base.getParentFile().getParentFile();
+            defaultImageExt = ".bmp";
 		}
 		gameConfig = new BlConfig(dataDir, type);
 		String imageExtension = gameConfig.getImageExtension();
-		if (imgExtIsPng && ".pbm".equals(imageExtension))
-			gameConfig.setImageExtension((imageExtension = ".png"));
+		if (".pbm".equals(imageExtension))
+			gameConfig.setImageExtension((imageExtension = defaultImageExt));
 		fillMapdata(base);
 		mycharFile = new File(dataDir + "/MyChar" + imageExtension); //$NON-NLS-1$
 		mycharFile = ResourceManager.checkBase(mycharFile);
@@ -780,7 +784,6 @@ public class GameInfo {
 			exe.patch(imgExt, imgStrOffset3);
 			changeFileExt(dataDir, extstr, ".bmp"); //$NON-NLS-1$
 		}
-		gameConfig.setImageExtension(".bmp");
 	}
 	
 	private void changeFileExt(File baseDir, String oldExt, String newExt) {
