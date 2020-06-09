@@ -142,7 +142,7 @@ public class TscPane extends JTextPane implements ActionListener, Changeable {
 		if (srcFile.exists() && saveSource) {
 			if (srcFile.lastModified() > scriptFile.lastModified()) {
 				int choice = JOptionPane.showOptionDialog(lastFocus,
-						"TSC file is more recent than ScriptSource",
+						"ScriptSource is more recent than the TSC file",
 						"Warning",
 						JOptionPane.YES_NO_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE,
