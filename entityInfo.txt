@@ -221,7 +221,7 @@
 #214	Proj	NiteS	Projectile - Night Spirit 	288:96:352:128	Projectile - Night Spirit 	CE:OuterWall ;
 #215	Enemy	ScrcW	Enemy - Sandcroc (white) 	0:240:96:256	Enemy - Sandcroc (white) 	CE:OuterWall ;
 #216	Debug	cat	Debug cat 	512:400:544:432	Debug cat 	CE:Characters ;
-#217	Itoh	 	Itoh	288:128:160:320	Itoh	CE:Characters ;
+#217	Itoh	 	Itoh	288:128:320:160	Itoh	CE:Characters ;
 #218	Proj?	 	Projectile?	0:0:0:0	Projectile?	CE:Unsure ;
 #219	Genrt	Smoke	Generator - Smoke/Underwater current 	32:0:64:32	Generator - Smoke/Underwater current 	CE:Misc ;
 #220	SBrig	stand	Shovel Brigade 	0:128:32:160	Shovel Brigade 	CE:Characters ;
