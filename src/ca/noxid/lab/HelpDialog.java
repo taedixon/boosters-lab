@@ -58,6 +58,7 @@ public class HelpDialog extends JFrame implements TreeSelectionListener, Hyperli
 			return;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return;
 		}
 		//create the tree
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("the root");
@@ -79,10 +80,9 @@ public class HelpDialog extends JFrame implements TreeSelectionListener, Hyperli
 		}
 		JScrollPane indexScroll = new JScrollPane(index);
 		JScrollPane editScroll = new JScrollPane(display);
-		this.add(indexScroll, BorderLayout.WEST);
-		this.add(editScroll, BorderLayout.CENTER);
+		this.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, indexScroll, editScroll));
 		this.setSize(640, 400);
-		indexScroll.setPreferredSize(new Dimension(110, 400));
+		indexScroll.setMinimumSize(new Dimension(110, 400));
 		this.validate();
 	}
 
@@ -165,10 +165,7 @@ public class HelpDialog extends JFrame implements TreeSelectionListener, Hyperli
 			}
 		} catch (IOException err) {
 			err.printStackTrace();
-			URL link = null;
-			if (book != null)
-				link = book.location;
-			StrTools.msgBox(Messages.getString("HelpDialog.3") + link); //$NON-NLS-1$
+			StrTools.msgBox(Messages.getString("HelpDialog.3") + new File(book.location.getFile()).getAbsolutePath()); //$NON-NLS-1$
 		}
 	}
 
@@ -183,7 +180,7 @@ public class HelpDialog extends JFrame implements TreeSelectionListener, Hyperli
 				display.setCursor(null);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
-				StrTools.msgBox(Messages.getString("HelpDialog.3") + event.getURL()); //$NON-NLS-1$
+				StrTools.msgBox(Messages.getString("HelpDialog.4") + new File(event.getURL().getFile()).getAbsolutePath()); //$NON-NLS-1$
 			}
 		}
 	}
