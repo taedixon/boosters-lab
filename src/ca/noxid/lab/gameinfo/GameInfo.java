@@ -1195,7 +1195,13 @@ public class GameInfo {
 			String gamePath = dataDir.getParent() + "/CsEngine.exe"; //$NON-NLS-1$
 			Runtime rt = Runtime.getRuntime();
 			try {
-				rt.exec(gamePath, null, gameLoc);
+				String os = System.getProperty("os.name");
+				if( !os.contains("Windows")) {
+					rt.exec("wine " + gamePath, null, gameLoc);
+				}
+				else {
+					rt.exec(gamePath, null, gameLoc);
+				}
 			} catch (IOException e) {
 				StrTools.msgBox(Messages.getString("GameInfo.46")); //$NON-NLS-1$
 				e.printStackTrace();
