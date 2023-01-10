@@ -3,11 +3,13 @@
 //Contributors: Wistil (cannibalized CE's entity list)
 //		Noxid (most of entities 0-180 & some more)
 //		Carrotlord (rects for entities 180+)
-//     Bombchu Link (updated and refreshed framarects.)
+//		Bombchu Link (updated and refreshed framerects.)
+//		txin (Started and did most of the work on new accurate list: https://docs.google.com/spreadsheets/d/12iC9uRGNZ2MnrhpS4s_KvIRYHhC56mPXCnCcsDjxit0/ )
+//		Enlight (Contributed some changes to list above and brought it here)
 #0	 	 	Null 	0:0:0:0	<nothing> 	General:Tool CE:General ;
 #1	Weapn	energy	EXP	0:32:32:64	Weapon energy 	CE:General ;
 #2	Enemy	Behem	Behemoth 	0:0:64:48	Enemy - Behemoth 	CE:Egg1 Tileset:Eggs1 Enemy:Ground ;
-#3	?	 	Null_disappear 	0:0:0:0	<nothing?> 	CE:Unsure ;
+#3	Disap	pear 	Null_disappear 	0:0:0:0	Null_disappear, used to place damage numbers 	CE:Unsure ;
 #4	Smoke	 	Smoke 	128:0:160:32	Smoke 	General:Effect CE:Misc Tileset:Sym ;
 #5	Enemy	CrtHG	Critter(g) 	0:94:32:124	Enemy - Critter (hopping, green) 	CE:Egg1 Tileset:Eggs1 Enemy:Ground ;
 #6	Enemy	BtlHG	Beetle(horiz_g) 	0:160:32:192	Enemy - Beetle (horiz, green) 	CE:Egg1 Tileset:Eggs1 Enemy:Air ;
@@ -29,9 +31,9 @@
 #22	Telep	 	Teleporter 	480:32:528:96	Teleporter 	General:Prop CE:Misc Tileset:Sym ;
 #23	Telep	light	TP_lights 	528:64:576:72	Teleporter lights 	General:Prop CE:Misc Tileset:Sym ;
 #24	Enemy	PCrit	PowerCritter 	0:0:48:48	Enemy - Power Critter 	CE:Grasstown Tileset:Weed Enemy:Ground ;
-#25	Lift	platf	Lift 	512:128:580:160	Lift platform 	General:Prop CE:Misc Tileset:Sym ;
+#25	Lift	platf	Lift 	512:128:580:160	Lift Platform / Elevator 	General:Prop CE:Misc Tileset:Sym ;
 #26	Enemy	BatBC	Bat(circle_black) 	64:160:96:192	Enemy - Bat (black, circling) 	CE:Grasstown Tileset:Weed Enemy:Air ;
-#27	Death	trap	DeathTrap 	192:128:256:176	Deathtrap 	General:Prop CE:Misc ;
+#27	Death	trap	DeathTrap 	192:128:256:176	Deathtrap / Deathspikes 	General:Prop CE:Misc ;
 #28	Enemy	CrtFy	Critter(fly_g) 	96:96:128:128	Enemy - Critter (flying) 	CE:Grasstown Tileset:Weed Enemy:Ground ;
 #29	Cthu	 	Cthulhu 	0:384:32:432	Cthulhu 	CE:Characters Character:Human Tileset:Regu ;
 #30	Hermt	Gunsm	Gunsmith 	0:64:32:96	Hermit Gunsmith 	CE:Characters Character:Human Tileset:Guest ;
@@ -43,11 +45,11 @@
 #36	Boss	Blrg2	Balrog(hover) 	0:0:80:48	Boss - Balrog (hovering) 	Tileset:Bllg CE:Balrog ;
 #37	Sign	post	Signpost 	384:128:416:160	Signpost 	General:Prop CE:General Tileset:Sym ;
 #38	Fire	place	Fire 	256:128:288:160	Fireplace fire 	General:Prop CE:Misc Tileset:Sym ;
-#39	Save	sign	SaveSign 	448:126:480:160	Save sign 	General:Tool CE:Misc ;
+#39	Save	sign	SaveSign 	448:126:480:160	Save / Cocktail Sign 	General:Tool CE:Misc ;
 #40	Santa	 	Santa 	0:64:32:96	Santa 	CE:Characters Character:Mimiga Tileset:Regu ;
 #41	Door	bustd	BustedDoor 	0:0:0:0	Busted doorway 	General:Prop CE:Misc Tileset:Map ;
 #42	Sue	 	Sue 	0:0:32:32	Sue 	CE:Characters Character:Mimiga Tileset:Regu ;
-#43	Black	board	Chalkboard 	256:160:336:224	Blackboard 	General:Prop CE:Misc Tileset:Sym ;
+#43	Blkbrd	/Table	Chalkboard/Table 	256:160:336:224	Blackboard / Table 	General:Prop CE:Misc Tileset:Sym ;
 #44	Enemy	Polsh	Polish 	0:0:64:64	Enemy - Polish 	CE:SandZone Tileset:Sand Enemy:Ground ;
 #45	Enemy	Baby	Baby 	32:64:64:96	Enemy - Baby 	CE:SandZone Tileset:Sand Enemy:Air ;
 #46	H/V	trigr	H/V_trigger 	0:0:0:0	Horiz/vert trigger 	General:Tool CE:General ;
@@ -57,7 +59,7 @@
 #50	Proj	Skele	ProjSkeleton 	96:64:128:96	Projectile - Skeleton 	CE:SandZone Tileset:Sand Projectile:All ;
 #51	Enemy	CrowS	Crow&SkullHead 	128:160:252:204	Enemy - Crow & Skullhead 	CE:SandZone Tileset:Sand Enemy:Air ;
 #52	BRobt	sit	BlueRobot(sit) 	512:400:544:432	Blue robot (sitting) 	CE:Misc Character:Other Tileset:Regu ;
-#53	CRASH	 	Unknown(crash) 	0:0:0:0	<CRASH> 	CE:Crash ;
+#53	CRASH	 	<CRASH> SkullstepLeg 	0:0:0:0	Skullstep Leg 	CE:Crash ;
 #54	Enemy	SkulS	SkullStep 	64:160:128:204	Enemy - Skullstep 	CE:SandZone Tileset:Sand Enemy:Ground ;
 #55	Kazum	 	Kazuma 	384:384:416:432	Kazuma 	CE:Characters Character:Human Tileset:Regu ;
 #56	Enemy	BtlHB	BeetleHorizBrown 	0:284:32:316	Enemy - Beetle (horiz, brown) 	CE:SandZone Tileset:Sand Enemy:Air ;
@@ -94,7 +96,7 @@
 #87	Heart	 	Heart 	64:160:96:192	Heart 	General:Tool CE:General Tileset:Sym ;
 #88	Boss	Igor	Igor 	0:0:80:80	Boss - Igor 	CE:Mimiga Tileset:Ravil Enemy:Ground ;
 #89	Dead	Igor	Igor(dead) 	574:176:616:208	Igor (defeated) 	CE:Mimiga Tileset:Ravil Enemy:Ground ;
-#90	Backg	 	Unknown(90) 	0:0:0:0	Background? 	CE:Unsure ;
+#90	UNUSED	 	Unused and Unknown 	0:0:0:0	Unused and Unknown, draws one sprite 	CE:Unsure ;
 #91	Cage	 	Cage 	192:176:256:224	Cage 	Tileset:Sym CE:Misc ;
 #92	Sue	compu	Sue(pc) 	544:432:576:480	Sue (computer) 	CE:Characters Character:Mimiga Tileset:Regu ;
 #93	Chaco	 	Chaco 	256:0:288:32	Chaco 	CE:Characters Character:Mimiga Tileset:Guest ;
@@ -149,7 +151,7 @@
 #142	Enemy	Flwcb	FlowerCub 	0:256:32:288	Enemy - Flowercub 	CE:Toroko(boss) Tileset:Toro Enemy:Ground ;
 #143	Jenka	uncon	Jenka(collapse) 	416:64:510:96	Jenka (collapsed) 	CE:Characters Character:Human Tileset:Regu ;
 #144	Torok	telep	Toroko(teleIn) 	64:128:96:160	Toroko (teleports in) 	CE:Characters Character:Mimiga Tileset:Regu ;
-#145	CRASH	 	Unknown(145) 	0:0:0:0	<CRASH> 	CE:Crash ;
+#145	CRASH	 	King's Blade 	0:0:0:0	<CRASH> 	CE:Crash ;
 #146	Ligtn	 	Lightning 	608:416:640:480	Lightning 	General:Effect CE:Misc Tileset:Caret ;
 #147	Enemy	CrtHv	Critter(hover) 	0:192:32:224	Enemy - Critter (hover) 	CE:Labyrinth Tileset:Maze Enemy:Ground ;
 #148	Proj	CrtHv	Shot(crit_p) 	192:192:208:208	Projectile - Critter 	CE:Labyrinth Tileset:Maze Projectile:All ;
@@ -185,9 +187,9 @@
 #178	Proj	Core1	Shot(core_spin) 	0:448:32:480	Projectile - Core (spinner) 	CE:Core Tileset:Almo1 Projectile:All ;
 #179	Proj	Core2	Shot(core_wisp) 	96:448:144:480	Projectile - Core (wisp) 	CE:Core Tileset:Almo1 Projectile:All ;
 #180	Curly	A.I.	Curly_AI 	0:192:32:224	Curly (A.I.) 	CE:Curly ;
-#181	?	 	Unknown(181)	0:0:0:0	<nothing?>	CE:Unsure ;
-#182	?	 	Unknown(182) 	0:0:0:0	<nothing?> 	CE:Unsure ;
-#183	?	 	MiseryBubble 	64:432:110:480	<nothing?> 	General:Effect CE:Unsure Tileset:Caret ;
+#181	CurlAI	MG Gun	CurlyAI Machine Gun	0:0:0:0	Curly (A.I.) Machine Gun	CE:Unsure ;
+#182	CurlAI	PlrStr	CurlyAI Polar Star 	0:0:0:0	Curly (A.I.) Polar Star 	CE:Unsure ;
+#183	CurlAI	AirTank	CurlyAI Air Tank 	64:432:110:480	Curly (A.I.) Air Tank Bubble 	General:Effect CE:Unsure Tileset:Caret ;
 #184	Shutr	large	Shutter(big) 	0:128:64:192	Shutter (large) 	General:Prop CE:Core Tileset:Map ;
 #185	Shutr	small	Shutter(small) 	192:128:224:192	Shutter (small) 	General:Prop CE:Core Tileset:Map ;
 #186	Lift	block	LiftBlock 	96:96:128:128	Lift block 	General:Prop CE:Core Tileset:Map ;
@@ -222,7 +224,7 @@
 #215	Enemy	ScrcW	Enemy - Sandcroc (white) 	0:240:96:256	Enemy - Sandcroc (white) 	CE:OuterWall ;
 #216	Debug	cat	Debug cat 	512:400:544:432	Debug cat 	CE:Characters ;
 #217	Itoh	 	Itoh	288:128:320:160	Itoh	CE:Characters ;
-#218	Proj?	 	Projectile?	0:0:0:0	Projectile?	CE:Unsure ;
+#218	Proj	Core 	Projectile - Core Large 	0:0:0:0	Projectile - Core Large Energy Ball	CE:Unsure ;
 #219	Genrt	Smoke	Generator - Smoke/Underwater current 	32:0:64:32	Generator - Smoke/Underwater current 	CE:Misc ;
 #220	SBrig	stand	Shovel Brigade 	0:128:32:160	Shovel Brigade 	CE:Characters ;
 #221	SBrig	walk	Shovel Brigade (walking) 	0:128:32:160	Shovel Brigade (walking) 	CE:Characters ;
@@ -230,14 +232,14 @@
 #223	Momo	 	Momorin	160:388:192:432	Momorin	CE:Characters ;
 #224	Chie	 	Chie	224:64:256:96	Chie	CE:Characters ;
 #225	Megan	 	Megane	128:128:160:160	Megane	CE:Characters ;
-#226	Kanpa	stand	Kanpachi 	544:64:592:112	Kanpachi 	CE:Characters ;
+#226	Kanpa	stand	Kanpachi (Standing) 	544:64:592:112	Kanpachi (Standing) 	CE:Characters ;
 #227	Buckt	 	Bucket	416:64:448:96	Bucket	CE:Misc ;
 #228	Droll	guard	Droll (guard) 	0:0:64:84	Droll (guard) 	CE:Plantation ;
 #229	RFlow	sprts	Red Flowers (sprouts) 	0:200:32:224	Red Flowers (sprouts) 	CE:Misc ;
 #230	RFlow	bloom	Red Flowers (blooming) 	200:200:256:256	Red Flowers (blooming) 	CE:Misc ;
 #231	Rockt	 	Rocket	352:64:416:96	Rocket	CE:Misc ;
 #232	Enemy	Orang	Enemy - Orangebell 	256:0:320:64	Enemy - Orangebell 	CE:Plantation ;
-#233	CRASH	 	<CRASH>	0:0:0:0	<CRASH>	CE:Crash ;
+#233	CRASH	OrgBat	<CRASH> Orangebell Bat	0:0:0:0	Enemy - Orangebell Bat	CE:Crash ;
 #234	RFlow	pickd	Red Flowers (picked) 	288:200:344:224	Red Flowers (picked) 	CE:Misc ;
 #235	Midor	 	Enemy - Midorin 	384:200:416:224	Enemy - Midorin 	CE:Characters ;
 #236	Enemy	Gunfs	Enemy - Gunfish 	256:120:308:176	Enemy - Gunfish 	CE:Plantation ;
@@ -252,14 +254,14 @@
 #245	Genrt	Acid	Generator - Acid drop 	192:0:204:32	Generator - Acid drop 	CE:LastCave ;
 #246	Enemy	PresP	Enemy - Press (proximity) 	288:224:320:272	Enemy - Press (proximity) 	CE:Misc ;
 #247	Boss	Msry	Boss - Misery 	0:0:32:32	Boss - Misery 	CE:Misery ;
-#248	Boss	MsryV	Boss - Misery (vanish) 	0:0:32:32	Boss - Misery (vanish) 	CE:Misery ;
-#249	Proj	Msry1	Projectile - Misery (energy shot) 	64:64:96:96	Projectile - Misery (energy shot) 	CE:Misery ;
+#248	Proj	Msry1	Projectile - Misery (energy shot) 	64:64:96:96	Projectile - Misery (energy shot) 	CE:Misery ;
+#249	Boss	MsryV	Boss - Misery (vanish) 	0:0:32:32	Boss - Misery (vanish) 	CE:Misery ;
 #250	Proj	Msry2	Projectile - Misery (lightning ball) 	0:64:32:96	Projectile - Misery (lightning ball) 	CE:Misery ;
 #251	Proj	Msry3	Projectile - Misery (lightning) 	160:64:192:128	Projectile - Misery (lightning) 	CE:Misery ;
-#252	Misery	bat	Projectile - Misery (Bat)	0:0:0:0	<CRASH>	CE:Crash ;
+#252	Misery	Ring	Projectile - Misery Orbiting Rings 	0:0:0:0	<CRASH>	CE:Crash ;
 #253	Capsl	enrgy	Energy Capsule 	0:128:32:160	Energy Capsule 	CE:General ;
 #254	Heli	copter	Helicopter 	0:0:256:128	Helicopter 	CE:Sky ;
-#255	CRASH	 	<CRASH>	0:0:0:0	<CRASH>	CE:Crash ;
+#255	Heli	Blade	<CRASH> Helicopter Blades	0:0:0:0	Helicopter Blades	CE:Crash ;
 #256	Doctr	back	Doctor (crowned, facing away) 	96:320:144:384	Doctor (crowned, facing away) 	CE:Doctor ;
 #257	Red	Cryst	Red Crystal 	352:64:366:96	Red Crystal 	CE:Doctor ;
 #258	Mimig	sleep	Mimiga (sleeping) 	96:64:128:96	Mimiga (sleeping) 	CE:Characters ;
@@ -279,7 +281,7 @@
 #272	Genrt	UBlok	Generator - Underwater block 	256:32:288:64	Generator - Underwater block 	CE:MainArtery ;
 #273	Proj	Droll	Projectile - Droll 	496:80:544:128	Projectile - Droll 	CE:Plantation ;
 #274	Enemy	Droll	Enemy - Droll 	0:0:64:84	Enemy - Droll 	CE:Plantation ;
-#275	Puppy	items	Puppy (with items) 	96:288:128:320	Puppy (with items) 	CE:Plantation ;
+#275	Puppy	sit	Puppy (sitting) 	96:288:128:320	Puppy (sitting) 	CE:Plantation ;
 #276	Boss	RDemn	Boss - Red Demon 	0:128:64:204	Boss - Red Demon 	CE:LastCave ;
 #277	Proj	RDemn	Projectile - Red Demon 	256:0:300:48	Projectile - Red Demon 	CE:LastCave ;
 #278	Littl	famly	Little family 	0:240:12:256	Little family 	CE:Little ;
@@ -290,7 +292,7 @@
 #283	Enemy	Msry	Enemy - Misery (transformed) 	0:128:64:192	Enemy - Misery (transformed) 	CE:UndeadCore ;
 #284	Enemy	Sue	Enemy - Sue (transformed) 	0:256:64:320	Enemy - Sue (transformed) 	CE:UndeadCore ;
 #285	Proj	OSpir	Projectile - Undead Core (orange spiral shot) 	0:448:32:480	Projectile - Undead Core (orange spiral shot) 	CE:Unsure ;
-#286	Orang	Dot	Orange Dot 	464:210:494:238	Orange Dot 	CE:Unsure ;
+#286	Proj	OTral	Projectile - Undead Core (spiral trail) 	464:210:494:238	Projectile - Undead Core (spiral trail) 	CE:Unsure ;
 #287	Orang	Smoke	Orange Smoke 	96:448:128:438	Orange Smoke 	CE:Unsure ;
 #288	Proj	GRock	Projectile - Undead Core (glowing rock thing) 	464:142:496:176	Projectile - Undead Core (glowing rock thing) 	CE:Unsure ;
 #289	Enemy	CrtHO	Enemy - Critter (hopping, orange) 	320:64:352:96	Enemy - Critter (hopping, orange) 	CE:UndeadCore ;
@@ -301,13 +303,13 @@
 #294	Quake	FBlck	Quake & Generator - Falling blocks 	0:32:64:96	Quake & Generator - Falling blocks 	CE:Misc ;
 #295	Cloud	 	Cloud 	288:224:384:284	Cloud 	CE:Sky ;
 #296	Genrt	Cloud	Generator - Cloud 	0:0:0:0	Generator - Cloud 	CE:Sky ;
-#297	CRASH	SOME	<CRASH> (Sometimes) 	0:0:0:0	<CRASH> (Sometimes) 	CE:Crash ;
+#297	CRASH	SueFly	<CRASH> Sue (on Sky Dragon) 	0:0:0:0	Sue (on Sky Dragon) 	CE:Crash ;
 #298	Intro	Doctr	Doctor (uncrowned) 	200:320:240:384	Doctor (uncrowned) 	CE:Intro ;
 #299	Intro	Bubbl	Balrog/Misery (bubble) 	0:0:96:96	Balrog/Misery (bubble) 	CE:Intro ;
 #300	Intro	Crown	Demon Crown 	384:160:416:192	Demon Crown 	CE:Intro ;
 #301	Enemy	FishO	Enemy - Fish Missile (orange) 	286:0:318:32	Enemy - Fish Missile (orange) 	CE:UndeadCore ;
-#302	End	Scene	Something with ending Scenes 	0:0:0:0	Something with ending Scenes 	CE:Unsure ;
-#303	?	 	<nothing?> 	0:0:0:0	<nothing?> 	CE:Unsure ;
+#302	Camera	Mrker	Camera Focus Marker 	0:0:0:0	Camera Focus Marker 	CE:Unsure ;
+#303	Unused	CrlMG	(Unused) Curly Machine Gun 	0:0:0:0	(Unused) Curly Machine Gun 	CE:Unsure ;
 #304	Gaudi	sit	Gaudi (sitting) 	0:352:48:384	Gaudi (sitting) 	CE:Labyrinth ;
 #305	Puppy	small	Puppy (small) 	320:300:352:320	Puppy (small) 	CE:SandZone ;
 #306	Blrg	nurse	Balrog (nurse) 	480:200:560:256	Balrog (nurse) 	CE:Characters ;
@@ -318,20 +320,20 @@
 #311	Enemy	ButeA	Enemy - Bute (archer) 	0:64:48:112	Enemy - Bute (archer) 	CE:Hell ;
 #312	Proj	ButeA	Projectile - Bute (archer) 	0:320:32:352	Projectile - Bute (archer) 	CE:Hell ;
 #313	Boss	MPign	Boss - Ma Pignon 	256:0:288:32	Boss - Ma Pignon 	CE:Graveyard ;
-#314	???	 	Falling, Indestructible 	0:0:0:0	Falling, Indestructible 	CE:Unsure ;
-#315	Enemy	???	Enemy (hopping, disappears) 	0:0:0:0	Enemy (hopping, disappears) 	CE:Unsure ;
+#314	Proj	MPRock 	Projectile - Ma Pignon Falling Rock 	0:0:0:0	Projectile - Ma Pignon Falling Rock 	CE:Unsure ;
+#315	Enemy	MPClne	Enemy - Ma Pignon Clone 	0:0:0:0	Enemy - Ma Pignon Clone 	CE:Unsure ;
 #316	Dead	Bute	Enemy - Bute (defeated) 	542:82:586:110	Enemy - Bute (defeated) 	CE:Hell ;
 #317	Enemy	Mesa	Enemy - Mesa 	0:160:64:236	Enemy - Mesa 	CE:Hell ;
 #318	Dead	Mesa	Enemy - Mesa (defeated) 	448:160:512:240	Enemy - Mesa (defeated) 	CE:Hell ;
-#319	CRASH	 	<CRASH> 	0:0:0:0	<CRASH> 	CE:Crash ;
+#319	Proj	MsaBlk 	<CRASH> Projectile - Mesa Block 	0:0:0:0	Projectile - Mesa Block 	CE:Crash ;
 #320	Carry	Curl2	Curly (carried, shooting) 	0:192:32:224	Curly (carried, shooting) 	CE:Curly ;
-#321	?	 	<nothing?>	0:0:0:0	<nothing?>	CE:Unsure ;
+#321	Curly	Nemsis 	Curly carried Nemesis	0:0:0:0	Curly (carried)'s Nemesis	CE:Unsure ;
 #322	Enemy	Delet	Enemy - Deleet 	320:432:364:478	Enemy - Deleet 	CE:Hell ;
 #323	Enemy	ButeG	Enemy - Bute (generator) 	432:64:464:108	Enemy - Bute (generator) 	CE:Hell ;
 #324	Genrt	Bute	Generator - Bute 	432:64:464:108	Generator - Bute 	CE:Hell ;
 #325	Proj	HeavP	Projectile - Heavy Press 	476:0:510:192	Projectile - Heavy Press 	CE:Hell ;
 #326	turn	human	Itoh/Sue (turning human) 	194:256:320:308	Itoh/Sue (turning human) 	CE:Characters ;
-#327	CRASH	 	<CRASH>	0:0:0:0	<CRASH>	CE:Crash ;
+#327	Ah	Choo	Itoh/Sue 'Ah Choo' 	0:0:0:0	Itoh/Sue 'Ah Choo' Bubble 	CE:Crash ;
 #328	human	machn	Transmogrifier 	192:0:256:96	Transmogrifier 	CE:Laboratory ;
 #329	Bldg	fan	Building fan 	96:0:128:32	Building fan 	CE:Laboratory ;
 #330	Enemy	Rolln	Enemy - Rolling 	288:272:320:304	Enemy - Rolling 	CE:Hell ;
@@ -345,12 +347,12 @@
 #338	Enemy	GDevl	Enemy - Green Devil 	566:0:604:32	Enemy - Green Devil 	CE:Ballos ;
 #339	Genrt	GDevl	Generator - Green Devil 	0:0:0:0	Generator - Green Devil 	CE:Ballos ;
 #340	Boss	Blls1	Boss - Ballos 	0:0:88:80	Boss - Ballos 	CE:Ballos ;
-#341	CRASH	 	<CRASH> 	0:0:0:0	<CRASH> 	CE:Crash ;
-#342	CRASH	 	<CRASH> 	0:0:0:0	<CRASH> 	CE:Crash ;
-#343	CRASH	 	<CRASH> 	0:0:0:0	<CRASH> 	CE:Crash ;
-#344	CRASH	 	<CRASH>	0:0:0:0	<CRASH>	CE:Crash ;
-#345	Proj	Blls4	Projectile - Ballos (skull) 	256:352:288:384	Projectile - Ballos (skull) 	CE:Ballos ;
-#346	CRASH	 	<CRASH>	0:0:0:0	<CRASH>	CE:Crash ;
+#341	CRASH	BsHead 	<CRASH> Ballos1 Head 	0:0:0:0	Ballos Phase 1 head (eyes closed) 	CE:Crash ;
+#342	CRASH	EyeBal 	<CRASH> Ballos3 Eyeball 	0:0:0:0	Enemy - Ballos Phase 3 Eyeball 	CE:Crash ;
+#343	CRASH	Blls2 	<CRASH> Ballos2 (screaming) 	0:0:0:0	Ballos Phase 2 (screaming, cutscene) 	CE:Crash ;
+#344	CRASH	BsEye 	<CRASH> Ballos2 eyes 	0:0:0:0	Ballos Phase 2 eyes 	CE:Crash ;
+#345	Proj	Blls3	Projectile - Ballos3 (skull) 	256:352:288:384	Projectile - Ballos3 (skull) 	CE:Ballos ;
+#346	CRASH	Pltfm 	<CRASH> Ballos4 Orbit Platform	0:0:0:0	Ballos Phase 4 Orbiting Platform	CE:Crash ;
 #347	Enemy	Hoppy	Enemy - Hoppy 	512:96:544:128	Enemy - Hoppy 	CE:OuterWall ;
 #348	Spike	Blls	Ballos spikes (rising) 	252:302:288:352	Ballos spikes (rising) 	CE:Ballos ;
 #349	Statu	 	Statue	64:200:128:288	Statue	CE:Statue ;
@@ -359,7 +361,7 @@
 #352	Cred	NPC	Credits NPCs 	448:64:476:96	Credits NPCs 	CE:Characters ;
 #353	Enemy	ButRS	Enemy - Bute (sword, red) 	396:316:432:352	Enemy - Bute (sword, red) 	CE:Ballos ;
 #354	Invis	Trap	Invisible deathtrap wall 	0:0:0:0	Invisible deathtrap wall 	CE:Unsure ;
-#355	CRASH	SOME	<CRASH> (Sometimes) 	0:0:0:0	<CRASH> (Sometimes) 	CE:Crash ;
+#355	CRASH	Trio	<CRASH> Quote/Curly on Balrog 	0:0:0:0	Quote/Curly with Balrog (rescue) 	CE:Crash ;
 #356	Blrg	rescu	Balrog (rescue) 	0:0:80:48	Balrog (rescue) 	CE:Sky ;
 #357	Puppy	ghost	Puppy (ghost) 	448:274:480:306	Puppy (ghost) 	CE:Ballos ;
 #358	Msry	wind	Misery (wind) 	416:20:444:64	Misery (wind) 	CE:Misery ;
